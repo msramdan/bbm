@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SatuanBarang;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SatuanBarangController extends Controller
 {
@@ -25,7 +26,7 @@ class SatuanBarangController extends Controller
      */
     public function create()
     {
-        //
+        return view('satuan-barang.create');
     }
 
     /**
@@ -81,6 +82,10 @@ class SatuanBarangController extends Controller
      */
     public function destroy(SatuanBarang $satuanBarang)
     {
-        //
+        SatuanBarang::findOrFail($satuanBarang->id)->delete();
+
+        Alert::success('Hapus Data', 'Berhasil');
+
+        return redirect()->route('satuan-barang.index');
     }
 }

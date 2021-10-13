@@ -7,6 +7,7 @@ use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MatauangController;
 use App\Http\Controllers\RateMataUangController;
 use App\Http\Controllers\RekeningBankController;
+use App\Http\Controllers\SupplierController;
 
 Route::get('/', [DashboardController::class, 'index']);
 
@@ -35,4 +36,6 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/bank', BankController::class)->except('show');
 
     Route::resource('/rekening-bank', RekeningBankController::class)->except('show');
+
+    Route::resource('/supplier', SupplierController::class)->except('show');
 });

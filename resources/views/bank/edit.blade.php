@@ -64,7 +64,6 @@
                                 <label class="col-md-3 control-label">Status</label>
                                 <div class="col-md-9">
                                     <select name="status" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
                                         <option value="Y" {{ $bank->status == 'Y' ? 'selected' : '' }}>Aktif</option>
                                         <option value="N" {{ $bank->status == 'N' ? 'selected' : '' }}>No</option>
                                     </select>

@@ -28,6 +28,7 @@ Breadcrumbs::for('matauang_edit', function (BreadcrumbTrail $trail) {
 });
 
 
+
 // Master Data > Rate Mata Uang
 Breadcrumbs::for('rate_matauang', function (BreadcrumbTrail $trail) {
     $trail->parent('master');
@@ -45,6 +46,7 @@ Breadcrumbs::for('rate_matauang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('rate_matauang');
     $trail->push('Edit');
 });
+
 
 
 // Master Data > Bank
@@ -67,6 +69,7 @@ Breadcrumbs::for('bank_edit', function (BreadcrumbTrail $trail) {
 
 
 
+
 // Master Data > Rekening Bank
 Breadcrumbs::for('rekening_bank', function (BreadcrumbTrail $trail) {
     $trail->parent('master');
@@ -82,5 +85,26 @@ Breadcrumbs::for('rekening_bank_add', function (BreadcrumbTrail $trail) {
 // Master Data > Rekening Bank > Edit
 Breadcrumbs::for('rekening_bank_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('rekening_bank');
+    $trail->push('Edit');
+});
+
+
+
+
+// Master Data > Supplier
+Breadcrumbs::for('supplier', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Supplier', route('supplier.index'));
+});
+
+// Master Data > Supplier > Tambah
+Breadcrumbs::for('supplier_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('supplier');
+    $trail->push('Tambah', route('supplier.create'));
+});
+
+// Master Data > Supplier > Edit
+Breadcrumbs::for('supplier_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('supplier');
     $trail->push('Edit');
 });

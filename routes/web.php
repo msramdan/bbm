@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BankController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocalizationController;
@@ -26,7 +27,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web', 'auth']], functio
 // group master data
 Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], function () {
     //Route matauang
-    Route::resource('/matauang', MatauangController::class);
+    Route::resource('/matauang', MatauangController::class)->except('show');
 
-    Route::resource('/rate-matauang', RateMataUangController::class);
+    Route::resource('/rate-matauang', RateMataUangController::class)->except('show');
+
+    Route::resource('/bank', BankController::class)->except('show');
 });

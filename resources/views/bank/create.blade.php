@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Mata Uang')
+@section('title', 'Create Bank')
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('matauang_add') }}
+        {{ Breadcrumbs::render('bank_add') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-6 -->
@@ -30,10 +30,10 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('matauang.title.tambah') }}</h4>
+                        <h4 class="panel-title">{{ trans('bank.title.tambah') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('matauang.store') }}" method="post" novalidate>
+                        <form class="form-horizontal" action="{{ route('bank.store') }}" method="post" novalidate>
                             @csrf
 
                             <div class="form-group">
@@ -55,19 +55,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Default</label>
-                                <div class="col-md-9">
-                                    <select name="default" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        <option value="Y">Aktif</option>
-                                        <option value="N">No</option>
-                                    </select>
-                                    @error('default')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-md-3 control-label">Status</label>
                                 <div class="col-md-9">
                                     <select name="status" class="form-control" required>
@@ -84,7 +71,7 @@
                                 <label class="col-md-3 control-label"></label>
                                 <div class="col-md-9">
                                     <button type="submit" class="btn btn-sm btn-success"> Simpan</button>
-                                    <a href="{{ route('matauang.index') }}" class="btn btn-sm btn-default"> Cancel
+                                    <a href="{{ route('bank.index') }}" class="btn btn-sm btn-default"> Cancel
                                     </a>
                                 </div>
                             </div>

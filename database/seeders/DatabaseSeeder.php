@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             MatauangSeeder::class,
             RateMataUangSeeder::class,
+            BankSeeder::class
         ]);
     }
 }

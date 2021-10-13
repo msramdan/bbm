@@ -23,12 +23,16 @@ class MatauangSeeder extends Seeder
                     'nama' => 'Rupiah',
                     'default' => 'Y',
                     'status' => 'Y',
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ],
                 [
                     'kode' => 'USD',
                     'nama' => 'US Dollar',
                     'default' => 'N',
                     'status' => 'Y',
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]
             ]
         );

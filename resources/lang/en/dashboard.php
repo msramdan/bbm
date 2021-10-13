@@ -12,6 +12,7 @@ return [
         'master' => 'Master Data',
         'matauang' => 'Currency',
         'rate_matauang' => 'Currency Rate',
+        'bank' => 'Bank'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

@@ -1,4 +1,7 @@
 @extends('layouts.dashboard')
+
+@section('title', 'Mata Uang')
+
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
@@ -12,13 +15,21 @@
                     <div class="panel-heading">
                         <div class="panel-heading-btn">
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default"
-                                data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                                data-click="panel-expand">
+                                <i class="fa fa-expand"></i>
+                            </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success"
-                                data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                                data-click="panel-reload">
+                                <i class="fa fa-repeat"></i>
+                            </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning"
-                                data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                                data-click="panel-collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger"
-                                data-click="panel-remove"><i class="fa fa-times"></i></a>
+                                data-click="panel-remove">
+                                <i class="fa fa-times"></i>
+                            </a>
                         </div>
                         <a href="{{ route('matauang.create') }}" class="btn btn-success">
                             <i class="fa fa-plus-square-o"></i> {{ trans('matauang.button.tambah') }}
@@ -46,14 +57,14 @@
                                         <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
                                         <td>
                                             <a href="{{ route('matauang.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle btn-lg"><i
+                                                class="btn btn-success btn-icon btn-circle"><i
                                                     class="fa fa-edit"></i></a>
                                             <form action="{{ route('matauang.destroy', $data->id) }}" method="post"
                                                 class="d-inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger btn-icon btn-circle btn-lg"><i
+                                                <button class="btn btn-danger btn-icon btn-circle"><i
                                                         class="ace-icon fa fa-trash"></i></button>
                                             </form>
 

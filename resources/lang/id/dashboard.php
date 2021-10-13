@@ -12,6 +12,7 @@ return [
         'master' => 'Data Master',
         'matauang' => 'Mata Uang',
         'rate_matauang' => 'Rate Mata Uang',
+        'bank' => 'Bank'
     ],
     'link' => [
         'dashboard' => 'Home',

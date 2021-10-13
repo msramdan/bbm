@@ -25,12 +25,21 @@
                 </a>
                 <ul class="sub-menu" style="display: none;">
                     <li>
-                        <a href="{{ route('matauang.index') }}">{{ trans('dashboard.menu.matauang') }}</a>
+                        <a href="{{ route('matauang.index') }}">
+                            {{ trans('dashboard.menu.matauang') }}
+                        </a>
                     </li>
 
                     <li>
-                        <a
-                            href="{{ route('rate-matauang.index') }}">{{ trans('dashboard.menu.rate_matauang') }}</a>
+                        <a href="{{ route('rate-matauang.index') }}">
+                            {{ trans('dashboard.menu.rate_matauang') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('bank.index') }}">
+                            {{ trans('dashboard.menu.bank') }}
+                        </a>
                     </li>
                 </ul>
             </li>

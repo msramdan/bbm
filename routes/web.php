@@ -5,6 +5,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MatauangController;
 use App\Http\Controllers\RateMataUangController;
+use App\Http\Controllers\SatuanBarangController;
+
+
 
 Route::get('/', [DashboardController::class, 'index']);
 
@@ -27,6 +30,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web', 'auth']], functio
 Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], function () {
     //Route matauang
     Route::resource('/matauang', MatauangController::class);
-
+    //Route rate mata uang
     Route::resource('/rate-matauang', RateMataUangController::class);
+    //Route rate mata uang
+    Route::resource('/satuan-barang', SatuanBarangController::class);
 });

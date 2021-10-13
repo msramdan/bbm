@@ -44,3 +44,8 @@ Breadcrumbs::for('rate_matauang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('rate_matauang');
     $trail->push('Edit');
 });
+// Master Data > Satuan Barang
+Breadcrumbs::for('satuanbarang', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Satuan Barang', route('satuan-barang.index'));
+});

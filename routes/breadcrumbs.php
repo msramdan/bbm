@@ -108,3 +108,24 @@ Breadcrumbs::for('supplier_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('supplier');
     $trail->push('Edit');
 });
+
+
+
+
+// Master Data > Area
+Breadcrumbs::for('area', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Area', route('area.index'));
+});
+
+// Master Data > Area > Tambah
+Breadcrumbs::for('area_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('area');
+    $trail->push('Tambah', route('area.create'));
+});
+
+// Master Data > Area > Edit
+Breadcrumbs::for('area_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('area');
+    $trail->push('Edit');
+});

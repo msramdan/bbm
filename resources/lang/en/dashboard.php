@@ -15,6 +15,7 @@ return [
         'bank' => 'Bank',
         'rekening_bank' => 'Bank Account',
         'supplier' => 'Supplier',
+        'area' => 'Area'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

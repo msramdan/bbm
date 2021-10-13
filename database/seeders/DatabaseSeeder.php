@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             RateMataUangSeeder::class,
             BankSeeder::class,
             RekeningBankSeeder::class,
-            SupplierSeeder::class
+            SupplierSeeder::class,
+            AreaSeeder::class
         ]);
     }
 }

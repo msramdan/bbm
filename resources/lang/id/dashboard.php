@@ -14,7 +14,8 @@ return [
         'rate_matauang' => 'Rate Mata Uang',
         'bank' => 'Bank',
         'rekening_bank' => 'Rekening Bank',
-        'supplier' => 'Supplier'
+        'supplier' => 'Supplier',
+        'area' => 'Area'
     ],
     'link' => [
         'dashboard' => 'Home',

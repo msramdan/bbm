@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BankController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -38,4 +39,6 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/rekening-bank', RekeningBankController::class)->except('show');
 
     Route::resource('/supplier', SupplierController::class)->except('show');
+
+    Route::resource('/area', AreaController::class)->except('show');
 });

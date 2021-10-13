@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MataUangRequest;
 use App\Models\Matauang;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class MatauangController extends Controller
 {
-     public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-     public function index()
+    public function index()
     {
         $matauang = Matauang::all();
-        return view('matauang.index')->with([
-            'matauang' => $matauang
-        ]);
+
+        return view('matauang.index', compact('matauang'));
     }
 
     public function create()
@@ -26,43 +21,37 @@ class MatauangController extends Controller
         return view('matauang.create');
     }
 
-    public function store(Request $request)
+    public function store(MataUangRequest $request)
     {
-        $data = $request->all();
-        Matauang::create($data);
-        Alert::success('Tambah Data', 'Berhasil');
-        return redirect()->route('matauang.index');
-    }
+        Matauang::create($request->validated());
 
-    public function show(Matauang $Matauang)
-    {
-        //
+        Alert::success('Tambah Data', 'Berhasil');
+
+        return redirect()->route('matauang.index');
     }
 
     public function edit($id)
     {
         $matauang = Matauang::findOrFail($id);
-        return view('matauang.edit')->with([
-            'matauang' => $matauang,
-        ]);
+
+        return view('matauang.edit', compact('matauang'));
     }
 
-    public function update(Request $request, Matauang $matauang)
+    public function update(MataUangRequest $request, Matauang $matauang)
     {
-        $data = $request->all();
-        $matauang = Matauang::findOrFail($matauang->id);
-        $matauang->update($data);
+        $matauang->update($request->validated());
+
         Alert::success('Update Data', 'Berhasil');
+
         return redirect()->route('matauang.index');
     }
 
     public function destroy($id)
     {
-        $matauang = Matauang::findOrFail($id);
-        $matauang ->delete();
+        Matauang::findOrFail($id)->delete();
+
         Alert::success('Hapus Data', 'Berhasil');
+
         return redirect()->route('matauang.index');
     }
-
-
 }

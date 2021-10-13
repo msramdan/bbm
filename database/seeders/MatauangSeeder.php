@@ -16,11 +16,21 @@ class MatauangSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('matauang')->insert([
-            'kode' => 'Rp',
-            'nama' => 'Rupiah',
-            'default' => 'Y',
-            'status' => 'Y',
-        ]);
+        DB::table('matauang')->insert(
+            [
+                [
+                    'kode' => 'Rp',
+                    'nama' => 'Rupiah',
+                    'default' => 'Y',
+                    'status' => 'Y',
+                ],
+                [
+                    'kode' => 'USD',
+                    'nama' => 'US Dollar',
+                    'default' => 'N',
+                    'status' => 'Y',
+                ]
+            ]
+        );
     }
 }

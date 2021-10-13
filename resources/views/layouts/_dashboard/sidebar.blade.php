@@ -14,19 +14,31 @@
         <ul class="nav">
             <li class="nav-header">Navigation</li>
             {{-- menu dashboard --}}
-            <li class="{{ set_active('dashboard.index') }}"><a href="{{ route('dashboard.index') }}"><i class="fa fa-laptop"></i> <span>{{ trans('dashboard.link.dashboard') }}</span></a></li>
+            <li class="{{ set_active('dashboard.index') }}"><a href="{{ route('dashboard.index') }}"><i
+                        class="fa fa-laptop"></i> <span>{{ trans('dashboard.link.dashboard') }}</span></a></li>
             {{-- menu master data --}}
             <li class="has-sub">
-					    <a href="javascript:;">
-					        <b class="caret pull-right"></b>
-					        <i class="fa fa-list"></i>
-					        <span>{{ trans('dashboard.menu.master') }}</span>
-					    </a>
-					    <ul class="sub-menu" style="display: none;">
-							<li><a href="{{ route('matauang.index') }}">{{ trans('dashboard.menu.matauang') }}</a></li>
-					    </ul>
-					</li>
-            <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-list"></i>
+                    <span>{{ trans('dashboard.menu.master') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('matauang.index') }}">{{ trans('dashboard.menu.matauang') }}</a>
+                    </li>
+
+                    <li>
+                        <a
+                            href="{{ route('rate-matauang.index') }}">{{ trans('dashboard.menu.rate_matauang') }}</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify">
+                    <i class="fa fa-angle-double-left"></i>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

@@ -1,4 +1,5 @@
 <?php
+
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
@@ -23,5 +24,23 @@ Breadcrumbs::for('matauang_add', function (BreadcrumbTrail $trail) {
 // Master Data > Mata Uang > Tambah
 Breadcrumbs::for('matauang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('matauang');
-    $trail->push('Edit', route('matauang.edit'));
+    $trail->push('Edit');
+});
+
+// Master Data > Rate Mata Uang
+Breadcrumbs::for('rate_matauang', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Rate Mata Uang', route('rate-matauang.index'));
+});
+
+// Master Data > Rate Mata Uang > Tambah
+Breadcrumbs::for('rate_matauang_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('rate_matauang');
+    $trail->push('Tambah', route('rate-matauang.create'));
+});
+
+// Master Data > Rate Mata Uang > Edit
+Breadcrumbs::for('rate_matauang_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('rate_matauang');
+    $trail->push('Edit');
 });

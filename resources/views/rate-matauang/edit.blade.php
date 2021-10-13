@@ -2,7 +2,8 @@
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('matauang_add') }}
+        {{ Breadcrumbs::render('rate_matauang_edit') }}
+
         <!-- begin row -->
         <div class="row">
             <!-- begin col-6 -->
@@ -16,7 +17,8 @@
                                 <i class="fa fa-expand"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success"
-                                data-click="panel-reload"><i class="fa fa-repeat"></i>
+                                data-click="panel-reload">
+                                <i class="fa fa-repeat"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning"
                                 data-click="panel-collapse">
@@ -27,60 +29,78 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('matauang.title.tambah') }}</h4>
+                        <h4 class="panel-title">{{ trans('rate_matauang.title.edit') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('matauang.store') }}" method="post" novalidate>
+                        <form class="form-horizontal" action="{{ route('rate-matauang.update', $rateMataUang->id) }}"
+                            method="post" novalidate>
                             @csrf
+                            @method('put')
 
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Kode</label>
+                                <label class="col-md-3 control-label">Tanggal</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="kode" class="form-control" placeholder="Kode" required />
-                                    @error('kode')
+                                    <input type="date" name="tanggal"
+                                        class="form-control @error('tanggal') is-invalid  @enderror"
+                                        value="{{ old('tanggal') ? old('tanggal') : $rateMataUang->tanggal }}" required />
+                                    @error('tanggal')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Nama</label>
+                                <label class="col-md-3 control-label">Mata Uang Asing</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="nama" class="form-control" placeholder="Nama" required />
-                                    @error('nama')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Default</label>
-                                <div class="col-md-9">
-                                    <select name="default" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        <option value="Y">Aktif</option>
-                                        <option value="N">No</option>
+                                    <select name="matauang_id" class="form-control" required>
+                                        @forelse ($matauang as $data)
+                                            <option value="{{ $data->id }}"
+                                                {{ $rateMataUang->matauang_asing->id == $data->id ? 'selected' : '' }}>
+                                                {{ $data->nama }}</option>
+                                        @empty
+                                            <option value="" disabled>Mata uang tidak ditemukan</option>
+                                        @endforelse
                                     </select>
-                                    @error('default')
+                                    @error('matauang_id')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Status</label>
+                                <label class="col-md-3 control-label">Mata Uang Default</label>
                                 <div class="col-md-9">
-                                    <select name="status" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        <option value="Y">Aktif</option>
-                                        <option value="N">No</option>
+                                    <select name="matauang_default" class="form-control" required>
+                                        @forelse ($matauang as $data)
+                                            <option value="{{ $data->id }}"
+                                                {{ $rateMataUang->matauang_default == $data->id ?? 'selected' }}>
+                                                {{ $data->nama }}</option>
+                                        @empty
+                                            <option value="" disabled>Mata uang tidak ditemukan</option>
+                                        @endforelse
                                     </select>
-                                    @error('status')
+                                    @error('matauang_default')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Rate</label>
+                                <div class="col-md-9">
+                                    <input type="number" name="rate" class="form-control"
+                                        value="{{ old('rate') ? old('rate') : $rateMataUang->rate }}" required />
+                                    @error('rate')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="col-md-3 control-label"></label>
                                 <div class="col-md-9">
-                                    <button type="submit" class="btn btn-sm btn-success"> Simpan</button>
+                                    <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+
                                     <a href="{{ route('matauang.index') }}" class="btn btn-sm btn-default"> Cancel
                                     </a>
                                 </div>

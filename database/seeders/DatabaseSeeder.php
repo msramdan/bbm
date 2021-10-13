@@ -12,12 +12,11 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run()
-{
-    $this->call([
-        UserTableSeeder::class,
-        MatauangSeeder::class,
-
-    ]);
-
-}
+    {
+        $this->call([
+            UserTableSeeder::class,
+            MatauangSeeder::class,
+            RateMataUangSeeder::class,
+        ]);
+    }
 }

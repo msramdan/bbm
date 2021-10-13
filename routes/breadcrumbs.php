@@ -76,6 +76,19 @@ Breadcrumbs::for('satuanbarang', function (BreadcrumbTrail $trail) {
     $trail->parent('master');
     $trail->push('Satuan Barang', route('satuan-barang.index'));
 });
+
+// Master Data > Satuan Barang > Tambah
+Breadcrumbs::for('satuanbarang_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('satuanbarang');
+    $trail->push('Tambah', route('satuan-barang.create'));
+});
+
+// Master Data > Satuan Barang > Tambah
+Breadcrumbs::for('satuanbarang_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('satuanbarang');
+    $trail->push('Edit');
+});
+
 // Master Data > Supplier
 Breadcrumbs::for('supplier', function (BreadcrumbTrail $trail) {
     $trail->parent('master');

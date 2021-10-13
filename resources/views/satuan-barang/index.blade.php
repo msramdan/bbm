@@ -44,7 +44,7 @@
                                         <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
                                         <td>
                                             <a href="{{ route('satuan-barang.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle btn-lg"><i
+                                                class="btn btn-success btn-icon btn-circle"><i
                                                     class="fa fa-edit"></i></a>
 
                                             <form action="{{ route('satuan-barang.destroy', $data->id) }}" method="post"
@@ -52,7 +52,7 @@
                                                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger btn-icon btn-circle btn-lg"><i
+                                                <button class="btn btn-danger btn-icon btn-circle "><i
                                                         class="ace-icon fa fa-trash"></i></button>
                                             </form>
 

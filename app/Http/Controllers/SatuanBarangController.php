@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SatuanBarangRequest;
 use App\Models\SatuanBarang;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -35,9 +36,13 @@ class SatuanBarangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SatuanBarangRequest $request)
     {
-        //
+        SatuanBarang::create($request->validated());
+
+        Alert::success('Tambah Data', 'Berhasil');
+
+        return redirect()->route('satuan-barang.index');
     }
 
     /**
@@ -59,7 +64,9 @@ class SatuanBarangController extends Controller
      */
     public function edit(SatuanBarang $satuanBarang)
     {
-        //
+        $satuanbarang = SatuanBarang::findOrFail($satuanBarang->id);
+
+        return view('satuan-barang.edit', compact('satuanbarang'));
     }
 
     /**
@@ -69,9 +76,13 @@ class SatuanBarangController extends Controller
      * @param  \App\Models\SatuanBarang  $satuanBarang
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SatuanBarang $satuanBarang)
+    public function update(SatuanBarangRequest $request, SatuanBarang $satuanBarang)
     {
-        //
+        $satuanBarang->update($request->validated());
+
+        Alert::success('Update Data', 'Berhasil');
+
+        return redirect()->route('satuan-barang.index');
     }
 
     /**

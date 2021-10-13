@@ -5,7 +5,7 @@
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('rekening_bank_add') }}
+        {{ Breadcrumbs::render('satuanbarang_add') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-6 -->
@@ -50,8 +50,8 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Satuan Barang</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="satuan-barang" class="form-control" placeholder="Satuan Barang" required />
-                                    @error('satuan-barang')
+                                    <input type="text" name="nama" class="form-control" placeholder="Nama" required />
+                                    @error('nama')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>

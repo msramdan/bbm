@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Mata Uang')
+@section('title', 'Tambah Rekening Bank')
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('matauang_add') }}
+        {{ Breadcrumbs::render('rekening_bank_add') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-6 -->
@@ -30,10 +30,11 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('matauang.title.tambah') }}</h4>
+                        <h4 class="panel-title">{{ trans('rekening_bank.title.tambah') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('matauang.store') }}" method="post" novalidate>
+                        <form class="form-horizontal" action="{{ route('rekening-bank.store') }}" method="post"
+                            novalidate>
                             @csrf
 
                             <div class="form-group">
@@ -45,28 +46,46 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Nama</label>
+                                <label class="col-md-3 control-label">Bank</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="nama" class="form-control" placeholder="Nama" required />
-                                    @error('nama')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Default</label>
-                                <div class="col-md-9">
-                                    <select name="default" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        <option value="Y">Aktif</option>
-                                        <option value="N">No</option>
+                                    <select name="bank" class="form-control" required>
+                                        <option value="" selected disabled>-- Pilih --</option>
+                                        @forelse ($banks as $bank)
+                                            <option value="{{ $bank->id }}">{{ $bank->nama }}</option>
+                                        @empty
+                                            <option value="" selected disabled>Data Bank tidak ada</option>
+                                        @endforelse
                                     </select>
-                                    @error('default')
+                                    @error('bank')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Nama Rekening</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="nama_rekening" class="form-control"
+                                        placeholder="Nama Rekening" required />
+                                    @error('nama_rekening')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">No. Rekening</label>
+                                <div class="col-md-9">
+                                    <input type="number" name="nomor_rekening" class="form-control"
+                                        placeholder="No. Rekening" required />
+                                    @error('nomor_rekening')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Status</label>
                                 <div class="col-md-9">
@@ -80,11 +99,12 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-md-3 control-label"></label>
                                 <div class="col-md-9">
                                     <button type="submit" class="btn btn-sm btn-success"> Simpan</button>
-                                    <a href="{{ route('matauang.index') }}" class="btn btn-sm btn-default"> Cancel
+                                    <a href="{{ route('rekening-bank.index') }}" class="btn btn-sm btn-default"> Cancel
                                     </a>
                                 </div>
                             </div>

@@ -27,6 +27,7 @@ Breadcrumbs::for('matauang_edit', function (BreadcrumbTrail $trail) {
     $trail->push('Edit');
 });
 
+
 // Master Data > Rate Mata Uang
 Breadcrumbs::for('rate_matauang', function (BreadcrumbTrail $trail) {
     $trail->parent('master');
@@ -44,6 +45,44 @@ Breadcrumbs::for('rate_matauang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('rate_matauang');
     $trail->push('Edit');
 });
+
+
+// Master Data > Bank
+Breadcrumbs::for('bank', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Bank', route('bank.index'));
+});
+
+// Master Data > Bank > Tambah
+Breadcrumbs::for('bank_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('bank');
+    $trail->push('Tambah', route('bank.create'));
+});
+
+// Master Data > Bank > Edit
+Breadcrumbs::for('bank_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('bank');
+    $trail->push('Edit');
+});
+
+
+
+// Master Data > Rekening Bank
+Breadcrumbs::for('rekening_bank', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Rekening Bank', route('rekening-bank.index'));
+});
+
+// Master Data > Rekening Bank > Tambah
+Breadcrumbs::for('rekening_bank_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('rekening_bank');
+    $trail->push('Tambah', route('rekening-bank.create'));
+});
+
+// Master Data > Rekening Bank > Edit
+Breadcrumbs::for('rekening_bank_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('rekening_bank');
+    $trail->push('Edit');
 // Master Data > Satuan Barang
 Breadcrumbs::for('satuanbarang', function (BreadcrumbTrail $trail) {
     $trail->parent('master');

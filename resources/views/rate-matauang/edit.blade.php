@@ -1,4 +1,7 @@
 @extends('layouts.dashboard')
+
+@section('title', 'Edit Rate Mata Uang')
+
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">

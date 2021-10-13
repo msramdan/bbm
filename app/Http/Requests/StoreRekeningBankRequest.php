@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MataUangRequest extends FormRequest
+class StoreRekeningBankRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,11 @@ class MataUangRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode' => 'required',
-            'nama' => 'required|min:3',
-            'default' => 'required|in:Y,N',
+            'kode' => 'required|max:5|unique:rekening_bank,kode',
+            'nama_rekening' => 'required|min:3',
             'status' => 'required|in:Y,N',
+            'nomor_rekening' => 'required',
+            'bank' => 'required',
         ];
     }
 }

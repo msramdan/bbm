@@ -1,12 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Rate Mata Uang')
+@section('title', 'Rekening Bank')
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('rate_matauang') }}
-
+        {{ Breadcrumbs::render('rekening_bank') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -32,8 +31,8 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('rate-matauang.create') }}" class="btn btn-success">
-                            <i class="fa fa-plus-square-o"></i> {{ trans('rate_matauang.button.tambah') }}
+                        <a href="{{ route('rekening-bank.create') }}" class="btn btn-success">
+                            <i class="fa fa-plus-square-o"></i> {{ trans('rekening_bank.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
@@ -41,37 +40,40 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Mata Uang Asing</th>
-                                    <th>Mata Uang Default</th>
-                                    <th>Rate</th>
+                                    <th>Kode</th>
+                                    <th>Bank</th>
+                                    <th>No. Rekening</th>
+                                    <th>Nama Rekening</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($rateMataUang as $data)
+                                @foreach ($rekeningBank as $data)
                                     <tr class="odd gradeX">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $data->tanggal }}</td>
-                                        <td>{{ $data->matauang_asing->nama }}</td>
-                                        <td>{{ $data->matauang_default }}</td>
-                                        <td>{{ number_format($data->rate) . '.00' }}</td>
+                                        <td>{{ $data->kode }}</td>
+                                        <td>{{ $data->bank->nama }}</td>
+                                        <td>{{ $data->nomor_rekening }}</td>
+                                        <td>{{ $data->nama_rekening }}</td>
+                                        <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
                                         <td>
-                                            <a href="{{ route('rate-matauang.edit', $data->id) }}"
+                                            <a href="{{ route('rekening-bank.edit', $data->id) }}"
                                                 class="btn btn-success btn-icon btn-circle">
-                                                <i class="fa fa-edit">
-                                                </i>
+                                                <i class="fa fa-edit"></i>
                                             </a>
 
-                                            <form action="{{ route('rate-matauang.destroy', $data->id) }}" method="post"
+                                            <form action="{{ route('rekening-bank.destroy', $data->id) }}" method="post"
                                                 class="d-inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                                 @csrf
                                                 @method('delete')
+
                                                 <button class="btn btn-danger btn-icon btn-circle">
                                                     <i class="ace-icon fa fa-trash"></i>
                                                 </button>
                                             </form>
+
                                         </td>
                                     </tr>
                                 @endforeach

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMatauangTable extends Migration
+class CreateRateMatauangTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateMatauangTable extends Migration
      */
     public function up()
     {
-        Schema::create('matauang', function (Blueprint $table) {
+        Schema::create('rate_matauang', function (Blueprint $table) {
             $table->id();
-            $table->char('kode', 5);
-            $table->string('nama');
-            $table->char('default', 5)->nullable();
-            $table->char('status', 5)->nullable();
+            $table->date('tanggal');
+            $table->foreignId('matauang_id')->constrained('matauang');
+            $table->integer('rate');
             $table->timestamps();
         });
     }
@@ -30,6 +29,8 @@ class CreateMatauangTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('matauang');
+        Schema::table('rate_matauang', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -14,6 +14,7 @@ return [
         'rate_matauang' => 'Currency Rate',
         'bank' => 'Bank',
         'rekening_bank' => 'Bank Account'
+        'satuan_barang' => 'Item Unit',
     ],
     'link' => [
         'dashboard' => 'Dashboard',

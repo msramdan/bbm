@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             RateMataUangSeeder::class,
             BankSeeder::class,
             RekeningBankSeeder::class
+            SatuanBarangSeeder::class,
         ]);
     }
 }

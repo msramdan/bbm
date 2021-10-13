@@ -12,7 +12,6 @@ class MatauangController extends Controller
     public function index()
     {
         $matauang = Matauang::all();
-
         return view('matauang.index', compact('matauang'));
     }
 

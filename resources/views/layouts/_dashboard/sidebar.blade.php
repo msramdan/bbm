@@ -29,7 +29,6 @@
                             {{ trans('dashboard.menu.matauang') }}
                         </a>
                     </li>
-
                     <li>
                         <a href="{{ route('rate-matauang.index') }}">
                             {{ trans('dashboard.menu.rate_matauang') }}
@@ -46,6 +45,10 @@
                         <a href="{{ route('rekening-bank.index') }}">
                             {{ trans('dashboard.menu.rekening_bank') }}
                         </a>
+                    </li>
+                    <li>
+                        <a
+                            href="{{ route('satuan-barang.index') }}">{{ trans('dashboard.menu.satuan_barang') }}</a>
                     </li>
                 </ul>
             </li>

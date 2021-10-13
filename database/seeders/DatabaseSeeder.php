@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             BankSeeder::class,
             RekeningBankSeeder::class,
             SupplierSeeder::class,
-            AreaSeeder::class
+            AreaSeeder::class,
             SatuanBarangSeeder::class,
         ]);
     }

@@ -86,6 +86,10 @@ Breadcrumbs::for('rekening_bank_add', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('rekening_bank_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('rekening_bank');
     $trail->push('Edit');
+// Master Data > Satuan Barang
+Breadcrumbs::for('satuanbarang', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Satuan Barang', route('satuan-barang.index'));
 });
 
 

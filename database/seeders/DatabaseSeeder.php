@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             RekeningBankSeeder::class,
             SupplierSeeder::class,
             AreaSeeder::class
+            SatuanBarangSeeder::class,
         ]);
     }
 }

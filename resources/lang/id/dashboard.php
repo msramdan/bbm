@@ -16,6 +16,7 @@ return [
         'rekening_bank' => 'Rekening Bank',
         'supplier' => 'Supplier',
         'area' => 'Area'
+        'satuan_barang' => 'Satuan Barang',
     ],
     'link' => [
         'dashboard' => 'Home',

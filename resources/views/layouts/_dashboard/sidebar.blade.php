@@ -47,6 +47,16 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('supplier.index') }}">
+                            {{ trans('dashboard.menu.supplier') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('area.index') }}">
+                            {{ trans('dashboard.menu.area') }}
+                        </a>
+                    <li>
                         <a
                             href="{{ route('satuan-barang.index') }}">{{ trans('dashboard.menu.satuan_barang') }}</a>
                     </li>

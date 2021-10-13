@@ -13,7 +13,9 @@ return [
         'matauang' => 'Currency',
         'rate_matauang' => 'Currency Rate',
         'bank' => 'Bank',
-        'rekening_bank' => 'Bank Account'
+        'rekening_bank' => 'Bank Account',
+        'supplier' => 'Supplier',
+        'area' => 'Area'
         'satuan_barang' => 'Item Unit',
     ],
     'link' => [

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MataUangRequest;
+use App\Http\Requests\StoreMataUangRequest;
+use App\Http\Requests\UpdateMataUangRequest;
 use App\Models\Matauang;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class MatauangController extends Controller
@@ -21,7 +21,7 @@ class MatauangController extends Controller
         return view('matauang.create');
     }
 
-    public function store(MataUangRequest $request)
+    public function store(StoreMataUangRequest $request)
     {
         Matauang::create($request->validated());
 
@@ -37,7 +37,7 @@ class MatauangController extends Controller
         return view('matauang.edit', compact('matauang'));
     }
 
-    public function update(MataUangRequest $request, Matauang $matauang)
+    public function update(UpdateMataUangRequest $request, Matauang $matauang)
     {
         $matauang->update($request->validated());
 

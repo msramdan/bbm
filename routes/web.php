@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MatauangController;
 use App\Http\Controllers\RateMataUangController;
+use App\Http\Controllers\RekeningBankController;
 
 Route::get('/', [DashboardController::class, 'index']);
 
@@ -32,4 +33,6 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/rate-matauang', RateMataUangController::class)->except('show');
 
     Route::resource('/bank', BankController::class)->except('show');
+
+    Route::resource('/rekening-bank', RekeningBankController::class)->except('show');
 });

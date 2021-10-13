@@ -12,7 +12,8 @@ return [
         'master' => 'Master Data',
         'matauang' => 'Currency',
         'rate_matauang' => 'Currency Rate',
-        'bank' => 'Bank'
+        'bank' => 'Bank',
+        'rekening_bank' => 'Bank Account'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

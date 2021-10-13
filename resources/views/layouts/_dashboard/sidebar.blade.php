@@ -41,6 +41,12 @@
                             {{ trans('dashboard.menu.bank') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('rekening-bank.index') }}">
+                            {{ trans('dashboard.menu.rekening_bank') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>

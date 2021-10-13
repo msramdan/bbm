@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BankRequest;
+use App\Http\Requests\StoreBankRequest;
+use App\Http\Requests\UpdateBankRequest;
 use App\Models\Bank;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class BankController extends Controller
@@ -37,7 +37,7 @@ class BankController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BankRequest $request)
+    public function store(StoreBankRequest $request)
     {
         Bank::create($request->validated());
 
@@ -64,7 +64,7 @@ class BankController extends Controller
      * @param  \App\Models\Bank  $bank
      * @return \Illuminate\Http\Response
      */
-    public function update(BankRequest $request, Bank $bank)
+    public function update(UpdateBankRequest $request, Bank $bank)
     {
         $bank->update($request->validated());
 

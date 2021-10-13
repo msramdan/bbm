@@ -64,3 +64,23 @@ Breadcrumbs::for('bank_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('bank');
     $trail->push('Edit');
 });
+
+
+
+// Master Data > Rekening Bank
+Breadcrumbs::for('rekening_bank', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Rekening Bank', route('rekening-bank.index'));
+});
+
+// Master Data > Rekening Bank > Tambah
+Breadcrumbs::for('rekening_bank_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('rekening_bank');
+    $trail->push('Tambah', route('rekening-bank.create'));
+});
+
+// Master Data > Rekening Bank > Edit
+Breadcrumbs::for('rekening_bank_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('rekening_bank');
+    $trail->push('Edit');
+});

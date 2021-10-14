@@ -46,6 +46,7 @@
                             {{ trans('dashboard.menu.rekening_bank') }}
                         </a>
                     </li>
+
                     <li>
                         <a href="{{ route('supplier.index') }}">
                             {{ trans('dashboard.menu.supplier') }}
@@ -66,6 +67,12 @@
                     <li>
                         <a href="{{ route('pelanggan.index') }}">
                             {{ trans('dashboard.menu.pelanggan') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('salesman.index') }}">
+                            {{ trans('dashboard.menu.salesman') }}
                         </a>
                     </li>
                 </ul>

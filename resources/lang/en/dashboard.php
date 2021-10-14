@@ -18,6 +18,7 @@ return [
         'area' => 'Area',
         'satuan_barang' => 'Item Unit',
         'pelanggan' => 'Customer',
+        'salesman' => 'Salesman',
     ],
     'link' => [
         'dashboard' => 'Dashboard',

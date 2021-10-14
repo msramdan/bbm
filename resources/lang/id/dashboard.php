@@ -18,6 +18,7 @@ return [
         'area' => 'Area',
         'satuan_barang' => 'Satuan Barang',
         'pelanggan' => 'Pelanggan',
+        'salesman' => 'Pramuniaga',
     ],
     'link' => [
         'dashboard' => 'Home',

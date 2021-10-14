@@ -9,6 +9,7 @@ use App\Http\Controllers\MatauangController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\RateMataUangController;
 use App\Http\Controllers\RekeningBankController;
+use App\Http\Controllers\SalesmanController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SatuanBarangController;
 
@@ -40,4 +41,5 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/area', AreaController::class)->except('show');
     Route::resource('/satuan-barang', SatuanBarangController::class)->except('show');
     Route::resource('/pelanggan', PelangganController::class)->except('show');
+    Route::resource('/salesman', SalesmanController::class)->except('show');
 });

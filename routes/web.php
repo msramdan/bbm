@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AreaController, BankController, DashboardController, GudangController, KategoriController, LocalizationController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
+use App\Http\Controllers\{AreaController, BankController, BarangController, DashboardController, GudangController, KategoriController, LocalizationController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
 
 Route::get('/', [DashboardController::class, 'index']);
 
@@ -34,4 +34,5 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/salesman', SalesmanController::class)->except('show');
     Route::resource('/gudang', GudangController::class)->except('show');
     Route::resource('/kategori', KategoriController::class)->except('show');
+    Route::resource('/barang', BarangController::class)->except('show');
 });

@@ -17,7 +17,7 @@ class SatuanBarangSeeder extends Seeder
     public function run()
     {
         DB::table('satuan_barang')->insert(
-        [
+            [
                 [
                     'kode' => 'pcs',
                     'nama' => 'Pieces',
@@ -29,6 +29,6 @@ class SatuanBarangSeeder extends Seeder
                     'status' => 'Y',
                 ]
             ]
-             );
+        );
     }
 }

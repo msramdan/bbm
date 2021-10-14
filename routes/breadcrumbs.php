@@ -184,6 +184,22 @@ Breadcrumbs::for('kategori_add', function (BreadcrumbTrail $trail) {
 });
 // Master Data > Kategori > Edit
 Breadcrumbs::for('kategori_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('kategori');
+    $trail->push('Edit');
+});
+
+// Master Data > Barang
+Breadcrumbs::for('barang', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Barang', route('barang.index'));
+});
+// Master Data > Barang > Tambah
+Breadcrumbs::for('barang_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('barang');
+    $trail->push('Tambah', route('barang.create'));
+});
+// Master Data > Barang > Edit
+Breadcrumbs::for('barang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('gudang');
     $trail->push('Edit');
 });

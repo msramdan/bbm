@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             AreaSeeder::class,
             SatuanBarangSeeder::class,
+            PelangganSeeder::class,
         ]);
     }
 }

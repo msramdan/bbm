@@ -56,9 +56,17 @@
                         <a href="{{ route('area.index') }}">
                             {{ trans('dashboard.menu.area') }}
                         </a>
+                    </li>
+
                     <li>
                         <a
                             href="{{ route('satuan-barang.index') }}">{{ trans('dashboard.menu.satuan_barang') }}</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('pelanggan.index') }}">
+                            {{ trans('dashboard.menu.pelanggan') }}
+                        </a>
                     </li>
                 </ul>
             </li>

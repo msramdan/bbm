@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Rekening Bank')
+@section('title', trans('rekening_bank.title.tambah'))
 
 @section('content')
     <!-- begin #content -->

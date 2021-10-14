@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MatauangController;
+use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\RateMataUangController;
 use App\Http\Controllers\RekeningBankController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SatuanBarangController;
+
 Route::get('/', [DashboardController::class, 'index']);
 
 //route switch bahasa
@@ -36,7 +38,6 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/rekening-bank', RekeningBankController::class)->except('show');
     Route::resource('/supplier', SupplierController::class)->except('show');
     Route::resource('/area', AreaController::class)->except('show');
-    Route::resource('/matauang', MatauangController::class);
-    Route::resource('/rate-matauang', RateMataUangController::class);
-    Route::resource('/satuan-barang', SatuanBarangController::class);
+    Route::resource('/satuan-barang', SatuanBarangController::class)->except('show');
+    Route::resource('/pelanggan', PelangganController::class)->except('show');
 });

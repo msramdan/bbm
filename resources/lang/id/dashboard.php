@@ -1,5 +1,5 @@
 <?php
-// Language English
+// Language Indonesia
 
 return [
     'title' => [
@@ -19,7 +19,8 @@ return [
         'satuan_barang' => 'Satuan Barang',
         'pelanggan' => 'Pelanggan',
         'salesman' => 'Pramuniaga',
-        'gudang' => 'Gudang'
+        'gudang' => 'Gudang',
+        'kategori' => 'Kategori Barang'
     ],
     'link' => [
         'dashboard' => 'Home',

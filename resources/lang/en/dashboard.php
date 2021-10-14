@@ -20,6 +20,7 @@ return [
         'pelanggan' => 'Customer',
         'salesman' => 'Salesman',
         'gudang' => 'Warehouse',
+        'kategori' => 'Item Category'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

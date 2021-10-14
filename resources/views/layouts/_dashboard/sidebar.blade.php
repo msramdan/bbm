@@ -81,6 +81,12 @@
                             {{ trans('dashboard.menu.gudang') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('kategori.index') }}">
+                            {{ trans('dashboard.menu.kategori') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>

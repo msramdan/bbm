@@ -171,3 +171,19 @@ Breadcrumbs::for('gudang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('gudang');
     $trail->push('Edit');
 });
+
+// Master Data > Kategori
+Breadcrumbs::for('kategori', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('kategori', route('kategori.index'));
+});
+// Master Data > Kategori > Tambah
+Breadcrumbs::for('kategori_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('kategori');
+    $trail->push('Tambah', route('kategori.create'));
+});
+// Master Data > Kategori > Edit
+Breadcrumbs::for('kategori_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('gudang');
+    $trail->push('Edit');
+});

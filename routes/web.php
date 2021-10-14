@@ -4,6 +4,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BankController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GudangController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MatauangController;
 use App\Http\Controllers\PelangganController;
@@ -42,4 +43,5 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/satuan-barang', SatuanBarangController::class)->except('show');
     Route::resource('/pelanggan', PelangganController::class)->except('show');
     Route::resource('/salesman', SalesmanController::class)->except('show');
+    Route::resource('/gudang', GudangController::class)->except('show');
 });

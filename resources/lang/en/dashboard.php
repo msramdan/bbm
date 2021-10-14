@@ -19,6 +19,7 @@ return [
         'satuan_barang' => 'Item Unit',
         'pelanggan' => 'Customer',
         'salesman' => 'Salesman',
+        'gudang' => 'Warehouse',
     ],
     'link' => [
         'dashboard' => 'Dashboard',

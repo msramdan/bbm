@@ -154,3 +154,20 @@ Breadcrumbs::for('salesman_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('salesman');
     $trail->push('Edit');
 });
+
+
+// Master Data > Gudang
+Breadcrumbs::for('gudang', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Gudang', route('gudang.index'));
+});
+// Master Data > Gudang > Tambah
+Breadcrumbs::for('gudang_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('gudang');
+    $trail->push('Tambah', route('gudang.create'));
+});
+// Master Data > Gudang > Edit
+Breadcrumbs::for('gudang_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('gudang');
+    $trail->push('Edit');
+});

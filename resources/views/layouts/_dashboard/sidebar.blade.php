@@ -75,6 +75,12 @@
                             {{ trans('dashboard.menu.salesman') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('gudang.index') }}">
+                            {{ trans('dashboard.menu.gudang') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>

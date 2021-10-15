@@ -22,6 +22,10 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             AreaSeeder::class,
             SatuanBarangSeeder::class,
+            PelangganSeeder::class,
+            SalesmanSeeder::class,
+            GudangSeeder::class,
+            KategoriSeeder::class
         ]);
     }
 }

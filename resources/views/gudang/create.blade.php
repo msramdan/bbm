@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('rekening_bank.title.tambah'))
+@section('title', trans('gudang.title.tambah'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('satuanbarang_add') }}
+        {{ Breadcrumbs::render('gudang_add') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-6 -->
@@ -30,17 +30,17 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('rekening_bank.title.tambah') }}</h4>
+                        <h4 class="panel-title">{{ trans('gudang.title.tambah') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('satuan-barang.store') }}" method="post"
-                            novalidate>
+                        <form class="form-horizontal" action="{{ route('gudang.store') }}" method="post" novalidate>
                             @csrf
 
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Kode</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="kode" class="form-control" placeholder="Kode" required />
+                                    <input type="text" name="kode" class="form-control" placeholder="Kode"
+                                        value="{{ old('kode') }}" required />
                                     @error('kode')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -48,10 +48,25 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Satuan Barang</label>
+                                <label class="col-md-3 control-label">Nama</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="nama" class="form-control" placeholder="Nama" required />
+                                    <input type="text" name="nama" class="form-control" placeholder="Nama"
+                                        value="{{ old('nama') }}" required />
                                     @error('nama')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Gudang Penjualan</label>
+                                <div class="col-md-9">
+                                    <select name="gudang_penjualan" class="form-control" required>
+                                        <option value="" disabled selected>-- Pilih --</option>
+                                        <option value="1">Ya</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                    @error('gudang_penjualan')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
@@ -75,7 +90,7 @@
                                 <label class="col-md-3 control-label"></label>
                                 <div class="col-md-9">
                                     <button type="submit" class="btn btn-sm btn-success"> Simpan</button>
-                                    <a href="{{ route('satuan-barang.index') }}" class="btn btn-sm btn-default"> Cancel
+                                    <a href="{{ route('gudang.index') }}" class="btn btn-sm btn-default"> Cancel
                                     </a>
                                 </div>
                             </div>

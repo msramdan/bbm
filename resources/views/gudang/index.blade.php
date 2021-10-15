@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('satuanbarang.title.index'))
+@section('title', trans('gudang.title.index'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('satuanbarang') }}
+        {{ Breadcrumbs::render('gudang') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -15,16 +15,24 @@
                     <div class="panel-heading">
                         <div class="panel-heading-btn">
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default"
-                                data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                                data-click="panel-expand">
+                                <i class="fa fa-expand"></i>
+                            </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success"
-                                data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                                data-click="panel-reload">
+                                <i class="fa fa-repeat"></i>
+                            </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning"
-                                data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                                data-click="panel-collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger"
-                                data-click="panel-remove"><i class="fa fa-times"></i></a>
+                                data-click="panel-remove">
+                                <i class="fa fa-times"></i>
+                            </a>
                         </div>
-                        <a href="{{ route('satuan-barang.create') }}" class="btn btn-success">
-                            <i class="fa fa-plus-square-o"></i> {{ trans('satuanbarang.button.tambah') }}
+                        <a href="{{ route('gudang.create') }}" class="btn btn-success">
+                            <i class="fa fa-plus-square-o"></i> {{ trans('gudang.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
@@ -34,29 +42,34 @@
                                     <th>No</th>
                                     <th>Kode</th>
                                     <th>Nama</th>
+                                    <th>Gudang Penjualan</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($satuanbarang as $data)
+                                @foreach ($gudang as $data)
                                     <tr class="odd gradeX">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $data->kode }}</td>
                                         <td>{{ $data->nama }}</td>
+                                        <td>{{ $data->gudang_penjualan == 1 ? 'Ya' : 'No' }}</td>
                                         <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
                                         <td>
-                                            <a href="{{ route('satuan-barang.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle"><i
-                                                    class="fa fa-edit"></i></a>
+                                            <a href="{{ route('gudang.edit', $data->id) }}"
+                                                class="btn btn-success btn-icon btn-circle">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
 
-                                            <form action="{{ route('satuan-barang.destroy', $data->id) }}" method="post"
+                                            <form action="{{ route('gudang.destroy', $data->id) }}" method="post"
                                                 class="d-inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger btn-icon btn-circle "><i
-                                                        class="ace-icon fa fa-trash"></i></button>
+
+                                                <button class="btn btn-danger btn-icon btn-circle">
+                                                    <i class="ace-icon fa fa-trash"></i>
+                                                </button>
                                             </form>
 
                                         </td>

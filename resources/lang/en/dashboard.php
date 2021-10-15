@@ -17,6 +17,10 @@ return [
         'supplier' => 'Supplier',
         'area' => 'Area',
         'satuan_barang' => 'Item Unit',
+        'pelanggan' => 'Customer',
+        'salesman' => 'Salesman',
+        'gudang' => 'Warehouse',
+        'kategori' => 'Item Category'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

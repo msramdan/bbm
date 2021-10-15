@@ -46,6 +46,7 @@
                             {{ trans('dashboard.menu.rekening_bank') }}
                         </a>
                     </li>
+
                     <li>
                         <a href="{{ route('supplier.index') }}">
                             {{ trans('dashboard.menu.supplier') }}
@@ -56,9 +57,35 @@
                         <a href="{{ route('area.index') }}">
                             {{ trans('dashboard.menu.area') }}
                         </a>
+                    </li>
+
                     <li>
                         <a
                             href="{{ route('satuan-barang.index') }}">{{ trans('dashboard.menu.satuan_barang') }}</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('pelanggan.index') }}">
+                            {{ trans('dashboard.menu.pelanggan') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('salesman.index') }}">
+                            {{ trans('dashboard.menu.salesman') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('gudang.index') }}">
+                            {{ trans('dashboard.menu.gudang') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('kategori.index') }}">
+                            {{ trans('dashboard.menu.kategori') }}
+                        </a>
                     </li>
                 </ul>
             </li>

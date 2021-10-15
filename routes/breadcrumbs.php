@@ -70,7 +70,7 @@ Breadcrumbs::for('rekening_bank_add', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('rekening_bank_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('rekening_bank');
     $trail->push('Edit');
-    });
+});
 // Master Data > Satuan Barang
 Breadcrumbs::for('satuanbarang', function (BreadcrumbTrail $trail) {
     $trail->parent('master');
@@ -105,6 +105,7 @@ Breadcrumbs::for('supplier_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('supplier');
     $trail->push('Edit');
 });
+
 // Master Data > Area
 Breadcrumbs::for('area', function (BreadcrumbTrail $trail) {
     $trail->parent('master');
@@ -118,5 +119,71 @@ Breadcrumbs::for('area_add', function (BreadcrumbTrail $trail) {
 // Master Data > Area > Edit
 Breadcrumbs::for('area_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('area');
+    $trail->push('Edit');
+});
+
+// Master Data > Pelanggan
+Breadcrumbs::for('pelanggan', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Pelanggan', route('pelanggan.index'));
+});
+// Master Data > Pelanggan > Tambah
+Breadcrumbs::for('pelanggan_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('pelanggan');
+    $trail->push('Tambah', route('pelanggan.create'));
+});
+// Master Data > Pelanggan > Edit
+Breadcrumbs::for('pelanggan_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('pelanggan');
+    $trail->push('Edit');
+});
+
+
+// Master Data > Salesman
+Breadcrumbs::for('salesman', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Salesman', route('salesman.index'));
+});
+// Master Data > Salesman > Tambah
+Breadcrumbs::for('salesman_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('salesman');
+    $trail->push('Tambah', route('salesman.create'));
+});
+// Master Data > Salesman > Edit
+Breadcrumbs::for('salesman_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('salesman');
+    $trail->push('Edit');
+});
+
+
+// Master Data > Gudang
+Breadcrumbs::for('gudang', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Gudang', route('gudang.index'));
+});
+// Master Data > Gudang > Tambah
+Breadcrumbs::for('gudang_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('gudang');
+    $trail->push('Tambah', route('gudang.create'));
+});
+// Master Data > Gudang > Edit
+Breadcrumbs::for('gudang_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('gudang');
+    $trail->push('Edit');
+});
+
+// Master Data > Kategori
+Breadcrumbs::for('kategori', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('kategori', route('kategori.index'));
+});
+// Master Data > Kategori > Tambah
+Breadcrumbs::for('kategori_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('kategori');
+    $trail->push('Tambah', route('kategori.create'));
+});
+// Master Data > Kategori > Edit
+Breadcrumbs::for('kategori_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('gudang');
     $trail->push('Edit');
 });

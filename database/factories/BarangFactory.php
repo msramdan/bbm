@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BarangFactory extends Factory
 {
+    private static $no = 1;
+
     /**
      * The name of the factory's corresponding model.
      *
@@ -31,7 +33,7 @@ class BarangFactory extends Factory
 
         return [
             'kode' => Str::random(rand(1, 10)),
-            'nama' => $this->faker->name,
+            'nama' => 'Barang ' . self::$no++,
             'jenis' => rand(1, 2), //1 barang, 2 paket
             'kategori_id' => rand(1, $kategori->id), //random kateogri id sesuai dengan jumlah data kategori
             'satuan_id' => rand(1, $satuan->id),
@@ -41,9 +43,9 @@ class BarangFactory extends Factory
             'harga_jual' => rand(1, 5000),
             'harga_jual_min' => rand(1, 5000),
             'stok' => rand(1, 30),
-            'min_sotk' => rand(0, 30),
+            'min_stok' => rand(0, 5),
             'gambar' => 'noimage.png',
-            'status' => 'Y',
+            'status' => array_rand(['Y', 'N']),
         ];
     }
 }

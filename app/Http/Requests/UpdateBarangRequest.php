@@ -24,19 +24,19 @@ class UpdateBarangRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode' => 'required|max:5|unique:barang,kode,' . $this->barang->id,
+            'kode' => 'required|max:10|unique:barang,kode,' . $this->barang->id,
             'nama' => 'required|min:3',
             'jenis' => 'required|in:1,2',
-            'kategori_id' => 'required',
-            'satuan_id' => 'required',
+            'kategori' => 'required',
+            'satuan' => 'required',
             'harga_beli_matauang' => 'required',
             'harga_jual_matauang' => 'required',
             'harga_beli' => 'required|integer|min:0',
             'harga_jual' => 'required|integer|min:0',
             'harga_jual_min' => 'required|integer|min:0',
             'stok' => 'required|integer|min:0',
-            'min_sotk' => 'required|integer|min:0',
-            'gambar' => 'nullable|image',
+            'min_stok' => 'required|integer|min:0',
+            'gambar' => 'nullable|image|max:1024',
             'status' => 'required|in:Y,N',
         ];
     }

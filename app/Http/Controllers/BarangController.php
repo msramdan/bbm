@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\{StoreBarangRequest, UpdateBarangRequest};
 use App\Models\{Barang, Kategori, Matauang, SatuanBarang};
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class BarangController extends Controller
@@ -42,7 +43,20 @@ class BarangController extends Controller
      */
     public function store(StoreBarangRequest $request)
     {
-        Barang::create($request->validated());
+        $data = $request->validated();
+        $data['gambar'] = 'noimage.png';
+        $data['kategori_id'] = $request->kategori;
+        $data['satuan_id'] = $request->satuan;
+
+        if ($request->has('gambar') && $request->file('gambar')->isValid()) {
+            $filename = time() . '.' . $request->gambar->extension();
+
+            $request->gambar->storeAs('public/img/barang/', $filename);
+
+            $data['gambar'] = $filename;
+        }
+
+        Barang::create($data);
 
         Alert::success('Tambah Data', 'Berhasil');
 
@@ -75,9 +89,26 @@ class BarangController extends Controller
      */
     public function update(UpdateBarangRequest $request, Barang $barang)
     {
-        Barang::create($request->validated());
+        $data = $request->validated();
+        $data['kategori_id'] = $request->kategori;
+        $data['satuan_id'] = $request->satuan;
 
-        Alert::success('Tambah Data', 'Berhasil');
+        if ($request->has('gambar') && $request->file('gambar')->isValid()) {
+            $filename = time()  . '.' . $request->gambar->extension();
+
+            $request->gambar->storeAs('public/img/barang/', $filename);
+
+            // hapus gambar lama jika bukan gambar default
+            if ($barang->gambar != 'noimage.png') {
+                Storage::delete('public/img/barang/' . $barang->gambar);
+            }
+
+            $data['gambar'] = $filename;
+        }
+
+        $barang->update($data);
+
+        Alert::success('Update Data', 'Berhasil');
 
         return redirect()->route('barang.index');
     }
@@ -90,9 +121,14 @@ class BarangController extends Controller
      */
     public function destroy(Barang $barang)
     {
+        // hapus gambar lama jika bukan gambar default
+        if ($barang->gambar != 'noimage.png') {
+            Storage::delete('public/img/barang/' . $barang->gambar);
+        }
+
         $barang->delete();
 
-        Alert::success('Tambah Data', 'Berhasil');
+        Alert::success('Hapus Data', 'Berhasil');
 
         return redirect()->route('barang.index');
     }

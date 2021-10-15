@@ -26,7 +26,7 @@ class CreateBarangTable extends Migration
             $table->integer('harga_jual');
             $table->integer('harga_jual_min');
             $table->integer('stok');
-            $table->integer('min_sotk');
+            $table->integer('min_stok');
             $table->string('gambar')->nullable();
             $table->char('status', 5)->nullable();
             $table->timestamps();

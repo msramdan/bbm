@@ -200,6 +200,6 @@ Breadcrumbs::for('barang_add', function (BreadcrumbTrail $trail) {
 });
 // Master Data > Barang > Edit
 Breadcrumbs::for('barang_edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('gudang');
+    $trail->parent('barang');
     $trail->push('Edit');
 });

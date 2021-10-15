@@ -24,7 +24,7 @@ class StoreBarangRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode' => 'required|max:5|unique:barang,kode',
+            'kode' => 'required|max:10|unique:barang,kode',
             'nama' => 'required|min:3',
             'jenis' => 'required|in:1,2',
             'kategori' => 'required',
@@ -36,7 +36,7 @@ class StoreBarangRequest extends FormRequest
             'harga_jual_min' => 'required|integer|min:0',
             'stok' => 'required|integer|min:0',
             'min_stok' => 'required|integer|min:0',
-            'gambar' => 'nullable|image',
+            'gambar' => 'nullable|image|max:1024',
             'status' => 'required|in:Y,N',
         ];
     }

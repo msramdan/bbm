@@ -33,13 +33,15 @@
                         <h4 class="panel-title">{{ trans('barang.title.tambah') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('barang.store') }}" method="post" novalidate>
+                        <form class="form-horizontal" action="{{ route('barang.store') }}" method="post"
+                            enctype="multipart/form-data" novalidate>
                             @csrf
 
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Kode</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="kode" class="form-control" placeholder="Kode" required />
+                                    <input type="text" name="kode" class="form-control" placeholder="Kode"
+                                        value="{{ old('kode') }}" required />
                                     @error('kode')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -49,7 +51,8 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Nama</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="nama" class="form-control" placeholder="Nama" required />
+                                    <input type="text" name="nama" class="form-control" placeholder="Nama"
+                                        value="{{ old('nama') }}" required />
                                     @error('nama')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -61,8 +64,10 @@
                                 <div class="col-md-9">
                                     <select name="jenis" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
-                                        <option value="1">Barang</option>
-                                        <option value="2">Paket</option>
+                                        <option value="1" {{ old('jenis') && old('jenis') == 1 ? 'selected' : '' }}>Barang
+                                        </option>
+                                        <option value="2" {{ old('jenis') && old('jenis') == 2 ? 'selected' : '' }}>Paket
+                                        </option>
                                     </select>
                                     @error('jenis')
                                         <small class="text-danger">{{ $message }}</small>
@@ -76,7 +81,9 @@
                                     <select name="kategori" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse($kategori as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            <option value="{{ $item->id }}"
+                                                {{ old('kategori') && old('kategori') == $item->id ? 'selected' : $item->id }}>
+                                                {{ $item->nama }}</option>
                                         @empty
                                             <option value="" disabled selected>Data tidak ditemukan
                                             <option>
@@ -94,7 +101,9 @@
                                     <select name="satuan" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse($satuan as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            <option value="{{ $item->id }}"
+                                                {{ old('satuan') && old('satuan') == $item->id ? 'selected' : $item->id }}>
+                                                {{ $item->nama }}</option>
                                         @empty
                                             <option value="" disabled selected>Data tidak ditemukan
                                             <option>
@@ -114,7 +123,9 @@
                                             <select name="harga_beli_matauang" class="form-control" required>
                                                 <option value="" disabled selected>-- Pilih --</option>
                                                 @forelse($matauang as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                    <option value="{{ $item->id }}"
+                                                        {{ old('harga_beli_matauang') && old('harga_beli_matauang') == $item->id ? 'selected' : $item->id }}>
+                                                        {{ $item->nama }}</option>
                                                 @empty
                                                     <option value="" disabled selected>Data tidak ditemukan
                                                     <option>
@@ -126,7 +137,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="number" min="1" name="harga_beli" placeholder="Harga Beli"
-                                                class="form-control" required>
+                                                value="{{ old('harga_beli') }}" class="form-control" required>
                                             @error('harga_beli')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
@@ -144,7 +155,9 @@
                                             <select name="harga_jual_matauang" class="form-control" required>
                                                 <option value="" disabled selected>-- Pilih --</option>
                                                 @forelse($matauang as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                    <option value="{{ $item->id }}"
+                                                        {{ old('harga_jual_matauang') && old('harga_jual_matauang') == $item->id ? 'selected' : $item->id }}>
+                                                        {{ $item->nama }}</option>
                                                 @empty
                                                     <option value="" disabled selected>Data tidak ditemukan
                                                     <option>
@@ -157,7 +170,7 @@
 
                                         <div class="col-md-6">
                                             <input type="number" min="1" name="harga_jual" placeholder="Harga Jual"
-                                                class="form-control" required>
+                                                value="{{ old('harga_jual') }}" class="form-control" required>
                                             @error('harga_jual')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
@@ -165,7 +178,7 @@
 
                                         <div class="col-md-3">
                                             <input type="number" min="1" name="harga_jual_min" placeholder="Harga Jual Min."
-                                                class="form-control" required>
+                                                value="{{ old('harga_jual_min') }}" class="form-control" required>
                                             @error('harga_jual_min')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
@@ -181,20 +194,19 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <input type="number" min="1" name="stok" placeholder="Stok"
-                                                class="form-control" required>
+                                                value="{{ old('stok') }}" class="form-control" required>
                                             @error('stok')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
                                         <div class="col-md-4">
                                             <input type="number" min="1" name="min_stok" placeholder="Min. Stok"
-                                                class="form-control" required>
+                                                value="{{ old('min_stok') }}" class="form-control" required>
                                             @error('min_stok')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -203,10 +215,23 @@
                                 <div class="col-md-9">
                                     <select name="status" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
-                                        <option value="Y">Aktif</option>
-                                        <option value="N">No</option>
+                                        <option value="Y" value="Y"
+                                            {{ old('status') && old('status') == 'Y' ? 'selected' : '' }}>Aktif
+                                        </option>
+                                        <option value="N" {{ old('status') && old('status') == 'N' ? 'selected' : '' }}>
+                                            No</option>
                                     </select>
                                     @error('status')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Gambar</label>
+                                <div class="col-md-9">
+                                    <input type="file" name="gambar" class="form-control" />
+                                    @error('gambar')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>

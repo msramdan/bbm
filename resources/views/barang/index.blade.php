@@ -58,7 +58,18 @@
                                 @foreach ($barang as $data)
                                     <tr class="odd gradeX">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $data->gambar }}</td>
+                                        <td>
+                                            @if ($data->gambar == 'noimage.png')
+                                                <img src="{{ asset('img/noimage.png') }}" alt="gambar"
+                                                    class="img-fluid rounded"
+                                                    style="width: 70px; height: 50px; object-fit: cover;">
+                                            @else
+                                                <img src="{{ asset('storage/img/barang/' . $data->gambar) }}" alt="gambar"
+                                                    class="img-fluid rounded"
+                                                    style="width: 70px; height: 50px; object-fit: cover;">
+                                            @endif
+
+                                        </td>
                                         <td>{{ $data->kode }}</td>
                                         <td>{{ $data->nama }}</td>
                                         <td>{{ $data->jenis }}</td>
@@ -79,7 +90,7 @@
                                             </a>
 
                                             <form action="{{ route('barang.destroy', $data->id) }}" method="post"
-                                                class="d-inline"
+                                                class="form-inline d-inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                                 @csrf
                                                 @method('delete')

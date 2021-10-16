@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{AreaController, BankController, BarangController, DashboardController, GudangController, KategoriController, LocalizationController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
+use App\Http\Controllers\Inventory\AdjustmentPlusController;
 
 Route::get('/', [DashboardController::class, 'index']);
 
@@ -35,4 +36,13 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/gudang', GudangController::class)->except('show');
     Route::resource('/kategori', KategoriController::class)->except('show');
     Route::resource('/barang', BarangController::class)->except('show');
+});
+
+
+// Inventory
+Route::group(['prefix' => 'inventory', 'middleware' => ['web', 'auth']], function () {
+    Route::post('/adjustment-plus/store', [AdjustmentPlusController::class, 'store'])->name('adjustment-plus.store');
+    Route::get('/adjustment-plus/generate-kode', [AdjustmentPlusController::class, 'generateKode'])->name('adjustment-plus.generateKode');
+
+    Route::resource('/adjustment-plus', AdjustmentPlusController::class)->except('store');
 });

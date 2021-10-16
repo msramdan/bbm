@@ -10,6 +10,7 @@ return [
     ],
     'menu' => [
         'master' => 'Data Master',
+        'inventory' => 'Persediaan',
         'matauang' => 'Mata Uang',
         'rate_matauang' => 'Rate Mata Uang',
         'bank' => 'Bank',
@@ -21,7 +22,8 @@ return [
         'salesman' => 'Pramuniaga',
         'gudang' => 'Gudang',
         'kategori' => 'Kategori Barang',
-        'barang' => 'Barang'
+        'barang' => 'Barang',
+        'adjustment_plus' => 'Adjustment Plus'
     ],
     'link' => [
         'dashboard' => 'Home',

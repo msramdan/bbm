@@ -203,3 +203,20 @@ Breadcrumbs::for('barang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('barang');
     $trail->push('Edit');
 });
+
+
+// Master Data > Adjustment Plus
+Breadcrumbs::for('adjustment_plus', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Adjustment Plus', route('adjustment-plus.index'));
+});
+// Master Data > Adjustment Plus > Tambah
+Breadcrumbs::for('adjustment_plus_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_plus');
+    $trail->push('Tambah', route('adjustment-plus.create'));
+});
+// Master Data > Adjustment Plus > Edit
+Breadcrumbs::for('adjustment_plus_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_plus');
+    $trail->push('Edit');
+});

@@ -15,6 +15,23 @@ class SupplierSeeder extends Seeder
     public function run()
     {
         Supplier::create([
+            'kode' => 'NOSP',
+            'nama_supplier' => 'Tanpa Supplier',
+            'npwp' => '',
+            'nppkp' => '',
+            'tgl_pkp' => now(),
+            'alamat' => '',
+            'kota' => '',
+            'kode_pos' => '',
+            'telp1' => '',
+            'telp2' => '',
+            'nama_kontak' => '',
+            'telp_kontak' => '',
+            'top' => null,
+            'status' => 'Y',
+        ]);
+
+        Supplier::create([
             'kode' => 'SP1',
             'nama_supplier' => 'Jonathan Joestar',
             'npwp' => '34539053455345',

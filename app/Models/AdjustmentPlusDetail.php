@@ -21,9 +21,20 @@ class AdjustmentPlusDetail extends Model
         'subtotal'
     ];
 
+    protected $with = ['barang', 'supplier'];
 
     public function adjustment_plus()
     {
         return $this->belongsTo(AdjustmentPlus::class);
+    }
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
 }

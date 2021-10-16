@@ -43,9 +43,6 @@
 
                                     <input type="text" name="kode" class="form-control" placeholder="Kode" id="kode"
                                         required readonly />
-                                    @error('kode')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
 
                                 <div class="col-md-6">
@@ -53,9 +50,6 @@
 
                                     <input type="date" name="tanggal" class="form-control" required
                                         value="{{ date('Y-m-d') }}" />
-                                    @error('tanggal')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
                             </div>
 
@@ -71,9 +65,6 @@
                                             <option value="" disabled>Data tidak ditemukan</option>
                                         @endforelse
                                     </select>
-                                    @error('gudang')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
 
                                 <div class="col-md-4 mt-3">
@@ -87,18 +78,12 @@
                                             <option value="" disabled>Data tidak ditemukan</option>
                                         @endforelse
                                     </select>
-                                    @error('matauang')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
 
                                 <div class="col-md-4 mt-3">
                                     <label class="control-label">Rate</label>
 
                                     <input type="number" name="rate" class="form-control" placeholder="Rate" required />
-                                    @error('rate')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
                             </div>
                         </form>
@@ -259,4 +244,4 @@
     <!-- end #content -->
 @endsection
 
-@include('inventory.adjustment-plus.script')
+@include('inventory.adjustment-plus.script.create-js')

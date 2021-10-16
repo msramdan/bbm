@@ -22,7 +22,7 @@ class AdjustmentPlusController extends Controller
      */
     public function index()
     {
-        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail')->get();
+        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')->withCount('adjustment_plus_detail')->get();
 
         return view('inventory.adjustment-plus.index', compact('adjustmentPlus'));
     }
@@ -77,10 +77,6 @@ class AdjustmentPlusController extends Controller
             $adjusment->adjustment_plus_detail()->saveMany($adjusmentDetail);
         });
 
-        // Alert::success('Tambah data', 'berhasil');
-
-        // return redirect()->route('adjustment-plus.index');
-
         return 'success';
     }
 
@@ -90,9 +86,13 @@ class AdjustmentPlusController extends Controller
      * @param  \App\Models\AdjustmentPlus  $adjustmentPlus
      * @return \Illuminate\Http\Response
      */
-    public function show(AdjustmentPlus $adjustmentPlus)
+    public function show($id)
     {
-        //
+        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')
+            ->withCount('adjustment_plus_detail')
+            ->findOrFail($id);
+
+        return view('inventory.adjustment-plus.show', compact('adjustmentPlus'));
     }
 
     /**
@@ -101,9 +101,17 @@ class AdjustmentPlusController extends Controller
      * @param  \App\Models\AdjustmentPlus  $adjustmentPlus
      * @return \Illuminate\Http\Response
      */
-    public function edit(AdjustmentPlus $adjustmentPlus)
+    public function edit($id)
     {
-        //
+        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')
+            ->withCount('adjustment_plus_detail')
+            ->findOrFail($id);
+
+        $gudang = Gudang::get();
+        $barang = Barang::get();
+        $supplier = Supplier::get();
+
+        return view('inventory.adjustment-plus.edit', compact('adjustmentPlus', 'gudang', 'barang', 'supplier'));
     }
 
     /**
@@ -113,9 +121,35 @@ class AdjustmentPlusController extends Controller
      * @param  \App\Models\AdjustmentPlus  $adjustmentPlus
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AdjustmentPlus $adjustmentPlus)
+    public function update(Request $request, $id)
     {
-        //
+        $adjusment = AdjustmentPlus::findOrFail($id);
+        $adjusmentDetail = [];
+
+        DB::transaction(function () use ($request, $adjusmentDetail, $adjusment) {
+            $adjusment->update([
+                'gudang_id' => $request->gudang,
+                'grand_total' => $request->grand_total,
+            ]);
+
+            foreach ($request->barang as $i => $value) {
+                $adjusmentDetail[] = new AdjustmentPlusDetail([
+                    'barang_id' => $value,
+                    'supplier_id' => $request->supplier[$i],
+                    'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
+                    'harga' => $request->harga[$i],
+                    'qty' => $request->qty[$i],
+                    'subtotal' => $request->subtotal[$i],
+                ]);
+            }
+
+            // hapus list barang lama
+            $adjusment->adjustment_plus_detail()->delete();
+
+            $adjusment->adjustment_plus_detail()->saveMany($adjusmentDetail);
+        });
+
+        return 'success';
     }
 
     /**
@@ -124,34 +158,38 @@ class AdjustmentPlusController extends Controller
      * @param  \App\Models\AdjustmentPlus  $adjustmentPlus
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AdjustmentPlus $adjustmentPlus)
+    public function destroy($id)
     {
-        //
+        $adjusment = AdjustmentPlus::findOrFail($id);
+        $adjusment->delete();
+
+        Alert::success('Happus Data', 'Berhasil');
+
+        return redirect()->route('adjustment-plus.index');
     }
-
-    // public function simpan(Request $request)
-    // {
-
-    // }
 
     protected function generateKode()
     {
-        $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', now()->month)->count();
+        if (request()->ajax()) {
+            $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', now()->month)->count();
 
-        if ($checkLatestKode == null) {
-            $kode = 'ADJPL-' . date('Ym') . '0000' . 1;
-        } else {
-            if ($checkLatestKode < 10) {
-                $kode = 'ADJPL-' . date('Ym') . '0000' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 10) {
-                $kode = 'ADJPL-' . date('Ym') . '000' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 100) {
-                $kode = 'ADJPL-' . date('Ym') . '00' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 1000) {
-                $kode = 'ADJPL-' . date('Ym') . '0' . $checkLatestKode + 1;
+            if ($checkLatestKode == null) {
+                $kode = 'ADJPL-' . date('Ym') . '0000' . 1;
+            } else {
+                if ($checkLatestKode < 10) {
+                    $kode = 'ADJPL-' . date('Ym') . '0000' . $checkLatestKode + 1;
+                } elseif ($checkLatestKode > 10) {
+                    $kode = 'ADJPL-' . date('Ym') . '000' . $checkLatestKode + 1;
+                } elseif ($checkLatestKode > 100) {
+                    $kode = 'ADJPL-' . date('Ym') . '00' . $checkLatestKode + 1;
+                } elseif ($checkLatestKode > 1000) {
+                    $kode = 'ADJPL-' . date('Ym') . '0' . $checkLatestKode + 1;
+                }
             }
-        }
 
-        return $kode;
+            return $kode;
+        } else {
+            abort(404);
+        }
     }
 }

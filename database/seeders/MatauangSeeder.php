@@ -27,7 +27,7 @@ class MatauangSeeder extends Seeder
                     'updated_at' => now()
                 ],
                 [
-                    'kode' => 'USD',
+                    'kode' => '$',
                     'nama' => 'US Dollar',
                     'default' => 'N',
                     'status' => 'Y',

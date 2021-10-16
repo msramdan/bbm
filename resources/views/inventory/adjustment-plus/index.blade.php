@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'adjustment_plus')
+@section('title', trans('adjustment_plus.title.index'))
 
 @section('content')
     <!-- begin #content -->
@@ -41,8 +41,12 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Kode</th>
-                                    <th>Nama</th>
-                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Mata Uang</th>
+                                    <th>Gudang</th>
+                                    <th>Rate</th>
+                                    <th>Total Item</th>
+                                    <th>Grandtotal</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -51,16 +55,25 @@
                                     <tr class="odd gradeX">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $data->kode }}</td>
-                                        <td>{{ $data->nama }}</td>
-                                        <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
+                                        <td>{{ $data->tanggal->format('d m Y') }}</td>
+                                        <td>{{ $data->matauang->nama }}</td>
+                                        <td>{{ $data->gudang->nama }}</td>
+                                        <td>{{ $data->rate }}</td>
+                                        <td>{{ $data->adjustment_plus_detail_count }}</td>
+                                        <td>{{ $data->matauang->kode . ' ' . number_format($data->grand_total) }}</td>
                                         <td>
+                                            <a href="{{ route('adjustment-plus.show', $data->id) }}"
+                                                class="btn btn-info btn-icon btn-circle">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+
                                             <a href="{{ route('adjustment-plus.edit', $data->id) }}"
                                                 class="btn btn-success btn-icon btn-circle">
                                                 <i class="fa fa-edit"></i>
                                             </a>
 
-                                            <form action="{{ route('adjustment-plus.destroy', $data->id) }}" method="post"
-                                                class="d-inline"
+                                            <form action="{{ route('adjustment-plus.destroy', $data->id) }}"
+                                                method="post" class="d-inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                                 @csrf
                                                 @method('delete')
@@ -69,7 +82,6 @@
                                                     <i class="ace-icon fa fa-trash"></i>
                                                 </button>
                                             </form>
-
                                         </td>
                                     </tr>
                                 @endforeach

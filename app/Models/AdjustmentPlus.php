@@ -20,8 +20,20 @@ class AdjustmentPlus extends Model
         'grand_total'
     ];
 
+    protected $casts = ['tanggal' => 'date'];
+
     public function adjustment_plus_detail()
     {
         return $this->hasMany(AdjustmentPlusDetail::class);
+    }
+
+    public function matauang()
+    {
+        return $this->belongsTo(Matauang::class);
+    }
+
+    public function gudang()
+    {
+        return $this->belongsTo(Gudang::class);
     }
 }

@@ -104,7 +104,7 @@
             <li class="has-sub">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
-                    <i class="fa fa-list"></i>
+                    <i class="fa fa-archive"></i>
                     <span>{{ trans('dashboard.menu.inventory') }}</span>
                 </a>
                 <ul class="sub-menu" style="display: none;">

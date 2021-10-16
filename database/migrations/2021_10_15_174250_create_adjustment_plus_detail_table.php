@@ -15,13 +15,13 @@ class CreateAdjustmentPlusDetailTable extends Migration
     {
         Schema::create('adjustment_plus_detail', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('adjustment_plus_id')->constrained('adjustment_plus');
+            $table->foreignId('adjustment_plus_id')->constrained('adjustment_plus')->onDelete('cascade');
             $table->foreignId('barang_id')->constrained('barang');
             $table->foreignId('supplier_id')->constrained('supplier');
             $table->string('bentuk_kepemilikan_stok', 20);
             $table->integer('qty');
-            $table->integer('harga');
-            $table->integer('subtotal');
+            $table->float('harga');
+            $table->float('subtotal');
             $table->timestamps();
         });
     }

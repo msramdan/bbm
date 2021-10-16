@@ -42,7 +42,8 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
 // Inventory
 Route::group(['prefix' => 'inventory', 'middleware' => ['web', 'auth']], function () {
     Route::post('/adjustment-plus/store', [AdjustmentPlusController::class, 'store'])->name('adjustment-plus.store');
+    Route::put('/adjustment-plus/update/{id}', [AdjustmentPlusController::class, 'update'])->name('adjustment-plus.update');
     Route::get('/adjustment-plus/generate-kode', [AdjustmentPlusController::class, 'generateKode'])->name('adjustment-plus.generateKode');
 
-    Route::resource('/adjustment-plus', AdjustmentPlusController::class)->except('store');
+    Route::resource('/adjustment-plus', AdjustmentPlusController::class)->except('store', 'update');
 });

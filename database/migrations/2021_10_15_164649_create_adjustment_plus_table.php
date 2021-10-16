@@ -19,8 +19,8 @@ class CreateAdjustmentPlusTable extends Migration
             $table->date('tanggal');
             $table->foreignId('gudang_id')->constrained('gudang');
             $table->foreignId('matauang_id')->constrained('matauang');
-            $table->integer('rate');
-            $table->integer('grand_total');
+            $table->float('rate');
+            $table->float('grand_total');
             $table->timestamps();
         });
     }

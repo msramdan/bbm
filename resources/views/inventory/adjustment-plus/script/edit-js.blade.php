@@ -1,7 +1,8 @@
 @push('custom-js')
     <script>
-        get_kode()
         cek_form_entry()
+        hitung_grand_total()
+        cek_table_length()
 
         $('#matauang').change(function() {
             hitung_grand_total()
@@ -139,35 +140,12 @@
                 }
 
                 $.ajax({
-                    type: 'POST',
-                    url: '{{ route('adjustment-plus.store') }}',
+                    type: 'PUT',
+                    url: '{{ route('adjustment-plus.update', $adjustmentPlus->id) }}',
                     data: data,
                     success: function(data) {
-                        if (data == 'success') {
-                            $('#tbl_trx tbody tr').remove()
-
-                            $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                            $('input[name="rate"]').val('')
-
-                            $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-                            $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
-
-                            clear_form_entry()
-                            hitung_grand_total()
-                            cek_table_length()
-                            get_kode()
-
-                            // Swal({
-                            //     title: 'Berhasil',
-                            //     text: 'Adjustment Plus disimpan',
-                            //     type: 'success'
-                            // })
-
-                            alert('Data berhasil disimpan')
-                        } else {
-                            alert('error')
-                            console.error(data)
-                        }
+                        alert('Data berhasil diubah')
+                        window.location = '{{ route('adjustment-plus.index') }}'
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
@@ -215,9 +193,9 @@
 
         // hitung jumlan <tr> pada table#tbl_trx
         function cek_table_length() {
-            let total = $('#tbl_trx tbody tr').length + 1;
+            let total = $('#tbl_trx tbody tr').length;
 
-            if (total > 1) {
+            if (total > 0) {
                 $('#btn_simpan').prop('disabled', false);
                 $('#btn_clear_table').prop('disabled', false);
             } else {
@@ -292,17 +270,6 @@
             $('#btn_add').show()
         }
 
-        // ajax get kode
-        function get_kode() {
-            $.ajax({
-                url: "{{ route('adjustment-plus.generateKode') }}",
-                type: 'GET',
-                success: function(data) {
-                    $('input[name="kode"]').val(data)
-                }
-            })
-        }
-
         function hitung_grand_total() {
             let total = 0;
 
@@ -350,6 +317,7 @@
             } else {
                 $('#btn_add').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
+
             }
         }
     </script>

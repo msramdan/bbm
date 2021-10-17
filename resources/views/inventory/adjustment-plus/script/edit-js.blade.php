@@ -1,4 +1,7 @@
 @push('custom-js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"
+        integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
+
     <script>
         cek_form_entry()
         hitung_grand_total()
@@ -20,63 +23,93 @@
         $('#form_trx').submit(function(e) {
             e.preventDefault()
 
-            let kode_nama_barang = $('#kode_barang_input option:selected')
-            let supplier = $('#supplier_input option:selected')
-            let harga = $('#harga_input').val()
-            let bentuk_kepemilikan = $('#bentuk_kepemilikan_input option:selected')
-            let qty = $('#qty_input').val()
-            // let subtotal = $('#subtotal_input').val()
-            let no = $('#tbl_trx tbody tr').length + 1
+            if (
+                !$('input[name="tanggal"]').val() ||
+                !$('input[name="rate"]').val() ||
+                !$('select[name="gudang"]').val() ||
+                !$('select[name="matauang"]').val()
+            ) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Mohon isi data Adjusment Plus - Header terlebih dahulu!'
+                })
+            } else {
 
-            let subtotal = harga * qty
+                let kode_barang = $('#kode_barang_input option:selected')
+                let supplier = $('#supplier_input option:selected')
+                let harga = $('#harga_input').val()
+                let bentuk_kepemilikan = $('#bentuk_kepemilikan_input option:selected')
+                let qty = $('#qty_input').val()
 
-            let data_trx = `<tr>
-                <td>${no}</td>
-                <td>
-                    ${kode_nama_barang.html()}
-                    <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_nama_barang.val()}">
-                </td>
-                <td>
-                    ${supplier.html()}
-                    <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier.val()}">
-                </td>
-                <td>
-                    ${bentuk_kepemilikan.html()}
-                    <input type="hidden" class="bentuk_kepemilikan_hidden" name="bentuk_kepemilikan[]" value="${bentuk_kepemilikan.val()}">
-                </td>
-                <td>
-                    ${format_ribuan(harga)}
-                    <input type="hidden"  class="harga_hidden" name="harga[]" value="${harga}">
-                </td>
-                <td>
-                    ${format_ribuan(qty)}
-                    <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
-                </td>
-                <td>
-                    ${format_ribuan(subtotal)}
-                    <input type="hidden" name="subtotal[]" class="subtotal_hidden" value="${subtotal}">
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info btn-xs btn_edit">
-                        <i class="fa fa-edit"></i>
-                    </button>
+                let subtotal = harga * qty
 
-                    <button type="button" class="btn btn-danger btn-xs btn_hapus">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </td>
-            </tr>`
+                // cek duplikasi barang
+                $('input[name="barang[]"]').each(function() {
+                    // cari index tr ke berapa
+                    let index = $(this).parent().parent().index()
 
-            $('#tbl_trx').append(data_trx)
+                    // kalo id barang di cart dan form input(barang) sama
+                    //  kalo id supplier di cart dan form input(barang) sama
+                    if ($(this).val() == kode_barang.val()) {
+                        // hapus tr berdasarkan index
+                        $('#tbl_trx tbody tr:eq(' + index + ')').remove()
 
-            cek_table_length()
+                        generate_nomer()
+                    }
+                })
 
-            clear_form_entry()
+                let no = $('#tbl_trx tbody tr').length + 1
 
-            hitung_grand_total()
+                let data_trx = `<tr>
+                    <td>${no}</td>
+                    <td>
+                        ${kode_barang.html()}
+                        <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
+                    </td>
+                    <td>
+                        ${supplier.html()}
+                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier.val()}">
+                    </td>
+                    <td>
+                        ${bentuk_kepemilikan.html()}
+                        <input type="hidden" class="bentuk_kepemilikan_hidden" name="bentuk_kepemilikan[]" value="${bentuk_kepemilikan.val()}">
+                    </td>
+                    <td>
+                        ${format_ribuan(harga)}
+                        <input type="hidden"  class="harga_hidden" name="harga[]" value="${harga}">
+                    </td>
+                    <td>
+                        ${format_ribuan(qty)}
+                        <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
+                    </td>
+                    <td>
+                        ${format_ribuan(subtotal)}
+                        <input type="hidden" name="subtotal[]" class="subtotal_hidden" value="${subtotal}">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs btn_edit">
+                            <i class="fa fa-edit"></i>
+                        </button>
 
-            e.preventDefault()
-            e.stopImmediatePropagation()
+                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>
+                </tr>`
+
+                $('#tbl_trx').append(data_trx)
+
+                cek_table_length()
+
+                clear_form_entry()
+
+                hitung_grand_total()
+
+                e.preventDefault()
+                e.stopImmediatePropagation()
+
+            }
         })
 
         $('#btn_clear_form').click(function() {
@@ -98,60 +131,67 @@
         })
 
         $('#btn_simpan').click(function() {
-            if (
-                !$('input[name="tanggal"]').val() ||
-                !$('input[name="rate"]').val() ||
-                !$('select[name="gudang"]').val() ||
-                !$('select[name="matauang"]').val()
-            ) {
-                alert('Data Adjusment Plus - Header tidak boleh kosong!')
-            } else {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                })
+            $(this).prop('disabled', true)
+            $(this).text('loading...')
 
-                let data = {
-                    kode: $('input[name="kode"]').val(),
-                    tanggal: $('input[name="tanggal"]').val(),
-                    matauang: $('select[name="matauang"]').val(),
-                    gudang: $('select[name="gudang"]').val(),
-                    rate: $('input[name="rate"]').val(),
-                    grand_total: $('#grand_total_input').val(),
-                    barang: $('input[name="barang[]"]').map(function() {
-                        return $(this).val()
-                    }).get(),
-                    supplier: $('input[name="supplier[]"]').map(function() {
-                        return $(this).val()
-                    }).get(),
-                    bentuk_kepemilikan: $('input[name="bentuk_kepemilikan[]"]').map(function() {
-                        return $(this).val()
-                    }).get(),
-                    harga: $('input[name="harga[]"]').map(function() {
-                        return $(this).val()
-                    }).get(),
-                    qty: $('input[name="qty[]"]').map(function() {
-                        return $(this).val()
-                    }).get(),
-                    subtotal: $('input[name="subtotal[]"]').map(function() {
-                        return $(this).val()
-                    }).get()
-                }
-
-                $.ajax({
-                    type: 'PUT',
-                    url: '{{ route('adjustment-plus.update', $adjustmentPlus->id) }}',
-                    data: data,
-                    success: function(data) {
-                        alert('Data berhasil diubah')
-                        window.location = '{{ route('adjustment-plus.index') }}'
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                })
+            let data = {
+                kode: $('input[name="kode"]').val(),
+                tanggal: $('input[name="tanggal"]').val(),
+                matauang: $('select[name="matauang"]').val(),
+                gudang: $('select[name="gudang"]').val(),
+                rate: $('input[name="rate"]').val(),
+                grand_total: $('#grand_total_input').val(),
+                barang: $('input[name="barang[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                supplier: $('input[name="supplier[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                bentuk_kepemilikan: $('input[name="bentuk_kepemilikan[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                harga: $('input[name="harga[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                qty: $('input[name="qty[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                subtotal: $('input[name="subtotal[]"]').map(function() {
+                    return $(this).val()
+                }).get()
             }
+
+            $.ajax({
+                type: 'PUT',
+                url: '{{ route('adjustment-plus.update', $adjustmentPlus->id) }}',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: data,
+                success: function(data) {
+                    $('#btn_simpan').text('simpan')
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Update data',
+                        text: 'Berhasil'
+                    }).then(function() {
+                        setTimeout(() => {
+                            window.location = '{{ route('adjustment-plus.index') }}'
+                        }, 500)
+                    })
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
+
         })
 
         $(document).on('click', '.btn_hapus', function(e) {
@@ -205,7 +245,7 @@
         }
 
         function update_list(index) {
-            let kode_nama_barang = $('#kode_barang_input option:selected')
+            let kode_barang = $('#kode_barang_input option:selected')
             let supplier = $('#supplier_input option:selected')
             let harga = $('#harga_input').val()
             let bentuk_kepemilikan = $('#bentuk_kepemilikan_input option:selected')
@@ -217,8 +257,8 @@
 
             let data_trx = `<td>${no}</td>
                 <td>
-                    ${kode_nama_barang.html()}
-                    <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_nama_barang.val()}">
+                    ${kode_barang.html()}
+                    <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
                 </td>
                 <td>
                     ${supplier.html()}
@@ -277,7 +317,7 @@
                 total += parseInt($(this).val());
             });
 
-            let matauang_type = $('#matauang option:selected').html()
+            let matauang_type = $('#matauang option:selected').val()
 
             $('#grand_total').text(`GRAND TOTAL: ${matauang_type} ${format_ribuan(total)},- `)
 

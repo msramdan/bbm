@@ -63,7 +63,7 @@
                                         <label class="control-label">Mata Uang</label>
                                         <select name="status" class="form-control" disabled>
                                             <option value="{{ $adjustmentPlus->matauang->id }}">
-                                                {{ $adjustmentPlus->matauang->nama }}
+                                                {{ $adjustmentPlus->matauang->kode . ' - ' . $adjustmentPlus->matauang->nama }}
                                             </option>
                                         </select>
                                     </div>

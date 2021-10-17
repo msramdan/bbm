@@ -72,8 +72,8 @@
                                     <label class="control-label">Mata Uang</label>
 
                                     <select name="matauang" id="matauang" class="form-control" disabled>
-                                        <option value="{{ $adjustmentPlus->matauang_id }}">
-                                            {{ $adjustmentPlus->matauang->nama }}
+                                        <option value="{{ $adjustmentPlus->matauang->kode }}">
+                                            {{ $adjustmentPlus->matauang->kode . ' - ' . $adjustmentPlus->matauang->nama }}
                                         </option>
                                     </select>
                                 </div>

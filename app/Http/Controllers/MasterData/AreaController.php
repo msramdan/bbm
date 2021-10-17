@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
-use App\Http\Requests\StoreBankRequest;
-use App\Http\Requests\UpdateBankRequest;
-use App\Models\Bank;
+use App\Http\Controllers\Controller;
+
+use App\Http\Requests\StoreAreaRequest;
+use App\Http\Requests\UpdateAreaRequest;
+use App\Models\Area;
+use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class BankController extends Controller
+class AreaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +19,9 @@ class BankController extends Controller
      */
     public function index()
     {
-        $bank = Bank::get();
+        $areas = Area::get();
 
-        return view('bank.index', compact('bank'));
+        return view('master-data.area.index', compact('areas'));
     }
 
     /**
@@ -28,7 +31,7 @@ class BankController extends Controller
      */
     public function create()
     {
-        return view('bank.create');
+        return view('master-data.area.create');
     }
 
     /**
@@ -37,54 +40,54 @@ class BankController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBankRequest $request)
+    public function store(StoreAreaRequest $request)
     {
-        Bank::create($request->validated());
+        Area::create($request->validated());
 
         Alert::success('Tambah Data', 'Berhasil');
 
-        return redirect()->route('bank.index');
+        return redirect()->route('area.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Bank  $bank
+     * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function edit(Bank $bank)
+    public function edit(Area $area)
     {
-        return view('bank.edit', compact('bank'));
+        return view('master-data.area.edit', compact('area'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Bank  $bank
+     * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBankRequest $request, Bank $bank)
+    public function update(UpdateAreaRequest $request, Area $area)
     {
-        $bank->update($request->validated());
+        $area->update($request->validated());
 
         Alert::success('Update Data', 'Berhasil');
 
-        return redirect()->route('bank.index');
+        return redirect()->route('area.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Bank  $bank
+     * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bank $bank)
+    public function destroy(Area $area)
     {
-        $bank->delete();
+        $area->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
 
-        return redirect()->route('bank.index');
+        return redirect()->route('area.index');
     }
 }

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
-use App\Http\Requests\StorePelangganRequest;
-use App\Http\Requests\UpdatePelangganRequest;
-use App\Models\Area;
-use App\Models\Pelanggan;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{StorePelangganRequest, UpdatePelangganRequest};
+use App\Models\{Area, Pelanggan};
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PelangganController extends Controller
@@ -20,7 +18,7 @@ class PelangganController extends Controller
     {
         $pelanggan = Pelanggan::get();
 
-        return view('pelanggan.index', compact('pelanggan'));
+        return view('master-data.pelanggan.index', compact('pelanggan'));
     }
 
     /**
@@ -32,7 +30,7 @@ class PelangganController extends Controller
     {
         $area = Area::get();
 
-        return view('pelanggan.create', compact('area'));
+        return view('master-data.pelanggan.create', compact('area'));
     }
 
     /**
@@ -65,7 +63,7 @@ class PelangganController extends Controller
 
         $area = Area::get();
 
-        return view('pelanggan.edit', compact('area', 'pelanggan'));
+        return view('master-data.pelanggan.edit', compact('area', 'pelanggan'));
     }
 
     /**

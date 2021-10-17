@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
-use App\Http\Requests\StoreAreaRequest;
-use App\Http\Requests\UpdateAreaRequest;
-use App\Models\Area;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreGudangRequest;
+use App\Http\Requests\UpdateGudangRequest;
+use App\Models\Gudang;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class AreaController extends Controller
+class GudangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +18,9 @@ class AreaController extends Controller
      */
     public function index()
     {
-        $areas = Area::get();
+        $gudang = Gudang::get();
 
-        return view('area.index', compact('areas'));
+        return view('master-data.gudang.index', compact('gudang'));
     }
 
     /**
@@ -29,7 +30,7 @@ class AreaController extends Controller
      */
     public function create()
     {
-        return view('area.create');
+        return view('master-data.gudang.create');
     }
 
     /**
@@ -38,54 +39,54 @@ class AreaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAreaRequest $request)
+    public function store(StoreGudangRequest $request)
     {
-        Area::create($request->validated());
+        Gudang::create($request->validated());
 
         Alert::success('Tambah Data', 'Berhasil');
 
-        return redirect()->route('area.index');
+        return redirect()->route('gudang.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Area  $area
+     * @param  \App\Models\Gudang  $gudang
      * @return \Illuminate\Http\Response
      */
-    public function edit(Area $area)
+    public function edit(Gudang $gudang)
     {
-        return view('area.edit', compact('area'));
+        return view('master-data.gudang.edit', compact('gudang'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Area  $area
+     * @param  \App\Models\Gudang  $gudang
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAreaRequest $request, Area $area)
+    public function update(UpdateGudangRequest $request, Gudang $gudang)
     {
-        $area->update($request->validated());
+        $gudang->update($request->validated());
 
         Alert::success('Update Data', 'Berhasil');
 
-        return redirect()->route('area.index');
+        return redirect()->route('gudang.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Area  $area
+     * @param  \App\Models\Gudang  $gudang
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Area $area)
+    public function destroy(Gudang $gudang)
     {
-        $area->delete();
+        $gudang->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
 
-        return redirect()->route('area.index');
+        return redirect()->route('gudang.index');
     }
 }

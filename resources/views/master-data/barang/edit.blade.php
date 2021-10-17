@@ -230,7 +230,6 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Status</label>
                                 <div class="col-md-9">
-                                    @dump($barang->status)
                                     <select name="status" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
 

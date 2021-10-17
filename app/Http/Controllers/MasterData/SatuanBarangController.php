@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SatuanBarangRequest;
 use App\Models\SatuanBarang;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class SatuanBarangController extends Controller
@@ -17,7 +17,7 @@ class SatuanBarangController extends Controller
     public function index()
     {
         $satuanbarang = SatuanBarang::all();
-        return view('satuan-barang.index', compact('satuanbarang'));
+        return view('master-data.satuan-barang.index', compact('satuanbarang'));
     }
 
     /**
@@ -27,7 +27,7 @@ class SatuanBarangController extends Controller
      */
     public function create()
     {
-        return view('satuan-barang.create');
+        return view('master-data.satuan-barang.create');
     }
 
     /**
@@ -66,7 +66,7 @@ class SatuanBarangController extends Controller
     {
         $satuanbarang = SatuanBarang::findOrFail($satuanBarang->id);
 
-        return view('satuan-barang.edit', compact('satuanbarang'));
+        return view('master-data.satuan-barang.edit', compact('satuanbarang'));
     }
 
     /**

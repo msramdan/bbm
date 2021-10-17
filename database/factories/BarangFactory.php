@@ -45,7 +45,7 @@ class BarangFactory extends Factory
             'stok' => rand(1, 30),
             'min_stok' => rand(0, 5),
             'gambar' => 'noimage.png',
-            'status' => array_rand(['Y', 'N']),
+            'status' => 'Y',
         ];
     }
 }

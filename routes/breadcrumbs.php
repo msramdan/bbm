@@ -220,3 +220,20 @@ Breadcrumbs::for('adjustment_plus_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('adjustment_plus');
     $trail->push('Edit');
 });
+
+
+// Master Data > Adjustment Minus
+Breadcrumbs::for('adjustment_minus', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Adjustment Minus', route('adjustment-minus.index'));
+});
+// Master Data > Adjustment Minus > Tambah
+Breadcrumbs::for('adjustment_minus_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_minus');
+    $trail->push('Tambah', route('adjustment-minus.create'));
+});
+// Master Data > Adjustment Minus > Edit
+Breadcrumbs::for('adjustment_minus_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_minus');
+    $trail->push('Edit');
+});

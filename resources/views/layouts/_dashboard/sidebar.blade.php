@@ -113,6 +113,12 @@
                             {{ trans('dashboard.menu.adjustment_plus') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('adjustment-minus.index') }}">
+                            {{ trans('dashboard.menu.adjustment_minus') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>

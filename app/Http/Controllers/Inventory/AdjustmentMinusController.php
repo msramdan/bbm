@@ -1,14 +1,15 @@
 <?php
 
+
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
-use App\Models\{AdjustmentPlus, AdjustmentPlusDetail, Barang, Gudang, Matauang, Supplier};
+use App\Models\{AdjustmentMinus, AdjustmentMinusDetail, Barang, Gudang, Supplier};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class AdjustmentPlusController extends Controller
+class AdjustmentMinusController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +18,9 @@ class AdjustmentPlusController extends Controller
      */
     public function index()
     {
-        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')->withCount('adjustment_plus_detail')->get();
+        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail',  'gudang')->withCount('adjustment_minus_detail')->get();
 
-        return view('inventory.adjustment-plus.index', compact('adjustmentPlus'));
+        return view('inventory.adjustment-minus.index', compact('adjustmentMinus'));
     }
 
     /**
@@ -31,10 +32,9 @@ class AdjustmentPlusController extends Controller
     {
         $gudang = Gudang::get();
         $barang = Barang::get();
-        $matauang = Matauang::get();
         $supplier = Supplier::get();
 
-        return view('inventory.adjustment-plus.create', compact('gudang', 'barang', 'matauang', 'supplier'));
+        return view('inventory.adjustment-minus.create', compact('gudang', 'barang', 'supplier'));
     }
 
     /**
@@ -46,27 +46,22 @@ class AdjustmentPlusController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $adjusment = AdjustmentPlus::create([
+            $adjusment = AdjustmentMinus::create([
                 'kode' => $request->kode,
                 'tanggal' => $request->tanggal,
-                'matauang_id' => $request->matauang,
-                'gudang_id' => $request->gudang,
-                'rate' => $request->rate,
-                'grand_total' => $request->grand_total,
+                'gudang_id' => $request->gudang
             ]);
 
             foreach ($request->barang as $i => $value) {
-                $adjusmentDetail[] = new AdjustmentPlusDetail([
+                $adjusmentDetail[] = new AdjustmentMinusDetail([
                     'barang_id' => $value,
                     'supplier_id' => $request->supplier[$i],
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
-                    'harga' => $request->harga[$i],
-                    'qty' => $request->qty[$i],
-                    'subtotal' => $request->subtotal[$i],
+                    'qty' => $request->qty[$i]
                 ]);
             }
 
-            $adjusment->adjustment_plus_detail()->saveMany($adjusmentDetail);
+            $adjusment->adjustment_minus_detail()->saveMany($adjusmentDetail);
         });
 
         return response()->json(['success'], 200);
@@ -75,69 +70,66 @@ class AdjustmentPlusController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AdjustmentPlus  $adjustmentPlus
+     * @param  \App\Models\AdjustmentMinus  $adjustmentMinus
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')
-            ->withCount('adjustment_plus_detail')
+        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail', 'gudang')
+            ->withCount('adjustment_minus_detail')
             ->findOrFail($id);
 
-        return view('inventory.adjustment-plus.show', compact('adjustmentPlus'));
+        return view('inventory.adjustment-minus.show', compact('adjustmentMinus'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\AdjustmentPlus  $adjustmentPlus
+     * @param  \App\Models\AdjustmentMinus  $adjustmentMinus
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')
-            ->withCount('adjustment_plus_detail')
+        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail', 'gudang')
+            ->withCount('adjustment_minus_detail')
             ->findOrFail($id);
 
         $gudang = Gudang::get();
         $barang = Barang::get();
         $supplier = Supplier::get();
 
-        return view('inventory.adjustment-plus.edit', compact('adjustmentPlus', 'gudang', 'barang', 'supplier'));
+        return view('inventory.adjustment-minus.edit', compact('adjustmentMinus', 'gudang', 'barang', 'supplier'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AdjustmentPlus  $adjustmentPlus
+     * @param  \App\Models\AdjustmentMinus  $adjustmentMinus
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $adjusment = AdjustmentPlus::findOrFail($id);
+        $adjusment = AdjustmentMinus::findOrFail($id);
 
         DB::transaction(function () use ($request, $adjusment) {
             $adjusment->update([
-                'gudang_id' => $request->gudang,
-                'grand_total' => $request->grand_total,
+                'gudang_id' => $request->gudang
             ]);
 
             foreach ($request->barang as $i => $value) {
-                $adjusmentDetail[] = new AdjustmentPlusDetail([
+                $adjusmentDetail[] = new AdjustmentMinusDetail([
                     'barang_id' => $value,
                     'supplier_id' => $request->supplier[$i],
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
-                    'harga' => $request->harga[$i],
-                    'qty' => $request->qty[$i],
-                    'subtotal' => $request->subtotal[$i],
+                    'qty' => $request->qty[$i]
                 ]);
             }
 
             // hapus list barang lama
-            $adjusment->adjustment_plus_detail()->delete();
+            $adjusment->adjustment_minus_detail()->delete();
 
-            $adjusment->adjustment_plus_detail()->saveMany($adjusmentDetail);
+            $adjusment->adjustment_minus_detail()->saveMany($adjusmentDetail);
         });
 
         return response()->json(['success'], 200);
@@ -146,26 +138,26 @@ class AdjustmentPlusController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\AdjustmentPlus  $adjustmentPlus
+     * @param  \App\Models\AdjustmentMinus  $adjustmentMinus
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $adjusment = AdjustmentPlus::findOrFail($id);
+        $adjusment = AdjustmentMinus::findOrFail($id);
         $adjusment->delete();
 
         Alert::success('Happus Data', 'Berhasil');
 
-        return redirect()->route('adjustment-plus.index');
+        return redirect()->route('adjustment-minus.index');
     }
 
     protected function generateKode()
     {
         if (request()->ajax()) {
-            $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', now()->month)->count();
+            $checkLatestKode = AdjustmentMinus::whereMonth('tanggal', now()->month)->count();
 
             if ($checkLatestKode == null) {
-                $kode = 'ADJPL-' . date('Ym') . '0000' . 1;
+                $kode = 'ADJMN-' . date('Ym') . '0000' . 1;
             } else {
                 if ($checkLatestKode < 10) {
                     $kode = 'ADJPL-' . date('Ym') . '0000' . $checkLatestKode + 1;

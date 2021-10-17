@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Create adjustment_plus')
+@section('title', trans('adjustment_minus.title.edit'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('adjustment_plus_add') }}
+        {{ Breadcrumbs::render('adjustment_minus_add') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-10 -->
@@ -30,61 +30,41 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('adjustment_plus.title.tambah') }}</h4>
+                        <h4 class="panel-title">{{ trans('adjustment_Minus.title.edit') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Kode</label>
-                                    <input type="text" class="form-control" value="{{ $adjustmentPlus->kode }}"
-                                        disabled />
-                                </div>
+                        <div class="form-group row" style="margin-bottom: 10px">
+                            <div class="col-md-4">
+                                <label class="control-label">Kode</label>
 
-                                <div class="form-group">
-                                    <label class="control-label">Tanggal</label>
-                                    <input type="text" class="form-control"
-                                        value="{{ $adjustmentPlus->tanggal->format('d m Y') }}" disabled />
-                                </div>
+                                <input type="text" name="kode" class="form-control" placeholder="Kode" id="kode" required
+                                    value="{{ $adjustmentMinus->kode }}" disabled />
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Gudang</label>
-                                    <select name="status" class="form-control" disabled>
-                                        <option value="{{ $adjustmentPlus->gudang->id }}">
-                                            {{ $adjustmentPlus->gudang->nama }}
-                                        </option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label class="control-label">Tanggal</label>
 
-                                <div class="row form-group">
-                                    <div class="col-md-8">
-                                        <label class="control-label">Mata Uang</label>
-                                        <select name="status" class="form-control" disabled>
-                                            <option value="{{ $adjustmentPlus->matauang->id }}">
-                                                {{ $adjustmentPlus->matauang->kode . ' - ' . $adjustmentPlus->matauang->nama }}
-                                            </option>
-                                        </select>
-                                    </div>
+                                <input type="date" name="tanggal" class="form-control" disabled
+                                    value="{{ $adjustmentMinus->tanggal->format('Y-m-d') }}" />
+                            </div>
 
-                                    <div class="col-md-4">
-                                        <label class="control-label">Rate</label>
-                                        <input type="text" class="form-control" value="{{ $adjustmentPlus->rate }}"
-                                            disabled />
-                                    </div>
-                                </div>
+                            <div class="col-md-4 mt-3">
+                                <label class="control-label">Gudang</label>
+
+                                <select name="gudang" class="form-control" disabled>
+                                    <option value="{{ $adjustmentMinus->gudang_id }}">
+                                        {{ $adjustmentMinus->gudang->nama }}
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        {{-- end row --}}
+                        {{-- end form-group row --}}
 
-                        <div class="row">
+                        <div class="row" style="margin-top: 1em;">
                             <div class="col-md-12">
                                 <hr>
                             </div>
-                        </div>
 
-                        <div class="row" style="margin-top: 1em;">
                             <div class="col-md-12">
                                 <table class="table table-striped table-hover table-condensed">
                                     <thead>
@@ -94,16 +74,14 @@
                                             <th>Nama Barang</th>
                                             <th>Supplier</th>
                                             <th>Bentuk Kep. Stok</th>
-                                            <th>Harga</th>
                                             <th>Qty</th>
-                                            <th>Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
                                             $total_qty = 0;
                                         @endphp
-                                        @foreach ($adjustmentPlus->adjustment_plus_detail as $detail)
+                                        @foreach ($adjustmentMinus->adjustment_minus_detail as $detail)
                                             @php
                                                 $total_qty += $detail->qty;
                                             @endphp
@@ -114,25 +92,16 @@
                                                 <td>{{ $detail->supplier->nama_supplier }}</td>
                                                 <td>{{ $detail->bentuk_kepemilikan_stok }}</td>
                                                 <td>
-                                                    {{ $adjustmentPlus->matauang->kode . ' ' . number_format($detail->harga) }}
-                                                </td>
-                                                <td>
                                                     {{ number_format($detail->qty) }}
-                                                </td>
-                                                <td>
-                                                    {{ $adjustmentPlus->matauang->kode . ' ' . number_format($detail->subtotal) }}
                                                 </td>
                                             </tr>
                                         @endforeach
                                         <tr>
-                                            <td colspan="6">
+                                            <td colspan="5">
                                                 <strong>Total</strong>
                                             </td>
                                             <td>
-                                                <strong> {{ $total_qty }}</strong>
-                                            </td>
-                                            <td>
-                                                <strong>{{ $adjustmentPlus->matauang->kode . ' ' . number_format($adjustmentPlus->grand_total) }}</strong>
+                                                <strong> {{ number_format($total_qty) }}</strong>
                                             </td>
                                         </tr>
                                     </tbody>

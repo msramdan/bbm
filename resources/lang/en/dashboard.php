@@ -23,7 +23,8 @@ return [
         'gudang' => 'Warehouse',
         'kategori' => 'Item Category',
         'barang' => 'Item',
-        'adjustment_plus' => 'Adjustment Plus'
+        'adjustment_plus' => 'Adjustment Plus',
+        'adjustment_minus' => 'Adjustment Minus'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

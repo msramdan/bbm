@@ -23,7 +23,8 @@ return [
         'gudang' => 'Gudang',
         'kategori' => 'Kategori Barang',
         'barang' => 'Barang',
-        'adjustment_plus' => 'Adjustment Plus'
+        'adjustment_plus' => 'Adjustment Plus',
+        'adjustment_minus' => 'Adjustment Minus'
     ],
     'link' => [
         'dashboard' => 'Home',

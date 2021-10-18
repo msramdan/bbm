@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\RateMataUangRequest;
-use App\Models\Matauang;
-use App\Models\RateMataUang;
-use Illuminate\Http\Request;
+use App\Models\{Matauang, RateMataUang};
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RateMataUangController extends Controller
@@ -22,7 +21,7 @@ class RateMataUangController extends Controller
         // return $rateMataUang;
         // die;
 
-        return view('rate-matauang.index', compact('rateMataUang'));
+        return view('master-data.rate-matauang.index', compact('rateMataUang'));
     }
 
     /**
@@ -34,7 +33,7 @@ class RateMataUangController extends Controller
     {
         $matauang = Matauang::get();
 
-        return view('rate-matauang.create', compact('matauang'));
+        return view('master-data.rate-matauang.create', compact('matauang'));
     }
 
     /**
@@ -64,7 +63,7 @@ class RateMataUangController extends Controller
 
         $rateMataUang = RateMataUang::with('matauang_asing', 'matauang_default')->findOrFail($id);
 
-        return view('rate-matauang.edit', compact('rateMataUang', 'matauang'));
+        return view('master-data.rate-matauang.edit', compact('rateMataUang', 'matauang'));
     }
 
     /**

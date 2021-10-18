@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreKategoriRequest;
 use App\Http\Requests\UpdateKategoriRequest;
 use App\Models\Kategori;
@@ -19,7 +20,7 @@ class KategoriController extends Controller
     {
         $kategori = Kategori::get();
 
-        return view('kategori.index', compact('kategori'));
+        return view('master-data.kategori.index', compact('kategori'));
     }
 
     /**
@@ -29,7 +30,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        return view('kategori.create');
+        return view('master-data.kategori.create');
     }
 
     /**
@@ -55,7 +56,7 @@ class KategoriController extends Controller
      */
     public function edit(Kategori $kategori)
     {
-        return view('kategori.edit', compact('kategori'));
+        return view('master-data.kategori.edit', compact('kategori'));
     }
 
     /**

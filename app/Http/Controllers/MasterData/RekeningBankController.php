@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
-use App\Http\Requests\StoreRekeningBankRequest;
-use App\Http\Requests\UpdateRekeningBankRequest;
-use App\Models\Bank;
-use App\Models\RekeningBank;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{StoreRekeningBankRequest, UpdateRekeningBankRequest};
+use App\Models\{Bank, RekeningBank};
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RekeningBankController extends Controller
@@ -19,7 +18,7 @@ class RekeningBankController extends Controller
     {
         $rekeningBank = RekeningBank::with('bank')->get();
 
-        return view('rekening-bank.index', compact('rekeningBank'));
+        return view('master-data.rekening-bank.index', compact('rekeningBank'));
     }
 
     /**
@@ -31,7 +30,7 @@ class RekeningBankController extends Controller
     {
         $banks = Bank::get();
 
-        return view('rekening-bank.create', compact('banks'));
+        return view('master-data.rekening-bank.create', compact('banks'));
     }
 
     /**
@@ -64,7 +63,7 @@ class RekeningBankController extends Controller
 
         $rekeningBank->load('bank');
 
-        return view('rekening-bank.edit', compact('rekeningBank', 'banks'));
+        return view('master-data.rekening-bank.edit', compact('rekeningBank', 'banks'));
     }
 
     /**

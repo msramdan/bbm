@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
-use App\Http\Requests\StoreGudangRequest;
-use App\Http\Requests\UpdateGudangRequest;
-use App\Models\Gudang;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+use App\Http\Requests\StoreBankRequest;
+use App\Http\Requests\UpdateBankRequest;
+use App\Models\Bank;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class GudangController extends Controller
+class BankController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +18,9 @@ class GudangController extends Controller
      */
     public function index()
     {
-        $gudang = Gudang::get();
+        $bank = Bank::get();
 
-        return view('gudang.index', compact('gudang'));
+        return view('master-data.bank.index', compact('bank'));
     }
 
     /**
@@ -29,7 +30,7 @@ class GudangController extends Controller
      */
     public function create()
     {
-        return view('gudang.create');
+        return view('master-data.bank.create');
     }
 
     /**
@@ -38,54 +39,54 @@ class GudangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreGudangRequest $request)
+    public function store(StoreBankRequest $request)
     {
-        Gudang::create($request->validated());
+        Bank::create($request->validated());
 
         Alert::success('Tambah Data', 'Berhasil');
 
-        return redirect()->route('gudang.index');
+        return redirect()->route('bank.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Gudang  $gudang
+     * @param  \App\Models\Bank  $bank
      * @return \Illuminate\Http\Response
      */
-    public function edit(Gudang $gudang)
+    public function edit(Bank $bank)
     {
-        return view('gudang.edit', compact('gudang'));
+        return view('master-data.bank.edit', compact('bank'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Gudang  $gudang
+     * @param  \App\Models\Bank  $bank
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateGudangRequest $request, Gudang $gudang)
+    public function update(UpdateBankRequest $request, Bank $bank)
     {
-        $gudang->update($request->validated());
+        $bank->update($request->validated());
 
         Alert::success('Update Data', 'Berhasil');
 
-        return redirect()->route('gudang.index');
+        return redirect()->route('bank.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Gudang  $gudang
+     * @param  \App\Models\Bank  $bank
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Gudang $gudang)
+    public function destroy(Bank $bank)
     {
-        $gudang->delete();
+        $bank->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
 
-        return redirect()->route('gudang.index');
+        return redirect()->route('bank.index');
     }
 }

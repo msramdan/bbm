@@ -1,5 +1,5 @@
 <?php
-// Language English
+// Language Indonesia
 
 return [
     'title' => [

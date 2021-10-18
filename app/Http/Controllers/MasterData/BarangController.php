@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreBarangRequest, UpdateBarangRequest};
 use App\Models\{Barang, Kategori, Matauang, SatuanBarang};
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +19,7 @@ class BarangController extends Controller
     {
         $barang = Barang::with('kategori', 'satuan', 'matauang_beli', 'mata_uang_jual')->get();
 
-        return view('barang.index', compact('barang'));
+        return view('master-data.barang.index', compact('barang'));
     }
 
     /**
@@ -32,7 +33,7 @@ class BarangController extends Controller
         $satuan = SatuanBarang::get();
         $matauang = Matauang::get();
 
-        return view('barang.create', compact('kategori', 'satuan', 'matauang'));
+        return view('master-data.barang.create', compact('kategori', 'satuan', 'matauang'));
     }
 
     /**
@@ -77,7 +78,7 @@ class BarangController extends Controller
 
         $barang->load('kategori', 'satuan', 'matauang_beli', 'mata_uang_jual');
 
-        return view('barang.edit', compact('kategori', 'satuan', 'matauang', 'barang'));
+        return view('master-data.barang.edit', compact('kategori', 'satuan', 'matauang', 'barang'));
     }
 
     /**

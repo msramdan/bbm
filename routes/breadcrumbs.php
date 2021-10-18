@@ -203,3 +203,37 @@ Breadcrumbs::for('barang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('barang');
     $trail->push('Edit');
 });
+
+
+// Master Data > Adjustment Plus
+Breadcrumbs::for('adjustment_plus', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Adjustment Plus', route('adjustment-plus.index'));
+});
+// Master Data > Adjustment Plus > Tambah
+Breadcrumbs::for('adjustment_plus_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_plus');
+    $trail->push('Tambah', route('adjustment-plus.create'));
+});
+// Master Data > Adjustment Plus > Edit
+Breadcrumbs::for('adjustment_plus_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_plus');
+    $trail->push('Edit');
+});
+
+
+// Master Data > Adjustment Minus
+Breadcrumbs::for('adjustment_minus', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Adjustment Minus', route('adjustment-minus.index'));
+});
+// Master Data > Adjustment Minus > Tambah
+Breadcrumbs::for('adjustment_minus_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_minus');
+    $trail->push('Tambah', route('adjustment-minus.create'));
+});
+// Master Data > Adjustment Minus > Edit
+Breadcrumbs::for('adjustment_minus_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_minus');
+    $trail->push('Edit');
+});

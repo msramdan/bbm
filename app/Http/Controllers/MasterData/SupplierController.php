@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
-use App\Http\Requests\StoreSupplierRequest;
-use App\Http\Requests\UpdateSupplierRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{StoreSupplierRequest, UpdateSupplierRequest};
 use App\Models\Supplier;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class SupplierController extends Controller
@@ -19,7 +18,7 @@ class SupplierController extends Controller
     {
         $suppliers = Supplier::get();
 
-        return view('supplier.index', compact('suppliers'));
+        return view('master-data.supplier.index', compact('suppliers'));
     }
 
     /**
@@ -29,7 +28,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        return view('supplier.create');
+        return view('master-data.supplier.create');
     }
 
     /**
@@ -55,7 +54,7 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        return view('supplier.edit', compact('supplier'));
+        return view('master-data.supplier.edit', compact('supplier'));
     }
 
     /**

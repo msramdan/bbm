@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
-use App\Http\Requests\StoreSalesmanRequest;
-use App\Http\Requests\UpdateSalesmanRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{StoreSalesmanRequest, UpdateSalesmanRequest};
 use App\Models\Salesman;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class SalesmanController extends Controller
@@ -19,7 +18,7 @@ class SalesmanController extends Controller
     {
         $salesman = Salesman::get();
 
-        return view('salesman.index', compact('salesman'));
+        return view('master-data.salesman.index', compact('salesman'));
     }
 
     /**
@@ -29,7 +28,7 @@ class SalesmanController extends Controller
      */
     public function create()
     {
-        return view('salesman.create');
+        return view('master-data.salesman.create');
     }
 
     /**
@@ -55,7 +54,7 @@ class SalesmanController extends Controller
      */
     public function edit(Salesman $salesman)
     {
-        return view('salesman.edit', compact('salesman'));
+        return view('master-data.salesman.edit', compact('salesman'));
     }
 
     /**

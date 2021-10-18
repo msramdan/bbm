@@ -32,7 +32,7 @@ class BarangFactory extends Factory
         $matauang = Matauang::latest('id')->first();
 
         return [
-            'kode' => Str::random(rand(1, 10)),
+            'kode' => strtoupper(Str::random(rand(1, 5))),
             'nama' => 'Barang ' . self::$no++,
             'jenis' => rand(1, 2), //1 barang, 2 paket
             'kategori_id' => rand(1, $kategori->id), //random kateogri id sesuai dengan jumlah data kategori
@@ -45,7 +45,7 @@ class BarangFactory extends Factory
             'stok' => rand(1, 30),
             'min_stok' => rand(0, 5),
             'gambar' => 'noimage.png',
-            'status' => array_rand(['Y', 'N']),
+            'status' => 'Y',
         ];
     }
 }

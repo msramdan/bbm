@@ -14,8 +14,12 @@
         <ul class="nav">
             <li class="nav-header">Navigation</li>
             {{-- menu dashboard --}}
-            <li class="{{ set_active('dashboard.index') }}"><a href="{{ route('dashboard.index') }}"><i
-                        class="fa fa-laptop"></i> <span>{{ trans('dashboard.link.dashboard') }}</span></a></li>
+            <li class="{{ set_active('dashboard.index') }}">
+                <a href="{{ route('dashboard.index') }}">
+                    <i class="fa fa-laptop"></i>
+                    <span>{{ trans('dashboard.link.dashboard') }}</span>
+                </a>
+            </li>
             {{-- menu master data --}}
             <li class="has-sub">
                 <a href="javascript:;">
@@ -91,6 +95,28 @@
                     <li>
                         <a href="{{ route('barang.index') }}">
                             {{ trans('dashboard.menu.barang') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- menu inventory --}}
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-archive"></i>
+                    <span>{{ trans('dashboard.menu.inventory') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('adjustment-plus.index') }}">
+                            {{ trans('dashboard.menu.adjustment_plus') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('adjustment-minus.index') }}">
+                            {{ trans('dashboard.menu.adjustment_minus') }}
                         </a>
                     </li>
                 </ul>

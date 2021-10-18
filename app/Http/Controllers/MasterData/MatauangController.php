@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMataUangRequest;
 use App\Http\Requests\UpdateMataUangRequest;
 use App\Models\Matauang;
@@ -12,12 +13,12 @@ class MatauangController extends Controller
     public function index()
     {
         $matauang = Matauang::all();
-        return view('matauang.index', compact('matauang'));
+        return view('master-data.matauang.index', compact('matauang'));
     }
 
     public function create()
     {
-        return view('matauang.create');
+        return view('master-data.matauang.create');
     }
 
     public function store(StoreMataUangRequest $request)
@@ -33,7 +34,7 @@ class MatauangController extends Controller
     {
         $matauang = Matauang::findOrFail($id);
 
-        return view('matauang.edit', compact('matauang'));
+        return view('master-data.matauang.edit', compact('matauang'));
     }
 
     public function update(UpdateMataUangRequest $request, Matauang $matauang)

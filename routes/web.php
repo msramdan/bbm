@@ -38,12 +38,12 @@ Route::group(['prefix' => 'inventory', 'middleware' => ['web', 'auth']], functio
     // Adjustment Plus
     Route::post('/adjustment-plus/store', [AdjustmentPlusController::class, 'store'])->name('adjustment-plus.store');
     Route::put('/adjustment-plus/update/{id}', [AdjustmentPlusController::class, 'update'])->name('adjustment-plus.update');
-    Route::get('/adjustment-plus/generate-kode', [AdjustmentPlusController::class, 'generateKode'])->name('adjustment-plus.generateKode');
+    Route::get('/adjustment-plus/generate-kode/{tanggal}', [AdjustmentPlusController::class, 'generateKode'])->name('adjustment-plus.generateKode');
     Route::resource('/adjustment-plus', AdjustmentPlusController::class)->except('store', 'update');
 
     // Adjustment Minus
     Route::post('/adjustment-minus/store', [AdjustmentMinusController::class, 'store'])->name('adjustment-minus.store');
     Route::put('/adjustment-minus/update/{id}', [AdjustmentMinusController::class, 'update'])->name('adjustment-minus.update');
-    Route::get('/adjustment-minus/generate-kode', [AdjustmentMinusController::class, 'generateKode'])->name('adjustment-minus.generateKode');
+    Route::get('/adjustment-minus/generate-kode/{tanggal}', [AdjustmentMinusController::class, 'generateKode'])->name('adjustment-minus.generateKode');
     Route::resource('/adjustment-minus', AdjustmentMinusController::class)->except('store', 'update');
 });

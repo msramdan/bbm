@@ -159,22 +159,22 @@ class AdjustmentPlusController extends Controller
         return redirect()->route('adjustment-plus.index');
     }
 
-    protected function generateKode()
+    protected function generateKode($tanggal)
     {
         if (request()->ajax()) {
-            $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', now()->month)->count();
+            $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
 
             if ($checkLatestKode == null) {
-                $kode = 'ADJPL-' . date('Ym') . '0000' . 1;
+                $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
             } else {
                 if ($checkLatestKode < 10) {
-                    $kode = 'ADJPL-' . date('Ym') . '0000' . $checkLatestKode + 1;
+                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 10) {
-                    $kode = 'ADJPL-' . date('Ym') . '000' . $checkLatestKode + 1;
+                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 100) {
-                    $kode = 'ADJPL-' . date('Ym') . '00' . $checkLatestKode + 1;
+                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 1000) {
-                    $kode = 'ADJPL-' . date('Ym') . '0' . $checkLatestKode + 1;
+                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
                 }
             }
 

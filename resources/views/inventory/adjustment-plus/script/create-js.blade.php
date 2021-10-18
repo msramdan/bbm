@@ -10,6 +10,10 @@
             hitung_grand_total()
         })
 
+        $('input[name="tanggal"]').change(function() {
+            get_kode()
+        })
+
         $('#qty_input, #harga_input, #kode_input, #supplier_input, #bentuk_kepemilikan_input').on('keyup keydown change',
             function() {
                 subtotal = $('#qty_input').val() * $('#harga_input').val()
@@ -318,9 +322,13 @@
         // ajax get kode
         function get_kode() {
             $.ajax({
-                url: "{{ route('adjustment-plus.generateKode') }}",
+                url: "/inventory/adjustment-plus/generate-kode/" + $('input[name="tanggal"]').val(),
                 type: 'GET',
                 success: function(data) {
+                    // setTimeout(() => {
+                    //     $('input[name="kode"]').val('Loading...')
+                    // }, 500)
+
                     $('input[name="kode"]').val(data)
                 }
             })

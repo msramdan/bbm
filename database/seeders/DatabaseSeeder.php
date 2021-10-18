@@ -26,7 +26,9 @@ class DatabaseSeeder extends Seeder
             SalesmanSeeder::class,
             GudangSeeder::class,
             KategoriSeeder::class,
-            BarangSeeder::class
+            BarangSeeder::class,
+            AdjustmentPlusSeeder::class,
+            AdjustmentMinusSeeder::class
         ]);
     }
 }

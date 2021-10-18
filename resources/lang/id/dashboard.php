@@ -20,7 +20,8 @@ return [
         'pelanggan' => 'Pelanggan',
         'salesman' => 'Pramuniaga',
         'gudang' => 'Gudang',
-        'kategori' => 'Kategori Barang'
+        'kategori' => 'Kategori Barang',
+        'barang' => 'Barang'
     ],
     'link' => [
         'dashboard' => 'Home',

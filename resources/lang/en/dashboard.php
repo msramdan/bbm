@@ -24,7 +24,9 @@ return [
         'kategori' => 'Item Category',
         'barang' => 'Item',
         'adjustment_plus' => 'Adjustment Plus',
-        'adjustment_minus' => 'Adjustment Minus'
+        'adjustment_minus' => 'Adjustment Minus',
+        'pesanan_pembelian' => 'Purchase Order',
+        'pembelian' => 'Purchase'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

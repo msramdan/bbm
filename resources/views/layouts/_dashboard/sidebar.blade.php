@@ -121,6 +121,29 @@
                     </li>
                 </ul>
             </li>
+
+            {{-- menu pembelian --}}
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-briefcase"></i>
+                    <span>{{ trans('dashboard.menu.pembelian') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('pesanan-pembelian.index') }}">
+                            {{ trans('dashboard.menu.pesanan_pembelian') }}
+                        </a>
+                    </li>
+
+                    {{-- <li>
+                        <a href="{{ route('adjustment-minus.index') }}">
+                            {{ trans('dashboard.menu.adjustment_minus') }}
+                        </a>
+                    </li> --}}
+                </ul>
+            </li>
+
             <li>
                 <a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify">
                     <i class="fa fa-angle-double-left"></i>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MasterData\{AreaController, BankController, BarangController, DashboardController, GudangController, KategoriController, LocalizationController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
 use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController};
+use App\Http\Controllers\Pembelian\PesananPembelianController;
 
 Route::get('/', [DashboardController::class, 'index']);
 
@@ -46,4 +47,12 @@ Route::group(['prefix' => 'inventory', 'middleware' => ['web', 'auth']], functio
     Route::put('/adjustment-minus/update/{id}', [AdjustmentMinusController::class, 'update'])->name('adjustment-minus.update');
     Route::get('/adjustment-minus/generate-kode/{tanggal}', [AdjustmentMinusController::class, 'generateKode'])->name('adjustment-minus.generateKode');
     Route::resource('/adjustment-minus', AdjustmentMinusController::class)->except('store', 'update');
+
+    // Perakitan Paket
+    // Coming soon
+});
+
+// Inventory
+Route::group(['prefix' => 'beli', 'middleware' => ['web', 'auth']], function () {
+    Route::resource('/pesanan-pembelian', PesananPembelianController::class)->except('store', 'update');
 });

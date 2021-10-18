@@ -237,3 +237,20 @@ Breadcrumbs::for('adjustment_minus_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('adjustment_minus');
     $trail->push('Edit');
 });
+
+
+// Master Data > Pesanan Pembelian
+Breadcrumbs::for('pesanan_pembelian', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Pesanan Pembelian', route('pesanan-pembelian.index'));
+});
+// Master Data > Pesanan Pembelian > Tambah
+Breadcrumbs::for('pesanan_pembelian_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('pesanan_pembelian');
+    $trail->push('Tambah', route('adjustment-minus.create'));
+});
+// Master Data > Pesanan Pembelian > Edit
+Breadcrumbs::for('pesanan_pembelian_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_minus');
+    $trail->push('Edit');
+});

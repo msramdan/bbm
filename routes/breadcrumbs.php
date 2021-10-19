@@ -254,3 +254,8 @@ Breadcrumbs::for('pesanan_pembelian_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('adjustment_minus');
     $trail->push('Edit');
 });
+// Master Data > Pesanan Pembelian > Show
+Breadcrumbs::for('pesanan_pembelian_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('adjustment_minus');
+    $trail->push('Show');
+});

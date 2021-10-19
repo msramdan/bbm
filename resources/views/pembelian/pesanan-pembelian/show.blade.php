@@ -1,15 +1,15 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Create adjustment_plus')
+@section('title', trans('pesanan_pembelian.title.show'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('adjustment_plus_add') }}
+        {{ Breadcrumbs::render('pesanan_pembelian_show') }}
         <!-- begin row -->
         <div class="row">
-            <!-- begin col-10 -->
-            <div class="col-md-10">
+            <!-- begin col-12 -->
+            <div class="col-md-12">
                 <!-- begin panel -->
                 <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
                     <div class="panel-heading">
@@ -30,120 +30,181 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('adjustment_plus.title.tambah') }}</h4>
+                        <h4 class="panel-title">{{ trans('pesanan_pembelian.title.tambah') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
+                        <div class="panel-body">
+                            <div class="form-group row" style="margin-bottom: 1em;">
+                                <div class="col-md-4">
                                     <label class="control-label">Kode</label>
-                                    <input type="text" class="form-control" value="{{ $adjustmentPlus->kode }}"
-                                        disabled />
+                                    <input type="text" class="form-control" placeholder="Kode" id="kode" required
+                                        value="{{ $pesananPembelian->kode }}" readonly />
                                 </div>
 
-                                <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Tanggal</label>
-                                    <input type="text" class="form-control"
-                                        value="{{ $adjustmentPlus->tanggal->format('d m Y') }}" disabled />
+                                    <input type="date" class="form-control" readonly
+                                        value="{{ $pesananPembelian->tanggal->format('Y-m-d') }}" />
+                                </div>
+
+                                {{-- Bentuk stok --}}
+                                <div class="col-md-4">
+                                    <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
+                                    <select id="bentuk_kepemilikan" class="form-control" readonly>
+                                        <option value="{{ $pesananPembelian->bentuk_kepemilikan_stok }}">
+                                            {{ $pesananPembelian->bentuk_kepemilikan_stok }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Gudang</label>
-                                    <select name="status" class="form-control" disabled>
-                                        <option value="{{ $adjustmentPlus->gudang->id }}">
-                                            {{ $adjustmentPlus->gudang->nama }}
+                            <div class="form-group row" style="margin-bottom: 1em;">
+                                <div class="col-md-4 mt-3">
+                                    <label class="control-label">Supplier</label>
+                                    <select class="form-control" readonly>
+                                        <option value="{{ $pesananPembelian->supplier_id }}">
+                                            {{ $pesananPembelian->supplier->nama_supplier }}
                                         </option>
                                     </select>
                                 </div>
 
-                                <div class="row form-group">
-                                    <div class="col-md-8">
-                                        <label class="control-label">Mata Uang</label>
-                                        <select name="status" class="form-control" disabled>
-                                            <option value="{{ $adjustmentPlus->matauang->id }}">
-                                                {{ $adjustmentPlus->matauang->kode . ' - ' . $adjustmentPlus->matauang->nama }}
-                                            </option>
-                                        </select>
-                                    </div>
+                                <div class="col-md-4 mt-3">
+                                    <label class="control-label">Mata Uang</label>
+                                    <select id="matauang" class="form-control" readonly>
+                                        <option value="{{ $pesananPembelian->matauang_id }}">
+                                            {{ $pesananPembelian->matauang->kode . ' - ' . $pesananPembelian->matauang->nama }}
+                                        </option>
+                                    </select>
+                                </div>
 
-                                    <div class="col-md-4">
-                                        <label class="control-label">Rate</label>
-                                        <input type="text" class="form-control" value="{{ $adjustmentPlus->rate }}"
-                                            disabled />
-                                    </div>
+                                <div class="col-md-4 mt-3">
+                                    <label class="control-label">Rate</label>
+                                    <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
+                                        value="{{ $pesananPembelian->rate }}" readonly />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Keterangan</label>
+                                <textarea name="keterangan" id="keterangan" rows="5" readonly
+                                    class="form-control">{{ $pesananPembelian->keterangan }}</textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
+
+                                {{-- table barang --}}
+                                <div class="col-md-12">
+                                    <table class="table table-striped table-hover table-condensed" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Kode Barang</th>
+                                                <th>Nama Barang</th>
+                                                <th>Harga</th>
+                                                <th>Qty</th>
+                                                <th>Disc%</th>
+                                                <th>Disc</th>
+                                                <th>Gross</th>
+                                                <th>PPN</th>
+                                                <th>PPH</th>
+                                                <th>Biaya Masuk</th>
+                                                <th>Clr. Fee</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $total_qty = 0;
+                                                $total_diskon_persen = 0;
+                                            @endphp
+                                            @foreach ($pesananPembelian->pesanan_pembelian_detail as $detail)
+                                                @php
+                                                    $total_qty += $detail->qty;
+                                                    $total_diskon_persen += $detail->diskon_persen;
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $detail->barang->kode }}</td>
+                                                    <td>{{ $detail->barang->nama }}</td>
+                                                    <td>
+                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->harga }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $detail->qty }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $detail->diskon_persen . '%' }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->diskon }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->gross }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->ppn }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->pph }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->biaya_masuk }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->clr_fee }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->netto }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            <tr>
+                                                <td colspan="3">
+                                                    <strong>Total</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->subtotal }}</strong>
+                                                </td>
+                                                <td><strong>{{ $total_qty }}</strong></td>
+                                                <td>
+                                                    <strong>{{ $total_diskon_persen . '%' }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_diskon }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_gross }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_ppn }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_pph }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_biaya_masuk }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_clr_fee }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_netto }}</strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        {{-- end row --}}
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <hr>
-                            </div>
-                        </div>
-
-                        <div class="row" style="margin-top: 1em;">
-                            <div class="col-md-12">
-                                <table class="table table-striped table-hover table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Kode Barang</th>
-                                            <th>Nama Barang</th>
-                                            <th>Supplier</th>
-                                            <th>Bentuk Kep. Stok</th>
-                                            <th>Harga</th>
-                                            <th>Qty</th>
-                                            <th>Subtotal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $total_qty = 0;
-                                        @endphp
-                                        @foreach ($adjustmentPlus->adjustment_plus_detail as $detail)
-                                            @php
-                                                $total_qty += $detail->qty;
-                                            @endphp
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $detail->barang->kode }}</td>
-                                                <td>{{ $detail->barang->nama }}</td>
-                                                <td>{{ $detail->supplier->nama_supplier }}</td>
-                                                <td>{{ $detail->bentuk_kepemilikan_stok }}</td>
-                                                <td>
-                                                    {{ $adjustmentPlus->matauang->kode . ' ' . number_format($detail->harga) }}
-                                                </td>
-                                                <td>
-                                                    {{ number_format($detail->qty) }}
-                                                </td>
-                                                <td>
-                                                    {{ $adjustmentPlus->matauang->kode . ' ' . number_format($detail->subtotal) }}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        <tr>
-                                            <td colspan="6">
-                                                <strong>Total</strong>
-                                            </td>
-                                            <td>
-                                                <strong> {{ $total_qty }}</strong>
-                                            </td>
-                                            <td>
-                                                <strong>{{ $adjustmentPlus->matauang->kode . ' ' . number_format($adjustmentPlus->grand_total) }}</strong>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        {{-- end panel body --}}
                     </div>
                 </div>
                 <!-- end panel -->
             </div>
-            <!-- end col-10 -->
+            <!-- end col-12 -->
         </div>
         <!-- end row -->
     </div>

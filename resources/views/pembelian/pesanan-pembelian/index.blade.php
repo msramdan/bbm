@@ -60,7 +60,7 @@
                                         <td>{{ $data->supplier->nama_supplier }}</td>
                                         <td>{{ $data->rate }}</td>
                                         <td>{{ $data->pesanan_pembelian_detail_count }}</td>
-                                        <td>{{ $data->matauang->kode . ' ' . number_format($data->grand_total) }}</td>
+                                        <td>{{ $data->matauang->kode . ' ' . number_format($data->total_netto) }}</td>
                                         <td>
                                             <a href="{{ route('pesanan-pembelian.show', $data->id) }}"
                                                 class="btn btn-info btn-icon btn-circle">

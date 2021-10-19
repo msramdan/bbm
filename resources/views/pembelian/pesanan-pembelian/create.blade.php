@@ -93,7 +93,8 @@
 
                                 <div class="col-md-4 mt-3">
                                     <label class="control-label">Rate</label>
-                                    <input type="number" name="rate" class="form-control" placeholder="Rate" required />
+                                    <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
+                                        required />
                                 </div>
                             </div>
 
@@ -133,15 +134,132 @@
                     </div>
 
                     <div class="panel-body">
+                        {{-- Form barang --}}
+                        <form id="form_trx" method="POST">
+                            <div class="row form-group">
+                                {{-- barang --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="kode_barang">Nama Barang</label>
+                                    <select name="kode_barang" id="kode_barang_input" class="form-control" required>
+                                        <option value="" disabled selected>-- Pilih --</option>
+                                        @forelse ($barang as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->kode . ' - ' . $item->nama }}
+                                            </option>
+                                        @empty
+                                            <option value="" disabled>Data tidak ditemukan</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+
+                                {{-- Harga --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="harga">Harga</label>
+                                    <input type="number" step="any" name="harga" id="harga_input" class="form-control"
+                                        required placeholder="Harga" />
+                                </div>
+
+                                {{-- Qty --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="qty">Qty</label>
+                                    <input type="number" step="any" name="qty" id="qty_input" class="form-control"
+                                        required placeholder="Qty" />
+                                </div>
+
+                                {{-- Diskon% --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="diskon_persen_input">Diskon%</label>
+                                    <input type="number" step="any" name="diskon_persen_input" id="diskon_persen_input"
+                                        class="form-control" placeholder="Diskon%" />
+                                </div>
+
+                                {{-- Diskon --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="diskon">Diskon</label>
+                                    <input type="number" step="any" name="diskon_input" id="diskon_input"
+                                        class="form-control" readonly placeholder="0" />
+                                </div>
+
+                                {{-- Gross --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="gross_input">Gross</label>
+                                    <input type="number" step="any" name="gross" id="gross_input" class="form-control"
+                                        readonly placeholder="0" />
+                                </div>
+
+                                {{-- ppn --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="ppn">PPN</label>
+                                    <input type="checkbox" id="checkbox_ppn" checked>
+                                    <input type="number" step="any" name="ppn" id="ppn_input" class="form-control"
+                                        readonly placeholder="0" />
+                                </div>
+
+                                {{-- PPH --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="qty">PPH</label>
+                                    <input type="checkbox" id="checkbox_pph" checked>
+                                    <input type="number" step="any" name="pph" id="pph_input" class="form-control"
+                                        readonly placeholder="0" />
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                {{-- Biaya Masuk --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="biaya_masuk">Biaya Masuk</label>
+                                    <input type="number" step="any" name="biaya_masuk" id="biaya_masuk_input"
+                                        class="form-control" placeholder="Biaya Masuk" />
+                                </div>
+
+                                {{-- Clr. Fee --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="clr_fee">Clr. Fee</label>
+                                    <input type="number" step="any" name="clr_fee" id="clr_fee_input" class="form-control"
+                                        placeholder="Clr. Fee" />
+                                </div>
+
+                                {{-- Netto --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label for="netto">Netto</label>
+                                    <input type="number" step="any" name="netto" id="netto_input" placeholder="0"
+                                        class="form-control" value="0" readonly />
+                                </div>
+
+                                {{-- button --}}
+                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                    <label>Button</label>
+                                    <div class="form-control" style="border: none; padding:0">
+                                        <input type="hidden" id="index_tr">
+
+                                        <button type="submit" class="btn btn-primary" id="btn_add">
+                                            <i class="fa fa-plus"></i> Add
+                                        </button>
+
+                                        <button type="button" class="btn btn-info" id="btn_update" style="display: none"
+                                            data-index="">
+                                            <i class="fa fa-save"></i> Update
+                                        </button>
+
+                                        <button type="button" class="btn btn-warning" id="btn_clear_form">
+                                            <i class="fa fa-times"></i> Clear Form
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr>
+
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-12">
                                 <div class="table-responsive" style="margin-bottom: 1em;">
                                     <table class="table table-striped table-condensed table-responsive" id="tbl_trx"
                                         width="100%">
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Kode - Nama Barang</th>
+                                                <th>Barang</th>
                                                 <th>Harga</th>
                                                 <th>Qty</th>
                                                 <th>Disc%</th>
@@ -159,180 +277,79 @@
                                     </table>
                                 </div>
 
-                                <button class="btn btn-success" id="btn_simpan" disabled>Simpan</button>
-
-                                <button class="btn btn-danger" id="btn_clear_table" disabled>Batal</button>
-
                                 <div class="row form-group" id="total" style="margin-top: 1em;">
                                     {{-- subtotal --}}
                                     <div class="col-md-4">
                                         <label for="subtotal">Subtotal</label>
-                                        <input type="number" name="subtotal" id="subtotal" class="form-control"
+                                        <input type="text" step="any" name="subtotal" id="subtotal" class="form-control"
                                             placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total PPH --}}
                                     <div class="col-md-4">
                                         <label for="total_pph">Total PPH</label>
-                                        <input type="number" name="total_pph" id="total_pph" class="form-control"
+                                        <input type="text" step="any" name="total_pph" id="total_pph" class="form-control"
                                             placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total PPN --}}
                                     <div class="col-md-4">
                                         <label for="total_ppn">Total PPN</label>
-                                        <input type="number" name="total_ppn" id="total_ppn" class="form-control"
+                                        <input type="text" step="any" name="total_ppn" id="total_ppn" class="form-control"
                                             placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total Diskon --}}
                                     <div class="col-md-4" style="margin-top: 1em;">
                                         <label for="total_diskon">Total Diskon</label>
-                                        <input type="number" name="total_diskon" id="total_diskon" class="form-control"
-                                            placeholder="0" readonly />
+                                        <input type="text" step="any" name="total_diskon" id="total_diskon"
+                                            class="form-control" placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total Biaya Masuk --}}
                                     <div class="col-md-4" style="margin-top: 1em;">
                                         <label for="total_biaya_masuk">Total Biaya Masuk</label>
-                                        <input type="number" name="total_biaya_masuk" id="total_biaya_masuk" placeholder="0"
-                                            class="form-control" readonly />
+                                        <input type="text" step="any" name="total_biaya_masuk" id="total_biaya_masuk"
+                                            placeholder="0" class="form-control" readonly />
                                     </div>
 
                                     {{-- Total Gross --}}
                                     <div class="col-md-4" style="margin-top: 1em;">
                                         <label for="total_gross">Total Gross</label>
-                                        <input type="number" name="total_gross" id="total_gross" class="form-control"
-                                            placeholder="0" readonly />
+                                        <input type="text" step="any" name="total_gross" id="total_gross"
+                                            class="form-control" placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total Clr. Fee --}}
                                     <div class="col-md-4" style="margin-top: 1em;">
                                         <label for="total_clr_fee">Total Clr. Fee</label>
-                                        <input type="number" name="total_clr_fee" id="total_clr_fee" class="form-control"
-                                            placeholder="0" readonly />
+                                        <input type="text" step="any" name="total_clr_fee" id="total_clr_fee"
+                                            class="form-control" placeholder="0" readonly />
                                     </div>
-
-                                    <div class="col-md-4" style="margin-top: 1em;"></div>
 
                                     {{-- Total Netto --}}
                                     <div class="col-md-4" style="margin-top: 1em;">
                                         <label for="total_netto">Total Netto</label>
-                                        <input type="number" name="total_netto" id="total_netto" class="form-control"
-                                            placeholder="0" readonly />
+                                        <input type="text" step="any" name="total_netto" id="total_netto"
+                                            class="form-control" placeholder="0" readonly />
+                                    </div>
+
+                                    <div class="col-md-4" style="margin-top: 1em;">
+                                        <label>Button</label>
+                                        <div class="form-control" style="border: none; padding:0">
+                                            <button class="btn btn-success" id="btn_simpan" disabled>Simpan</button>
+
+                                            <button class="btn btn-danger" id="btn_clear_table" disabled>Batal</button>
+                                        </div>
                                     </div>
                                 </div>
+                                {{-- end row form-group --}}
                             </div>
-
-                            {{-- Form barang --}}
-                            <div class="col-md-3">
-                                <form id="form_trx" method="POST">
-                                    <div class="form-group">
-                                        <label for="kode_barang">Nama Barang</label>
-                                        <select name="kode_barang" id="kode_barang_input" class="form-control" required>
-                                            <option value="" disabled selected>-- Pilih --</option>
-                                            @forelse ($barang as $item)
-                                                <option value="{{ $item->id }}">
-                                                    {{ $item->kode . ' - ' . $item->nama }}
-                                                </option>
-                                            @empty
-                                                <option value="" disabled>Data tidak ditemukan</option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-
-                                    {{-- Harga --}}
-                                    <div class="form-group">
-                                        <label for="harga">Harga</label>
-                                        <input type="number" name="harga" id="harga_input" class="form-control" min="1"
-                                            required placeholder="Harga" />
-                                    </div>
-
-                                    {{-- Qty --}}
-                                    <div class="form-group">
-                                        <label for="qty">Qty</label>
-                                        <input type="number" name="qty" id="qty_input" class="form-control" required
-                                            placeholder="Qty" min="1" />
-                                    </div>
-
-                                    <div class="row" style="margin-bottom: 1em;">
-                                        {{-- Diskon% --}}
-                                        <div class="col-md-6">
-                                            <label for="diskon_persen_input">Diskon%</label>
-                                            <input type="number" name="diskon_persen_input" id="diskon_persen_input"
-                                                class="form-control" min="0" placeholder="Diskon%" />
-                                        </div>
-
-                                        {{-- Diskon --}}
-                                        <div class="col-md-6">
-                                            <label for="diskon">Diskon</label>
-                                            <input type="number" name="diskon_input" id="diskon_input"
-                                                class="form-control" readonly min="0" placeholder="Diskon" />
-                                        </div>
-                                    </div>
-
-                                    {{-- Gross --}}
-                                    <div class="form-group">
-                                        <label for="gross_input">Gross</label>
-                                        <input type="number" name="gross" id="gross_input" class="form-control" readonly
-                                            placeholder="0" />
-                                    </div>
-
-                                    <div class="row" style="margin-bottom: 1em;">
-                                        {{-- ppn --}}
-                                        <div class="col-md-6">
-                                            <label for="ppn">PPN</label>
-                                            <input type="number" name="ppn" id="ppn_input" class="form-control"
-                                                placeholder="PPH" min="0" />
-                                        </div>
-
-                                        {{-- PPH --}}
-                                        <div class="col-md-6">
-                                            <label for="qty">PPH</label>
-                                            <input type="number" name="pph" id="pph_input" class="form-control" readonly
-                                                placeholder="PPN" min="0" />
-                                        </div>
-                                    </div>
-
-                                    {{-- Biaya Masuk --}}
-                                    <div class="form-group">
-                                        <label for="biaya_masuk">Biaya Masuk</label>
-                                        <input type="number" name="biaya_masuk" id="biaya_masuk_input"
-                                            class="form-control" placeholder="Biaya Masuk" min="0" />
-                                    </div>
-
-                                    {{-- Clr. Fee --}}
-                                    <div class="form-group">
-                                        <label for="clr_fee">Clr. Fee</label>
-                                        <input type="number" name="clr_fee" id="clr_fee_input" class="form-control"
-                                            placeholder="Clr. Fee" min="0" />
-                                    </div>
-
-                                    {{-- Netto --}}
-                                    <div class="form-group">
-                                        <label for="netto">Netto</label>
-                                        <input type="number" name="netto" id="netto_input" class="form-control" value="0"
-                                            readonly />
-                                    </div>
-
-                                    <input type="hidden" id="index_tr">
-
-                                    <button type="submit" class="btn btn-primary" id="btn_add">
-                                        <i class="fa fa-plus"></i> Add
-                                    </button>
-
-                                    <button type="button" class="btn btn-info" id="btn_update" style="display: none"
-                                        data-index="">
-                                        <i class="fa fa-save"></i> Update
-                                    </button>
-
-                                    <button type="button" class="btn btn-warning" id="btn_clear_form">
-                                        <i class="fa fa-times"></i> Clear Form
-                                    </button>
-                                </form>
-                            </div>
+                            {{-- end col-md-12 --}}
                         </div>
+                        {{-- end row --}}
                     </div>
+                    {{-- end panel body --}}
                 </div>
                 <!-- end panel -->
             </div>

@@ -18,9 +18,17 @@ class PesananPembelian extends Model
         'tanggal',
         'supplier_id',
         'matauang_id',
-        'kepemilikan_stok',
+        'bentuk_kepemilikan_stok',
         'rate',
-        'keterangan'
+        'keterangan',
+        'subtotal',
+        'total_ppn',
+        'total_pph',
+        'total_gross',
+        'total_diskon',
+        'total_clr_fee',
+        'total_biaya_masuk',
+        'total_netto',
     ];
 
     public function pesanan_pembelian_detail()

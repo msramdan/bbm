@@ -154,7 +154,7 @@ class AdjustmentPlusController extends Controller
         $adjusment = AdjustmentPlus::findOrFail($id);
         $adjusment->delete();
 
-        Alert::success('Happus Data', 'Berhasil');
+        Alert::success('Hapus Data', 'Berhasil');
 
         return redirect()->route('adjustment-plus.index');
     }

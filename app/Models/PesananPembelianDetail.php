@@ -11,6 +11,8 @@ class PesananPembelianDetail extends Model
 
     protected $table = 'pesanan_pembelian_detail';
 
+    protected $with = ['barang'];
+
     protected $fillable = [
         'pesanan_pembelian_id',
         'barang_id',
@@ -23,7 +25,7 @@ class PesananPembelianDetail extends Model
         'biaya_masuk',
         'clr_fee',
         'gross',
-        'total'
+        'netto'
     ];
 
     public function pesanan_pembelian()

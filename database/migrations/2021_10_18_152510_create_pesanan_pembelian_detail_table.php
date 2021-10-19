@@ -26,7 +26,7 @@ class CreatePesananPembelianDetailTable extends Migration
             $table->float('biaya_masuk')->nullable();
             $table->float('clr_fee')->nullable();
             $table->float('gross');
-            $table->float('total');
+            $table->float('netto');
             $table->timestamps();
         });
     }

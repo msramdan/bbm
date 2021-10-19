@@ -22,6 +22,14 @@ class CreatePesananPembelianTable extends Migration
             $table->float('rate');
             $table->string('bentuk_kepemilikan_stok', 20);
             $table->text('keterangan')->nullable();
+            $table->float('subtotal');
+            $table->float('total_ppn');
+            $table->float('total_pph');
+            $table->float('total_gross');
+            $table->float('total_biaya_masuk');
+            $table->float('total_clr_fee');
+            $table->float('total_diskon');
+            $table->float('total_netto');
             $table->timestamps();
         });
     }

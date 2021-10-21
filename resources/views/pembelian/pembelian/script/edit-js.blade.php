@@ -3,15 +3,11 @@
         integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
 
     <script>
-        get_kode()
         cek_form_entry()
+        hitung_semua_total()
 
         $('#matauang').change(function() {
             hitung_semua_total()
-        })
-
-        $('input[name="tanggal"]').change(function() {
-            get_kode()
         })
 
         $('#qty_input, #harga_input, #kode_input, #diskon_input, #diskon_persen_input, #ppn_input,#pph_input, #gross_input, #biaya_masuk_input, #clr_fee_input, #checkbox_ppn, #checkbox_pph')
@@ -223,36 +219,23 @@
             }
 
             $.ajax({
-                type: 'POST',
-                url: '{{ route('pesanan-pembelian.store') }}',
+                type: 'PUT',
+                url: '{{ route('pesanan-pembelian.update', $pesananPembelian->id) }}',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data: data,
                 success: function(data) {
-                    $('#tbl_trx tbody tr').remove()
-
-                    $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                    $('input[name="rate"]').val('')
-                    $('textarea[name="keterangan"]').val('')
-
-                    $('select[name="supplier"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="bentuk_kepemilikan"] option[value="1"]').attr('selected',
-                        'selected')
-
-                    clear_form_entry()
-                    hitung_semua_total()
-                    cek_table_length()
-                    get_kode()
-
-                    $('select[name="bentuk_kepemilikan"]').focus()
                     $('#btn_simpan').text('simpan')
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'Tambah data',
+                        title: 'Update data',
                         text: 'Berhasil'
+                    }).then(function() {
+                        setTimeout(() => {
+                            window.location = '{{ route('pesanan-pembelian.index') }}'
+                        }, 500)
                     })
                 },
                 error: function(xhr, status, error) {
@@ -423,21 +406,6 @@
             $('#btn_add').show()
         }
 
-        // ajax get kode
-        function get_kode() {
-            $.ajax({
-                url: "/beli/pesanan-pembelian/generate-kode/" + $('input[name="tanggal"]').val(),
-                type: 'GET',
-                success: function(data) {
-                    // setTimeout(() => {
-                    //     $('input[name="kode"]').val('Loading...')
-                    // }, 500)
-
-                    $('input[name="kode"]').val(data)
-                }
-            })
-        }
-
         function hitung_semua_total() {
             let subtotal = 0
             let total_pph = 0
@@ -530,7 +498,7 @@
         }
 
         function format_ribuan(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }
 
         // auto generate no pada table

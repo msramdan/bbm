@@ -26,7 +26,7 @@ return [
         'adjustment_plus' => 'Adjustment Plus',
         'adjustment_minus' => 'Adjustment Minus',
         'pesanan_pembelian' => 'Purchase Order',
-        'pembelian' => 'Purchase'
+        'pembelian' => 'Purchase',
     ],
     'link' => [
         'dashboard' => 'Dashboard',

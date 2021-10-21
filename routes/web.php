@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MasterData\{AreaController, BankController, BarangController, GudangController, KategoriController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
 use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController};
 use App\Http\Controllers\LocalizationController;
+use App\Http\Controllers\Pembelian\PembelianController;
 use App\Http\Controllers\Pembelian\PesananPembelianController;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -61,4 +62,13 @@ Route::group(['prefix' => 'beli', 'middleware' => ['web', 'auth']], function () 
     Route::put('/pesanan-pembelian/update/{PesananPembelian}', [PesananPembelianController::class, 'update'])->name('pesanan-pembelian.update');
     Route::get('/pesanan-pembelian/generate-kode/{tanggal}', [PesananPembelianController::class, 'generateKode'])->name('pesanan-pembelian.generateKode');
     Route::resource('/pesanan-pembelian', PesananPembelianController::class)->except('store', 'update');
+
+
+    // Pesanan Pembelian
+    Route::post('/pembelian/store', [PembelianController::class, 'store'])->name('pembelian.store');
+    Route::put('/pembelian/update/{PesananPembelian}', [PembelianController::class, 'update'])->name('pembelian.update');
+    Route::get('/pembelian/generate-kode/{tanggal}', [PembelianController::class, 'generateKode'])->name('pembelian.generateKode');
+    Route::get('/pembelian/get-rekening/{id}', [PembelianController::class, 'getRekeningByBankId'])->name('pembelian.getRekeningByBankId');
+    Route::get('/pembelian/get-data-po/{id}', [PembelianController::class, 'getDataPO'])->name('pembelian.getDataPO');
+    Route::resource('/pembelian', PembelianController::class)->except('store', 'update');
 });

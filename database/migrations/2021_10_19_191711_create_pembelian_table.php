@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePesananPembelianTable extends Migration
+class CreatePembelianTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,17 @@ class CreatePesananPembelianTable extends Migration
      */
     public function up()
     {
-        Schema::create('pesanan_pembelian', function (Blueprint $table) {
+        Schema::create('pembelian', function (Blueprint $table) {
             $table->id();
-            $table->string('kode');
+            $table->string('kode', 25);
             $table->date('tanggal');
+            $table->foreignId('gudang_id')->constrained('gudang');
+
+            $table->unsignedBigInteger('pesanan_pembelian_id')->nullable();
+            // $table->unsignedBigInteger('supplier_id')->nullable();
+            // $table->unsignedBigInteger('matauang_id')->nullable();
+
+            // $table->foreignId('pesanan_pembelian_id')->constrained('pesanan_pembelian');
             $table->foreignId('supplier_id')->constrained('supplier');
             $table->foreignId('matauang_id')->constrained('matauang');
             $table->double('rate', 20, 2);
@@ -31,6 +38,10 @@ class CreatePesananPembelianTable extends Migration
             $table->double('total_diskon', 20, 2);
             $table->double('total_netto', 20, 2);
             $table->timestamps();
+
+            $table->foreign('pesanan_pembelian_id')->references('id')->on('pesanan_pembelian')->nullOnDelete();
+            // $table->foreign('supplier_id')->references('id')->on('supplier')->nullOnDelete();
+            // $table->foreign('matauang_id')->references('id')->on('matauang')->nullOnDelete();
         });
     }
 
@@ -41,6 +52,6 @@ class CreatePesananPembelianTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pesanan_pembelian');
+        Schema::dropIfExists('pembelian');
     }
 }

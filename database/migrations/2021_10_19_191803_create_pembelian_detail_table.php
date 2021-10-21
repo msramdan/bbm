@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePesananPembelianDetailTable extends Migration
+class CreatePembelianDetailTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreatePesananPembelianDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('pesanan_pembelian_detail', function (Blueprint $table) {
+        Schema::create('pembelian_detail', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pesanan_pembelian_id')->constrained('pesanan_pembelian')->onDelete('cascade');
+            $table->foreignId('pembelian_id')->constrained('pembelian')->onDelete('cascade');
             $table->foreignId('barang_id')->constrained('barang');
             $table->integer('qty');
             $table->double('harga', 20, 2);
@@ -38,6 +38,6 @@ class CreatePesananPembelianDetailTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pesanan_pembelian_detail');
+        Schema::dropIfExists('pembelian_detail');
     }
 }

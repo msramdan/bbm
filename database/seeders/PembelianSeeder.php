@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\PesananPembelian;
 use Illuminate\Database\Seeder;
 
-class PesananPembelianSeeder extends Seeder
+class PembelianSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +13,6 @@ class PesananPembelianSeeder extends Seeder
      */
     public function run()
     {
-        // PesananPembelian::create([
-
-        // ]);
+        //
     }
 }

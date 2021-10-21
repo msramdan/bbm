@@ -247,15 +247,37 @@ Breadcrumbs::for('pesanan_pembelian', function (BreadcrumbTrail $trail) {
 // Master Data > Pesanan Pembelian > Tambah
 Breadcrumbs::for('pesanan_pembelian_add', function (BreadcrumbTrail $trail) {
     $trail->parent('pesanan_pembelian');
-    $trail->push('Tambah', route('adjustment-minus.create'));
+    $trail->push('Tambah', route('pesanan-pembelian.create'));
 });
 // Master Data > Pesanan Pembelian > Edit
 Breadcrumbs::for('pesanan_pembelian_edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('adjustment_minus');
+    $trail->parent('pesanan_pembelian');
     $trail->push('Edit');
 });
 // Master Data > Pesanan Pembelian > Show
 Breadcrumbs::for('pesanan_pembelian_show', function (BreadcrumbTrail $trail) {
-    $trail->parent('adjustment_minus');
+    $trail->parent('pesanan_pembelian');
+    $trail->push('Show');
+});
+
+
+// Master Data > Pembelian
+Breadcrumbs::for('pembelian', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Pembelian', route('pembelian.index'));
+});
+// Master Data > Pembelian > Tambah
+Breadcrumbs::for('pembelian_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('pembelian');
+    $trail->push('Tambah', route('pembelian.create'));
+});
+// Master Data > Pembelian > Edit
+Breadcrumbs::for('pembelian_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('pembelian');
+    $trail->push('Edit');
+});
+// Master Data > Pembelian > Show
+Breadcrumbs::for('pembelian_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('pembelian');
     $trail->push('Show');
 });

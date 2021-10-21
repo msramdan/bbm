@@ -136,11 +136,11 @@
                         </a>
                     </li>
 
-                    {{-- <li>
-                        <a href="{{ route('adjustment-minus.index') }}">
-                            {{ trans('dashboard.menu.adjustment_minus') }}
+                    <li>
+                        <a href="{{ route('pembelian.index') }}">
+                            {{ trans('dashboard.menu.pembelian') }}
                         </a>
-                    </li> --}}
+                    </li>
                 </ul>
             </li>
 

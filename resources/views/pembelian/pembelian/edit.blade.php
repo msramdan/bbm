@@ -93,8 +93,8 @@
                                 <div class="col-md-3">
                                     <label class="control-label">Supplier</label>
                                     <select name="supplier" class="form-control" readonly>
-                                        <option value="{{ $pembelian->supplier->kode }}">
-                                            {{ $pembelian->supplier->nama_supplier }}
+                                        <option value="{{ $pembelian->supplier ? $pembelian->supplier->kode : '' }}">
+                                            {{ $pembelian->supplier ? $pembelian->supplier->nama_supplier : 'Tanpa Supplier' }}
                                         </option>
                                     </select>
                                 </div>

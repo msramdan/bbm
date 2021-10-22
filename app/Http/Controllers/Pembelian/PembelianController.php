@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Bank, Barang, Supplier, Pembelian, Matauang, Gudang, PembelianDetail, PembelianPembayaran, PesananPembelian, RekeningBank};
+use App\Models\{Pembelian, PembelianDetail, PembelianPembayaran, PesananPembelian, RekeningBank};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -29,15 +29,7 @@ class PembelianController extends Controller
      */
     public function create()
     {
-        $barang = Barang::get();
-        $matauang = Matauang::get();
-        $supplier = Supplier::get();
-        $gudang = Gudang::get();
-        $pesananPembelian = PesananPembelian::get();
-        $jenisPembayaran = $this->getJenisPembayaran();
-        $bank = Bank::get();
-
-        return view('pembelian.pembelian.create', compact('barang', 'matauang', 'gudang', 'bank', 'supplier', 'pesananPembelian', 'jenisPembayaran'));
+        return view('pembelian.pembelian.create');
     }
 
     /**
@@ -125,17 +117,9 @@ class PembelianController extends Controller
      */
     public function edit(Pembelian $pembelian)
     {
-        $barang = Barang::get();
-        // $matauang = Matauang::get();
-        $supplier = Supplier::get();
-        $gudang = Gudang::get();
-        $pesananPembelian = PesananPembelian::get();
-        $jenisPembayaran = $this->getJenisPembayaran();
-        $bank = Bank::get();
-
         $pembelian->load('pembelian_detail', 'gudang', 'supplier', 'matauang', 'pembelian_pembayaran', 'pesanan_pembelian');
 
-        return view('pembelian.pembelian.edit', compact('barang', 'gudang', 'bank', 'supplier', 'pesananPembelian', 'jenisPembayaran', 'pembelian'));
+        return view('pembelian.pembelian.edit', compact('pembelian'));
     }
 
     /**
@@ -214,25 +198,6 @@ class PembelianController extends Controller
         Alert::success('Hapus Data', 'Berhasil');
 
         return redirect()->route('pembelian.index');
-    }
-
-    protected function getJenisPembayaran()
-    {
-        // buat collection/array to collection
-        return collect([
-            (object)  [
-                'id' => 'Cash',
-                'nama' => 'Cash'
-            ],
-            (object)  [
-                'id' => 'Transfer',
-                'nama' =>  'Transfer',
-            ],
-            (object) [
-                'id' => 'Giro',
-                'nama' => 'Giro'
-            ]
-        ]);
     }
 
     protected function generateKode($tanggal)

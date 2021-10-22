@@ -61,7 +61,7 @@
                                         </td>
                                         <td>{{ $data->tanggal->format('d m Y') }}</td>
                                         <td>{{ $data->matauang->nama }}</td>
-                                        <td>{{ $data->supplier->nama_supplier }}</td>
+                                        <td>{{ $data->supplier ? $data->supplier->nama_supplier : 'Tanpa Supplier' }}</td>
                                         <td>{{ $data->gudang->nama }}</td>
                                         <td>{{ $data->rate }}</td>
                                         <td>{{ $data->pembelian_detail_count }}</td>

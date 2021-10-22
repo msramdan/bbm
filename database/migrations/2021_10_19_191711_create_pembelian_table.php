@@ -19,8 +19,8 @@ class CreatePembelianTable extends Migration
             $table->date('tanggal');
 
             $table->unsignedBigInteger('pesanan_pembelian_id')->nullable();
+            $table->unsignedBigInteger('supplier_id')->nullable();
 
-            $table->foreignId('supplier_id')->constrained('supplier');
             $table->foreignId('matauang_id')->constrained('matauang');
             $table->foreignId('gudang_id')->constrained('gudang');
             $table->double('rate', 20, 2);
@@ -37,6 +37,7 @@ class CreatePembelianTable extends Migration
             $table->timestamps();
 
             $table->foreign('pesanan_pembelian_id')->references('id')->on('pesanan_pembelian')->nullOnDelete();
+            $table->foreign('supplier_id')->references('id')->on('supplier')->nullOnDelete();
         });
     }
 

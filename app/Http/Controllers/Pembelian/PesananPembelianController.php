@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
-use App\Models\{PesananPembelian, PesananPembelianDetail, Barang, Gudang, Matauang, Supplier};
+use App\Models\{PesananPembelian, PesananPembelianDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -29,11 +29,7 @@ class PesananPembelianController extends Controller
      */
     public function create()
     {
-        $barang = Barang::get();
-        $matauang = Matauang::get();
-        $supplier = Supplier::get();
-
-        return view('pembelian.pesanan-pembelian.create', compact('barang', 'matauang', 'supplier'));
+        return view('pembelian.pesanan-pembelian.create');
     }
 
     /**
@@ -108,11 +104,7 @@ class PesananPembelianController extends Controller
     {
         $pesananPembelian->load('pesanan_pembelian_detail', 'supplier', 'matauang')->withCount('pesanan_pembelian_detail');
 
-        $barang = Barang::get();
-        $matauang = Matauang::get();
-        $supplier = Supplier::get();
-
-        return view('pembelian.pesanan-pembelian.edit', compact('pesananPembelian', 'barang', 'matauang', 'supplier'));
+        return view('pembelian.pesanan-pembelian.edit', compact('pesananPembelian'));
     }
 
     /**

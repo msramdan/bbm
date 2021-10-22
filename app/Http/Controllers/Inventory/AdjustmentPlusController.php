@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
-use App\Models\{AdjustmentPlus, AdjustmentPlusDetail, Barang, Gudang, Matauang, Supplier};
+use App\Models\{AdjustmentPlus, AdjustmentPlusDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -29,12 +29,7 @@ class AdjustmentPlusController extends Controller
      */
     public function create()
     {
-        $gudang = Gudang::get();
-        $barang = Barang::get();
-        $matauang = Matauang::get();
-        $supplier = Supplier::get();
-
-        return view('inventory.adjustment-plus.create', compact('gudang', 'barang', 'matauang', 'supplier'));
+        return view('inventory.adjustment-plus.create');
     }
 
     /**
@@ -99,11 +94,7 @@ class AdjustmentPlusController extends Controller
             ->withCount('adjustment_plus_detail')
             ->findOrFail($id);
 
-        $gudang = Gudang::get();
-        $barang = Barang::get();
-        $supplier = Supplier::get();
-
-        return view('inventory.adjustment-plus.edit', compact('adjustmentPlus', 'gudang', 'barang', 'supplier'));
+        return view('inventory.adjustment-plus.edit', compact('adjustmentPlus'));
     }
 
     /**

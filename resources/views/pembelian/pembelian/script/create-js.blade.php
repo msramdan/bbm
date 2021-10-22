@@ -134,7 +134,6 @@
             if (
                 !$('input[name="tanggal"]').val() ||
                 !$('input[name="rate"]').val() ||
-                !$('select[name="supplier"]').val() ||
                 !$('select[name="bentuk_kepemilikan"]').val() ||
                 !$('select[name="matauang"]').val() ||
                 !$('select[name="gudang"]').val()

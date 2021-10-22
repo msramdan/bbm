@@ -144,9 +144,60 @@ class PembelianController extends Controller
      * @param  \App\Models\Pembelian  $pembelian
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pembelian $pembelian)
+    public function update(Request $request, $id)
     {
-        //
+        $pembelian = Pembelian::findOrFail($id);
+
+        DB::transaction(function () use ($request, $pembelian) {
+            $pembelian->update([
+                'gudang_id' => $request->gudang,
+                'keterangan' => $request->keterangan,
+                'subtotal' => $request->subtotal,
+                'total_ppn' => $request->total_ppn,
+                'total_pph' => $request->total_pph,
+                'total_gross' => $request->total_gross,
+                'total_diskon' => $request->total_diskon,
+                'total_clr_fee' => $request->total_clr_fee,
+                'total_biaya_masuk' => $request->total_biaya_masuk,
+                'total_netto' => $request->total_netto,
+            ]);
+
+            foreach ($request->barang as $i => $value) {
+                $pembelianDetail[] = new PembelianDetail([
+                    'barang_id' => $value,
+                    'harga' => $request->harga[$i],
+                    'qty' => $request->qty[$i],
+                    'diskon_persen' => $request->diskon_persen[$i],
+                    'diskon' => $request->diskon[$i],
+                    'gross' => $request->gross[$i],
+                    'biaya_masuk' => $request->biaya_masuk[$i],
+                    'clr_fee' => $request->clr_fee[$i],
+                    'ppn' => $request->ppn[$i],
+                    'pph' => $request->pph[$i],
+                    'netto' => $request->netto[$i],
+                ]);
+            }
+
+            foreach ($request->bank as $i => $value) {
+                $pembayaran[] = new PembelianPembayaran([
+                    'bank_id' => $request->bank[$i],
+                    'rekening_bank_id' => $request->rekening[$i],
+                    'tgl_cek_giro' => $request->tgl_cek_giro[$i],
+                    'no_cek_giro' => $request->no_cek_giro[$i],
+                    'bayar' => $request->bayar[$i],
+                ]);
+            }
+
+            // hapus list lama
+            $pembelian->pembelian_pembayaran()->delete();
+            $pembelian->pembelian_detail()->delete();
+
+            // insert list baru
+            $pembelian->pembelian_pembayaran()->saveMany($pembayaran);
+            $pembelian->pembelian_detail()->saveMany($pembelianDetail);
+        });
+
+        return response()->json(['success'], 200);
     }
 
     /**

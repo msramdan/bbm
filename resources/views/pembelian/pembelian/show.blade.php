@@ -57,8 +57,9 @@
                                 <div class="col-md-3">
                                     <label class="control-label">Kode P.O</label>
                                     <select class="form-control" readonly>
-                                        <option value="{{ $pembelian->pesanan_pembelian->kode }}">
-                                            {{ $pembelian->pesanan_pembelian->kode }}
+                                        <option
+                                            value="{{ $pembelian->pesanan_pembelian ? $pembelian->pesanan_pembelian->kode : 'Tanpa P.O' }}">
+                                            {{ $pembelian->pesanan_pembelian ? $pembelian->pesanan_pembelian->kode : 'Tanpa P.O' }}
                                         </option>
                                     </select>
                                 </div>

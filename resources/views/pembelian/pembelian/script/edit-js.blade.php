@@ -3,11 +3,16 @@
         integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
 
     <script>
-        cek_form_entry()
-        hitung_semua_total()
+        cek_form_entry_brg()
+        hitung_total_payment()
+        hitung_semua_total_brg()
 
         $('#matauang').change(function() {
-            hitung_semua_total()
+            hitung_semua_total_brg()
+        })
+
+        $('#bank_input').change(function() {
+            get_rekening()
         })
 
         $('#qty_input, #harga_input, #kode_input, #diskon_input, #diskon_persen_input, #ppn_input,#pph_input, #gross_input, #biaya_masuk_input, #clr_fee_input, #checkbox_ppn, #checkbox_pph')
@@ -19,25 +24,37 @@
 
                     hitung_netto()
 
-                    cek_form_entry()
+                    cek_form_entry_brg()
+
+                    cek_table_length()
                 })
+
+        $('#jenis_pembayaran_input, #bank_input, #rekening_input, #no_cek_giro_input,#tgl_cek_giro_input,#bayar_input').on(
+            'keyup keydown change',
+            function() {
+                cek_form_entry_payment()
+
+                cek_table_length()
+            })
 
         $('#form_trx').submit(function(e) {
             e.preventDefault()
-
+            // ||
+            //     !$('select[name="kode_po"]').val()
             if (
                 !$('input[name="tanggal"]').val() ||
                 !$('input[name="rate"]').val() ||
                 !$('select[name="supplier"]').val() ||
                 !$('select[name="bentuk_kepemilikan"]').val() ||
-                !$('select[name="matauang"]').val()
+                !$('select[name="matauang"]').val() ||
+                !$('select[name="gudang"]').val()
             ) {
-                $('select[name="bentuk_kepemilikan"]').focus()
+                $('select[name="rate"]').focus()
 
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Mohon isi data Pesanan Pembelian - Header terlebih dahulu!'
+                    text: 'Mohon isi data Pembelian - Header terlebih dahulu!'
                 })
             } else {
                 let kode_barang = $('#kode_barang_input option:selected')
@@ -65,7 +82,7 @@
                         // hapus tr berdasarkan index
                         $('#tbl_trx tbody tr:eq(' + index + ')').remove()
 
-                        generate_nomer()
+                        generate_nomer_brg()
                     }
                 })
 
@@ -118,11 +135,11 @@
                         <input type="hidden"  class="netto_hidden" name="netto[]" value="${netto}">
                     </td>
                     <td>
-                        <button type="button" class="btn btn-info btn-xs btn_edit">
+                        <button type="button" class="btn btn-info btn-xs btn_edit_brg">
                             <i class="fa fa-edit"></i>
                         </button>
 
-                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                        <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
                             <i class="fa fa-times"></i>
                         </button>
                     </td>
@@ -132,29 +149,112 @@
 
                 cek_table_length()
 
-                clear_form_entry()
+                clear_form_entry_brg()
 
-                hitung_semua_total()
+                hitung_semua_total_brg()
 
                 $('#kode_barang_input').focus()
             }
         })
 
-        $('#btn_clear_form').click(function() {
-            clear_form_entry()
+        $('#form_payment').submit(function(e) {
+            e.preventDefault()
+
+            let jenis_pembayaran = $('#jenis_pembayaran_input option:selected')
+            let bank = $('#bank_input option:selected')
+            let rekening = $('#rekening_input option:selected')
+            let no_cek_giro = $('#no_cek_giro_input').val()
+            let tgl_cek_giro = $('#tgl_cek_giro_input').val()
+            let bayar = $('#bayar_input').val()
+
+            // cek duplikasi barang
+            $('input[name="no_cek_giro[]"]').each(function() {
+                // cari index tr ke berapa
+                let index = $(this).parent().parent().index()
+
+                // kalo id barang di cart dan form input(barang) sama
+                //  kalo id supplier di cart dan form input(barang) sama
+                if ($(this).val() == no_cek_giro) {
+                    // hapus tr berdasarkan index
+                    $('#tbl_payment tbody tr:eq(' + index + ')').remove()
+
+                    generate_nomer_payment()
+                }
+            })
+
+            let no = $('#tbl_payment tbody tr').length + 1
+
+            let data_payment = `<tr>
+                    <td>${no}</td>
+                    <td>
+                        ${jenis_pembayaran.html()}
+                        <input type="hidden" class="jenis_pembayaran_hidden" name="jenis_pembayaran[]" value="${jenis_pembayaran.val()}">
+                    </td>
+                    <td>
+                        ${bank.html()}
+                        <input type="hidden"  class="bank_hidden" name="bank[]" value="${bank.val()}">
+                    </td>
+                    <td>
+                        ${rekening.html()}
+                        <input type="hidden"  class="rekening_hidden" name="rekening[]" value="${rekening.val()}">
+                    </td>
+                    <td>
+                        ${no_cek_giro}
+                        <input type="hidden"  class="no_cek_giro_hidden" name="no_cek_giro[]" value="${no_cek_giro}">
+                    </td>
+                    <td>
+                        ${tgl_cek_giro}
+                        <input type="hidden"  class="tgl_cek_giro_hidden" name="tgl_cek_giro[]" value="${tgl_cek_giro}">
+                    </td>
+                    <td>
+                        ${format_ribuan(bayar)}
+                        <input type="hidden"  class="bayar_hidden" name="bayar[]" value="${bayar}">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs btn_edit_payment">
+                            <i class="fa fa-edit"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-danger btn-xs btn_hapus_payment">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>
+                </tr>`
+
+            $('#tbl_payment').append(data_payment)
+
+            cek_table_length()
+
+            clear_form_entry_payment()
+
+            hitung_total_payment()
+
+            $('#jenis_pembayaran_input').focus()
+
+            $('#btn_add_payment').prop('disabled', true)
+            $('#btn_clear_form_payment').prop('disabled', true)
+        })
+
+        $('#btn_clear_form_brg').click(function() {
+            clear_form_entry_brg()
 
             cek_table_length()
         })
 
-        $('#btn_update').click(function() {
-            update_list($('#index_tr').val())
+        $('#btn_update_brg').click(function() {
+            update_list_brg($('#index_tr_brg').val())
         })
 
+        $('#btn_update_payment').click(function() {
+            update_list_payment($('#index_tr_payment').val())
+        })
+
+        // clear tr pada semua table
         $('#btn_clear_table').click(function() {
             $('#tbl_trx tbody tr').remove()
 
-            clear_form_entry()
-            hitung_semua_total()
+            clear_form_entry_brg()
+            hitung_semua_total_brg()
             cek_table_length()
         })
 
@@ -169,10 +269,12 @@
                 matauang: $('select[name="matauang"]').val(),
                 supplier: $('select[name="supplier"]').val(),
                 rate: $('input[name="rate"]').val(),
+                kode_po: $('select[name="kode_po"]').val(),
+                gudang: $('select[name="gudang"]').val(),
                 keterangan: $('#keterangan').val(),
                 bentuk_kepemilikan: $('#bentuk_kepemilikan').val(),
 
-                // list
+                // total  barang
                 subtotal: $('#subtotal').val(),
                 total_ppn: $('#total_ppn').val(),
                 total_pph: $('#total_pph').val(),
@@ -181,6 +283,7 @@
                 total_gross: $('#total_gross').val(),
                 total_clr_fee: $('#total_clr_fee').val(),
                 total_netto: $('#total_netto').val(),
+                total_payment: $('#total_payment').val(),
 
                 // detail barang
                 barang: $('input[name="barang[]"]').map(function() {
@@ -216,11 +319,31 @@
                 clr_fee: $('input[name="clr_fee[]"]').map(function() {
                     return $(this).val()
                 }).get(),
+
+                // total payment
+                jenis_pembayaran: $('input[name="jenis_pembayaran[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                bank: $('input[name="bank[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                rekening: $('input[name="rekening[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                no_cek_giro: $('input[name="no_cek_giro[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                tgl_cek_giro: $('input[name="tgl_cek_giro[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
+                bayar: $('input[name="bayar[]"]').map(function() {
+                    return $(this).val()
+                }).get(),
             }
 
             $.ajax({
                 type: 'PUT',
-                url: '{{ route('pesanan-pembelian.update', $pesananPembelian->id) }}',
+                url: '{{ route('pembelian.update', $pembelian->id) }}',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -234,7 +357,7 @@
                         text: 'Berhasil'
                     }).then(function() {
                         setTimeout(() => {
-                            window.location = '{{ route('pesanan-pembelian.index') }}'
+                            window.location = '{{ route('pembelian.index') }}'
                         }, 500)
                     })
                 },
@@ -250,17 +373,27 @@
             })
         })
 
-        $(document).on('click', '.btn_hapus', function(e) {
+        $(document).on('click', '.btn_hapus_brg', function(e) {
             e.preventDefault()
 
             $(this).parent().parent().remove()
 
-            generate_nomer()
-            hitung_semua_total()
+            generate_nomer_brg()
+            hitung_semua_total_brg()
             cek_table_length()
         })
 
-        $(document).on('click', '.btn_edit', function(e) {
+        $(document).on('click', '.btn_hapus_payment', function(e) {
+            e.preventDefault()
+
+            $(this).parent().parent().remove()
+
+            generate_nomer_payment()
+            hitung_total_payment()
+            cek_table_length()
+        })
+
+        $(document).on('click', '.btn_edit_brg', function(e) {
             e.preventDefault()
 
             // ambil <tr> index
@@ -291,17 +424,85 @@
             $('#clr_fee_input').val(clr_fee)
             $('#netto_input').val(netto)
 
-            $('#btn_add').hide()
-            $('#btn_update').show()
+            $('#btn_add_brg').hide()
+            $('#btn_update_brg').show()
 
-            $('#index_tr').val(index)
+            $('#index_tr_brg').val(index)
         })
 
-        // hitung jumlan <> pada table#tbl_trx
-        function cek_table_length() {
-            let total = $('#tbl_trx tbody tr').length
+        $(document).on('click', '.btn_edit_payment', function(e) {
+            e.preventDefault()
 
-            if (total > 0) {
+            // ambil <tr> index
+            let index = $(this).parent().parent().index()
+
+            let jenis_pembayaran = $('.jenis_pembayaran_hidden:eq(' + index + ')').val()
+            let bank = $('.bank_hidden:eq(' + index + ')').val()
+            let rekening = $('.rekening_hidden:eq(' + index + ')').val()
+            let no_cek_giro = $('.no_cek_giro_hidden:eq(' + index + ')').val()
+            let tgl_cek_giro = $('.tgl_cek_giro_hidden:eq(' + index + ')').val()
+            let bayar = $('.bayar_hidden:eq(' + index + ')').val()
+
+            $('#no_cek_giro_input').val(no_cek_giro)
+            $('#tgl_cek_giro_input').val(tgl_cek_giro)
+            $('#bayar_input').val(bayar)
+
+            $('#jenis_pembayaran_input option[value="' + jenis_pembayaran + '"]').attr('selected', 'selected')
+            $('#bank_input option[value="' + bank + '"]').attr('selected', 'selected')
+
+            get_rekening(rekening)
+
+            $('#rekening_input option[value="' + rekening + '"]').attr('selected', 'selected')
+
+            $('#jenis_pembayaran_input').focus()
+
+            $('#btn_add_payment').hide()
+            $('#btn_update_payment').show()
+
+            $('#index_tr_payment').val(index)
+        })
+
+        function get_rekening(selected = null) {
+            $.ajax({
+                url: "/beli/pembelian/get-rekening/" + $('#bank_input').val(),
+                type: 'GET',
+                success: function(data) {
+                    let rekening = []
+
+                    $('#rekening_input').html(
+                        '<option value="" disabled selected>Loading...</option>')
+
+                    setTimeout(() => {
+                        if (data.length > 0) {
+                            data.forEach(elm => {
+                                rekening.push(
+                                    `<option value="${elm.id}">${elm.nomor_rekening} - ${elm.nama_rekening}</option>`
+                                )
+                            })
+
+                            $('#rekening_input').html(rekening)
+
+                            // kalo dipanggil dari .btn_edit_payment
+                            if (selected) {
+                                $('#rekening_input option[value="' + selected + '"]').attr('selected',
+                                    'selected')
+                            }
+                        } else {
+                            $('#rekening_input').html(
+                                '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
+                            )
+                        }
+                    }, 1000);
+                }
+            })
+        }
+
+        // hitung jumlan <tr> pada table#tbl_trx dan table#tbl_payemnt
+        function cek_table_length() {
+            let table_trx = $('#tbl_trx tbody tr').length
+            let table_payment = $('#tbl_payment tbody tr').length
+
+            if (table_trx > 0 && table_payment > 0) {
                 $('#btn_simpan').prop('disabled', false)
                 $('#btn_clear_table').prop('disabled', false)
             } else {
@@ -310,7 +511,7 @@
             }
         }
 
-        function update_list(index) {
+        function update_list_brg(index) {
             let kode_barang = $('#kode_barang_input option:selected')
             let harga = $('#harga_input').val()
             let qty = $('#qty_input').val()
@@ -373,23 +574,85 @@
                     <input type="hidden"  class="netto_hidden" name="netto[]" value="${netto}">
                 </td>
                 <td>
-                    <button type="button" class="btn btn-info btn-xs btn_edit">
+                    <button type="button" class="btn btn-info btn-xs btn_edit_brg">
                         <i class="fa fa-edit"></i>
                     </button>
 
-                    <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                    <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
                         <i class="fa fa-times"></i>
                     </button>
                 </td>`
 
             $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
 
-            clear_form_entry()
+            clear_form_entry_brg()
 
-            hitung_semua_total()
+            hitung_semua_total_brg()
         }
 
-        function clear_form_entry() {
+        function update_list_payment(index) {
+            let jenis_pembayaran = $('#jenis_pembayaran_input option:selected')
+            let bank = $('#bank_input option:selected')
+            let rekening = $('#rekening_input option:selected')
+            let no_cek_giro = $('#no_cek_giro_input').val()
+            let tgl_cek_giro = $('#tgl_cek_giro_input').val()
+            let bayar = $('#bayar_input').val()
+
+            let no = $('#tbl_payment tbody tr').length + 1
+
+            let data_payment = `
+                <td>${no}</td>
+                <td>
+                    ${jenis_pembayaran.html()}
+                    <input type="hidden" class="jenis_pembayaran_hidden" name="jenis_pembayaran[]" value="${jenis_pembayaran.val()}">
+                </td>
+                <td>
+                    ${bank.html()}
+                    <input type="hidden"  class="bank_hidden" name="bank[]" value="${bank.val()}">
+                </td>
+                <td>
+                    ${rekening.html()}
+                    <input type="hidden"  class="rekening_hidden" name="rekening[]" value="${rekening.val()}">
+                </td>
+                <td>
+                    ${no_cek_giro}
+                    <input type="hidden"  class="no_cek_giro_hidden" name="no_cek_giro[]" value="${no_cek_giro}">
+                </td>
+                <td>
+                    ${tgl_cek_giro}
+                    <input type="hidden"  class="tgl_cek_giro_hidden" name="tgl_cek_giro[]" value="${tgl_cek_giro}">
+                </td>
+                <td>
+                    ${format_ribuan(bayar)}
+                    <input type="hidden"  class="bayar_hidden" name="bayar[]" value="${bayar}">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info btn-xs btn_edit_payment">
+                        <i class="fa fa-edit"></i>
+                    </button>
+
+                    <button type="button" class="btn btn-danger btn-xs btn_hapus_payment">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </td>`
+
+            $('#tbl_payment tbody tr:eq(' + index + ')').html(data_payment)
+
+            cek_table_length()
+
+            clear_form_entry_payment()
+
+            hitung_total_payment()
+
+            $('#jenis_pembayaran_input').focus()
+
+            $('#btn_update_payment').hide()
+            $('#btn_add_payment').show()
+            $('#btn_add_payment').prop('disabled', true)
+            $('#btn_clear_form_payment').prop('disabled', true)
+        }
+
+        function clear_form_entry_brg() {
             $('#kode_barang_input option[value=""]').attr('selected', 'selected')
             $('#harga_input').val('')
             $('#qty_input').val('')
@@ -402,11 +665,22 @@
             $('#biaya_masuk_input').val('')
             $('#clr_fee_input').val('')
 
-            $('#btn_update').hide()
-            $('#btn_add').show()
+            $('#btn_update_brg').hide()
+            $('#btn_add_brg').show()
+
+            $('#index_tr_brg').val('')
         }
 
-        function hitung_semua_total() {
+        function clear_form_entry_payment() {
+            $('#jenis_pembayaran_input option[value=""]').attr('selected', 'selected')
+            $('#bank_input option[value=""]').attr('selected', 'selected')
+            $('#rekening_input').html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
+            $('#no_cek_giro_input').val('')
+            $('#tgl_cek_giro_input').val('')
+            $('#bayar_input').val('')
+        }
+
+        function hitung_semua_total_brg() {
             let subtotal = 0
             let total_pph = 0
             let total_ppn = 0
@@ -458,15 +732,20 @@
             $('#total_netto').val(total_netto)
             $('#total_gross').val(total_gross)
 
-            cek_form_entry()
+            cek_form_entry_brg()
+        }
+
+        function hitung_total_payment() {
+            let total_payment = 0
+
+            $('input[name="bayar[]"]').map(function() {
+                total_payment += parseFloat($(this).val())
+            }).get()
+
+            $('#total_payment_input').val(total_payment)
         }
 
         function hitung_netto() {
-
-            // let ppn = ? parseFloat($('#ppn_input').val()) : 0
-            // let pph = ? parseFloat($('#pph_input').val()) : 0
-            // let diskon = ? parseFloat($('#diskon_input').val()) : 0
-
             let harga = $('#harga_input').val() ? parseFloat($('#harga_input').val()) : 0
             let qty = $('#qty_input').val() ? parseFloat($('#qty_input').val()) : 0
             let diskon_persen = $('#diskon_persen_input').val() ? parseFloat($('#diskon_persen_input').val()) : 0
@@ -497,12 +776,8 @@
             $('#gross_input').val(gross)
         }
 
-        function format_ribuan(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        }
-
         // auto generate no pada table
-        function generate_nomer() {
+        function generate_nomer_brg() {
             let no = 1
             $('#tbl_trx tbody tr').each(function() {
                 $(this).find('td:nth-child(1)').html(no)
@@ -510,20 +785,49 @@
             })
         }
 
-        // cek apakah form entry(adjusment plus - list) kosong atau tidak
+        function generate_nomer_payment() {
+            let no = 1
+            $('#tbl_payment tbody tr').each(function() {
+                $(this).find('td:nth-child(1)').html(no)
+                no++
+            })
+        }
+
+        // cek apakah form entry(barang - list) kosong atau tidak
         // kalo kosong buat button(add & clear) disabled
-        function cek_form_entry() {
+        function cek_form_entry_brg() {
             if (
                 !$('#kode_barang_input').val() ||
                 !$('#harga_input').val() ||
                 !$('#qty_input').val()
             ) {
-                $('#btn_add').prop('disabled', true)
-                $('#btn_clear_form').prop('disabled', true)
+                $('#btn_add_brg').prop('disabled', true)
+                $('#btn_clear_form_brg').prop('disabled', true)
             } else {
-                $('#btn_add').prop('disabled', false)
-                $('#btn_clear_form').prop('disabled', false)
+                $('#btn_add_brg').prop('disabled', false)
+                $('#btn_clear_form_brg').prop('disabled', false)
             }
+        }
+
+        function cek_form_entry_payment() {
+            if (
+                !$('#jenis_pembayaran_input').val() ||
+                !$('#bank_input').val() ||
+                !$('#rekening_input').val() ||
+                !$('#no_cek_giro_input').val() ||
+                !$('#tgl_cek_giro_input').val() ||
+                !$('#bayar_input').val()
+            ) {
+                $('#btn_add_payment').prop('disabled', true)
+                $('#btn_clear_form_payment').prop('disabled', true)
+            } else {
+                $('#btn_add_payment').prop('disabled', false)
+                $('#btn_clear_form_payment').prop('disabled', false)
+            }
+        }
+
+        function format_ribuan(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         }
     </script>
 @endpush

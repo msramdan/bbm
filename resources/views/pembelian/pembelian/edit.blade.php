@@ -51,49 +51,6 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label class="control-label">Rate</label>
-                                    <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
-                                        value="{{ $pembelian->rate }}" readonly />
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label class="control-label">Kode P.O</label>
-
-                                    <select name="kode_po" id="kode_po" class="form-control" readonly>
-                                        <option value="{{ $pembelian->pesanan_pembelian->kode }}">
-                                            {{ $pembelian->pesanan_pembelian->kode }}</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label class="control-label">Mata Uang</label>
-
-                                    <select name="matauang" id="matauang" class="form-control" required>
-                                        <option value="{{ $pembelian->matauang->kode }}">
-                                            {{ $pembelian->matauang->kode . ' - ' . $pembelian->matauang->nama }}
-                                        </option>
-                                    </select>
-                                </div>
-                                {{-- end col-md-3 --}}
-
-                                <div class="col-md-3">
-                                    <label class="control-label">Supplier</label>
-
-                                    <select name="supplier" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @forelse ($supplier as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $pembelian->supplier_id == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama_supplier }}</option>
-                                        @empty
-                                            <option value="" disabled>Data tidak ditemukan</option>
-                                        @endforelse
-                                    </select>
-                                </div>
-
-                                <div class="col-md-3">
                                     <label class="control-label">Gudang</label>
 
                                     <select name="gudang" id="gudang" class="form-control" required>
@@ -109,20 +66,56 @@
                                 </div>
                                 {{-- end col-md-3 --}}
 
+                                <div class="col-md-3">
+                                    <label class="control-label">Kode P.O</label>
+
+                                    <select name="kode_po" id="kode_po" class="form-control" readonly>
+                                        <option value="{{ $pembelian->pesanan_pembelian ? $pembelian->pesanan_pembelian->kode : 'Tanpa P.O' }}">
+                                            {{  $pembelian->pesanan_pembelian ? $pembelian->pesanan_pembelian->kode : 'Tanpa P.O' }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label class="control-label">Mata Uang</label>
+
+                                    <select name="matauang" id="matauang" class="form-control" readonly>
+                                        <option value="{{ $pembelian->matauang->kode }}">
+                                            {{ $pembelian->matauang->kode . ' - ' . $pembelian->matauang->nama }}
+                                        </option>
+                                    </select>
+                                </div>
+                                {{-- end col-md-3 --}}
+
+                                <div class="col-md-3">
+                                    <label class="control-label">Supplier</label>
+
+                                    <select name="supplier" class="form-control" readonly>
+                                        <option value="{{ $pembelian->supplier->kode }}">
+                                            {{ $pembelian->supplier->nama_supplier }}
+                                        </option>
+                                    </select>
+                                </div>
+
                                 {{-- Bentuk stok --}}
                                 <div class="col-md-3">
                                     <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
                                     <select name="bentuk_kepemilikan" id="bentuk_kepemilikan" class="form-control"
-                                        required>
-                                        <option value="Stok Sendiri"
-                                            {{ $pembelian->bentuk_kepemilikan_stok == 'Stok Sendiri' ? 'selected' : '' }}>
-                                            Stok Sendiri</option>
-                                        <option value="Konsinyasi"
-                                            {{ $pembelian->bentuk_kepemilikan_stok == 'Konsinyasi' ? 'selected' : '' }}>
-                                            Konsinyasi</option>
+                                        readonly>
+                                        <option value="{{ $pembelian->bentuk_kepemilikan_stok }}">
+                                            {{ $pembelian->bentuk_kepemilikan_stok }}</option>
                                     </select>
                                 </div>
+
+                                <div class="col-md-3">
+                                    <label class="control-label">Rate</label>
+                                    <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
+                                        value="{{ $pembelian->rate }}" readonly />
+                                </div>
+
                             </div>
+                            {{-- form-group row --}}
 
                             <div class="form-group" style="margin-top: 1em;">
                                 <label class="control-label">Keterangan</label>
@@ -131,6 +124,7 @@
                             </div>
                         </form>
                     </div>
+                    {{-- end panel-body --}}
                 </div>
                 <!-- end panel -->
             </div>
@@ -279,6 +273,7 @@
 
                         <hr>
 
+                        {{-- table barang --}}
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive" style="margin-bottom: 1em;">
@@ -301,7 +296,77 @@
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody></tbody>
+                                        <tbody>
+                                            @foreach ($pembelian->pembelian_detail as $detail)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>
+                                                        {{ $detail->barang->kode . ' - ' . $detail->barang->nama }}
+                                                        <input type="hidden" class="kode_barang_hidden" name="barang[]"
+                                                            value="{{ $detail->barang->id }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->harga) }}
+                                                        <input type="hidden" class="harga_hidden" name="harga[]"
+                                                            value="{{ $detail->harga }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ $detail->qty }}
+                                                        <input type="hidden" class="qty_hidden" name="qty[]"
+                                                            value="{{ $detail->qty }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->diskon_persen) }}%
+                                                        <input type="hidden" class="diskon_persen_hidden"
+                                                            name="diskon_persen[]" value="{{ $detail->diskon_persen }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->diskon) }}
+                                                        <input type="hidden" class="diskon_hidden" name="diskon[]"
+                                                            value="{{ $detail->diskon }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->gross) }}
+                                                        <input type="hidden" name="gross[]" class="gross_hidden"
+                                                            value="{{ $detail->gross }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->ppn) }}
+                                                        <input type="hidden" class="ppn_hidden" name="ppn[]"
+                                                            value="{{ $detail->ppn }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->pph) }}
+                                                        <input type="hidden" class="pph_hidden" name="pph[]"
+                                                            value="{{ $detail->pph }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->biaya_masuk) }}
+                                                        <input type="hidden" class="biaya_masuk_hidden"
+                                                            name="biaya_masuk[]" value="{{ $detail->biaya_masuk }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->clr_fee) }}
+                                                        <input type="hidden" class="clr_fee_hidden" name="clr_fee[]"
+                                                            value=" {{ $detail->clr_fee }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->netto) }}
+                                                        <input type="hidden" class="netto_hidden" name="netto[]"
+                                                            value="{{ $detail->netto }}">
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-info btn-xs btn_edit_brg">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+
+                                                        <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
 
@@ -316,8 +381,8 @@
                                     {{-- Total PPH --}}
                                     <div class="col-md-4">
                                         <label for="total_pph">Total PPH</label>
-                                        <input type="text" step="any" name="total_pph" id="total_pph" class="form-control"
-                                            placeholder="0" readonly />
+                                        <input type="text" step="any" name="total_pph" id="total_pph"
+                                            class="form-control" placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total PPN --}}
@@ -502,7 +567,55 @@
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody></tbody>
+                                        <tbody>
+                                            @foreach ($pembelian->pembelian_pembayaran as $detail)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>
+                                                        {{ $detail->jenis_pembayaran }}
+                                                        <input type="hidden" class="jenis_pembayaran_hidden"
+                                                            name="jenis_pembayaran[]"
+                                                            value="{{ $detail->jenis_pembayaran }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ $detail->bank->nama }}
+                                                        <input type="hidden" class="bank_hidden" name="bank[]"
+                                                            value="{{ $detail->bank->id }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ $detail->rekening->nomor_rekening . ' - ' . $detail->rekening->nama_rekening }}
+                                                        <input type="hidden" class="rekening_hidden" name="rekening[]"
+                                                            value="{{ $detail->rekening->id }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ $detail->no_cek_giro }}
+                                                        <input type="hidden" class="no_cek_giro_hidden"
+                                                            name="no_cek_giro[]" value="{{ $detail->no_cek_giro }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ $detail->tgl_cek_giro->format('Y-m-d') }}
+                                                        <input type="hidden" class="tgl_cek_giro_hidden"
+                                                            name="tgl_cek_giro[]"
+                                                            value="{{ $detail->tgl_cek_giro->format('Y-m-d') }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ number_format($detail->bayar) }}
+                                                        <input type="hidden" class="bayar_hidden" name="bayar[]"
+                                                            value="{{ $detail->bayar }}">
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-info btn-xs btn_edit_payment">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-xs btn_hapus_payment">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
                                         {{-- <tfoot>
                                             <tr>
                                                 <th colspan="6"><strong>Total</strong></th>
@@ -527,9 +640,9 @@
                                     <div class="col-md-3" style="margin-top: 1em;">
                                         <label>Button</label>
                                         <div class="form-control" style="border: none; padding:0">
-                                            <button class="btn btn-success" id="btn_simpan" disabled>Simpan</button>
+                                            <button class="btn btn-success" id="btn_simpan">Simpan</button>
 
-                                            <button class="btn btn-danger" id="btn_clear_table" disabled>Batal</button>
+                                            <button class="btn btn-danger" id="btn_clear_table">Batal</button>
                                         </div>
                                     </div>
                                 </div>
@@ -553,4 +666,4 @@
     <!-- end #content -->
 @endsection
 
-{{-- @include('pembelian.pembelian.script.edit-js') --}}
+@include('pembelian.pembelian.script.edit-js')

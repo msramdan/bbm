@@ -251,11 +251,12 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $detail->jenis_pembayaran }}</td>
-                                                    <td>{{ $detail->bank->nama }}</td>
-                                                    <td>{{ $detail->rekening->nomor_rekening . ' - ' . $detail->rekening->nama_rekening }}
+                                                    <td>{{ $detail->bank ? $detail->bank->nama : '-' }}</td>
+                                                    <td>{{ $detail->rekening ? $detail->rekening->nomor_rekening . ' - ' . $detail->rekening->nama_rekening : '-' }}
                                                     </td>
-                                                    <td>{{ $detail->no_cek_giro }}</td>
-                                                    <td>{{ $detail->tgl_cek_giro->format('d F Y') }}</td>
+                                                    <td>{{ $detail->no_cek_giro ?? '-' }}</td>
+                                                    <td>{{ $detail->tgl_cek_giro ? $detail->tgl_cek_giro->format('d F Y') : '-' }}
+                                                    </td>
                                                     <td>{{ $pembelian->matauang->kode . '  ' . $detail->bayar }}</td>
                                                 </tr>
                                             @endforeach

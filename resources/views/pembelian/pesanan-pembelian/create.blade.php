@@ -69,7 +69,7 @@
                                     <label class="control-label">Supplier</label>
 
                                     <select name="supplier" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
+                                        <option value="" selected>Tanpa Supplier</option>
                                         @forelse ($supplier as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama_supplier }}</option>
                                         @empty

@@ -1,4 +1,11 @@
 @push('custom-js')
+    <script type="text/javascript">
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault()
+            e.returnValue = ''
+        })
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"
         integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
 
@@ -241,6 +248,12 @@
             cek_table_length()
         })
 
+        $('#btn_clear_form_payment').click(function() {
+            clear_form_entry_payment()
+
+            cek_table_length()
+        })
+
         $('#btn_update_brg').click(function() {
             update_list_brg($('#index_tr_brg').val())
         })
@@ -252,10 +265,18 @@
         // clear tr pada semua table
         $('#btn_clear_table').click(function() {
             $('#tbl_trx tbody tr').remove()
+            $('#tbl_payment tbody tr').remove()
 
             clear_form_entry_brg()
+            clear_form_entry_payment()
+
             hitung_semua_total_brg()
+            hitung_total_payment()
+
             cek_table_length()
+
+            $('#btn_simpan').prop('disabled', true)
+            $('#btn_clear_table').prop('disabled', true)
         })
 
         $('#btn_simpan').click(function() {
@@ -443,16 +464,41 @@
             let tgl_cek_giro = $('.tgl_cek_giro_hidden:eq(' + index + ')').val()
             let bayar = $('.bayar_hidden:eq(' + index + ')').val()
 
+            if (jenis_pembayaran == 'Cash') {
+                $('#no_cek_giro_input').prop('disabled', true)
+                $('#tgl_cek_giro_input').prop('disabled', true)
+                $('#bank_input').prop('disabled', true)
+                $('#rekening_input').prop('disabled', true)
+
+                $('#bank_input option[value=""]').attr('selected', 'selected')
+                $('#rekening_input').html(
+                    '<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
+            } else if (jenis_pembayaran == 'Transfer') {
+                $('#no_cek_giro_input').prop('disabled', true)
+                $('#tgl_cek_giro_input').prop('disabled', true)
+                $('#bank_input').prop('disabled', false)
+                $('#rekening_input').prop('disabled', false)
+
+                $('#bank_input option[value="' + bank + '"]').attr('selected', 'selected')
+
+                get_rekening(rekening)
+
+                $('#rekening_input option[value="' + rekening + '"]').attr('selected', 'selected')
+            } else {
+                $('#no_cek_giro_input').prop('disabled', false)
+                $('#tgl_cek_giro_input').prop('disabled', false)
+                $('#bank_input').prop('disabled', true)
+                $('#rekening_input').prop('disabled', true)
+
+                $('#bank_input option[value=""]').attr('selected', 'selected')
+                $('#rekening_input').html(
+                    '<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
+            }
+
+            $('#jenis_pembayaran_input option[value="' + jenis_pembayaran + '"]').attr('selected', 'selected')
             $('#no_cek_giro_input').val(no_cek_giro)
             $('#tgl_cek_giro_input').val(tgl_cek_giro)
             $('#bayar_input').val(bayar)
-
-            $('#jenis_pembayaran_input option[value="' + jenis_pembayaran + '"]').attr('selected', 'selected')
-            $('#bank_input option[value="' + bank + '"]').attr('selected', 'selected')
-
-            get_rekening(rekening)
-
-            $('#rekening_input option[value="' + rekening + '"]').attr('selected', 'selected')
 
             $('#jenis_pembayaran_input').focus()
 
@@ -492,7 +538,7 @@
                                 '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
                             )
                         }
-                    }, 1000);
+                    }, 1000)
                 }
             })
         }
@@ -678,6 +724,10 @@
             $('#no_cek_giro_input').val('')
             $('#tgl_cek_giro_input').val('')
             $('#bayar_input').val('')
+            $('#total_payment_input').val('')
+
+            $('#btn_update_payment').hide()
+            $('#btn_add_payment').show()
         }
 
         function hitung_semua_total_brg() {
@@ -810,21 +860,71 @@
         }
 
         function cek_form_entry_payment() {
-            if (
-                !$('#jenis_pembayaran_input').val() ||
-                !$('#bank_input').val() ||
-                !$('#rekening_input').val() ||
-                !$('#no_cek_giro_input').val() ||
-                !$('#tgl_cek_giro_input').val() ||
-                !$('#bayar_input').val()
-            ) {
-                $('#btn_add_payment').prop('disabled', true)
-                $('#btn_clear_form_payment').prop('disabled', true)
-            } else {
-                $('#btn_add_payment').prop('disabled', false)
-                $('#btn_clear_form_payment').prop('disabled', false)
+            let jenis_pembayaran_input = $('#jenis_pembayaran_input')
+            let bank_input = $('#bank_input')
+            let rekening_input = $('#rekening_input')
+            let no_cek_giro_input = $('#no_cek_giro_input')
+            let tgl_cek_giro_input = $('#tgl_cek_giro_input')
+            let bayar_input = $('#bayar_input')
+
+            // kalo cash, bank dan giro boleh kosong
+            if (jenis_pembayaran_input.val() == 'Cash') {
+                bank_input.prop('disabled', true)
+                rekening_input.prop('disabled', true)
+                no_cek_giro_input.prop('disabled', true)
+                tgl_cek_giro_input.prop('disabled', true)
+
+                bank_input.val('')
+                no_cek_giro_input.val('')
+                tgl_cek_giro_input.val('')
+                rekening_input.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
+
+                if (bayar_input.val()) {
+                    $('#btn_add_payment').prop('disabled', false)
+                    $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_add_payment').prop('disabled', true)
+                    $('#btn_clear_form_payment').prop('disabled', true)
+                }
+            }
+
+            if (jenis_pembayaran_input.val() == 'Transfer') {
+                bank_input.prop('disabled', false)
+                rekening_input.prop('disabled', false)
+
+                no_cek_giro_input.prop('disabled', true)
+                no_cek_giro_input.val('')
+                tgl_cek_giro_input.prop('disabled', true)
+                tgl_cek_giro_input.val('')
+
+                if (bayar_input.val() && bank_input.val() && rekening_input.val()) {
+                    $('#btn_add_payment').prop('disabled', false)
+                    $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_add_payment').prop('disabled', true)
+                    $('#btn_clear_form_payment').prop('disabled', true)
+                }
+            }
+
+            if (jenis_pembayaran_input.val() == 'Giro') {
+                bank_input.prop('disabled', true)
+                bank_input.val('')
+                rekening_input.prop('disabled', true)
+                rekening_input.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
+
+                no_cek_giro_input.prop('disabled', false)
+                tgl_cek_giro_input.prop('disabled', false)
+
+                if (bayar_input.val() && no_cek_giro_input.val() && tgl_cek_giro_input.val()) {
+                    $('#btn_add_payment').prop('disabled', false)
+                    $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_add_payment').prop('disabled', true)
+                    $('#btn_clear_form_payment').prop('disabled', true)
+                }
             }
         }
+
 
         function format_ribuan(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")

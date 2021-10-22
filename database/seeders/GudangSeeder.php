@@ -15,15 +15,15 @@ class GudangSeeder extends Seeder
     public function run()
     {
         Gudang::create([
-            'kode' => 'KDA',
+            'kode' => 'GB',
             'nama' => 'Gudang bekasi',
             'status' => 'Y',
             'gudang_penjualan' => 1
         ]);
 
         Gudang::create([
-            'kode' => 'LOL',
-            'nama' => 'Gudang bogor',
+            'kode' => 'GJ',
+            'nama' => 'Gudang jakarta',
             'status' => 'Y',
             'gudang_penjualan' => 1
         ]);

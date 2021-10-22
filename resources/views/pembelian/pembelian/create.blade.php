@@ -406,7 +406,6 @@
 
                                     <select name="jenis_pembayaran" id="jenis_pembayaran_input" class="form-control"
                                         required>
-                                        <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($jenisPembayaran as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @empty
@@ -418,7 +417,7 @@
                                 <div class="col-md-4">
                                     <label class="control-label">Bank</label>
 
-                                    <select name="bank" id="bank_input" class="form-control" required>
+                                    <select name="bank" id="bank_input" class="form-control" disabled>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($bank as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -431,7 +430,7 @@
                                 <div class="col-md-4">
                                     <label class="control-label">Rekening</label>
 
-                                    <select name="rekening" id="rekening_input" class="form-control" required>
+                                    <select name="rekening" id="rekening_input" class="form-control" disabled>
                                         <option value="" disabled selected>-- Pilih Bank Terlebih Dahulu --</option>
                                     </select>
                                 </div>
@@ -440,14 +439,14 @@
                                 <div class="col-md-3" style="margin-top: 1em;">
                                     <label for="no_cek_giro">No. Cek/Giro </label>
                                     <input type="number" step="any" name="no_cek_giro" id="no_cek_giro_input"
-                                        class="form-control" required placeholder="No. Cek/Giro " />
+                                        class="form-control" placeholder="No. Cek/Giro " disabled />
                                 </div>
 
                                 {{-- Tgl. Cek/Giro --}}
                                 <div class="col-md-3" style="margin-top: 1em;">
                                     <label for="tgl_cek_giro">Tgl. Cek/Giro</label>
                                     <input type="date" step="any" name="tgl_cek_giro" id="tgl_cek_giro_input"
-                                        class="form-control" required placeholder="Tgl. Cek/Giro" />
+                                        class="form-control" placeholder="Tgl. Cek/Giro" disabled />
                                 </div>
 
                                 {{-- Bayar --}}

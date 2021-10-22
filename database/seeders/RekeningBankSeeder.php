@@ -21,5 +21,13 @@ class RekeningBankSeeder extends Seeder
             'nomor_rekening' => '1230984312312',
             'status' => 'Y'
         ]);
+
+        RekeningBank::create([
+            'kode' => 'REK-2',
+            'bank_id' => 1, //BCA
+            'nama_rekening' => 'Steven',
+            'nomor_rekening' => '23445675676',
+            'status' => 'Y'
+        ]);
     }
 }

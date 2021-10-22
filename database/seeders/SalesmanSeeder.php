@@ -15,15 +15,15 @@ class SalesmanSeeder extends Seeder
     public function run()
     {
         Salesman::create([
-            'kode' => 'AND',
-            'nama' => 'Andi',
+            'kode' => 'ALP',
+            'nama' => 'Alphonse',
             'commission' => '1',
             'status' => 'Y'
         ]);
 
         Salesman::create([
-            'kode' => 'STV',
-            'nama' => 'Steven',
+            'kode' => 'EDW',
+            'nama' => 'Edward',
             'commission' => '1',
             'status' => 'Y'
         ]);

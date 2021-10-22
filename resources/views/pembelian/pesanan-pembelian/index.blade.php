@@ -57,7 +57,7 @@
                                         <td>{{ $data->kode }}</td>
                                         <td>{{ $data->tanggal->format('d m Y') }}</td>
                                         <td>{{ $data->matauang->nama }}</td>
-                                        <td>{{ $data->supplier->nama_supplier }}</td>
+                                        <td>{{ $data->supplier ? $data->supplier->nama_supplier : 'Tanpa Supplier' }}</td>
                                         <td>{{ $data->rate }}</td>
                                         <td>{{ $data->pesanan_pembelian_detail_count }}</td>
                                         <td>{{ $data->matauang->kode . ' ' . number_format($data->total_netto) }}</td>

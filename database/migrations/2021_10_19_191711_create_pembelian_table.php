@@ -17,15 +17,12 @@ class CreatePembelianTable extends Migration
             $table->id();
             $table->string('kode', 25);
             $table->date('tanggal');
-            $table->foreignId('gudang_id')->constrained('gudang');
 
             $table->unsignedBigInteger('pesanan_pembelian_id')->nullable();
-            // $table->unsignedBigInteger('supplier_id')->nullable();
-            // $table->unsignedBigInteger('matauang_id')->nullable();
 
-            // $table->foreignId('pesanan_pembelian_id')->constrained('pesanan_pembelian');
             $table->foreignId('supplier_id')->constrained('supplier');
             $table->foreignId('matauang_id')->constrained('matauang');
+            $table->foreignId('gudang_id')->constrained('gudang');
             $table->double('rate', 20, 2);
             $table->string('bentuk_kepemilikan_stok', 20);
             $table->text('keterangan')->nullable();
@@ -40,8 +37,6 @@ class CreatePembelianTable extends Migration
             $table->timestamps();
 
             $table->foreign('pesanan_pembelian_id')->references('id')->on('pesanan_pembelian')->nullOnDelete();
-            // $table->foreign('supplier_id')->references('id')->on('supplier')->nullOnDelete();
-            // $table->foreign('matauang_id')->references('id')->on('matauang')->nullOnDelete();
         });
     }
 

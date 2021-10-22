@@ -72,6 +72,8 @@
                                     <label class="control-label">Supplier</label>
 
                                     <select name="supplier" class="form-control" required>
+                                        <option value="" {{ $pesananPembelian->supplier_id == null ? 'selected' : '' }}>
+                                            Tanpa Supplier</option>
                                         @forelse ($supplier as $item)
                                             <option value="{{ $item->id }}"
                                                 {{ $pesananPembelian->supplier_id == $item->id }}>

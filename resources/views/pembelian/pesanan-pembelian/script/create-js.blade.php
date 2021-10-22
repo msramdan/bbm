@@ -1,4 +1,11 @@
 @push('custom-js')
+    <script type="text/javascript">
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault()
+            e.returnValue = ''
+        })
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"
         integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
 
@@ -29,10 +36,11 @@
         $('#form_trx').submit(function(e) {
             e.preventDefault()
 
+            // !$('select[name="supplier"]').val() ||
+
             if (
                 !$('input[name="tanggal"]').val() ||
                 !$('input[name="rate"]').val() ||
-                !$('select[name="supplier"]').val() ||
                 !$('select[name="bentuk_kepemilikan"]').val() ||
                 !$('select[name="matauang"]').val()
             ) {

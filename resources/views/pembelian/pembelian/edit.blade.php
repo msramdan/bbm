@@ -70,8 +70,10 @@
                                     <label class="control-label">Kode P.O</label>
 
                                     <select name="kode_po" id="kode_po" class="form-control" readonly>
-                                        <option value="{{ $pembelian->pesanan_pembelian ? $pembelian->pesanan_pembelian->kode : 'Tanpa P.O' }}">
-                                            {{  $pembelian->pesanan_pembelian ? $pembelian->pesanan_pembelian->kode : 'Tanpa P.O' }}</option>
+                                        <option
+                                            value="{{ $pembelian->pesanan_pembelian ? $pembelian->pesanan_pembelian->kode : 'Tanpa P.O' }}">
+                                            {{ $pembelian->pesanan_pembelian ? $pembelian->pesanan_pembelian->kode : 'Tanpa P.O' }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -90,7 +92,6 @@
 
                                 <div class="col-md-3">
                                     <label class="control-label">Supplier</label>
-
                                     <select name="supplier" class="form-control" readonly>
                                         <option value="{{ $pembelian->supplier->kode }}">
                                             {{ $pembelian->supplier->nama_supplier }}
@@ -472,7 +473,6 @@
 
                                     <select name="jenis_pembayaran" id="jenis_pembayaran_input" class="form-control"
                                         required>
-                                        <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($jenisPembayaran as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @empty
@@ -484,7 +484,7 @@
                                 <div class="col-md-4">
                                     <label class="control-label">Bank</label>
 
-                                    <select name="bank" id="bank_input" class="form-control" required>
+                                    <select name="bank" id="bank_input" class="form-control" disabled>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($bank as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -497,7 +497,7 @@
                                 <div class="col-md-4">
                                     <label class="control-label">Rekening</label>
 
-                                    <select name="rekening" id="rekening_input" class="form-control" required>
+                                    <select name="rekening" id="rekening_input" class="form-control" disabled>
                                         <option value="" disabled selected>-- Pilih Bank Terlebih Dahulu --</option>
                                     </select>
                                 </div>
@@ -506,14 +506,14 @@
                                 <div class="col-md-3" style="margin-top: 1em;">
                                     <label for="no_cek_giro">No. Cek/Giro </label>
                                     <input type="number" step="any" name="no_cek_giro" id="no_cek_giro_input"
-                                        class="form-control" required placeholder="No. Cek/Giro " />
+                                        class="form-control" disabled placeholder="No. Cek/Giro " />
                                 </div>
 
                                 {{-- Tgl. Cek/Giro --}}
                                 <div class="col-md-3" style="margin-top: 1em;">
                                     <label for="tgl_cek_giro">Tgl. Cek/Giro</label>
                                     <input type="date" step="any" name="tgl_cek_giro" id="tgl_cek_giro_input"
-                                        class="form-control" required placeholder="Tgl. Cek/Giro" />
+                                        class="form-control" disabled placeholder="Tgl. Cek/Giro" />
                                 </div>
 
                                 {{-- Bayar --}}
@@ -578,25 +578,26 @@
                                                             value="{{ $detail->jenis_pembayaran }}">
                                                     </td>
                                                     <td>
-                                                        {{ $detail->bank->nama }}
+                                                        {{ $detail->bank ? $detail->bank->nama : '-' }}
                                                         <input type="hidden" class="bank_hidden" name="bank[]"
-                                                            value="{{ $detail->bank->id }}">
+                                                            value="{{ $detail->bank ? $detail->bank->id : '' }}">
                                                     </td>
                                                     <td>
-                                                        {{ $detail->rekening->nomor_rekening . ' - ' . $detail->rekening->nama_rekening }}
+                                                        {{ $detail->rekening ? $detail->rekening->nomor_rekening . ' - ' . $detail->rekening->nama_rekening : '-' }}
                                                         <input type="hidden" class="rekening_hidden" name="rekening[]"
-                                                            value="{{ $detail->rekening->id }}">
+                                                            value="{{ $detail->rekening ? $detail->rekening->id : 's' }}">
                                                     </td>
                                                     <td>
-                                                        {{ $detail->no_cek_giro }}
+                                                        {{ $detail->no_cek_giro ?? '-' }}
                                                         <input type="hidden" class="no_cek_giro_hidden"
-                                                            name="no_cek_giro[]" value="{{ $detail->no_cek_giro }}">
+                                                            name="no_cek_giro[]"
+                                                            value="{{ $detail->no_cek_giro ?? '-' }}">
                                                     </td>
                                                     <td>
-                                                        {{ $detail->tgl_cek_giro->format('Y-m-d') }}
+                                                        {{ $detail->tgl_cek_giro ? $detail->tgl_cek_giro->format('d F Y') : '-' }}
                                                         <input type="hidden" class="tgl_cek_giro_hidden"
                                                             name="tgl_cek_giro[]"
-                                                            value="{{ $detail->tgl_cek_giro->format('Y-m-d') }}">
+                                                            value="{{ $detail->tgl_cek_giro ? $detail->tgl_cek_giro->format('Y-m-d') : '' }}">
                                                     </td>
                                                     <td>
                                                         {{ number_format($detail->bayar) }}

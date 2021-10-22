@@ -1,8 +1,18 @@
 @push('custom-js')
+    <script type="text/javascript">
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault()
+            e.returnValue = ''
+        })
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"
         integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
 
     <script>
+        get_kode()
+        cek_form_entry_brg()
+
         let list_matauang = []
         let list_supplier = []
         let list_bentuk_kepemilikan = []
@@ -23,11 +33,6 @@
         $('#kode_po').find('option').map(function() {
             list_kode_po.push(`<option value="${$(this).val()}">${$(this).html()}</option>`)
         }).get()
-
-
-
-        get_kode()
-        cek_form_entry_brg()
 
         $('#matauang').change(function() {
             hitung_semua_total_brg()
@@ -69,7 +74,7 @@
                             '<option value="" disabled selected>Loading...</option>')
 
                         rate.prop('type', 'text')
-                        rate.val('loading...')
+                        rate.val('Loading...')
 
                         supplier.prop('disabled', true)
                         matauang.prop('disabled', true)
@@ -77,9 +82,16 @@
                         rate.prop('disabled', true)
 
                         setTimeout(() => {
-                            supplier.html(
-                                `<option value="${data.supplier.id}" selected>${data.supplier.nama_supplier}</option>`
-                            )
+                            if (data.supplier != null) {
+                                supplier.html(
+                                    `<option value="${data.supplier.id}" selected>${data.supplier.nama_supplier}</option>`
+                                )
+                            } else {
+                                supplier.html(
+                                    `<option value="" selected>Tanpa Supplier</option>`
+                                )
+                            }
+
                             matauang.html(
                                 `<option value="${data.matauang.id}" selected>${data.matauang.kode}</option>`
                             )
@@ -245,17 +257,10 @@
             let tgl_cek_giro = $('#tgl_cek_giro_input').val()
             let bayar = $('#bayar_input').val()
 
-            // cek duplikasi barang
-            $('input[name="no_cek_giro[]"]').each(function() {
-                // cari index tr ke berapa
+            $('input[name="jenis_pembayaran[]"]').each(function() {
                 let index = $(this).parent().parent().index()
-
-                // kalo id barang di cart dan form input(barang) sama
-                //  kalo id supplier di cart dan form input(barang) sama
-                if ($(this).val() == no_cek_giro) {
-                    // hapus tr berdasarkan index
+                if ($(this).val() == jenis_pembayaran) {
                     $('#tbl_payment tbody tr:eq(' + index + ')').remove()
-
                     generate_nomer_payment()
                 }
             })
@@ -269,19 +274,19 @@
                         <input type="hidden" class="jenis_pembayaran_hidden" name="jenis_pembayaran[]" value="${jenis_pembayaran.val()}">
                     </td>
                     <td>
-                        ${bank.html()}
+                        ${bank.html() == '-- Pilih --' ? '-' : bank.html()}
                         <input type="hidden"  class="bank_hidden" name="bank[]" value="${bank.val()}">
                     </td>
                     <td>
-                        ${rekening.html()}
+                        ${rekening.html() == '-- Pilih Bank terlebih dahulu --' ? '-' : rekening.html()}
                         <input type="hidden"  class="rekening_hidden" name="rekening[]" value="${rekening.val()}">
                     </td>
                     <td>
-                        ${no_cek_giro}
+                        ${!no_cek_giro ? '-' : no_cek_giro}
                         <input type="hidden"  class="no_cek_giro_hidden" name="no_cek_giro[]" value="${no_cek_giro}">
                     </td>
                     <td>
-                        ${tgl_cek_giro}
+                        ${!tgl_cek_giro ? '-' : tgl_cek_giro}
                         <input type="hidden"  class="tgl_cek_giro_hidden" name="tgl_cek_giro[]" value="${tgl_cek_giro}">
                     </td>
                     <td>
@@ -338,7 +343,7 @@
 
         $('#btn_simpan').click(function() {
             $(this).prop('disabled', true)
-            $(this).text('loading...')
+            $(this).text('Loading...')
 
             let data = {
                 // header
@@ -466,8 +471,6 @@
 
                     $('select[name="gudang"]').focus()
                     $('#btn_simpan').text('simpan')
-
-                    console.log(data);
 
                     Swal.fire({
                         icon: 'success',
@@ -935,19 +938,68 @@
         }
 
         function cek_form_entry_payment() {
-            if (
-                !$('#jenis_pembayaran_input').val() ||
-                !$('#bank_input').val() ||
-                !$('#rekening_input').val() ||
-                !$('#no_cek_giro_input').val() ||
-                !$('#tgl_cek_giro_input').val() ||
-                !$('#bayar_input').val()
-            ) {
-                $('#btn_add_payment').prop('disabled', true)
-                $('#btn_clear_form_payment').prop('disabled', true)
-            } else {
-                $('#btn_add_payment').prop('disabled', false)
-                $('#btn_clear_form_payment').prop('disabled', false)
+            let jenis_pembayaran_input = $('#jenis_pembayaran_input')
+            let bank_input = $('#bank_input')
+            let rekening_input = $('#rekening_input')
+            let no_cek_giro_input = $('#no_cek_giro_input')
+            let tgl_cek_giro_input = $('#tgl_cek_giro_input')
+            let bayar_input = $('#bayar_input')
+
+            // kalo cash, bank dan giro boleh kosong
+            if (jenis_pembayaran_input.val() == 'Cash') {
+                bank_input.prop('disabled', true)
+                rekening_input.prop('disabled', true)
+                no_cek_giro_input.prop('disabled', true)
+                tgl_cek_giro_input.prop('disabled', true)
+
+                bank_input.val('')
+                no_cek_giro_input.val('')
+                tgl_cek_giro_input.val('')
+                rekening_input.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
+
+                if (bayar_input.val()) {
+                    $('#btn_add_payment').prop('disabled', false)
+                    $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_add_payment').prop('disabled', true)
+                    $('#btn_clear_form_payment').prop('disabled', true)
+                }
+            }
+
+            if (jenis_pembayaran_input.val() == 'Transfer') {
+                bank_input.prop('disabled', false)
+                rekening_input.prop('disabled', false)
+
+                no_cek_giro_input.prop('disabled', true)
+                no_cek_giro_input.val('')
+                tgl_cek_giro_input.prop('disabled', true)
+                tgl_cek_giro_input.val('')
+
+                if (bayar_input.val() && bank_input.val() && rekening_input.val()) {
+                    $('#btn_add_payment').prop('disabled', false)
+                    $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_add_payment').prop('disabled', true)
+                    $('#btn_clear_form_payment').prop('disabled', true)
+                }
+            }
+
+            if (jenis_pembayaran_input.val() == 'Giro') {
+                bank_input.prop('disabled', true)
+                bank_input.val('')
+                rekening_input.prop('disabled', true)
+                rekening_input.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
+
+                no_cek_giro_input.prop('disabled', false)
+                tgl_cek_giro_input.prop('disabled', false)
+
+                if (bayar_input.val() && no_cek_giro_input.val() && tgl_cek_giro_input.val()) {
+                    $('#btn_add_payment').prop('disabled', false)
+                    $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_add_payment').prop('disabled', true)
+                    $('#btn_clear_form_payment').prop('disabled', true)
+                }
             }
         }
 

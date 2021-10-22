@@ -14,22 +14,22 @@ class SupplierSeeder extends Seeder
      */
     public function run()
     {
-        Supplier::create([
-            'kode' => 'NOSP',
-            'nama_supplier' => 'Tanpa Supplier',
-            'npwp' => '',
-            'nppkp' => '',
-            'tgl_pkp' => now(),
-            'alamat' => '',
-            'kota' => '',
-            'kode_pos' => '',
-            'telp1' => '',
-            'telp2' => '',
-            'nama_kontak' => '',
-            'telp_kontak' => '',
-            'top' => null,
-            'status' => 'Y',
-        ]);
+        // Supplier::create([
+        //     'kode' => 'NOSP',
+        //     'nama_supplier' => 'Tanpa Supplier',
+        //     'npwp' => '',
+        //     'nppkp' => '',
+        //     'tgl_pkp' => now(),
+        //     'alamat' => '',
+        //     'kota' => '',
+        //     'kode_pos' => '',
+        //     'telp1' => '',
+        //     'telp2' => '',
+        //     'nama_kontak' => '',
+        //     'telp_kontak' => '',
+        //     'top' => null,
+        //     'status' => 'Y',
+        // ]);
 
         Supplier::create([
             'kode' => 'SP1',
@@ -45,6 +45,23 @@ class SupplierSeeder extends Seeder
             'nama_kontak' => '',
             'telp_kontak' => '',
             'top' => 7889,
+            'status' => 'Y',
+        ]);
+
+        Supplier::create([
+            'kode' => 'SP2',
+            'nama_supplier' => 'Bruno Bucciarati',
+            'npwp' => '68789789',
+            'nppkp' => '2423423',
+            'tgl_pkp' => now(),
+            'alamat' => 'Jln passione',
+            'kota' => 'Bandung',
+            'kode_pos' => '789',
+            'telp1' => '',
+            'telp2' => '',
+            'nama_kontak' => '',
+            'telp_kontak' => '',
+            'top' => 100,
             'status' => 'Y',
         ]);
     }

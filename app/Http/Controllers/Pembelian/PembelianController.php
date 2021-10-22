@@ -87,6 +87,7 @@ class PembelianController extends Controller
 
             foreach ($request->bank as $i => $value) {
                 $pembayaran[] = new PembelianPembayaran([
+                    'jenis_pembayaran' => $request->jenis_pembayaran[$i],
                     'bank_id' => $request->bank[$i],
                     'rekening_bank_id' => $request->rekening[$i],
                     'tgl_cek_giro' => $request->tgl_cek_giro[$i],

@@ -150,6 +150,22 @@
                 </ul>
             </li>
 
+            {{-- menu Setting --}}
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-gear"></i>
+                    <span>{{ trans('dashboard.menu.setting') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('toko.index') }}">
+                            {{ trans('dashboard.menu.toko') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li>
                 <a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify">
                     <i class="fa fa-angle-double-left"></i>

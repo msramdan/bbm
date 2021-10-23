@@ -6,6 +6,7 @@ use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MasterData\{AreaController, BankController, BarangController, GudangController, KategoriController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
 use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController};
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
+use App\Http\Controllers\Setting\TokoController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -78,4 +79,9 @@ Route::group(['prefix' => 'beli', 'middleware' => ['web', 'auth']], function () 
     Route::get('/retur-pembelian/generate-kode/{tanggal}', [ReturPembelianController::class, 'generateKode'])->name('retur-pembelian.generateKode');
     Route::get('/retur-pembelian/get-pembelian/{id}', [ReturPembelianController::class, 'getPembelianById'])->name('retur-pembelian.getPembelianById');
     Route::resource('/retur-pembelian', ReturPembelianController::class)->except('store', 'update');
+});
+
+Route::group(['prefix' => 'setting', 'middleware' => ['web', 'auth']], function () {
+    Route::get('/toko', [TokoController::class, 'index'])->name('toko.index');
+    Route::put('/toko/{toko:id}', [TokoController::class, 'update'])->name('toko.update');
 });

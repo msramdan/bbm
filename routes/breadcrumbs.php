@@ -303,3 +303,16 @@ Breadcrumbs::for('retur_pembelian_show', function (BreadcrumbTrail $trail) {
     $trail->parent('retur_pembelian');
     $trail->push('Show');
 });
+
+
+
+// Master Data > Setting
+Breadcrumbs::for('setting', function (BreadcrumbTrail $trail) {
+    $trail->push('Setting');
+});
+
+// Master Data > Setting > Toko
+Breadcrumbs::for('toko', function (BreadcrumbTrail $trail) {
+    $trail->parent('setting');
+    $trail->push('Toko');
+});

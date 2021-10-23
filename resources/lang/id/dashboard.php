@@ -28,6 +28,8 @@ return [
         'pesanan_pembelian' => 'Pesanan Pembelian',
         'pembelian' => 'Pembelian',
         'retur_pembelian' => 'Retur Pembelian',
+        'toko' => 'Toko',
+        'setting' => 'Pengaturan'
     ],
     'link' => [
         'dashboard' => 'Home',

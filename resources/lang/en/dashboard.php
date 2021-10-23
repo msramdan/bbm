@@ -28,6 +28,8 @@ return [
         'pesanan_pembelian' => 'Purchase Order',
         'pembelian' => 'Purchase',
         'retur_pembelian' => 'Purchase Return',
+        'toko' => 'Store',
+        'setting' => 'Setting'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

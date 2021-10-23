@@ -141,6 +141,12 @@
                             {{ trans('dashboard.menu.pembelian') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('retur-pembelian.index') }}">
+                            {{ trans('dashboard.menu.retur_pembelian') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
 

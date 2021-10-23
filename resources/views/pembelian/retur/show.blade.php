@@ -1,11 +1,14 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('pesanan_pembelian.title.show'))
+@section('title', trans('retur_pembelian.title.show'))
 
 @section('content')
+    @php
+    $matauang = $returPembelian->pembelian->matauang;
+    @endphp
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('pesanan_pembelian_show') }}
+        {{ Breadcrumbs::render('retur_pembelian_show') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -30,64 +33,81 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('pesanan_pembelian.title.tambah') }}</h4>
+                        <h4 class="panel-title">{{ trans('retur_pembelian.title.show') }}</h4>
                     </div>
                     <div class="panel-body">
                         <div class="panel-body">
                             <div class="form-group row" style="margin-bottom: 1em;">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="control-label">Kode</label>
                                     <input type="text" class="form-control" placeholder="Kode" id="kode" required
-                                        value="{{ $pesananPembelian->kode }}" readonly />
+                                        value="{{ $returPembelian->kode }}" readonly />
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="control-label">Tanggal</label>
                                     <input type="date" class="form-control" readonly
-                                        value="{{ $pesananPembelian->tanggal->format('Y-m-d') }}" />
+                                        value="{{ $returPembelian->tanggal->format('Y-m-d') }}" />
                                 </div>
 
-                                {{-- Bentuk stok --}}
-                                <div class="col-md-4">
-                                    <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
-                                    <select id="bentuk_kepemilikan" class="form-control" readonly>
-                                        <option value="{{ $pesananPembelian->bentuk_kepemilikan_stok }}">
-                                            {{ $pesananPembelian->bentuk_kepemilikan_stok }}
+                                <div class="col-md-3">
+                                    <label for="gudang">Gudang</label>
+                                    <select id="gudang" class="form-control" readonly>
+                                        <option value="{{ $returPembelian->gudang->id }}">
+                                            {{ $returPembelian->gudang->nama }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="pembelian_id">Kode Pembelian</label>
+                                    <select id="pembelian_id" class="form-control" readonly>
+                                        <option value="{{ $returPembelian->pembelian->id }}">
+                                            {{ $returPembelian->pembelian->kode }}
                                         </option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-group row" style="margin-bottom: 1em;">
-                                <div class="col-md-4 mt-3">
+                                <div class="col-md-3">
                                     <label class="control-label">Supplier</label>
                                     <select class="form-control" readonly>
-                                        <option value="{{ $pesananPembelian->supplier_id }}">
-                                            {{ $pesananPembelian->supplier ? $data->supplier->nama_supplier : 'Tanpa Supplier' }}
+                                        <option value="{{ $returPembelian->supplier_id }}">
+                                            {{ $returPembelian->supplier ? $data->supplier->nama_supplier : 'Tanpa Supplier' }}
                                         </option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-4 mt-3">
+                                <div class="col-md-3">
                                     <label class="control-label">Mata Uang</label>
                                     <select id="matauang" class="form-control" readonly>
-                                        <option value="{{ $pesananPembelian->matauang_id }}">
-                                            {{ $pesananPembelian->matauang->kode . ' - ' . $pesananPembelian->matauang->nama }}
+                                        <option value="{{ $returPembelian->matauang_id }}">
+                                            {{ $matauang->kode . ' - ' . $matauang->nama }}
                                         </option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-4 mt-3">
+                                <div class="col-md-3">
+                                    <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
+                                    <select id="bentuk_kepemilikan" class="form-control" readonly>
+                                        <option value="{{ $returPembelian->pembelian->bentuk_kepemilikan_stok }}">
+                                            {{ $returPembelian->pembelian->bentuk_kepemilikan_stok }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
                                     <label class="control-label">Rate</label>
                                     <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
-                                        value="{{ $pesananPembelian->rate }}" readonly />
+                                        value="{{ $returPembelian->rate }}" readonly />
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label">Keterangan</label>
                                 <textarea name="keterangan" id="keterangan" rows="5" readonly
-                                    class="form-control">{{ $pesananPembelian->keterangan }}</textarea>
+                                    class="form-control">{{ $returPembelian->keterangan }}</textarea>
                             </div>
 
                             <div class="row">
@@ -104,7 +124,8 @@
                                                 <th>Kode Barang</th>
                                                 <th>Nama Barang</th>
                                                 <th>Harga</th>
-                                                <th>Qty</th>
+                                                <th>Qty Beli</th>
+                                                <th>Qty Retur</th>
                                                 <th>Disc%</th>
                                                 <th>Disc</th>
                                                 <th>Gross</th>
@@ -117,12 +138,14 @@
                                         </thead>
                                         <tbody>
                                             @php
-                                                $total_qty = 0;
+                                                $total_qty_beli = 0;
+                                                $total_qty_retur = 0;
                                                 $total_diskon_persen = 0;
                                             @endphp
-                                            @foreach ($pesananPembelian->pesanan_pembelian_detail as $detail)
+                                            @foreach ($returPembelian->retur_pembelian_detail as $detail)
                                                 @php
-                                                    $total_qty += $detail->qty;
+                                                    $total_qty_beli += $detail->qty_beli;
+                                                    $total_qty_retur += $detail->qty_retur;
                                                     $total_diskon_persen += $detail->diskon_persen;
                                                 @endphp
                                                 <tr>
@@ -130,34 +153,37 @@
                                                     <td>{{ $detail->barang->kode }}</td>
                                                     <td>{{ $detail->barang->nama }}</td>
                                                     <td>
-                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->harga }}
+                                                        {{ $matauang->kode . ' ' . $detail->harga }}
                                                     </td>
                                                     <td>
-                                                        {{ $detail->qty }}
+                                                        {{ $detail->qty_beli }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $detail->qty_retur }}
                                                     </td>
                                                     <td>
                                                         {{ $detail->diskon_persen . '%' }}
                                                     </td>
                                                     <td>
-                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->diskon }}
+                                                        {{ $matauang->kode . ' ' . $detail->diskon }}
                                                     </td>
                                                     <td>
-                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->gross }}
+                                                        {{ $matauang->kode . ' ' . $detail->gross }}
                                                     </td>
                                                     <td>
-                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->ppn }}
+                                                        {{ $matauang->kode . ' ' . $detail->ppn }}
                                                     </td>
                                                     <td>
-                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->pph }}
+                                                        {{ $matauang->kode . ' ' . $detail->pph }}
                                                     </td>
                                                     <td>
-                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->biaya_masuk }}
+                                                        {{ $matauang->kode . ' ' . $detail->biaya_masuk }}
                                                     </td>
                                                     <td>
-                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->clr_fee }}
+                                                        {{ $matauang->kode . ' ' . $detail->clr_fee }}
                                                     </td>
                                                     <td>
-                                                        {{ $pesananPembelian->matauang->kode . ' ' . $detail->netto }}
+                                                        {{ $matauang->kode . ' ' . $detail->netto }}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -168,32 +194,33 @@
                                                     Total
                                                 </th>
                                                 <th>
-                                                    {{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->subtotal }}
+                                                    {{ $matauang->kode . ' ' . $returPembelian->subtotal }}
                                                 </th>
-                                                <th><strong>{{ $total_qty }}</th>
+                                                <th>{{ $total_qty_beli }}</th>
+                                                <th>{{ $total_qty_retur }}</th>
                                                 <th>
                                                     {{ $total_diskon_persen . '%' }}
                                                 </th>
                                                 <th>
-                                                    {{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_diskon }}
+                                                    {{ $matauang->kode . ' ' . $returPembelian->total_diskon }}
                                                 </th>
                                                 <th>
-                                                    {{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_gross }}
+                                                    {{ $matauang->kode . ' ' . $returPembelian->total_gross }}
                                                 </th>
                                                 <th>
-                                                    {{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_ppn }}
+                                                    {{ $matauang->kode . ' ' . $returPembelian->total_ppn }}
                                                 </th>
                                                 <th>
-                                                    {{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_pph }}
+                                                    {{ $matauang->kode . ' ' . $returPembelian->total_pph }}
                                                 </th>
                                                 <th>
-                                                    {{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_biaya_masuk }}
+                                                    {{ $matauang->kode . ' ' . $returPembelian->total_biaya_masuk }}
                                                 </th>
                                                 <th>
-                                                    {{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_clr_fee }}
+                                                    {{ $matauang->kode . ' ' . $returPembelian->total_clr_fee }}
                                                 </th>
                                                 <th>
-                                                    {{ $pesananPembelian->matauang->kode . ' ' . $pesananPembelian->total_netto }}
+                                                    {{ $matauang->kode . ' ' . $returPembelian->total_netto }}
                                                 </th>
                                             </tr>
                                         </tfoot>

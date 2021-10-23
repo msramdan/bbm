@@ -7,6 +7,7 @@ use App\Models\Barang;
 use App\Models\Gudang;
 use App\Models\Kategori;
 use App\Models\Matauang;
+use App\Models\Pembelian;
 use App\Models\PesananPembelian;
 use App\Models\SatuanBarang;
 use App\Models\Supplier;
@@ -41,7 +42,7 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.pesanan-pembelian.create',
             'pembelian.pesanan-pembelian.edit',
             'pembelian.pembelian.create',
-            'pembelian.pembelian.edit'
+            'pembelian.pembelian.edit',
         ], function ($view) {
             return $view->with('barang', Barang::all());
         });
@@ -68,7 +69,9 @@ class ViewServiceProvider extends ServiceProvider
             'inventory.adjustment-minus.create',
             'inventory.adjustment-minus.edit',
             'pembelian.pembelian.create',
-            'pembelian.pembelian.edit'
+            'pembelian.pembelian.edit',
+            'pembelian.retur.create',
+            'pembelian.retur.edit'
         ], function ($view) {
             return $view->with('gudang', Gudang::all());
         });
@@ -123,6 +126,15 @@ class ViewServiceProvider extends ServiceProvider
             'master-data.barang.edit'
         ], function ($view) {
             return $view->with('satuan', SatuanBarang::all());
+        });
+
+
+        // list pembelian
+        View::composer([
+            'pembelian.retur.create',
+            'pembelian.retur.edit'
+        ], function ($view) {
+            return $view->with('pembelian', Pembelian::all());
         });
 
 

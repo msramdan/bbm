@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
-use App\Models\{PesananPembelian, PesananPembelianDetail};
+use App\Models\Pembelian;
+use App\Models\ReturPembelian;
+use App\Models\ReturPembelianDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class PesananPembelianController extends Controller
+class ReturPembelianController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +19,9 @@ class PesananPembelianController extends Controller
      */
     public function index()
     {
-        $pesanan = PesananPembelian::with('pesanan_pembelian_detail', 'supplier', 'matauang')->withCount('pesanan_pembelian_detail')->get();
+        $retur = ReturPembelian::with('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail')->get();
 
-        return view('pembelian.pesanan-pembelian.index', compact('pesanan'));
+        return view('pembelian.retur.index', compact('retur'));
     }
 
     /**
@@ -29,7 +31,7 @@ class PesananPembelianController extends Controller
      */
     public function create()
     {
-        return view('pembelian.pesanan-pembelian.create');
+        return view('pembelian.retur.create');
     }
 
     /**
@@ -41,13 +43,12 @@ class PesananPembelianController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $pesanan = PesananPembelian::create([
+            $retur = ReturPembelian::create([
                 'kode' => $request->kode,
                 'tanggal' => $request->tanggal,
-                'matauang_id' => $request->matauang,
-                'supplier_id' => $request->supplier,
+                'pembelian_id' => $request->pembelian_id,
+                'gudang_id' => $request->gudang,
                 'keterangan' => $request->keterangan,
-                'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan,
                 'rate' => $request->rate,
                 'subtotal' => floatval($request->subtotal),
                 'total_ppn' => floatval($request->total_ppn),
@@ -60,10 +61,11 @@ class PesananPembelianController extends Controller
             ]);
 
             foreach ($request->barang as $i => $value) {
-                $pesananDetail[] = new PesananPembelianDetail([
+                $returDetail[] = new ReturPembelianDetail([
                     'barang_id' => $value,
                     'harga' => $request->harga[$i],
-                    'qty' => $request->qty[$i],
+                    'qty_beli' => $request->qty_beli[$i],
+                    'qty_retur' => $request->qty_retur[$i],
                     'diskon_persen' => floatval($request->diskon_persen[$i]),
                     'diskon' => floatval($request->diskon[$i]),
                     'gross' => floatval($request->gross[$i]),
@@ -75,7 +77,7 @@ class PesananPembelianController extends Controller
                 ]);
             }
 
-            $pesanan->pesanan_pembelian_detail()->saveMany($pesananDetail);
+            $retur->retur_pembelian_detail()->saveMany($returDetail);
         });
 
         return response()->json(['success'], 200);
@@ -84,44 +86,44 @@ class PesananPembelianController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PesananPembelian  $pesananPembelian
+     * @param  \App\Models\ReturPembelian  $returPembelian
      * @return \Illuminate\Http\Response
      */
-    public function show(PesananPembelian $pesananPembelian)
+    public function show(ReturPembelian $returPembelian)
     {
-        $pesananPembelian->load('pesanan_pembelian_detail', 'supplier', 'matauang')->withCount('pesanan_pembelian_detail');
+        $returPembelian->load('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail');
 
-        return view('pembelian.pesanan-pembelian.show', compact('pesananPembelian'));
+        return view('pembelian.retur.show', compact('returPembelian'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PesananPembelian  $pesananPembelian
+     * @param  \App\Models\ReturPembelian  $returPembelian
      * @return \Illuminate\Http\Response
      */
-    public function edit(PesananPembelian $pesananPembelian)
+    public function edit(ReturPembelian $returPembelian)
     {
-        $pesananPembelian->load('pesanan_pembelian_detail', 'supplier', 'matauang')->withCount('pesanan_pembelian_detail');
+        $returPembelian->load('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail');
 
-        return view('pembelian.pesanan-pembelian.edit', compact('pesananPembelian'));
+        return view('pembelian.retur.edit', compact('returPembelian'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PesananPembelian  $pesananPembelian
+     * @param  \App\Models\ReturPembelian  $returPembelian
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $pesananPembelian = PesananPembelian::findOrFail($id);
+        $returPembelian = ReturPembelian::findOrFail($id);
 
-        DB::transaction(function () use ($request, $pesananPembelian) {
-            $pesananPembelian->update([
+        DB::transaction(function () use ($request, $returPembelian) {
+            $returPembelian->update([
+                'gudang_id' => $request->gudang,
                 'keterangan' => $request->keterangan,
-                'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan,
                 'subtotal' => floatval($request->subtotal),
                 'total_ppn' => floatval($request->total_ppn),
                 'total_pph' => floatval($request->total_pph),
@@ -133,10 +135,11 @@ class PesananPembelianController extends Controller
             ]);
 
             foreach ($request->barang as $i => $value) {
-                $pesananPembelianDetail[] = new PesananPembelianDetail([
+                $returDetail[] = new ReturPembelianDetail([
                     'barang_id' => $value,
                     'harga' => $request->harga[$i],
-                    'qty' => $request->qty[$i],
+                    'qty_beli' => $request->qty_beli[$i],
+                    'qty_retur' => $request->qty_retur[$i],
                     'diskon_persen' => floatval($request->diskon_persen[$i]),
                     'diskon' => floatval($request->diskon[$i]),
                     'gross' => floatval($request->gross[$i]),
@@ -148,9 +151,9 @@ class PesananPembelianController extends Controller
                 ]);
             }
 
-            $pesananPembelian->pesanan_pembelian_detail()->delete();
+            $returPembelian->retur_pembelian_detail()->delete();
 
-            $pesananPembelian->pesanan_pembelian_detail()->saveMany($pesananPembelianDetail);
+            $returPembelian->retur_pembelian_detail()->saveMany($returDetail);
         });
 
         return response()->json(['success'], 200);
@@ -159,34 +162,41 @@ class PesananPembelianController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PesananPembelian  $pesananPembelian
+     * @param  \App\Models\ReturPembelian  $returPembelian
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PesananPembelian $pesananPembelian)
+    public function destroy(ReturPembelian $returPembelian)
     {
-        $pesananPembelian->delete();
+        $returPembelian->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
 
         return back();
     }
 
+    protected function getPembelianById($id)
+    {
+        $pembelian = Pembelian::with('supplier', 'matauang', 'pembelian_detail')->findOrFail($id);
+
+        return response()->json($pembelian, 200);
+    }
+
     protected function generateKode($tanggal)
     {
         if (request()->ajax()) {
-            $checkLatestKode = PesananPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+            $checkLatestKode = ReturPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
 
             if ($checkLatestKode == null) {
-                $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
             } else {
                 if ($checkLatestKode < 10) {
-                    $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
+                    $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 10) {
-                    $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
+                    $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 100) {
-                    $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
+                    $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 1000) {
-                    $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
+                    $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
                 }
             }
 

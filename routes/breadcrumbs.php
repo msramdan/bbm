@@ -281,3 +281,25 @@ Breadcrumbs::for('pembelian_show', function (BreadcrumbTrail $trail) {
     $trail->parent('pembelian');
     $trail->push('Show');
 });
+
+
+// Master Data > Retur
+Breadcrumbs::for('retur_pembelian', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Retur', route('retur-pembelian.index'));
+});
+// Master Data > Retur > Tambah
+Breadcrumbs::for('retur_pembelian_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_pembelian');
+    $trail->push('Tambah', route('retur-pembelian.create'));
+});
+// Master Data > Retur > Edit
+Breadcrumbs::for('retur_pembelian_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_pembelian');
+    $trail->push('Edit');
+});
+// Master Data > Retur > Show
+Breadcrumbs::for('retur_pembelian_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_pembelian');
+    $trail->push('Show');
+});

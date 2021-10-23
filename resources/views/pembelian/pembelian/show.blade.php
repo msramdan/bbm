@@ -70,7 +70,7 @@
                                     <label class="control-label">Supplier</label>
                                     <select class="form-control" readonly>
                                         <option value="{{ $pembelian->supplier_id }}">
-                                            {{ $pembelian->supplier->nama_supplier }}
+                                            {{ $pembelian->supplier ? $pembelian->supplier->nama_supplier : 'Tanpa Supplier' }}
                                         </option>
                                     </select>
                                 </div>

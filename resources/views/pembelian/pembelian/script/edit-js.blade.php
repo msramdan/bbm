@@ -1,12 +1,5 @@
 @push('custom-js')
-    <script type="text/javascript">
-        window.addEventListener('beforeunload', function(e) {
-            e.preventDefault()
-            e.returnValue = ''
-        })
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"
+       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"
         integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
 
     <script>
@@ -51,7 +44,6 @@
             if (
                 !$('input[name="tanggal"]').val() ||
                 !$('input[name="rate"]').val() ||
-                !$('select[name="supplier"]').val() ||
                 !$('select[name="bentuk_kepemilikan"]').val() ||
                 !$('select[name="matauang"]').val() ||
                 !$('select[name="gudang"]').val()
@@ -198,19 +190,19 @@
                         <input type="hidden" class="jenis_pembayaran_hidden" name="jenis_pembayaran[]" value="${jenis_pembayaran.val()}">
                     </td>
                     <td>
-                        ${bank.html()}
+                        ${bank.html() == '-- Pilih --' ? '-' : bank.html()}
                         <input type="hidden"  class="bank_hidden" name="bank[]" value="${bank.val()}">
                     </td>
                     <td>
-                        ${rekening.html()}
+                        ${rekening.html() == '-- Pilih Bank terlebih dahulu --' ? '-' : rekening.html()}
                         <input type="hidden"  class="rekening_hidden" name="rekening[]" value="${rekening.val()}">
                     </td>
                     <td>
-                        ${no_cek_giro}
+                        ${!no_cek_giro ? '-' : no_cek_giro}
                         <input type="hidden"  class="no_cek_giro_hidden" name="no_cek_giro[]" value="${no_cek_giro}">
                     </td>
                     <td>
-                        ${tgl_cek_giro}
+                        ${!tgl_cek_giro ? '-' : tgl_cek_giro}
                         <input type="hidden"  class="tgl_cek_giro_hidden" name="tgl_cek_giro[]" value="${tgl_cek_giro}">
                     </td>
                     <td>

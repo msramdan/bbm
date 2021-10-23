@@ -259,7 +259,7 @@
                                             <i class="fa fa-plus"></i> Add
                                         </button>
 
-                                        <button type="button" class="btn btn-info" id="btn_update_brg" disabled
+                                        <button type="button" class="btn btn-info" id="btn_update_brg"
                                             style="display: none">
                                             <i class="fa fa-save"></i> Update
                                         </button>
@@ -585,13 +585,13 @@
                                                     <td>
                                                         {{ $detail->rekening ? $detail->rekening->nomor_rekening . ' - ' . $detail->rekening->nama_rekening : '-' }}
                                                         <input type="hidden" class="rekening_hidden" name="rekening[]"
-                                                            value="{{ $detail->rekening ? $detail->rekening->id : 's' }}">
+                                                            value="{{ $detail->rekening ? $detail->rekening->id : '' }}">
                                                     </td>
                                                     <td>
                                                         {{ $detail->no_cek_giro ?? '-' }}
                                                         <input type="hidden" class="no_cek_giro_hidden"
                                                             name="no_cek_giro[]"
-                                                            value="{{ $detail->no_cek_giro ?? '-' }}">
+                                                            value="{{ $detail->no_cek_giro ?? '' }}">
                                                     </td>
                                                     <td>
                                                         {{ $detail->tgl_cek_giro ? $detail->tgl_cek_giro->format('d F Y') : '-' }}

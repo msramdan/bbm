@@ -26,7 +26,8 @@ return [
         'adjustment_plus' => 'Adjustment Plus',
         'adjustment_minus' => 'Adjustment Minus',
         'pesanan_pembelian' => 'Pesanan Pembelian',
-        'pembelian' => 'Pembelian'
+        'pembelian' => 'Pembelian',
+        'retur_pembelian' => 'Retur Pembelian',
     ],
     'link' => [
         'dashboard' => 'Home',

@@ -96,15 +96,17 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        <tr>
-                                            <td colspan="5">
-                                                <strong>Total</strong>
-                                            </td>
-                                            <td>
-                                                <strong> {{ number_format($total_qty) }}</strong>
-                                            </td>
-                                        </tr>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="5">
+                                                Total
+                                            </th>
+                                            <th>
+                                                {{ number_format($total_qty) }}
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

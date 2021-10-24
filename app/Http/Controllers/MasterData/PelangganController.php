@@ -9,6 +9,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class PelangganController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create pelanggan')->only('create');
+        $this->middleware('permission:read pelanggan')->only('index');
+        $this->middleware('permission:edit pelanggan')->only('edit');
+        $this->middleware('permission:update pelanggan')->only('update');
+        $this->middleware('permission:delete pelanggan')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

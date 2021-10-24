@@ -36,7 +36,9 @@
                                     <th>Nama</th>
                                     <th>Email</th>
                                     <th>Role</th>
-                                    <th>Action</th>
+                                     @if (auth()->user()->can('edit user') || auth()->user()->can('delete user'))
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,21 +48,29 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ ucfirst($user->roles[0]->name) }}</td>
-                                        <td>
-                                            <a href="{{ route('user.edit', $user->id) }}"
-                                                class="btn btn-success btn-icon btn-circle"><i
-                                                    class="fa fa-edit"></i></a>
+                                         @if (auth()->user()->can('edit user') || auth()->user()->can('delete user'))
+                                            <td>
+                                                @can('edit user')
+                                                    <a href="{{ route('user.edit', $user->id) }}"
+                                                        class="btn btn-success btn-icon btn-circle">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                @endcan
 
-                                            <form action="{{ route('user.destroy', $user->id) }}" method="post"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-danger btn-icon btn-circle "><i
-                                                        class="ace-icon fa fa-trash"></i></button>
-                                            </form>
+                                                @can('delete user')
+                                                    <form action="{{ route('user.destroy', $user->id) }}" method="post"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                        @csrf
+                                                        @method('delete')
 
-                                        </td>
+                                                        <button class="btn btn-danger btn-icon btn-circle">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

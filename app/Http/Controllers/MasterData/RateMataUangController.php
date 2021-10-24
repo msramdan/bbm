@@ -9,6 +9,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class RateMataUangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create rate mata uang')->only('create');
+        $this->middleware('permission:read rate mata uang')->only('index');
+        $this->middleware('permission:edit rate mata uang')->only('edit');
+        $this->middleware('permission:update rate mata uang')->only('update');
+        $this->middleware('permission:delete rate mata uang')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

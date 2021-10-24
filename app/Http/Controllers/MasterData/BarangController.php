@@ -10,6 +10,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class BarangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create barang')->only('create');
+        $this->middleware('permission:read barang')->only('index');
+        $this->middleware('permission:edit barang')->only('edit');
+        $this->middleware('permission:update barang')->only('update');
+        $this->middleware('permission:delete barang')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

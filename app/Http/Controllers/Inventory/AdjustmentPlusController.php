@@ -10,6 +10,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AdjustmentPlusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create adjustment plus')->only('create');
+        $this->middleware('permission:read adjustment plus')->only('index');
+        $this->middleware('permission:edit adjustment plus')->only('edit');
+        $this->middleware('permission:update adjustment plus')->only('update');
+        $this->middleware('permission:delete adjustment plus')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

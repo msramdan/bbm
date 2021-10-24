@@ -87,7 +87,7 @@
                                 <div class="col-md-3">
                                     <strong>Mata Uang</strong>
                                     @foreach ($permissions as $permission)
-                                        @if (Str::contains($permission->name, 'matauang') && !Str::contains($permission->name, 'rate'))
+                                        @if (Str::contains($permission->name, 'mata uang') && !Str::contains($permission->name, 'rate'))
                                             <div class="checkbox">
                                                 <label>
                                                     <input type="checkbox" name="permissions[]"

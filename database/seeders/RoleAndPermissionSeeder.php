@@ -25,17 +25,17 @@ class RoleAndPermissionSeeder extends Seeder
 
 
         // Master data
-        Permission::create(['name' => 'create matauang']);
-        Permission::create(['name' => 'read matauang']);
-        Permission::create(['name' => 'edit matauang']);
-        Permission::create(['name' => 'update matauang']);
-        Permission::create(['name' => 'delete matauang']);
+        Permission::create(['name' => 'create mata uang']);
+        Permission::create(['name' => 'read mata uang']);
+        Permission::create(['name' => 'edit mata uang']);
+        Permission::create(['name' => 'update mata uang']);
+        Permission::create(['name' => 'delete mata uang']);
 
-        Permission::create(['name' => 'create matauang rate']);
-        Permission::create(['name' => 'read matauang rate']);
-        Permission::create(['name' => 'edit matauang rate']);
-        Permission::create(['name' => 'update matauang rate']);
-        Permission::create(['name' => 'delete matauang rate']);
+        Permission::create(['name' => 'create rate mata uang']);
+        Permission::create(['name' => 'read rate mata uang']);
+        Permission::create(['name' => 'edit rate mata uang']);
+        Permission::create(['name' => 'update rate mata uang']);
+        Permission::create(['name' => 'delete rate mata uang']);
 
         Permission::create(['name' => 'create bank']);
         Permission::create(['name' => 'read bank']);
@@ -219,7 +219,12 @@ class RoleAndPermissionSeeder extends Seeder
 
         // Setting
         Permission::create(['name' => 'toko']);
-        Permission::create(['name' => 'user']);
+        
+        Permission::create(['name' => 'create user']);
+        Permission::create(['name' => 'read user']);
+        Permission::create(['name' => 'edit user']);
+        Permission::create(['name' => 'update user']);
+        Permission::create(['name' => 'delete user']);
 
 
         // User

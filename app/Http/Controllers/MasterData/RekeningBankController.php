@@ -9,6 +9,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class RekeningBankController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create rekening')->only('create');
+        $this->middleware('permission:read rekening')->only('index');
+        $this->middleware('permission:edit rekening')->only('edit');
+        $this->middleware('permission:update rekening')->only('update');
+        $this->middleware('permission:delete rekening')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -4,13 +4,21 @@ namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Requests\StoreBankRequest;
-use App\Http\Requests\UpdateBankRequest;
+use App\Http\Requests\{StoreBankRequest, UpdateBankRequest};
 use App\Models\Bank;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class BankController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create bank')->only('create');
+        $this->middleware('permission:read bank')->only('index');
+        $this->middleware('permission:edit bank')->only('edit');
+        $this->middleware('permission:update bank')->only('update');
+        $this->middleware('permission:delete bank')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

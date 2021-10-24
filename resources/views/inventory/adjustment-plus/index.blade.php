@@ -47,7 +47,9 @@
                                     <th>Rate</th>
                                     <th>Total Item</th>
                                     <th>Grandtotal</th>
-                                    <th>Action</th>
+                                    @if (auth()->user()->can('edit adjustment plus') || auth()->user()->can('delete adjustment plus'))
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,28 +63,36 @@
                                         <td>{{ $data->rate }}</td>
                                         <td>{{ $data->adjustment_plus_detail_count }}</td>
                                         <td>{{ $data->matauang->kode . ' ' . number_format($data->grand_total) }}</td>
-                                        <td>
-                                            <a href="{{ route('adjustment-plus.show', $data->id) }}"
-                                                class="btn btn-info btn-icon btn-circle">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
+                                        @if (auth()->user()->can('edit adjustment plus') || auth()->user()->can('delete adjustment plus'))
+                                            <td>
+                                                @can('edit adjustment plus')
+                                                        <a href="{{ route('adjustment-minus.edit', $data->id) }}"
+                                                            class="btn btn-success btn-icon btn-circle">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                @endcan
 
-                                            <a href="{{ route('adjustment-plus.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
+                                                @can('detail adjustment plus')
+                                                        <a href="{{ route('adjustment-minus.show', $data->id) }}"
+                                                            class="btn btn-success btn-icon btn-circle">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                @endcan
 
-                                            <form action="{{ route('adjustment-plus.destroy', $data->id) }}"
-                                                method="post" class="d-inline"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                @csrf
-                                                @method('delete')
+                                                @can('delete adjustment plus')
+                                                        <form action="{{ route('adjustment-minus.destroy', $data->id) }}" method="post"
+                                                            class="d-inline"
+                                                            onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                            @csrf
+                                                            @method('delete')
 
-                                                <button class="btn btn-danger btn-icon btn-circle">
-                                                    <i class="ace-icon fa fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
+                                                            <button class="btn btn-danger btn-icon btn-circle">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                @endcan
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

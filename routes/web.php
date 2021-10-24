@@ -86,5 +86,5 @@ Route::group(['prefix' => 'setting', 'middleware' => ['web', 'auth']], function 
     Route::get('/toko', [TokoController::class, 'index'])->name('toko.index')->middleware('permission:toko');
     Route::put('/toko/{toko:id}', [TokoController::class, 'update'])->name('toko.update')->middleware('permission:toko');
 
-    Route::resource('/user', UserController::class)->except('show')->middleware('permission:user');
+    Route::resource('/user', UserController::class)->except('show');
 });

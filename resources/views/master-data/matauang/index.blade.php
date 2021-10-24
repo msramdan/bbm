@@ -44,7 +44,9 @@
                                     <th>Nama</th>
                                     <th>Default</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    @if (auth()->user()->can('edit mata uang') || auth()->user()->can('delete mata uang'))
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,20 +57,29 @@
                                         <td>{{ $data->nama }}</td>
                                         <td>{{ $data->default == 'Y' ? 'Ya' : 'No' }}</td>
                                         <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
-                                        <td>
-                                            <a href="{{ route('matauang.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle"><i
-                                                    class="fa fa-edit"></i></a>
-                                            <form action="{{ route('matauang.destroy', $data->id) }}" method="post"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-danger btn-icon btn-circle"><i
-                                                        class="ace-icon fa fa-trash"></i></button>
-                                            </form>
+                                        @if (auth()->user()->can('edit mata uang') || auth()->user()->can('delete mata uang'))
+                                            <td>
+                                                @can('edit mata uang')
+                                                    <a href="{{ route('matauang.edit', $data->id) }}"
+                                                        class="btn btn-success btn-icon btn-circle">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                @endcan
 
-                                        </td>
+                                                @can('delete mata uang')
+                                                    <form action="{{ route('matauang.destroy', $data->id) }}" method="post"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                        @csrf
+                                                        @method('delete')
+
+                                                        <button class="btn btn-danger btn-icon btn-circle">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -10,6 +10,16 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class PembelianController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create pembelian')->only('create');
+        $this->middleware('permission:read pembelian')->only('index');
+        $this->middleware('permission:edit pembelian')->only('edit');
+        $this->middleware('permission:detail pembelian')->only('show');
+        $this->middleware('permission:update pembelian')->only('update');
+        $this->middleware('permission:delete pembelian')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -12,6 +12,16 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class ReturPembelianController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create retur pembelian')->only('create');
+        $this->middleware('permission:read retur pembelian')->only('index');
+        $this->middleware('permission:edit retur pembelian')->only('edit');
+        $this->middleware('permission:detail retur pembelian')->only('show');
+        $this->middleware('permission:update retur pembelian')->only('update');
+        $this->middleware('permission:delete retur pembelian')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

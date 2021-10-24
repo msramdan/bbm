@@ -48,7 +48,9 @@
                                     <th>Rate</th>
                                     <th>Total Item</th>
                                     <th>Grandtotal</th>
-                                    <th>Action</th>
+                                   @if (auth()->user()->can('edit retur pembelian') || auth()->user()->can('delete retur pembelian'))
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,28 +67,36 @@
                                         <td>{{ $data->retur_pembelian_detail_count }}</td>
                                         <td>{{ $data->pembelian->matauang->kode . ' ' . number_format($data->total_netto) }}
                                         </td>
-                                        <td>
-                                            <a href="{{ route('retur-pembelian.show', $data->id) }}"
-                                                class="btn btn-info btn-icon btn-circle">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
+                                       @if (auth()->user()->can('edit retur pembelian') || auth()->user()->can('delete retur pembelian'))
+                                            <td>
+                                                @can('edit retur pembelian')
+                                                        <a href="{{ route('retur-pembelian.edit', $data->id) }}"
+                                                            class="btn btn-success btn-icon btn-circle">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                @endcan
 
-                                            <a href="{{ route('retur-pembelian.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
+                                                @can('detail retur pembelian')
+                                                        <a href="{{ route('retur-pembelian.show', $data->id) }}"
+                                                            class="btn btn-success btn-icon btn-circle">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                @endcan
 
-                                            <form action="{{ route('retur-pembelian.destroy', $data->id) }}"
-                                                method="post" class="d-inline"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                @csrf
-                                                @method('delete')
+                                                @can('delete retur pembelian')
+                                                        <form action="{{ route('retur-pembelian.destroy', $data->id) }}" method="post"
+                                                            class="d-inline"
+                                                            onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                            @csrf
+                                                            @method('delete')
 
-                                                <button class="btn btn-danger btn-icon btn-circle">
-                                                    <i class="ace-icon fa fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
+                                                            <button class="btn btn-danger btn-icon btn-circle">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                @endcan
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

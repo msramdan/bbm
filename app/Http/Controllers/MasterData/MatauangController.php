@@ -3,13 +3,21 @@
 namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreMataUangRequest;
-use App\Http\Requests\UpdateMataUangRequest;
+use App\Http\Requests\{StoreMataUangRequest, UpdateMataUangRequest};
 use App\Models\Matauang;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class MatauangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create mata uang')->only('create');
+        $this->middleware('permission:read mata uang')->only('index');
+        $this->middleware('permission:edit mata uang')->only('edit');
+        $this->middleware('permission:update mata uang')->only('update');
+        $this->middleware('permission:delete mata uang')->only('delete');
+    }
+
     public function index()
     {
         $matauang = Matauang::all();

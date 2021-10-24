@@ -10,6 +10,16 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class PesananPembelianController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create pesanan pembelian')->only('create');
+        $this->middleware('permission:read pesanan pembelian')->only('index');
+        $this->middleware('permission:edit pesanan pembelian')->only('edit');
+        $this->middleware('permission:detail pesanan pembelian')->only('show');
+        $this->middleware('permission:update pesanan pembelian')->only('update');
+        $this->middleware('permission:delete pesanan pembelian')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

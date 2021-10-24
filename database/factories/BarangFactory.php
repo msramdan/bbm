@@ -2,10 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Barang;
-use App\Models\Kategori;
-use App\Models\Matauang;
-use App\Models\SatuanBarang;
+use App\Models\{Barang,Kategori,Matauang,SatuanBarang};
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -33,7 +30,7 @@ class BarangFactory extends Factory
 
         return [
             'kode' => strtoupper(Str::random(5)),
-            'nama' => 'Barang ' . self::$no++,
+            'nama' => $this->faker->text(20),
             'jenis' => rand(1, 2), //1 barang, 2 paket
             'kategori_id' => rand(1, $kategori->id), //random kateogri id sesuai dengan jumlah data kategori
             'satuan_id' => rand(1, $satuan->id),
@@ -42,7 +39,7 @@ class BarangFactory extends Factory
             'harga_beli' => rand(1, 5000),
             'harga_jual' => rand(1, 5000),
             'harga_jual_min' => rand(1, 5000),
-            'stok' => rand(1, 30),
+            'stok' => rand(5, 30),
             'min_stok' => rand(0, 5),
             'gambar' => 'noimage.png',
             'status' => 'Y',

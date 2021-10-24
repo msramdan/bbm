@@ -18,7 +18,7 @@ class TokoSeeder extends Seeder
             'nama' => 'LC KOMPUTER',
             'telp1' => '0215456456',
             'telp2' => '0814564562',
-            'email' => '',
+            'email' => 'lc-komputer@gmail.com',
             'deskripsi' => 'Your Friendly Supplier',
             'npwp' => '',
             'fax' => '',

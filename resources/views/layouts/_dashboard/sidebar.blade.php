@@ -163,6 +163,12 @@
                             {{ trans('dashboard.menu.toko') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('user.index') }}">
+                            {{ trans('dashboard.menu.user') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
 

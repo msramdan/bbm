@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             AdjustmentPlusSeeder::class,
             AdjustmentMinusSeeder::class,
             TokoSeeder::class,
+            RoleAndPermissionSeeder::class,
         ]);
     }
 }

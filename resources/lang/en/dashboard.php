@@ -29,7 +29,8 @@ return [
         'pembelian' => 'Purchase',
         'retur_pembelian' => 'Purchase Return',
         'toko' => 'Store',
-        'setting' => 'Setting'
+        'setting' => 'Setting',
+        'user' => 'User',
     ],
     'link' => [
         'dashboard' => 'Dashboard',

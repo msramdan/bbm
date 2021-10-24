@@ -29,7 +29,8 @@ return [
         'pembelian' => 'Pembelian',
         'retur_pembelian' => 'Retur Pembelian',
         'toko' => 'Toko',
-        'setting' => 'Pengaturan'
+        'setting' => 'Pengaturan',
+        'user' => 'Pengguna',
     ],
     'link' => [
         'dashboard' => 'Home',

@@ -11,6 +11,8 @@ use App\Models\Pembelian;
 use App\Models\PesananPembelian;
 use App\Models\SatuanBarang;
 use App\Models\Supplier;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -137,6 +139,21 @@ class ViewServiceProvider extends ServiceProvider
             return $view->with('pembelian', Pembelian::all());
         });
 
+        // list roles
+        View::composer([
+            'setting.user.create',
+            'setting.user.edit'
+        ], function ($view) {
+            return $view->with('roles', Role::all());
+        });
+
+        // list permissions
+        View::composer([
+            'setting.user.create',
+            'setting.user.edit'
+        ], function ($view) {
+            return $view->with('permissions', Permission::all());
+        });
 
         // list jenisPembayaran
         View::composer([

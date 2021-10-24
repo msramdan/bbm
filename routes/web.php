@@ -7,6 +7,7 @@ use App\Http\Controllers\MasterData\{AreaController, BankController, BarangContr
 use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController};
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
 use App\Http\Controllers\Setting\TokoController;
+use App\Http\Controllers\Setting\UserController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -82,6 +83,8 @@ Route::group(['prefix' => 'beli', 'middleware' => ['web', 'auth']], function () 
 });
 
 Route::group(['prefix' => 'setting', 'middleware' => ['web', 'auth']], function () {
-    Route::get('/toko', [TokoController::class, 'index'])->name('toko.index');
-    Route::put('/toko/{toko:id}', [TokoController::class, 'update'])->name('toko.update');
+    Route::get('/toko', [TokoController::class, 'index'])->name('toko.index')->middleware('permission:toko');
+    Route::put('/toko/{toko:id}', [TokoController::class, 'update'])->name('toko.update')->middleware('permission:toko');
+
+    Route::resource('/user', UserController::class)->except('show')->middleware('permission:user');
 });

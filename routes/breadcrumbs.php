@@ -310,9 +310,30 @@ Breadcrumbs::for('retur_pembelian_show', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('setting', function (BreadcrumbTrail $trail) {
     $trail->push('Setting');
 });
-
 // Master Data > Setting > Toko
 Breadcrumbs::for('toko', function (BreadcrumbTrail $trail) {
     $trail->parent('setting');
     $trail->push('Toko');
+});
+
+
+// Setting  > Retur
+Breadcrumbs::for('user', function (BreadcrumbTrail $trail) {
+    $trail->parent('setting');
+    $trail->push('User', route('user.index'));
+});
+// Setting  > Retur > Tambah
+Breadcrumbs::for('user_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('user');
+    $trail->push('Tambah', route('user.create'));
+});
+// Setting  > Retur > Edit
+Breadcrumbs::for('user_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('user');
+    $trail->push('Edit');
+});
+// Setting  > Retur > Show
+Breadcrumbs::for('user_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('user');
+    $trail->push('Show');
 });

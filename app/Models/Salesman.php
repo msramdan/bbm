@@ -15,6 +15,12 @@ class Salesman extends Model
         'kode',
         'nama',
         'status',
-        'commission'
+        'commission',
+        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

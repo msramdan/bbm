@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Setting;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
+use App\Models\Salesman;
 use App\Models\User;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -49,9 +50,13 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $user = User::create($request->validated());
-
         $user->assignRole($request->role);
         $user->givePermissionTo($request->permissions);
+
+        if ($request->salesman) {
+            $salesman = Salesman::findOrFail($request->salesman);
+            $salesman->update(['user_id' => $user->id]);
+        }
 
         Alert::success('Tambah Data', 'Berhasil');
 
@@ -91,6 +96,21 @@ class UserController extends Controller
         $user->syncPermissions($request->permissions);
 
         $user->update($request->only(['name', 'email']));
+
+        // kalo ada request salesman.id maka set salesman.user_id
+        if ($request->salesman && $request->role == 'salesman') {
+            $salesman = Salesman::findOrFail($request->salesman);
+            $salesman->update(['user_id' => $user->id]);
+        }
+
+        // kalo sebelumnya salesman dan diubah jadi admin, buat null user_id pada tabel salesman
+        if ($request->role == 'admin') {
+            /**
+             * kalo admin otomatis $request->salesman = null
+             * udah coba null secara manual ga bisa
+             */
+            $user->salesman->update(['user_id' => $request->salesman]);
+        }
 
         Alert::success('Update Data', 'Berhasil');
 

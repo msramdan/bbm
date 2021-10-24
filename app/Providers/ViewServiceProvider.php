@@ -2,17 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Bank;
-use App\Models\Barang;
-use App\Models\Gudang;
-use App\Models\Kategori;
-use App\Models\Matauang;
-use App\Models\Pembelian;
-use App\Models\PesananPembelian;
-use App\Models\SatuanBarang;
-use App\Models\Supplier;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Models\{Bank, Barang, Gudang, Kategori, Matauang, Pembelian, PesananPembelian, Salesman, SatuanBarang, Supplier};
+use Spatie\Permission\Models\{Role, Permission};
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -153,6 +144,14 @@ class ViewServiceProvider extends ServiceProvider
             'setting.user.edit'
         ], function ($view) {
             return $view->with('permissions', Permission::all());
+        });
+
+        // list salesman
+        View::composer([
+            'setting.user.create',
+            'setting.user.edit'
+        ], function ($view) {
+            return $view->with('salesman', Salesman::all());
         });
 
         // list jenisPembayaran

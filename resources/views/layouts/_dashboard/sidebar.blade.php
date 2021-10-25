@@ -3,7 +3,16 @@
         <ul class="nav">
             <li class="nav-profile">
                 <div class="image">
-                    <a href="javascript:;"><img src="{{ asset('vendor/assets/img/user-13.jpg') }}" alt="" /></a>
+                    <a href="javascript:;">
+                        @if (auth()->user()->foto != null)
+                            <img src="{{ asset('storage/img/foto/' . auth()->user()->foto) }}" alt="Avatar"
+                                class="img-fluid rounded" style="width: 40px; height: 40px; object-fit: cover;">
+                        @else
+                            <img src="https://www.gravatar.com/avatar/fa24c69431e3df73ef30d06860dd6258?s=40"
+                                alt="Avatar" class="img-fluid rounded"
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        @endif
+                    </a>
                 </div>
                 <div class="info">
                     {{ Auth::user()->name }}
@@ -168,6 +177,33 @@
                         <a href="{{ route('user.index') }}">
                             {{ trans('dashboard.menu.user') }}
                         </a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- menu Akun --}}
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-user"></i>
+                    <span>{{ trans('dashboard.menu.akun') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('profile.index') }}">
+                            {{ trans('dashboard.menu.profile') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="http://bbm.test/logout"
+                            onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+
+                        <form id="logout-form" action="http://bbm.test/logout" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
                 </ul>
             </li>

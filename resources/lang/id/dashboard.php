@@ -31,6 +31,8 @@ return [
         'toko' => 'Toko',
         'setting' => 'Pengaturan',
         'user' => 'Pengguna',
+        'akun' => 'Akun',
+        'profile' => 'Profil'
     ],
     'link' => [
         'dashboard' => 'Home',

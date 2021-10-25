@@ -3,13 +3,22 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
-use App\Models\{AdjustmentPlus, AdjustmentPlusDetail, Barang, Gudang, Matauang, Supplier};
+use App\Models\{AdjustmentPlus, AdjustmentPlusDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AdjustmentPlusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create adjustment plus')->only('create');
+        $this->middleware('permission:read adjustment plus')->only('index');
+        $this->middleware('permission:edit adjustment plus')->only('edit');
+        $this->middleware('permission:update adjustment plus')->only('update');
+        $this->middleware('permission:delete adjustment plus')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,12 +38,7 @@ class AdjustmentPlusController extends Controller
      */
     public function create()
     {
-        $gudang = Gudang::get();
-        $barang = Barang::get();
-        $matauang = Matauang::get();
-        $supplier = Supplier::get();
-
-        return view('inventory.adjustment-plus.create', compact('gudang', 'barang', 'matauang', 'supplier'));
+        return view('inventory.adjustment-plus.create');
     }
 
     /**
@@ -99,11 +103,7 @@ class AdjustmentPlusController extends Controller
             ->withCount('adjustment_plus_detail')
             ->findOrFail($id);
 
-        $gudang = Gudang::get();
-        $barang = Barang::get();
-        $supplier = Supplier::get();
-
-        return view('inventory.adjustment-plus.edit', compact('adjustmentPlus', 'gudang', 'barang', 'supplier'));
+        return view('inventory.adjustment-plus.edit', compact('adjustmentPlus'));
     }
 
     /**
@@ -154,27 +154,27 @@ class AdjustmentPlusController extends Controller
         $adjusment = AdjustmentPlus::findOrFail($id);
         $adjusment->delete();
 
-        Alert::success('Happus Data', 'Berhasil');
+        Alert::success('Hapus Data', 'Berhasil');
 
         return redirect()->route('adjustment-plus.index');
     }
 
-    protected function generateKode()
+    protected function generateKode($tanggal)
     {
         if (request()->ajax()) {
-            $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', now()->month)->count();
+            $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
 
             if ($checkLatestKode == null) {
-                $kode = 'ADJPL-' . date('Ym') . '0000' . 1;
+                $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
             } else {
                 if ($checkLatestKode < 10) {
-                    $kode = 'ADJPL-' . date('Ym') . '0000' . $checkLatestKode + 1;
+                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 10) {
-                    $kode = 'ADJPL-' . date('Ym') . '000' . $checkLatestKode + 1;
+                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 100) {
-                    $kode = 'ADJPL-' . date('Ym') . '00' . $checkLatestKode + 1;
+                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
                 } elseif ($checkLatestKode > 1000) {
-                    $kode = 'ADJPL-' . date('Ym') . '0' . $checkLatestKode + 1;
+                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
                 }
             }
 

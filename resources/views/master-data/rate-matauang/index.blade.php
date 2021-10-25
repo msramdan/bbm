@@ -45,7 +45,9 @@
                                     <th>Mata Uang Asing</th>
                                     <th>Mata Uang Default</th>
                                     <th>Rate</th>
-                                    <th>Action</th>
+                                     @if (auth()->user()->can('edit rate mata uang') || auth()->user()->can('delete rate mata uang'))
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,23 +58,29 @@
                                         <td>{{ $data->matauang_asing->nama }}</td>
                                         <td>{{ $data->matauang_default }}</td>
                                         <td>{{ number_format($data->rate) . '.00' }}</td>
-                                        <td>
-                                            <a href="{{ route('rate-matauang.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle">
-                                                <i class="fa fa-edit">
-                                                </i>
-                                            </a>
+                                        @if (auth()->user()->can('edit rate mata uang') || auth()->user()->can('delete rate mata uang'))
+                                            <td>
+                                                @can('edit rate mata uang')
+                                                    <a href="{{ route('rate-matauang.edit', $data->id) }}"
+                                                        class="btn btn-success btn-icon btn-circle">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                @endcan
 
-                                            <form action="{{ route('rate-matauang.destroy', $data->id) }}" method="post"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-danger btn-icon btn-circle">
-                                                    <i class="ace-icon fa fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
+                                                @can('delete rate mata uang')
+                                                    <form action="{{ route('rate-matauang.destroy', $data->id) }}" method="post"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                        @csrf
+                                                        @method('delete')
+
+                                                        <button class="btn btn-danger btn-icon btn-circle">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

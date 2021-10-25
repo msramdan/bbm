@@ -24,7 +24,13 @@ return [
         'kategori' => 'Kategori Barang',
         'barang' => 'Barang',
         'adjustment_plus' => 'Adjustment Plus',
-        'adjustment_minus' => 'Adjustment Minus'
+        'adjustment_minus' => 'Adjustment Minus',
+        'pesanan_pembelian' => 'Pesanan Pembelian',
+        'pembelian' => 'Pembelian',
+        'retur_pembelian' => 'Retur Pembelian',
+        'toko' => 'Toko',
+        'setting' => 'Pengaturan',
+        'user' => 'Pengguna',
     ],
     'link' => [
         'dashboard' => 'Home',

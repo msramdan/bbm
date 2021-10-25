@@ -6,6 +6,10 @@
         get_kode()
         cek_form_entry()
 
+        $('input[name="tanggal"]').change(function() {
+            get_kode()
+        })
+
         $('#kode_input, #supplier_input, #bentuk_kepemilikan_input').on('keyup keydown change',
             function() {
                 cek_form_entry()
@@ -271,7 +275,7 @@
         // ajax get kode
         function get_kode() {
             $.ajax({
-                url: "{{ route('adjustment-minus.generateKode') }}",
+                url: "/inventory/adjustment-minus/generate-kode/" + $('input[name="tanggal"]').val(),
                 type: 'GET',
                 success: function(data) {
                     $('input[name="kode"]').val(data)

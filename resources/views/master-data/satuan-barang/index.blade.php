@@ -35,7 +35,9 @@
                                     <th>Kode</th>
                                     <th>Nama</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    @if (auth()->user()->can('edit satuan') || auth()->user()->can('delete satuan'))
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,21 +47,29 @@
                                         <td>{{ $data->kode }}</td>
                                         <td>{{ $data->nama }}</td>
                                         <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
-                                        <td>
-                                            <a href="{{ route('satuan-barang.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle"><i
-                                                    class="fa fa-edit"></i></a>
+                                         @if (auth()->user()->can('edit satuan') || auth()->user()->can('delete satuan'))
+                                            <td>
+                                                @can('edit satuan')
+                                                    <a href="{{ route('satuan-barang.edit', $data->id) }}"
+                                                        class="btn btn-success btn-icon btn-circle">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                @endcan
 
-                                            <form action="{{ route('satuan-barang.destroy', $data->id) }}" method="post"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-danger btn-icon btn-circle "><i
-                                                        class="ace-icon fa fa-trash"></i></button>
-                                            </form>
+                                                @can('delete satuan')
+                                                    <form action="{{ route('satuan-barang.destroy', $data->id) }}" method="post"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                        @csrf
+                                                        @method('delete')
 
-                                        </td>
+                                                        <button class="btn btn-danger btn-icon btn-circle">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </td>
+                                         @endif
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -4,11 +4,20 @@ namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RateMataUangRequest;
-use App\Models\{Matauang, RateMataUang};
+use App\Models\RateMataUang;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RateMataUangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create rate mata uang')->only('create');
+        $this->middleware('permission:read rate mata uang')->only('index');
+        $this->middleware('permission:edit rate mata uang')->only('edit');
+        $this->middleware('permission:update rate mata uang')->only('update');
+        $this->middleware('permission:delete rate mata uang')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,9 +26,6 @@ class RateMataUangController extends Controller
     public function index()
     {
         $rateMataUang = RateMataUang::with('matauang_asing', 'matauang_default')->get();
-
-        // return $rateMataUang;
-        // die;
 
         return view('master-data.rate-matauang.index', compact('rateMataUang'));
     }
@@ -31,9 +37,7 @@ class RateMataUangController extends Controller
      */
     public function create()
     {
-        $matauang = Matauang::get();
-
-        return view('master-data.rate-matauang.create', compact('matauang'));
+        return view('master-data.rate-matauang.create');
     }
 
     /**
@@ -59,11 +63,9 @@ class RateMataUangController extends Controller
      */
     public function edit($id)
     {
-        $matauang = Matauang::get();
-
         $rateMataUang = RateMataUang::with('matauang_asing', 'matauang_default')->findOrFail($id);
 
-        return view('master-data.rate-matauang.edit', compact('rateMataUang', 'matauang'));
+        return view('master-data.rate-matauang.edit', compact('rateMataUang'));
     }
 
     /**

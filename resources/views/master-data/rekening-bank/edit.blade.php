@@ -56,10 +56,10 @@
                                 <div class="col-md-9">
                                     <select name="bank" class="form-control" required>
                                         <option value="" selected disabled>-- Pilih --</option>
-                                        @forelse ($banks as $bank)
-                                            <option value="{{ $bank->id }}"
-                                                {{ $rekeningBank->bank_id == $bank->id ? 'selected' : '' }}>
-                                                {{ $bank->nama }}</option>
+                                        @forelse ($bank as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ $rekeningBank->bank_id == $item->id ? 'selected' : '' }}>
+                                                {{ $item->nama }}</option>
                                         @empty
                                             <option value="" selected disabled>Data Bank tidak ada</option>
                                         @endforelse

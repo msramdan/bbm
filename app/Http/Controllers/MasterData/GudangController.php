@@ -3,14 +3,21 @@
 namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreGudangRequest;
-use App\Http\Requests\UpdateGudangRequest;
+use App\Http\Requests\{StoreGudangRequest, UpdateGudangRequest};
 use App\Models\Gudang;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class GudangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create gudang')->only('create');
+        $this->middleware('permission:read gudang')->only('index');
+        $this->middleware('permission:edit gudang')->only('edit');
+        $this->middleware('permission:update gudang')->only('update');
+        $this->middleware('permission:delete gudang')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -121,6 +121,57 @@
                     </li>
                 </ul>
             </li>
+
+            {{-- menu pembelian --}}
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-briefcase"></i>
+                    <span>{{ trans('dashboard.menu.pembelian') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('pesanan-pembelian.index') }}">
+                            {{ trans('dashboard.menu.pesanan_pembelian') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('pembelian.index') }}">
+                            {{ trans('dashboard.menu.pembelian') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('retur-pembelian.index') }}">
+                            {{ trans('dashboard.menu.retur_pembelian') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- menu Setting --}}
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-gear"></i>
+                    <span>{{ trans('dashboard.menu.setting') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('toko.index') }}">
+                            {{ trans('dashboard.menu.toko') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('user.index') }}">
+                            {{ trans('dashboard.menu.user') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li>
                 <a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify">
                     <i class="fa fa-angle-double-left"></i>

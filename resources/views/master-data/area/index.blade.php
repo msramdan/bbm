@@ -43,7 +43,9 @@
                                     <th>Kode</th>
                                     <th>Nama</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    @if (auth()->user()->can('edit area') || auth()->user()->can('delete area'))
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,24 +55,29 @@
                                         <td>{{ $area->kode }}</td>
                                         <td>{{ $area->nama }}</td>
                                         <td>{{ $area->status == 'Y' ? 'Aktif' : 'No' }}</td>
-                                        <td>
-                                            <a href="{{ route('area.edit', $area->id) }}"
-                                                class="btn btn-success btn-icon btn-circle">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
+                                        @if (auth()->user()->can('edit area') || auth()->user()->can('delete area'))
+                                            <td>
+                                                @can('edit area')
+                                                    <a href="{{ route('area.edit', $area->id) }}"
+                                                        class="btn btn-success btn-icon btn-circle">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                @endcan
 
-                                            <form action="{{ route('area.destroy', $area->id) }}" method="post"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                @csrf
-                                                @method('delete')
+                                                @can('delete area')
+                                                    <form action="{{ route('area.destroy', $area->id) }}" method="post"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                        @csrf
+                                                        @method('delete')
 
-                                                <button class="btn btn-danger btn-icon btn-circle">
-                                                    <i class="ace-icon fa fa-trash"></i>
-                                                </button>
-                                            </form>
-
-                                        </td>
+                                                        <button class="btn btn-danger btn-icon btn-circle">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

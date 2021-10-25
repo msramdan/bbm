@@ -16,7 +16,13 @@ class BankSeeder extends Seeder
     {
         Bank::create([
             'kode' => 'BCA',
-            'nama' => 'Bank Central Asia',
+            'nama' => 'Bank Central Asia(BCA)',
+            'status' => 'Y'
+        ]);
+
+        Bank::create([
+            'kode' => 'MDR',
+            'nama' => 'Mandiri',
             'status' => 'Y'
         ]);
     }

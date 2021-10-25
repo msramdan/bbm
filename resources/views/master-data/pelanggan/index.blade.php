@@ -47,7 +47,9 @@
                                     <th>Telp. Kontak</th>
                                     <th>TOP</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                     @if (auth()->user()->can('edit pelanggan') || auth()->user()->can('delete pelanggan'))
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,24 +63,29 @@
                                         <td>{{ $data->telp_kontak != null ? $data->telp_kontak : '-' }}</td>
                                         <td>{{ $data->top }}</td>
                                         <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
-                                        <td>
-                                            <a href="{{ route('pelanggan.edit', $data->id) }}"
-                                                class="btn btn-success btn-icon btn-circle">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
+                                        @if (auth()->user()->can('edit pelanggan') || auth()->user()->can('delete pelanggan'))
+                                            <td>
+                                                @can('edit pelanggan')
+                                                    <a href="{{ route('pelanggan.edit', $data->id) }}"
+                                                        class="btn btn-success btn-icon btn-circle">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                @endcan
 
-                                            <form action="{{ route('pelanggan.destroy', $data->id) }}" method="post"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                @csrf
-                                                @method('delete')
+                                                @can('delete pelanggan')
+                                                    <form action="{{ route('pelanggan.destroy', $data->id) }}" method="post"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                        @csrf
+                                                        @method('delete')
 
-                                                <button class="btn btn-danger btn-icon btn-circle">
-                                                    <i class="ace-icon fa fa-trash"></i>
-                                                </button>
-                                            </form>
-
-                                        </td>
+                                                        <button class="btn btn-danger btn-icon btn-circle">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

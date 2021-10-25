@@ -9,6 +9,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SatuanBarangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create satuan')->only('create');
+        $this->middleware('permission:read satuan')->only('index');
+        $this->middleware('permission:edit satuan')->only('edit');
+        $this->middleware('permission:update satuan')->only('update');
+        $this->middleware('permission:delete satuan')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

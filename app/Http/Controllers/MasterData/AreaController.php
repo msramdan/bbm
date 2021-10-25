@@ -4,14 +4,21 @@ namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Requests\StoreAreaRequest;
-use App\Http\Requests\UpdateAreaRequest;
+use App\Http\Requests\{StoreAreaRequest, UpdateAreaRequest};
 use App\Models\Area;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AreaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create area')->only('create');
+        $this->middleware('permission:read area')->only('index');
+        $this->middleware('permission:edit area')->only('edit');
+        $this->middleware('permission:update area')->only('update');
+        $this->middleware('permission:delete area')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

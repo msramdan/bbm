@@ -237,3 +237,103 @@ Breadcrumbs::for('adjustment_minus_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('adjustment_minus');
     $trail->push('Edit');
 });
+
+
+// Master Data > Pesanan Pembelian
+Breadcrumbs::for('pesanan_pembelian', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Pesanan Pembelian', route('pesanan-pembelian.index'));
+});
+// Master Data > Pesanan Pembelian > Tambah
+Breadcrumbs::for('pesanan_pembelian_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('pesanan_pembelian');
+    $trail->push('Tambah', route('pesanan-pembelian.create'));
+});
+// Master Data > Pesanan Pembelian > Edit
+Breadcrumbs::for('pesanan_pembelian_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('pesanan_pembelian');
+    $trail->push('Edit');
+});
+// Master Data > Pesanan Pembelian > Show
+Breadcrumbs::for('pesanan_pembelian_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('pesanan_pembelian');
+    $trail->push('Show');
+});
+
+
+// Master Data > Pembelian
+Breadcrumbs::for('pembelian', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Pembelian', route('pembelian.index'));
+});
+// Master Data > Pembelian > Tambah
+Breadcrumbs::for('pembelian_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('pembelian');
+    $trail->push('Tambah', route('pembelian.create'));
+});
+// Master Data > Pembelian > Edit
+Breadcrumbs::for('pembelian_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('pembelian');
+    $trail->push('Edit');
+});
+// Master Data > Pembelian > Show
+Breadcrumbs::for('pembelian_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('pembelian');
+    $trail->push('Show');
+});
+
+
+// Master Data > Retur
+Breadcrumbs::for('retur_pembelian', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Retur', route('retur-pembelian.index'));
+});
+// Master Data > Retur > Tambah
+Breadcrumbs::for('retur_pembelian_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_pembelian');
+    $trail->push('Tambah', route('retur-pembelian.create'));
+});
+// Master Data > Retur > Edit
+Breadcrumbs::for('retur_pembelian_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_pembelian');
+    $trail->push('Edit');
+});
+// Master Data > Retur > Show
+Breadcrumbs::for('retur_pembelian_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_pembelian');
+    $trail->push('Show');
+});
+
+
+
+// Master Data > Setting
+Breadcrumbs::for('setting', function (BreadcrumbTrail $trail) {
+    $trail->push('Setting');
+});
+// Master Data > Setting > Toko
+Breadcrumbs::for('toko', function (BreadcrumbTrail $trail) {
+    $trail->parent('setting');
+    $trail->push('Toko');
+});
+
+
+// Setting  > Retur
+Breadcrumbs::for('user', function (BreadcrumbTrail $trail) {
+    $trail->parent('setting');
+    $trail->push('User', route('user.index'));
+});
+// Setting  > Retur > Tambah
+Breadcrumbs::for('user_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('user');
+    $trail->push('Tambah', route('user.create'));
+});
+// Setting  > Retur > Edit
+Breadcrumbs::for('user_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('user');
+    $trail->push('Edit');
+});
+// Setting  > Retur > Show
+Breadcrumbs::for('user_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('user');
+    $trail->push('Show');
+});

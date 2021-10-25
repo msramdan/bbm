@@ -124,18 +124,20 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        <tr>
-                                            <td colspan="6">
-                                                <strong>Total</strong>
-                                            </td>
-                                            <td>
-                                                <strong> {{ $total_qty }}</strong>
-                                            </td>
-                                            <td>
-                                                <strong>{{ $adjustmentPlus->matauang->kode . ' ' . number_format($adjustmentPlus->grand_total) }}</strong>
-                                            </td>
-                                        </tr>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="6">
+                                                Total
+                                            </th>
+                                            <th>
+                                                {{ $total_qty }}
+                                            </th>
+                                            <th>
+                                                {{ $adjustmentPlus->matauang->kode . ' ' . number_format($adjustmentPlus->grand_total) }}
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

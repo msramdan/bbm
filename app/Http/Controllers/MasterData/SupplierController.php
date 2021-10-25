@@ -9,6 +9,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SupplierController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create supplier')->only('create');
+        $this->middleware('permission:read supplier')->only('index');
+        $this->middleware('permission:edit supplier')->only('edit');
+        $this->middleware('permission:update supplier')->only('update');
+        $this->middleware('permission:delete supplier')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

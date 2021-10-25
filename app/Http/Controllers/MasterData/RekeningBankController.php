@@ -4,11 +4,20 @@ namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreRekeningBankRequest, UpdateRekeningBankRequest};
-use App\Models\{Bank, RekeningBank};
+use App\Models\RekeningBank;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RekeningBankController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create rekening')->only('create');
+        $this->middleware('permission:read rekening')->only('index');
+        $this->middleware('permission:edit rekening')->only('edit');
+        $this->middleware('permission:update rekening')->only('update');
+        $this->middleware('permission:delete rekening')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,9 +37,7 @@ class RekeningBankController extends Controller
      */
     public function create()
     {
-        $banks = Bank::get();
-
-        return view('master-data.rekening-bank.create', compact('banks'));
+        return view('master-data.rekening-bank.create');
     }
 
     /**
@@ -59,11 +66,9 @@ class RekeningBankController extends Controller
      */
     public function edit(RekeningBank $rekeningBank)
     {
-        $banks = Bank::get();
-
         $rekeningBank->load('bank');
 
-        return view('master-data.rekening-bank.edit', compact('rekeningBank', 'banks'));
+        return view('master-data.rekening-bank.edit', compact('rekeningBank'));
     }
 
     /**

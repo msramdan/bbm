@@ -9,6 +9,14 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SalesmanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create salesman')->only('create');
+        $this->middleware('permission:read salesman')->only('index');
+        $this->middleware('permission:edit salesman')->only('edit');
+        $this->middleware('permission:update salesman')->only('update');
+        $this->middleware('permission:delete salesman')->only('delete');
+    }
     /**
      * Display a listing of the resource.
      *

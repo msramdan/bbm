@@ -4,12 +4,21 @@ namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreBarangRequest, UpdateBarangRequest};
-use App\Models\{Barang, Kategori, Matauang, SatuanBarang};
+use App\Models\Barang;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class BarangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create barang')->only('create');
+        $this->middleware('permission:read barang')->only('index');
+        $this->middleware('permission:edit barang')->only('edit');
+        $this->middleware('permission:update barang')->only('update');
+        $this->middleware('permission:delete barang')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,11 +38,7 @@ class BarangController extends Controller
      */
     public function create()
     {
-        $kategori = Kategori::get();
-        $satuan = SatuanBarang::get();
-        $matauang = Matauang::get();
-
-        return view('master-data.barang.create', compact('kategori', 'satuan', 'matauang'));
+        return view('master-data.barang.create');
     }
 
     /**
@@ -72,13 +77,9 @@ class BarangController extends Controller
      */
     public function edit(Barang $barang)
     {
-        $kategori = Kategori::get();
-        $satuan = SatuanBarang::get();
-        $matauang = Matauang::get();
-
         $barang->load('kategori', 'satuan', 'matauang_beli', 'mata_uang_jual');
 
-        return view('master-data.barang.edit', compact('kategori', 'satuan', 'matauang', 'barang'));
+        return view('master-data.barang.edit', compact('barang'));
     }
 
     /**

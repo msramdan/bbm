@@ -3,14 +3,21 @@
 namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreKategoriRequest;
-use App\Http\Requests\UpdateKategoriRequest;
+use App\Http\Requests\{StoreKategoriRequest, UpdateKategoriRequest};
 use App\Models\Kategori;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class KategoriController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create kategori')->only('create');
+        $this->middleware('permission:read kategori')->only('index');
+        $this->middleware('permission:edit kategori')->only('edit');
+        $this->middleware('permission:update kategori')->only('update');
+        $this->middleware('permission:delete kategori')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

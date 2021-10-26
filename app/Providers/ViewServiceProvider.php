@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\{Bank, Barang, Gudang, Kategori, Matauang, Pembelian, PesananPembelian, Salesman, SatuanBarang, Supplier};
+use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\{Role, Permission};
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -135,7 +136,12 @@ class ViewServiceProvider extends ServiceProvider
             'setting.user.create',
             'setting.user.edit'
         ], function ($view) {
-            return $view->with('roles', Role::all());
+            // dicache biar ga cuma get query ke database cuma sekali aja
+            $role = Cache::rememberForever('role', function () {
+                return Role::all();
+            });
+
+            return $view->with('roles', $role);
         });
 
         // list permissions
@@ -143,7 +149,11 @@ class ViewServiceProvider extends ServiceProvider
             'setting.user.create',
             'setting.user.edit'
         ], function ($view) {
-            return $view->with('permissions', Permission::all());
+            $permissions = Cache::rememberForever('permissions', function () {
+                return  Permission::all();
+            });
+
+            return $view->with('permissions', $permissions);
         });
 
         // list salesman
@@ -159,20 +169,24 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.pembelian.create',
             'pembelian.pembelian.edit',
         ], function ($view) {
-            return $view->with('jenisPembayaran', collect([
-                (object)  [
-                    'id' => 'Cash',
-                    'nama' => 'Cash'
-                ],
-                (object)  [
-                    'id' => 'Transfer',
-                    'nama' =>  'Transfer',
-                ],
-                (object) [
-                    'id' => 'Giro',
-                    'nama' => 'Giro'
-                ]
-            ]));
+            $jenisPembayaran = Cache::rememberForever('jenisPembayaran', function () {
+                return collect([
+                    (object)  [
+                        'id' => 'Cash',
+                        'nama' => 'Cash'
+                    ],
+                    (object)  [
+                        'id' => 'Transfer',
+                        'nama' =>  'Transfer',
+                    ],
+                    (object) [
+                        'id' => 'Giro',
+                        'nama' => 'Giro'
+                    ]
+                ]);
+            });
+
+            return $view->with('jenisPembayaran', $jenisPembayaran);
         });
     }
 }

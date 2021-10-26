@@ -3,7 +3,16 @@
         <ul class="nav">
             <li class="nav-profile">
                 <div class="image">
-                    <a href="javascript:;"><img src="{{ asset('vendor/assets/img/user-13.jpg') }}" alt="" /></a>
+                    <a href="javascript:;">
+                        @if (auth()->user()->foto != null)
+                            <img src="{{ asset('storage/img/foto/' . auth()->user()->foto) }}" alt="Avatar"
+                                class="img-fluid rounded" style="width: 40px; height: 40px; object-fit: cover;">
+                        @else
+                            <img src="https://www.gravatar.com/avatar/fa24c69431e3df73ef30d06860dd6258?s=40"
+                                alt="Avatar" class="img-fluid rounded"
+                                style="width: 40px; height: 40px; object-fit: cover;">
+                        @endif
+                    </a>
                 </div>
                 <div class="info">
                     {{ Auth::user()->name }}
@@ -21,153 +30,188 @@
                 </a>
             </li>
             {{-- menu master data --}}
-            <li class="has-sub">
-                <a href="javascript:;">
-                    <b class="caret pull-right"></b>
-                    <i class="fa fa-list"></i>
-                    <span>{{ trans('dashboard.menu.master') }}</span>
-                </a>
-                <ul class="sub-menu" style="display: none;">
-                    <li>
-                        <a href="{{ route('matauang.index') }}">
-                            {{ trans('dashboard.menu.matauang') }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('rate-matauang.index') }}">
-                            {{ trans('dashboard.menu.rate_matauang') }}
-                        </a>
-                    </li>
+            @role('admin')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-list"></i>
+                        <span>{{ trans('dashboard.menu.master') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('matauang.index') }}">
+                                {{ trans('dashboard.menu.matauang') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('rate-matauang.index') }}">
+                                {{ trans('dashboard.menu.rate_matauang') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('bank.index') }}">
-                            {{ trans('dashboard.menu.bank') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('bank.index') }}">
+                                {{ trans('dashboard.menu.bank') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('rekening-bank.index') }}">
-                            {{ trans('dashboard.menu.rekening_bank') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('rekening-bank.index') }}">
+                                {{ trans('dashboard.menu.rekening_bank') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('supplier.index') }}">
-                            {{ trans('dashboard.menu.supplier') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('supplier.index') }}">
+                                {{ trans('dashboard.menu.supplier') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('area.index') }}">
-                            {{ trans('dashboard.menu.area') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('area.index') }}">
+                                {{ trans('dashboard.menu.area') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a
-                            href="{{ route('satuan-barang.index') }}">{{ trans('dashboard.menu.satuan_barang') }}</a>
-                    </li>
+                        <li>
+                            <a
+                                href="{{ route('satuan-barang.index') }}">{{ trans('dashboard.menu.satuan_barang') }}</a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('pelanggan.index') }}">
-                            {{ trans('dashboard.menu.pelanggan') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('pelanggan.index') }}">
+                                {{ trans('dashboard.menu.pelanggan') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('salesman.index') }}">
-                            {{ trans('dashboard.menu.salesman') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('salesman.index') }}">
+                                {{ trans('dashboard.menu.salesman') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('gudang.index') }}">
-                            {{ trans('dashboard.menu.gudang') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('gudang.index') }}">
+                                {{ trans('dashboard.menu.gudang') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('kategori.index') }}">
-                            {{ trans('dashboard.menu.kategori') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('kategori.index') }}">
+                                {{ trans('dashboard.menu.kategori') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('barang.index') }}">
-                            {{ trans('dashboard.menu.barang') }}
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                        <li>
+                            <a href="{{ route('barang.index') }}">
+                                {{ trans('dashboard.menu.barang') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endrole
 
             {{-- menu inventory --}}
-            <li class="has-sub">
-                <a href="javascript:;">
-                    <b class="caret pull-right"></b>
-                    <i class="fa fa-archive"></i>
-                    <span>{{ trans('dashboard.menu.inventory') }}</span>
-                </a>
-                <ul class="sub-menu" style="display: none;">
-                    <li>
-                        <a href="{{ route('adjustment-plus.index') }}">
-                            {{ trans('dashboard.menu.adjustment_plus') }}
-                        </a>
-                    </li>
+            @role('admin')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-archive"></i>
+                        <span>{{ trans('dashboard.menu.inventory') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('adjustment-plus.index') }}">
+                                {{ trans('dashboard.menu.adjustment_plus') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('adjustment-minus.index') }}">
-                            {{ trans('dashboard.menu.adjustment_minus') }}
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                        <li>
+                            <a href="{{ route('adjustment-minus.index') }}">
+                                {{ trans('dashboard.menu.adjustment_minus') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endrole
 
             {{-- menu pembelian --}}
-            <li class="has-sub">
-                <a href="javascript:;">
-                    <b class="caret pull-right"></b>
-                    <i class="fa fa-briefcase"></i>
-                    <span>{{ trans('dashboard.menu.pembelian') }}</span>
-                </a>
-                <ul class="sub-menu" style="display: none;">
-                    <li>
-                        <a href="{{ route('pesanan-pembelian.index') }}">
-                            {{ trans('dashboard.menu.pesanan_pembelian') }}
-                        </a>
-                    </li>
+            @hasanyrole('salesman|admin')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-briefcase"></i>
+                        <span>{{ trans('dashboard.menu.pembelian') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('pesanan-pembelian.index') }}">
+                                {{ trans('dashboard.menu.pesanan_pembelian') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('pembelian.index') }}">
-                            {{ trans('dashboard.menu.pembelian') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('pembelian.index') }}">
+                                {{ trans('dashboard.menu.pembelian') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('retur-pembelian.index') }}">
-                            {{ trans('dashboard.menu.retur_pembelian') }}
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                        <li>
+                            <a href="{{ route('retur-pembelian.index') }}">
+                                {{ trans('dashboard.menu.retur_pembelian') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endhasanyrole
 
             {{-- menu Setting --}}
+            @role('admin')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-gear"></i>
+                        <span>{{ trans('dashboard.menu.setting') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('toko.index') }}">
+                                {{ trans('dashboard.menu.toko') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('user.index') }}">
+                                {{ trans('dashboard.menu.user') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endrole
+
+            {{-- menu Akun --}}
             <li class="has-sub">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
-                    <i class="fa fa-gear"></i>
-                    <span>{{ trans('dashboard.menu.setting') }}</span>
+                    <i class="fa fa-user"></i>
+                    <span>{{ trans('dashboard.menu.akun') }}</span>
                 </a>
                 <ul class="sub-menu" style="display: none;">
                     <li>
-                        <a href="{{ route('toko.index') }}">
-                            {{ trans('dashboard.menu.toko') }}
+                        <a href="{{ route('profile.index') }}">
+                            {{ trans('dashboard.menu.profile') }}
                         </a>
                     </li>
 
                     <li>
-                        <a href="{{ route('user.index') }}">
-                            {{ trans('dashboard.menu.user') }}
+                        <a class="dropdown-item" href="http://bbm.test/logout"
+                            onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                            Logout
                         </a>
+
+                        <form id="logout-form" action="http://bbm.test/logout" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
                 </ul>
             </li>

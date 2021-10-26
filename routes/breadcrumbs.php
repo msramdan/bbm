@@ -337,3 +337,15 @@ Breadcrumbs::for('user_show', function (BreadcrumbTrail $trail) {
     $trail->parent('user');
     $trail->push('Show');
 });
+
+
+
+// Master Data > Akun
+Breadcrumbs::for('akun', function (BreadcrumbTrail $trail) {
+    $trail->push('Akun');
+});
+// Master Data > Akun > Profile
+Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
+    $trail->parent('akun');
+    $trail->push('Profile');
+});

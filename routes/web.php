@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Akun\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LocalizationController;
@@ -87,4 +88,11 @@ Route::group(['prefix' => 'setting', 'middleware' => ['web', 'auth']], function 
     Route::put('/toko/{toko:id}', [TokoController::class, 'update'])->name('toko.update')->middleware('permission:toko');
 
     Route::resource('/user', UserController::class)->except('show');
+});
+
+
+Route::group(['prefix' => 'akun', 'middleware' => ['web', 'auth']], function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
+    Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
 });

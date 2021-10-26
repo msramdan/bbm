@@ -31,6 +31,8 @@ return [
         'toko' => 'Store',
         'setting' => 'Setting',
         'user' => 'User',
+        'akun' => 'Account',
+        'profile' => 'Profile'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

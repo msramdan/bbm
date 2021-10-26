@@ -8,6 +8,7 @@ use App\Models\{AdjustmentMinus, AdjustmentMinusDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class AdjustmentMinusController extends Controller
 {
@@ -27,9 +28,31 @@ class AdjustmentMinusController extends Controller
      */
     public function index()
     {
-        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail',  'gudang')->withCount('adjustment_minus_detail')->get();
+        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail',  'gudang')->withCount('adjustment_minus_detail')->orderByDesc('updated_at');
 
-        return view('inventory.adjustment-minus.index', compact('adjustmentMinus'));
+        if (request()->ajax()) {
+            return Datatables::of($adjustmentMinus)
+                ->addIndexColumn()
+                ->addColumn('action', 'inventory.adjustment-minus.data-table.action')
+                ->addColumn('gudang', function ($row) {
+                    return $row->gudang->nama;
+                })
+                ->addColumn('total_barang', function ($row) {
+                    return $row->adjustment_minus_detail_count;
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->addColumn('tanggal', function ($row) {
+                    return $row->tanggal->format('d F Y');
+                })
+                ->toJson();
+        }
+
+        return view('inventory.adjustment-minus.index');
     }
 
     /**

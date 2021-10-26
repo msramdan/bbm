@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreRekeningBankRequest, UpdateRekeningBankRequest};
 use App\Models\RekeningBank;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class RekeningBankController extends Controller
 {
@@ -25,9 +26,28 @@ class RekeningBankController extends Controller
      */
     public function index()
     {
-        $rekeningBank = RekeningBank::with('bank')->get();
+        $rekeningBank = RekeningBank::with('bank')->orderByDesc('id');
 
-        return view('master-data.rekening-bank.index', compact('rekeningBank'));
+        if (request()->ajax()) {
+            return Datatables::of($rekeningBank)
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.rekening-bank.data-table.action')
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('bank', function ($row) {
+                    return $row->bank->nama;
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('master-data.rekening-bank.index');
     }
 
     /**

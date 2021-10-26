@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SatuanBarangRequest;
 use App\Models\SatuanBarang;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class SatuanBarangController extends Controller
 {
@@ -25,8 +26,23 @@ class SatuanBarangController extends Controller
      */
     public function index()
     {
-        $satuanbarang = SatuanBarang::all();
-        return view('master-data.satuan-barang.index', compact('satuanbarang'));
+        if (request()->ajax()) {
+            return Datatables::of(SatuanBarang::query())
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.satuan-barang.data-table.action')
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('master-data.satuan-barang.index');
     }
 
     /**

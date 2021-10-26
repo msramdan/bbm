@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreAreaRequest, UpdateAreaRequest};
 use App\Models\Area;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class AreaController extends Controller
 {
@@ -26,9 +27,23 @@ class AreaController extends Controller
      */
     public function index()
     {
-        $areas = Area::get();
+        if (request()->ajax()) {
+            return Datatables::of(Area::query())
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.area.data-table.action')
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
 
-        return view('master-data.area.index', compact('areas'));
+        return view('master-data.area.index');
     }
 
     /**

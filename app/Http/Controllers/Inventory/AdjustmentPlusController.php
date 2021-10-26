@@ -7,6 +7,7 @@ use App\Models\{AdjustmentPlus, AdjustmentPlusDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class AdjustmentPlusController extends Controller
 {
@@ -26,9 +27,37 @@ class AdjustmentPlusController extends Controller
      */
     public function index()
     {
-        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')->withCount('adjustment_plus_detail')->get();
+        if (request()->ajax()) {
+            $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')->withCount('adjustment_plus_detail')->orderByDesc('updated_at');
 
-        return view('inventory.adjustment-plus.index', compact('adjustmentPlus'));
+            return Datatables::of($adjustmentPlus)
+                ->addIndexColumn()
+                ->addColumn('action', 'inventory.adjustment-plus.data-table.action')
+                ->addColumn('gudang', function ($row) {
+                    return $row->gudang->nama;
+                })
+                ->addColumn('total_barang', function ($row) {
+                    return $row->adjustment_plus_detail_count;
+                })
+                ->addColumn('matauang', function ($row) {
+                    return $row->matauang->nama;
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('grand_total', function ($row) {
+                    return $row->matauang->kode . ' ' . number_format($row->grand_total);
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->addColumn('tanggal', function ($row) {
+                    return $row->tanggal->format('d F Y');
+                })
+                ->toJson();
+        }
+
+        return view('inventory.adjustment-plus.index');
     }
 
     /**

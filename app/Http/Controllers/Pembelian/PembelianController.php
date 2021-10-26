@@ -7,6 +7,7 @@ use App\Models\{Pembelian, PembelianDetail, PembelianPembayaran, PesananPembelia
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class PembelianController extends Controller
 {
@@ -27,9 +28,43 @@ class PembelianController extends Controller
      */
     public function index()
     {
-        $pembelian = Pembelian::with('pembelian_detail', 'gudang', 'supplier', 'matauang')->withCount('pembelian_detail')->get();
+        if (request()->ajax()) {
+            $pembelian = Pembelian::with('pembelian_detail', 'gudang', 'supplier', 'matauang')->withCount('pembelian_detail');
 
-        return view('pembelian.pembelian.index', compact('pembelian'));
+            return Datatables::of($pembelian)
+                ->addIndexColumn()
+                ->addColumn('action', 'pembelian.pembelian.data-table.action')
+                ->addColumn('kode_po', function ($row) {
+                    return $row->pesanan_pembelian ? $row->pesanan_pembelian->kode : 'Tanpa P.O';
+                })
+                ->addColumn('tanggal', function ($row) {
+                    return $row->tanggal->format('d F Y');
+                })
+                ->addColumn('matauang', function ($row) {
+                    return $row->matauang->nama;
+                })
+                ->addColumn('supplier', function ($row) {
+                    return $row->supplier ? $row->supplier->nama_supplier : 'Tanpa Supplier';
+                })
+                ->addColumn('gudang', function ($row) {
+                    return $row->gudang->nama;
+                })
+                ->addColumn('total_barang', function ($row) {
+                    return $row->pembelian_detail_count;
+                })
+                ->addColumn('grand_total', function ($row) {
+                    return $row->matauang->kode . ' ' . number_format($row->total_netto);
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('pembelian.pembelian.index');
     }
 
     /**

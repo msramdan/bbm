@@ -15,7 +15,7 @@ class PelangganSeeder extends Seeder
     public function run()
     {
         Pelanggan::create([
-            'kode' => 'SP1',
+            'kode' => 'CUS1',
             'nama_pelanggan' => 'Alphonse Elric',
             'npwp' => '76786786123',
             'nppkp' => '',

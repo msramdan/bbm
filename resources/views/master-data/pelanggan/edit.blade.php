@@ -36,7 +36,7 @@
                     </div>
                     <div class="panel-body">
                         <form class="form-horizontal" action="{{ route('pelanggan.update', $pelanggan->id) }}"
-                            method="post" novalidate>
+                            method="post">
                             @csrf
                             @method('put')
 

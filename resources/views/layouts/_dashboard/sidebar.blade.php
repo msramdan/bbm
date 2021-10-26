@@ -8,7 +8,7 @@
                             <img src="{{ asset('storage/img/foto/' . auth()->user()->foto) }}" alt="Avatar"
                                 class="img-fluid rounded" style="width: 40px; height: 40px; object-fit: cover;">
                         @else
-                            <img src="https://www.gravatar.com/avatar/fa24c69431e3df73ef30d06860dd6258?s=40"
+                            <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}&s=40"
                                 alt="Avatar" class="img-fluid rounded"
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         @endif

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\{Bank, Barang, Gudang, Kategori, Matauang, Pembelian, PesananPembelian, Salesman, SatuanBarang, Supplier};
+use App\Models\{Area, Bank, Barang, Gudang, Kategori, Matauang, Pembelian, PesananPembelian, Salesman, SatuanBarang, Supplier};
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\{Role, Permission};
 use Illuminate\Support\Facades\View;
@@ -162,6 +162,14 @@ class ViewServiceProvider extends ServiceProvider
             'setting.user.edit'
         ], function ($view) {
             return $view->with('salesman', Salesman::all());
+        });
+
+        // list area
+        View::composer([
+            'master-data.pelanggan.create',
+            'master-data.pelanggan.edit'
+        ], function ($view) {
+            return $view->with('area', Area::all());
         });
 
         // list jenisPembayaran

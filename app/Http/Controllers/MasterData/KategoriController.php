@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreKategoriRequest, UpdateKategoriRequest};
 use App\Models\Kategori;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class KategoriController extends Controller
 {
@@ -25,9 +26,23 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategori = Kategori::get();
+        if (request()->ajax()) {
+            return Datatables::of(Kategori::query())
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.area.data-table.action')
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
 
-        return view('master-data.kategori.index', compact('kategori'));
+        return view('master-data.kategori.index');
     }
 
     /**

@@ -23,7 +23,7 @@ class RateMataUang extends Model
         return $this->belongsTo(Matauang::class, 'matauang_id', 'id');
     }
 
-    public function matauang_default()
+    public function mata_uang_default()
     {
         return $this->belongsTo(Matauang::class, 'matauang_default', 'id');
     }

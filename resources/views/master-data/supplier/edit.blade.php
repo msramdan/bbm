@@ -35,8 +35,8 @@
                         <h4 class="panel-title">{{ trans('supplier.title.edit') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('supplier.update', $supplier->id) }}" method="post"
-                            novalidate>
+                        <form class="form-horizontal" action="{{ route('supplier.update', $supplier->id) }}"
+                            method="post">
                             @csrf
                             @method('put')
 

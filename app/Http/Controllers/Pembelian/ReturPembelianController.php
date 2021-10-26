@@ -9,6 +9,7 @@ use App\Models\ReturPembelianDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class ReturPembelianController extends Controller
 {
@@ -29,9 +30,40 @@ class ReturPembelianController extends Controller
      */
     public function index()
     {
-        $retur = ReturPembelian::with('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail')->get();
+        if (request()->ajax()) {
+            $retur = ReturPembelian::with('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail');
 
-        return view('pembelian.retur.index', compact('retur'));
+            return Datatables::of($retur)
+                ->addIndexColumn()
+                ->addColumn('action', 'pembelian.retur.data-table.action')
+                ->addColumn('tanggal', function ($row) {
+                    return $row->tanggal->format('d F Y');
+                })
+                ->addColumn('kode_beli', function ($row) {
+                    return $row->pembelian->kode;
+                })
+                ->addColumn('supplier', function ($row) {
+                    return $row->supplier ? $row->supplier->nama_supplier : 'Tanpa Supplier';
+                })
+                ->addColumn('gudang', function ($row) {
+                    return $row->gudang->nama;
+                })
+                ->addColumn('total_barang', function ($row) {
+                    return $row->retur_pembelian_detail_count;
+                })
+                ->addColumn('grand_total', function ($row) {
+                    return $row->pembelian->matauang->kode . ' ' . number_format($row->total_netto);
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('pembelian.retur.index');
     }
 
     /**

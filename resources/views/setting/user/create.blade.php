@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('user.store') }}" method="post" novalidate>
+                        <form class="form-horizontal" action="{{ route('user.store') }}" method="post">
                             @csrf
                             @method('post')
 

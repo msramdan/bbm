@@ -33,8 +33,7 @@
                         <h4 class="panel-title">{{ trans('rekening_bank.title.tambah') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('satuan-barang.store') }}" method="post"
-                            novalidate>
+                        <form class="form-horizontal" action="{{ route('satuan-barang.store') }}" method="post">
                             @csrf
 
                             <div class="form-group">

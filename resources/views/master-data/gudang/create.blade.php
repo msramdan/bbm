@@ -33,7 +33,7 @@
                         <h4 class="panel-title">{{ trans('gudang.title.tambah') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('gudang.store') }}" method="post" novalidate>
+                        <form class="form-horizontal" action="{{ route('gudang.store') }}" method="post">
                             @csrf
 
                             <div class="form-group">

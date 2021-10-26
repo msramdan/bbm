@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreMataUangRequest, UpdateMataUangRequest};
 use App\Models\Matauang;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class MatauangController extends Controller
 {
@@ -20,8 +21,26 @@ class MatauangController extends Controller
 
     public function index()
     {
-        $matauang = Matauang::all();
-        return view('master-data.matauang.index', compact('matauang'));
+        if (request()->ajax()) {
+            return Datatables::of(Matauang::query())
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.matauang.data-table.action')
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('default', function ($row) {
+                    return $row->default == 'Y' ? 'Ya' : 'Tidak';
+                })
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('master-data.matauang.index');
     }
 
     public function create()

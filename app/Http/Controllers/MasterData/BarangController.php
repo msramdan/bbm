@@ -7,6 +7,7 @@ use App\Http\Requests\{StoreBarangRequest, UpdateBarangRequest};
 use App\Models\Barang;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class BarangController extends Controller
 {
@@ -26,9 +27,52 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $barang = Barang::with('kategori', 'satuan', 'matauang_beli', 'mata_uang_jual')->get();
+        $barang = Barang::with('kategori', 'satuan', 'matauang_beli', 'mata_uang_jual')->orderByDesc('id');
 
-        return view('master-data.barang.index', compact('barang'));
+        if (request()->ajax()) {
+            return Datatables::of($barang)
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.barang.data-table.action')
+                ->addColumn('gambar', function ($row) {
+                    if ($row->gambar == 'noimage.png') {
+                        $gambar = asset('img/noimage.png');
+                    } else {
+                        $gambar = asset('storage/img/barang/' . $row->gambar);
+                    }
+
+                    return $gambar;
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('default', function ($row) {
+                    return $row->default == 'Y' ? 'Ya' : 'Tidak';
+                })
+                ->addColumn('jenis', function ($row) {
+                    return $row->jenis == 1 ? 'Barang' : 'Paket';
+                })
+                ->addColumn('kategori', function ($row) {
+                    return $row->kategori->nama;
+                })
+                ->addColumn('satuan', function ($row) {
+                    return $row->satuan->nama;
+                })
+                ->addColumn('harga_beli', function ($row) {
+                    return $row->matauang_beli->kode . ' ' . number_format($row->harga_beli);
+                })
+                ->addColumn('harga_jual', function ($row) {
+                    return $row->mata_uang_jual->kode . ' ' . number_format($row->harga_jual);
+                })
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->make(true);
+        }
+
+        return view('master-data.barang.index');
     }
 
     /**

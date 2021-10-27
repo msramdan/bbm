@@ -371,3 +371,25 @@ Breadcrumbs::for('penjualan_show', function (BreadcrumbTrail $trail) {
     $trail->parent('penjualan');
     $trail->push('Show');
 });
+
+
+// Master Data > Retur Penjualan
+Breadcrumbs::for('retur_penjualan', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Retur Penjualan', route('retur-penjualan.index'));
+});
+// Master Data > Retur Penjualan  > Tambah
+Breadcrumbs::for('retur_penjualan_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_penjualan');
+    $trail->push('Tambah', route('retur-penjualan.create'));
+});
+// Master Data > Retur Penjualan  > Edit
+Breadcrumbs::for('retur_penjualan_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_penjualan');
+    $trail->push('Edit');
+});
+// Master Data > Retur Penjualan  > Show
+Breadcrumbs::for('retur_penjualan_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('retur_penjualan');
+    $trail->push('Show');
+});

@@ -33,7 +33,8 @@ return [
         'user' => 'User',
         'akun' => 'Account',
         'profile' => 'Profile',
-        'penjualan' => 'Sales'
+        'penjualan' => 'Sales',
+        'retur_penjualan' => 'Sales Return'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

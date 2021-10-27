@@ -58,7 +58,7 @@
                 <ul class="dropdown-menu animated fadeInLeft">
                     <li class="arrow"></li>
                     <li>
-                        <a href="javascript:;">{{ trans('dashboard.link.profile') }}</a>
+                        <a href="{{ route('profile.index') }}">{{ trans('dashboard.link.profile') }}</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ route('logout') }}"

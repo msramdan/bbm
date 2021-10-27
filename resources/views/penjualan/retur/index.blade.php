@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('retur_pembelian.title.index'))
+@section('title', trans('retur_penjualan.title.index'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('retur_pembelian') }}
+        {{ Breadcrumbs::render('retur_penjualan') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -31,8 +31,8 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('retur-pembelian.create') }}" class="btn btn-success">
-                            <i class="fa fa-plus-square-o"></i> {{ trans('retur_pembelian.button.tambah') }}
+                        <a href="{{ route('retur-penjualan.create') }}" class="btn btn-success">
+                            <i class="fa fa-plus-square-o"></i> {{ trans('retur_penjualan.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
@@ -42,17 +42,16 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode</th>
-                                        <th>Kode Pembelian</th>
+                                        <th>Kode penjualan</th>
                                         <th>Tanggal</th>
-                                        <th>Supplier</th>
                                         <th>Gudang</th>
                                         <th>Rate</th>
                                         <th>Total Item</th>
                                         <th>Grandtotal</th>
                                         <th>Created At</th>
                                         <th>Updated At</th>
-                                        @if (auth()->user()->can('edit retur pembelian') ||
-        auth()->user()->can('delete retur pembelian'))
+                                        @if (auth()->user()->can('edit retur penjualan') ||
+        auth()->user()->can('delete retur penjualan'))
                                             <th>Action</th>
                                         @endif
                                     </tr>
@@ -73,8 +72,8 @@
 @push('custom-js')
     <script>
         const action =
-            '{{ auth()->user()->can('edit retur pembelian') ||
-auth()->user()->can('delete retur pembelian')
+            '{{ auth()->user()->can('edit retur penjualan') ||
+auth()->user()->can('delete retur penjualan')
     ? 'yes yes yes'
     : '' }}'
 
@@ -89,16 +88,12 @@ auth()->user()->can('delete retur pembelian')
                 name: 'kode'
             },
             {
-                data: 'kode_beli',
-                name: 'kode_beli'
+                data: 'kode_jual',
+                name: 'kode_jual'
             },
             {
                 data: 'tanggal',
                 name: 'tanggal'
-            },
-            {
-                data: 'supplier',
-                name: 'supplier'
             },
             {
                 data: 'gudang',
@@ -138,7 +133,7 @@ auth()->user()->can('delete retur pembelian')
         $('.data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('retur-pembelian.index') }}",
+            ajax: "{{ route('retur-penjualan.index') }}",
             columns: columns,
         });
     </script>

@@ -122,18 +122,20 @@ class PembelianController extends Controller
                 ]);
             }
 
-            foreach ($request->bank as $i => $value) {
-                $pembayaran[] = new PembelianPembayaran([
-                    'jenis_pembayaran' => $request->jenis_pembayaran[$i],
-                    'bank_id' => $request->bank[$i],
-                    'rekening_bank_id' => $request->rekening[$i],
-                    'tgl_cek_giro' => $request->tgl_cek_giro[$i],
-                    'no_cek_giro' => $request->no_cek_giro[$i],
-                    'bayar' => $request->bayar[$i],
-                ]);
-            }
+            if ($request->jenis_pembayaran && $request->bayar) {
+                foreach ($request->bank as $i => $value) {
+                    $pembayaran[] = new PembelianPembayaran([
+                        'jenis_pembayaran' => $request->jenis_pembayaran[$i],
+                        'bank_id' => $request->bank[$i],
+                        'rekening_bank_id' => $request->rekening[$i],
+                        'tgl_cek_giro' => $request->tgl_cek_giro[$i],
+                        'no_cek_giro' => $request->no_cek_giro[$i],
+                        'bayar' => $request->bayar[$i],
+                    ]);
+                }
 
-            $pembelian->pembelian_pembayaran()->saveMany($pembayaran);
+                $pembelian->pembelian_pembayaran()->saveMany($pembayaran);
+            }
 
             $pembelian->pembelian_detail()->saveMany($pembelianDetail);
         });
@@ -270,6 +272,8 @@ class PembelianController extends Controller
 
     protected function getRekeningByBankId($id)
     {
+        abort_if(!request()->ajax(), 404);
+
         $rekening = RekeningBank::whereBankId($id)->get();
 
         return response()->json($rekening, 200);
@@ -277,6 +281,8 @@ class PembelianController extends Controller
 
     protected function getDataPO($id)
     {
+        abort_if(!request()->ajax(), 404);
+
         $pesananPembelian = PesananPembelian::with('supplier', 'matauang')->findOrFail($id);
 
         return response()->json($pesananPembelian, 200);

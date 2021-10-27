@@ -14,18 +14,22 @@
             get_kode()
         })
 
-        $('select[name="pembelian_id"]').change(function() {
+        $('select[name="penjualan_id"]').change(function() {
             $.ajax({
                 type: 'GET',
-                url: '/beli/retur-pembelian/get-pembelian/' + $(this).val(),
+                url: '/jual/retur-penjualan/get-penjualan/' + $(this).val(),
                 success: function(data) {
-                    let supplier = $('#supplier')
+                    let pelanggan = $('#pelanggan')
                     let matauang = $('#matauang')
+                    let salesman = $('#salesman')
+                    let alamat = $('#alamat')
                     let bentuk_kepemilikan = $('#bentuk_kepemilikan')
                     let tbl_trx = $('#tbl_trx tbody')
 
-                    supplier.val('Loading...')
+                    pelanggan.val('Loading...')
+                    salesman.val('Loading...')
                     matauang.val('Loading...')
+                    alamat.val('Loading...')
                     bentuk_kepemilikan.val('Loading...')
                     tbl_trx.html(`
                     <tr>
@@ -35,15 +39,16 @@
                     </tr>`)
 
                     setTimeout(() => {
-                        supplier.val(data.supplier ? data.supplier.nama_supplier :
-                            'Tanpa Supplier')
-                        matauang.val(data.matauang.nama)
+                        pelanggan.val(data.pelanggan.nama_pelanggan)
+                        matauang.val(data.matauang.kode + ' ' + data.matauang.nama)
+                        salesman.val(data.salesman.nama)
+                        alamat.val(data.alamat)
                         bentuk_kepemilikan.val(data.bentuk_kepemilikan_stok)
 
                         let data_trx = []
                         let no = 1
 
-                        $.each(data.pembelian_detail, function(index, item) {
+                        $.each(data.penjualan_detail, function(index, item) {
                             data_trx.push(`<tr>
                                 <td>${no++}</td>
                                 <td>
@@ -80,18 +85,6 @@
                                     <input type="hidden"  class="ppn_hidden" name="ppn[]" value="${item.ppn}">
                                 </td>
                                 <td>
-                                    ${format_ribuan(item.pph)}
-                                    <input type="hidden"  class="pph_hidden" name="pph[]" value="${item.pph}">
-                                </td>
-                                <td>
-                                    ${format_ribuan(item.biaya_masuk)}
-                                    <input type="hidden"  class="biaya_masuk_hidden" name="biaya_masuk[]" value="${item.biaya_masuk}">
-                                </td>
-                                <td>
-                                    ${format_ribuan(item.clr_fee)}
-                                    <input type="hidden"  class="clr_fee_hidden" name="clr_fee[]" value="${item.clr_fee}">
-                                </td>
-                                <td>
                                     ${format_ribuan(item.netto)}
                                     <input type="hidden"  class="netto_hidden" name="netto[]" value="${item.netto}">
                                 </td>
@@ -108,29 +101,17 @@
                         hitung_netto()
 
                         cek_table_length()
+
+                        hitung_semua_total()
                     }, 1000)
                 }
             })
         })
 
-        $('#qty_retur_input, #checkbox_ppn, #checkbox_pph')
+        $('#qty_retur_input, #checkbox_ppn')
             .on('keyup keydown change',
                 function() {
-                    // let qty_beli = $('#qty_beli_input').val()
-                    // let qty_retur = $('#qty_retur_input').val()
-                    // let harga = $('#harga_input').val()
-
-                    // if (qty_beli == qty_retur || qty_retur > qty_beli) {
-                    //     gross = harga
-                    // } else {
-                    //     gross = (qty_beli - qty_retur) * harga
-                    // }
-
-                    // $('#gross_input').val(gross)
-
                     hitung_netto()
-                    // asdjaja
-
                     cek_form_entry()
                 })
 
@@ -141,27 +122,20 @@
             let harga = $('#harga_input').val()
             let qty_retur = $('#qty_retur_input').val()
             let ppn = $('#ppn_input').val()
-            let pph = $('#pph_input').val()
+
             let diskon = $('#diskon_input').val()
-            let diskon_persen = $('#diskon_persen_input').val() ? parseFloat($('#diskon_persen_input').val()) :
-                0
-            let biaya_masuk = $('#biaya_masuk_input').val() ? parseFloat($('#biaya_masuk_input').val()) : 0
-            let clr_fee = $('#clr_fee_input').val() ? parseFloat($('#clr_fee_input').val()) : 0
+            let diskon_persen = $('#diskon_persen_input').val() ? parseFloat($('#diskon_persen_input').val()) : 0
+
             let netto = $('#netto_input').val()
 
             let gross = harga * qty_retur
 
             // cek duplikasi barang
             $('input[name="barang_id[]"]').each(function() {
-                // cari index tr ke berapa
                 let index = $(this).parent().parent().index()
 
-                // kalo id barang di cart dan form input(barang) sama
-                //  kalo id supplier di cart dan form input(barang) sama
                 if ($(this).val() == kode_barang.val()) {
-                    // hapus tr berdasarkan index
                     $('#tbl_trx tbody tr:eq(' + index + ')').remove()
-
                     generate_nomer()
                 }
             })
@@ -197,18 +171,6 @@
                     <td>
                         ${format_ribuan(ppn)}
                         <input type="hidden"  class="ppn_hidden" name="ppn[]" value="${ppn}">
-                    </td>
-                    <td>
-                        ${format_ribuan(pph)}
-                        <input type="hidden"  class="pph_hidden" name="pph[]" value="${pph}">
-                    </td>
-                    <td>
-                        ${format_ribuan(biaya_masuk)}
-                        <input type="hidden"  class="biaya_masuk_hidden" name="biaya_masuk[]" value="${biaya_masuk}">
-                    </td>
-                    <td>
-                        ${format_ribuan(clr_fee)}
-                        <input type="hidden"  class="clr_fee_hidden" name="clr_fee[]" value="${clr_fee}">
                     </td>
                     <td>
                         ${format_ribuan(netto)}
@@ -249,10 +211,10 @@
         $('#btn_clear_table').click(function() {
             $('#tbl_trx tbody tr').remove()
 
-            $('#pembelian_id option:eq(0)').attr('selected', 'selected')
+            $('#penjualan_id option:eq(0)').attr('selected', 'selected')
             $('#gudang option:eq(0)').attr('selected', 'selected')
             $('#rate').val('')
-            $('#supplier').val('')
+            $('#pelanggan').val('')
             $('#matauang').val('')
             $('#bentuk_kepemilikan').val('')
 
@@ -267,7 +229,7 @@
             if (
                 !$('input[name="tanggal"]').val() ||
                 !$('input[name="rate"]').val() ||
-                !$('select[name="pembelian_id"]').val() ||
+                !$('select[name="penjualan_id"]').val() ||
                 !$('select[name="gudang"]').val()
             ) {
                 $('select[name="gudang"]').focus()
@@ -275,7 +237,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Mohon isi data Retur Pembelian - Header terlebih dahulu!'
+                    text: 'Mohon isi data Retur penjualan - Header terlebih dahulu!'
                 })
             } else {
                 $(this).prop('disabled', true)
@@ -284,22 +246,17 @@
                 let data = {
                     // header
                     kode: $('input[name="kode"]').val(),
-                    pembelian_id: $('select[name="pembelian_id"]').val(),
+                    penjualan_id: $('select[name="penjualan_id"]').val(),
                     tanggal: $('input[name="tanggal"]').val(),
-                    matauang: $('select[name="matauang"]').val(),
-                    gudang: $('select[name="gudang"]').val(),
                     rate: $('input[name="rate"]').val(),
+                    gudang: $('select[name="gudang"]').val(),
                     keterangan: $('#keterangan').val(),
-                    bentuk_kepemilikan: $('#bentuk_kepemilikan').val(),
 
                     // list
                     subtotal: $('#subtotal').val(),
                     total_ppn: $('#total_ppn').val(),
-                    total_pph: $('#total_pph').val(),
                     total_diskon: $('#total_diskon').val(),
-                    total_biaya_masuk: $('#total_biaya_masuk').val(),
                     total_gross: $('#total_gross').val(),
-                    total_clr_fee: $('#total_clr_fee').val(),
                     total_netto: $('#total_netto').val(),
 
                     // detail barang
@@ -327,23 +284,14 @@
                     ppn: $('input[name="ppn[]"]').map(function() {
                         return $(this).val()
                     }).get(),
-                    pph: $('input[name="pph[]"]').map(function() {
-                        return $(this).val()
-                    }).get(),
-                    biaya_masuk: $('input[name="biaya_masuk[]"]').map(function() {
-                        return $(this).val()
-                    }).get(),
                     netto: $('input[name="netto[]"]').map(function() {
-                        return $(this).val()
-                    }).get(),
-                    clr_fee: $('input[name="clr_fee[]"]').map(function() {
                         return $(this).val()
                     }).get(),
                 }
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('retur-pembelian.store') }}',
+                    url: '{{ route('retur-penjualan.store') }}',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -352,15 +300,17 @@
                         $('#tbl_trx tbody tr').remove()
 
                         $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-                        $('select[name="pembelian_id"] option[value=""]').attr('selected', 'selected')
+                        $('select[name="penjualan_id"] option[value=""]').attr('selected', 'selected')
                         $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
                         $('input[name="rate"]').val('')
                         $('textarea[name="keterangan"]').val('')
                         $('input[name="bentuk_kepemilikan"]').val('')
                         $('#rate').val('')
-                        $('#supplier').val('')
+                        $('#pelanggan').val('')
+                        $('#salesman').val('')
                         $('#matauang').val('')
                         $('#bentuk_kepemilikan').val('')
+                        $('#alamat').val('')
 
                         clear_form_entry()
                         hitung_semua_total()
@@ -401,9 +351,6 @@
             let diskon = $('.diskon_hidden:eq(' + index + ')').val()
             let diskon_persen = $('.diskon_persen_hidden:eq(' + index + ')').val()
             let ppn = $('.ppn_hidden:eq(' + index + ')').val()
-            let pph = $('.pph_hidden:eq(' + index + ')').val()
-            let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
-            let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
 
             $('#harga_input').val(harga)
@@ -412,13 +359,9 @@
             $('#diskon_input').val(diskon)
             $('#diskon_persen_input').val(diskon_persen)
             $('#ppn_input').val(ppn)
-            $('#pph_input').val(pph)
-            $('#biaya_masuk_input').val(biaya_masuk)
-            $('#clr_fee_input').val(clr_fee)
             $('#netto_input').val(netto)
             $('#barang_input').val(barang_text)
             $('#barang_hidden').val(barang_id)
-            // $('#qty_retur_input').val(qty_retur < 1 ? 1 : qty_retur)
 
             $('#btn_add').hide()
             $('#btn_update').show()
@@ -456,17 +399,10 @@
             let qty_beli = $('#qty_beli_input').val()
             let qty_retur = $('#qty_retur_input').val()
             let ppn = $('#ppn_input').val()
-            let pph = $('#pph_input').val()
             let diskon = $('#diskon_input').val()
 
             let diskon_persen = $('#diskon_persen_input').val() ?
                 parseFloat($('#diskon_persen_input').val()) : 0
-
-            let biaya_masuk = $('#biaya_masuk_input').val() ?
-                parseFloat($('#biaya_masuk_input').val()) : 0
-
-            let clr_fee = $('#clr_fee_input').val() ?
-                parseFloat($('#clr_fee_input').val()) : 0
 
             let netto = $('#netto_input').val()
 
@@ -501,15 +437,6 @@
             <td> ${format_ribuan(ppn)}
                 <input type="hidden" class="ppn_hidden" name="ppn[]" value="${ppn}">
             </td>
-            <td> ${format_ribuan(pph)}
-                <input type="hidden" class="pph_hidden" name="pph[]" value="${pph}">
-            </td>
-            <td> ${format_ribuan(biaya_masuk)}
-                <input type="hidden" class="biaya_masuk_hidden" name="biaya_masuk[]" value="${biaya_masuk}">
-            </td>
-            <td> ${format_ribuan(clr_fee)}
-                <input type="hidden" class="clr_fee_hidden" name="clr_fee[]" value="${clr_fee}">
-            </td>
             <td> ${format_ribuan(netto)}
                 <input type="hidden" class="netto_hidden" name="netto[]" value="${netto}">
             </td>
@@ -533,13 +460,10 @@
             $('#qty_beli_input').val('')
             $('#qty_retur_input').val('')
             $('#ppn_input').val('')
-            $('#pph_input').val('')
             $('#gross_input').val('')
             $('#netto_input').val('')
             $('#diskon_input').val('')
             $('#diskon_persen_input').val('')
-            $('#biaya_masuk_input').val('')
-            $('#clr_fee_input').val('')
 
             $('#btn_update').hide()
             $('#btn_add').show()
@@ -551,7 +475,7 @@
         // ajax get kode
         function get_kode() {
             $.ajax({
-                url: "/beli/retur-pembelian/generate-kode/" + $('input[name="tanggal"]').val(),
+                url: "/jual/retur-penjualan/generate-kode/" + $('input[name="tanggal"]').val(),
                 type: 'GET',
                 success: function(data) {
                     $('input[name="kode"]').val('Loading...')
@@ -565,53 +489,31 @@
 
         function hitung_semua_total() {
             let subtotal = 0
-            let total_pph = 0
             let total_ppn = 0
             let total_diskon = 0
-            let total_biaya_masuk = 0
             let total_gross = 0
-            let total_clr_fee = 0
             let total_netto = 0
             let matauang = $('#matauang option:selected').html()
 
             $('input[name="harga[]"]').map(function() {
                 subtotal += parseFloat($(this).val())
             }).get()
-
-            $('input[name="pph[]"]').map(function() {
-                total_pph += parseFloat($(this).val())
-            }).get()
-
             $('input[name="ppn[]"]').map(function() {
                 total_ppn += parseFloat($(this).val())
             }).get()
-
             $('input[name="diskon[]"]').map(function() {
                 total_diskon += parseFloat($(this).val())
             }).get()
-
-            $('input[name="biaya_masuk[]"]').map(function() {
-                total_biaya_masuk += parseFloat($(this).val())
-            }).get()
-
-            $('input[name="clr_fee[]"]').map(function() {
-                total_clr_fee += parseFloat($(this).val())
-            }).get()
-
             $('input[name="netto[]"]').map(function() {
                 total_netto += parseFloat($(this).val())
             }).get()
-
             $('input[name="gross[]"]').map(function() {
                 total_gross += parseFloat($(this).val())
             }).get()
 
             $('#subtotal').val(subtotal)
             $('#total_ppn').val(total_ppn)
-            $('#total_pph').val(total_pph)
             $('#total_diskon').val(total_diskon)
-            $('#total_biaya_masuk').val(total_biaya_masuk)
-            $('#total_clr_fee').val(total_clr_fee)
             $('#total_netto').val(total_netto)
             $('#total_gross').val(total_gross)
 
@@ -619,7 +521,6 @@
         }
 
         function hitung_netto() {
-
             let harga = $('#harga_input').val() ?
                 parseFloat($('#harga_input').val()) : 0
 
@@ -632,12 +533,6 @@
             let diskon_persen = $('#diskon_persen_input').val() ?
                 parseFloat($('#diskon_persen_input').val()) : 0
 
-            let biaya_masuk = $('#biaya_masuk_input').val() ?
-                parseFloat($('#biaya_masuk_input').val()) : 0
-
-            let clr_fee = $('#clr_fee_input').val() ?
-                parseFloat($('#clr_fee_input').val()) : 0
-
             if (qty_retur > qty_beli) {
                 $('#qty_retur_input').focus()
                 $('#qty_retur_input').val('1')
@@ -648,35 +543,19 @@
                     text: 'Qty Retur tidak boleh lebih besar dari Qty Beli!'
                 })
             } else {
-                // let qty_hasil = 0
-                // if (qty_beli == qty_retur || qty_retur > qty_beli) {
-                //     qty_hasil = 0
-                // } else {
-                //     qty_hasil = qty_beli - qty_retur
-                // }
-
                 let diskon = harga * (diskon_persen / 100)
                 let gross = (harga * qty_retur) - diskon
 
-                // let gross = (harga * (qty_beli - qty_retur)) - diskon
-
                 let ppn = 0
-                let pph = 0
 
                 if ($('#checkbox_ppn').is(':checked')) {
-                    // gross*10%
                     ppn = gross * 0.1
                 }
 
-                if ($('#checkbox_pph').is(':checked')) {
-                    pph = ppn / 4
-                }
-
-                let netto = gross + ppn + pph + biaya_masuk + clr_fee
+                let netto = gross + ppn
 
                 $('#diskon_input').val(diskon)
                 $('#ppn_input').val(ppn)
-                $('#pph_input').val(pph)
                 $('#netto_input').val(netto)
                 $('#gross_input').val(gross)
             }

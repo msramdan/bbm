@@ -8,6 +8,7 @@ use App\Http\Controllers\MasterData\{AreaController, BankController, BarangContr
 use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController};
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
 use App\Http\Controllers\Penjualan\PenjualanController;
+use App\Http\Controllers\Penjualan\ReturPenjualanController;
 use App\Http\Controllers\Setting\TokoController;
 use App\Http\Controllers\Setting\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -106,6 +107,12 @@ Route::group(['prefix' => 'jual', 'middleware' => ['web', 'auth']], function () 
     Route::get('/penjualan/generate-kode/{tanggal}', [PenjualanController::class, 'generateKode'])->name('penjualan.generateKode');
     Route::get('/penjualan/get-rekening/{id}', [PenjualanController::class, 'getRekeningByBankId'])->name('penjualan.getRekeningByBankId');
     Route::get('/penjualan/get-alamat/{tanggal}', [PenjualanController::class, 'getAlamatPelanggan'])->name('penjualan.getAlamatPelanggan');
-
     Route::resource('/penjualan', PenjualanController::class)->except('store', 'update');
+
+    // Retur Penjualan
+    Route::post('/retur-penjualan/store', [ReturPenjualanController::class, 'store'])->name('retur-penjualan.store');
+    Route::put('/retur-penjualan/update/{returPenjualan:id}', [ReturPenjualanController::class, 'update'])->name('retur-penjualan.update');
+    Route::get('/retur-penjualan/generate-kode/{tanggal}', [ReturPenjualanController::class, 'generateKode']);
+    Route::get('/retur-penjualan/get-penjualan/{penjualan:id}', [ReturPenjualanController::class, 'getPenjualanById']);
+    Route::resource('/retur-penjualan', ReturPenjualanController::class)->except('store', 'update');
 });

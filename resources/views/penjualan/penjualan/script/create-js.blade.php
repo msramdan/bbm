@@ -744,8 +744,8 @@
 
             let ppn = 0
 
-            if ($('#checkbox_pph').is(':checked')) {
-                pph = ppn / 4
+            if ($('#checkbox_ppn').is(':checked')) {
+                ppn = gross * 0.1
             }
 
             let netto = gross + ppn

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\{Area, Bank, Barang, Gudang, Kategori, Matauang, Pelanggan, Pembelian, PesananPembelian, Salesman, SatuanBarang, Supplier};
+use App\Models\{Area, Bank, Barang, Gudang, Kategori, Matauang, Pelanggan, Pembelian, Penjualan, PesananPembelian, Salesman, SatuanBarang, Supplier};
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\{Role, Permission};
 use Illuminate\Support\Facades\View;
@@ -69,7 +69,9 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.retur.create',
             'pembelian.retur.edit',
             'penjualan.penjualan.edit',
-            'penjualan.penjualan.create'
+            'penjualan.penjualan.create',
+            'penjualan.retur.edit',
+            'penjualan.retur.create'
         ], function ($view) {
             return $view->with('gudang', Gudang::all());
         });
@@ -112,10 +114,20 @@ class ViewServiceProvider extends ServiceProvider
             return $view->with('pesananPembelian', PesananPembelian::all());
         });
 
+
+        // list penjualan
+        View::composer([
+            'penjualan.retur.create'
+        ], function ($view) {
+            return $view->with('penjualan', Penjualan::all());
+        });
+
+
         // list Pelanggan
         View::composer([
             'penjualan.penjualan.create',
             'penjualan.penjualan.edit',
+            'penjualan.retur.create'
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::all());
         });

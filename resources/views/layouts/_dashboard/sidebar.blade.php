@@ -179,6 +179,12 @@
                                 {{ trans('dashboard.menu.penjualan') }}
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('retur-penjualan.index') }}">
+                                {{ trans('dashboard.menu.retur_penjualan') }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endhasanyrole

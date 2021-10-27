@@ -268,6 +268,8 @@ class PenjualanController extends Controller
 
     protected function getRekeningByBankId($id)
     {
+        abort_if(!request()->ajax(), 404);
+
         $rekening = RekeningBank::whereBankId($id)->get();
 
         return response()->json($rekening, 200);
@@ -275,6 +277,8 @@ class PenjualanController extends Controller
 
     protected function getAlamatPelanggan($id)
     {
+        abort_if(!request()->ajax(), 404);
+
         return response()->json(Pelanggan::select('alamat')->findOrFail($id), 200);
     }
 }

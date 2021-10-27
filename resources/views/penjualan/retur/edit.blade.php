@@ -1,17 +1,17 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('retur_pembelian.title.edit'))
+@section('title', trans('retur_penjualan.title.edit'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('retur_pembelian_edit') }}
+        {{ Breadcrumbs::render('retur_penjualan_edit') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
             <div class="col-md-12">
                 <!-- begin panel -->
-                <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
+                <div class="panel panel-inverse" data-sortable-id="forma-stuff-1">
                     <div class="panel-heading">
                         <div class="panel-heading-btn">
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default"
@@ -30,7 +30,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('retur_pembelian.title.tambah') }} - Header</h4>
+                        <h4 class="panel-title">{{ trans('retur_penjualan.title.tambah') }} - Header</h4>
                     </div>
 
                     <div class="panel-body">
@@ -40,74 +40,89 @@
                                     <label class="control-label">Kode</label>
 
                                     <input type="text" name="kode" class="form-control" placeholder="Kode" id="kode"
-                                        required readonly />
+                                        value="{{ $returPenjualan->kode }}" required readonly />
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="control-label">Tanggal</label>
-
                                     <input type="date" name="tanggal" class="form-control" required
-                                        value="{{ $returPembelian->tanggal->format('Y-m-d') }}" />
+                                        value="{{ $returPenjualan->tanggal->format('Y-m-d') }}" readonly />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="control-label">Salesman</label>
+                                    <select id="salesman" name="salesman" class="form-control" readonly>
+                                        <option value="{{ $returPenjualan->penjualan->salesman->nama }}">
+                                            {{ $returPenjualan->penjualan->salesman->nama }}</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="control-label">Gudang</label>
-
-                                    <select id="gudang" name="gudang" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
+                                    <select name="gudang" id="gudang" class="form-control" required>
                                         @forelse ($gudang as $item)
-                                            <option {{ $returPembelian->gudang_id == $item->id ? 'selected' : '' }}
-                                                value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            <option value="{{ $item->id }}"
+                                                {{ $returPenjualan->gudang_id == $item->id ? 'selected' : '' }}>
+                                                {{ $item->nama }}</option>
                                         @empty
                                             <option value="" disabled>Data tidak ditemukan</option>
                                         @endforelse
                                     </select>
                                 </div>
-
-                                <div class="col-md-3">
-                                    <label class="control-label">Kode Pembelian</label>
-
-                                    <select id="pembelian_id" name="pembelian_id" class="form-control" readonly>
-                                        <option value="{{ $returPembelian->pembelian->kode }}">
-                                            {{ $returPembelian->pembelian->kode }}</option>
-                                    </select>
-                                </div>
+                                {{-- end col-md-3 --}}
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-md-3">
-                                    <label for="supplier" class="control-label">Supplier</label>
-                                    <input type="text" id="supplier" name="supplier" class="form-control"
-                                        placeholder="Supplier"
-                                        value="{{ $returPembelian->pembelian->supplier ? $returPembelian->pembelian->supplier->nama_supplier : 'Tanpa Supplier' }}"
-                                        disabled />
+                                    <label class="control-label">Pelanggan</label>
+
+                                    <select name="pelanggan" id="pelanggan" class="form-control" readonly>
+                                        <option value="{{ $returPenjualan->penjualan->pelanggan->nama_pelanggan }}">
+                                            {{ $returPenjualan->penjualan->pelanggan->nama_pelanggan }}
+                                        </option>
+                                    </select>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <label for="matauang" class="control-label">Mata Uang</label>
-                                    <input type="text" id="matauang" name="matauang" class="form-control"
-                                        placeholder="Mata Uang" value="{{ $returPembelian->pembelian->matauang->nama }}"
-                                        disabled />
-                                </div>
-
+                                {{-- Bentuk stok --}}
                                 <div class="col-md-3">
                                     <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
-                                    <input type="text" name="bentuk_kepemilikan" id="bentuk_kepemilikan"
-                                        class="form-control" placeholder="Bentuk Kepemilikan Stok"
-                                        value="{{ $returPembelian->pembelian->bentuk_kepemilikan_stok }}" disabled />
+                                    <select name="bentuk_kepemilikan" id="bentuk_kepemilikan" class="form-control"
+                                        readonly>
+                                        <option value="{{ $returPenjualan->penjualan->bentuk_kepemilikan_stok }}">
+                                            {{ $returPenjualan->penjualan->bentuk_kepemilikan_stok }}</option>
+                                    </select>
                                 </div>
+
+                                <div class="col-md-3">
+                                    <label class="control-label">Mata Uang</label>
+
+                                    <select name="matauang" id="matauang" class="form-control" readonly>
+                                        <option value="{{ $returPenjualan->penjualan->matauang_id }}">
+                                            {{ $returPenjualan->penjualan->matauang->kode }}
+                                        </option>
+                                    </select>
+                                </div>
+                                {{-- end col-md-3 --}}
 
                                 <div class="col-md-3">
                                     <label class="control-label">Rate</label>
                                     <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
-                                        value="{{ $returPembelian->rate }}" readonly />
+                                        value="{{ $returPenjualan->penjualan->rate }}" />
                                 </div>
                             </div>
 
-                            <div class="form-group" style="margin-top: 1em;">
-                                <label class="control-label">Keterangan</label>
-                                <textarea name="keterangan" id="keterangan" rows="5"
-                                    class="form-control">{{ $returPembelian->keterangan }}</textarea>
+                            <div class="form-group row" style="margin-top: 1em;">
+                                <div class="col-md-6">
+                                    <label class="control-label">Alamat Penerima</label>
+                                    <textarea name="alamat" id="alamat" rows="5" class="form-control"
+                                        readonly>{{ $returPenjualan->penjualan->alamat }}</textarea>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="control-label">Keterangan</label>
+                                    <textarea name="keterangan" id="keterangan" rows="5"
+                                        class="form-control">{{ $returPenjualan->penjualan->keterangan }}</textarea>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -137,7 +152,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('retur_pembelian.title.tambah') }} - List</h4>
+                        <h4 class="panel-title">{{ trans('retur_penjualan.title.tambah') }} - List</h4>
                     </div>
 
                     <div class="panel-body">
@@ -182,49 +197,25 @@
                                 </div>
 
                                 {{-- Diskon --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="diskon">Diskon</label>
                                     <input type="number" step="any" name="diskon_input" id="diskon_input"
                                         class="form-control" disabled placeholder="0" />
                                 </div>
 
                                 {{-- Gross --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="gross_input">Gross</label>
                                     <input type="number" step="any" name="gross" id="gross_input" class="form-control"
                                         disabled placeholder="0" />
                                 </div>
 
                                 {{-- ppn --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="ppn">PPN</label>
                                     <input type="checkbox" id="checkbox_ppn" checked>
                                     <input type="number" step="any" name="ppn" id="ppn_input" class="form-control"
                                         disabled placeholder="0" />
-                                </div>
-
-                                {{-- PPH --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
-                                    <label for="qty">PPH</label>
-                                    <input type="checkbox" id="checkbox_pph" checked>
-                                    <input type="number" step="any" name="pph" id="pph_input" class="form-control"
-                                        readonly placeholder="0" />
-                                </div>
-                            </div>
-
-                            <div class="row form-group">
-                                {{-- Biaya Masuk --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
-                                    <label for="biaya_masuk">Biaya Masuk</label>
-                                    <input type="number" step="any" name="biaya_masuk" id="biaya_masuk_input"
-                                        class="form-control" placeholder="Biaya Masuk" disabled />
-                                </div>
-
-                                {{-- Clr. Fee --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
-                                    <label for="clr_fee">Clr. Fee</label>
-                                    <input type="number" step="any" name="clr_fee" id="clr_fee_input" class="form-control"
-                                        placeholder="Clr. Fee" disabled />
                                 </div>
 
                                 {{-- Netto --}}
@@ -274,15 +265,12 @@
                                                 <th>Disc</th>
                                                 <th>Gross</th>
                                                 <th>PPN</th>
-                                                <th>PPH</th>
-                                                <th>B. Msk</th>
-                                                <th>Clr. Fee</th>
                                                 <th>Total</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($returPembelian->retur_pembelian_detail as $detail)
+                                            @foreach ($returPenjualan->retur_penjualan_detail as $detail)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $detail->barang->kode . ' - ' . $detail->barang->nama }}
@@ -327,21 +315,6 @@
                                                             value="{{ $detail->ppn }}">
                                                     </td>
                                                     <td>
-                                                        {{ number_format($detail->pph) }}
-                                                        <input type="hidden" class="pph_hidden" name="pph[]"
-                                                            value="{{ $detail->pph }}">
-                                                    </td>
-                                                    <td>
-                                                        {{ number_format($detail->biaya_masuk) }}
-                                                        <input type="hidden" class="biaya_masuk_hidden"
-                                                            name="biaya_masuk[]" value="{{ $detail->biaya_masuk }}">
-                                                    </td>
-                                                    <td>
-                                                        {{ number_format($detail->clr_fee) }}
-                                                        <input type="hidden" class="clr_fee_hidden" name="clr_fee[]"
-                                                            value=" {{ $detail->clr_fee }}">
-                                                    </td>
-                                                    <td>
                                                         {{ number_format($detail->netto) }}
                                                         <input type="hidden" class="netto_hidden" name="netto[]"
                                                             value="{{ $detail->netto }}">
@@ -365,13 +338,6 @@
                                             placeholder="0" readonly />
                                     </div>
 
-                                    {{-- Total PPH --}}
-                                    <div class="col-md-4">
-                                        <label for="total_pph">Total PPH</label>
-                                        <input type="text" step="any" name="total_pph" id="total_pph"
-                                            class="form-control" placeholder="0" readonly />
-                                    </div>
-
                                     {{-- Total PPN --}}
                                     <div class="col-md-4">
                                         <label for="total_ppn">Total PPN</label>
@@ -386,24 +352,10 @@
                                             class="form-control" placeholder="0" readonly />
                                     </div>
 
-                                    {{-- Total Biaya Masuk --}}
-                                    <div class="col-md-4" style="margin-top: 1em;">
-                                        <label for="total_biaya_masuk">Total Biaya Masuk</label>
-                                        <input type="text" step="any" name="total_biaya_masuk" id="total_biaya_masuk"
-                                            placeholder="0" class="form-control" readonly />
-                                    </div>
-
                                     {{-- Total Gross --}}
                                     <div class="col-md-4" style="margin-top: 1em;">
                                         <label for="total_gross">Total Gross</label>
                                         <input type="text" step="any" name="total_gross" id="total_gross"
-                                            class="form-control" placeholder="0" readonly />
-                                    </div>
-
-                                    {{-- Total Clr. Fee --}}
-                                    <div class="col-md-4" style="margin-top: 1em;">
-                                        <label for="total_clr_fee">Total Clr. Fee</label>
-                                        <input type="text" step="any" name="total_clr_fee" id="total_clr_fee"
                                             class="form-control" placeholder="0" readonly />
                                     </div>
 
@@ -439,4 +391,4 @@
     <!-- end #content -->
 @endsection
 
-@include('pembelian.retur.script.edit-js')
+@include('penjualan.retur.script.edit-js')

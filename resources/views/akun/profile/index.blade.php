@@ -134,8 +134,6 @@
                                 <label class="control-label"></label>
 
                                 <button type="submit" class="btn btn-sm btn-success"> Simpan</button>
-                                <a href="{{ route('profile.index') }}" class="btn btn-sm btn-default"> Cancel
-                                </a>
                             </div>
                         </form>
                     </div>

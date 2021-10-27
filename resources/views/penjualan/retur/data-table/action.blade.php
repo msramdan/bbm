@@ -1,20 +1,20 @@
-@if (auth()->user()->can('edit retur pembelian') ||
-    auth()->user()->can('delete retur pembelian'))
+@if (auth()->user()->can('edit retur penjualan') ||
+    auth()->user()->can('delete retur penjualan'))
     <td>
-        @can('edit retur pembelian')
-            <a href="{{ route('retur-pembelian.edit', $model->id) }}" class="btn btn-success btn-icon btn-circle">
+        @can('edit retur penjualan')
+            <a href="{{ route('retur-penjualan.edit', $model->id) }}" class="btn btn-success btn-icon btn-circle">
                 <i class="fa fa-edit"></i>
             </a>
         @endcan
 
-        @can('detail retur pembelian')
-            <a href="{{ route('retur-pembelian.show', $model->id) }}" class="btn btn-success btn-icon btn-circle">
+        @can('detail retur penjualan')
+            <a href="{{ route('retur-penjualan.show', $model->id) }}" class="btn btn-success btn-icon btn-circle">
                 <i class="fa fa-eye"></i>
             </a>
         @endcan
 
-        @can('delete retur pembelian')
-            <form action="{{ route('retur-pembelian.destroy', $model->id) }}" method="post" class="d-inline"
+        @can('delete retur penjualan')
+            <form action="{{ route('retur-penjualan.destroy', $model->id) }}" method="post" class="d-inline"
                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                 @csrf
                 @method('delete')

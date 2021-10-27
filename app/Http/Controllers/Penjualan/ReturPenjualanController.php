@@ -1,28 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Pembelian;
+namespace App\Http\Controllers\Penjualan;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pembelian;
-use App\Models\ReturPembelian;
-use App\Models\ReturPembelianDetail;
+use App\Models\Penjualan;
+use App\Models\ReturPenjualan;
+use App\Models\ReturPenjualanDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
-class ReturPembelianController extends Controller
+class ReturPenjualanController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('permission:create retur pembelian')->only('create');
-        $this->middleware('permission:read retur pembelian')->only('index');
-        $this->middleware('permission:edit retur pembelian')->only('edit');
-        $this->middleware('permission:detail retur pembelian')->only('show');
-        $this->middleware('permission:update retur pembelian')->only('update');
-        $this->middleware('permission:delete retur pembelian')->only('delete');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -31,28 +21,25 @@ class ReturPembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $retur = ReturPembelian::with('gudang', 'pembelian')->withCount('retur_pembelian_detail');
+            $retur = ReturPenjualan::with('gudang', 'penjualan')->withCount('retur_penjualan_detail');
 
             return Datatables::of($retur)
                 ->addIndexColumn()
-                ->addColumn('action', 'pembelian.retur.data-table.action')
+                ->addColumn('action', 'penjualan.retur.data-table.action')
                 ->addColumn('tanggal', function ($row) {
                     return $row->tanggal->format('d F Y');
                 })
-                ->addColumn('kode_beli', function ($row) {
-                    return $row->pembelian->kode;
-                })
-                ->addColumn('supplier', function ($row) {
-                    return $row->supplier ? $row->supplier->nama_supplier : 'Tanpa Supplier';
+                ->addColumn('kode_jual', function ($row) {
+                    return $row->penjualan->kode;
                 })
                 ->addColumn('gudang', function ($row) {
                     return $row->gudang->nama;
                 })
                 ->addColumn('total_barang', function ($row) {
-                    return $row->retur_pembelian_detail_count;
+                    return $row->retur_penjualan_detail_count;
                 })
                 ->addColumn('grand_total', function ($row) {
-                    return $row->pembelian->matauang->kode . ' ' . number_format($row->total_netto);
+                    return $row->penjualan->matauang->kode . ' ' . number_format($row->total_netto);
                 })
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at->format('d F Y H:i');
@@ -63,7 +50,7 @@ class ReturPembelianController extends Controller
                 ->toJson();
         }
 
-        return view('pembelian.retur.index');
+        return view('penjualan.retur.index');
     }
 
     /**
@@ -73,7 +60,7 @@ class ReturPembelianController extends Controller
      */
     public function create()
     {
-        return view('pembelian.retur.create');
+        return view('penjualan.retur.create');
     }
 
     /**
@@ -85,25 +72,22 @@ class ReturPembelianController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $retur = ReturPembelian::create([
+            $retur = ReturPenjualan::create([
                 'kode' => $request->kode,
                 'tanggal' => $request->tanggal,
-                'pembelian_id' => $request->pembelian_id,
+                'penjualan_id' => $request->penjualan_id,
                 'gudang_id' => $request->gudang,
                 'keterangan' => $request->keterangan,
                 'rate' => $request->rate,
                 'subtotal' => floatval($request->subtotal),
                 'total_ppn' => floatval($request->total_ppn),
-                'total_pph' => floatval($request->total_pph),
                 'total_gross' => floatval($request->total_gross),
                 'total_diskon' => floatval($request->total_diskon),
-                'total_clr_fee' => floatval($request->total_clr_fee),
-                'total_biaya_masuk' => floatval($request->total_biaya_masuk),
                 'total_netto' => floatval($request->total_netto),
             ]);
 
             foreach ($request->barang as $i => $value) {
-                $returDetail[] = new ReturPembelianDetail([
+                $returDetail[] = new ReturPenjualanDetail([
                     'barang_id' => $value,
                     'harga' => $request->harga[$i],
                     'qty_beli' => $request->qty_beli[$i],
@@ -111,15 +95,12 @@ class ReturPembelianController extends Controller
                     'diskon_persen' => floatval($request->diskon_persen[$i]),
                     'diskon' => floatval($request->diskon[$i]),
                     'gross' => floatval($request->gross[$i]),
-                    'biaya_masuk' => floatval($request->biaya_masuk[$i]),
-                    'clr_fee' => floatval($request->clr_fee[$i]),
                     'ppn' => floatval($request->ppn[$i]),
-                    'pph' => floatval($request->pph[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
             }
 
-            $retur->retur_pembelian_detail()->saveMany($returDetail);
+            $retur->retur_penjualan_detail()->saveMany($returDetail);
         });
 
         return response()->json(['success'], 200);
@@ -128,56 +109,52 @@ class ReturPembelianController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ReturPembelian  $returPembelian
+     * @param  \App\Models\ReturPenjualan  $returPenjualan
      * @return \Illuminate\Http\Response
      */
-    public function show(ReturPembelian $returPembelian)
+    public function show(ReturPenjualan $returPenjualan)
     {
-        $returPembelian->load('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail');
+        $returPenjualan->load('retur_penjualan_detail', 'gudang', 'penjualan')->withCount('retur_penjualan_detail');
 
-        return view('pembelian.retur.show', compact('returPembelian'));
+        return view('penjualan.retur.show', compact('returPenjualan'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ReturPembelian  $returPembelian
+     * @param  \App\Models\ReturPenjualan  $returPenjualan
      * @return \Illuminate\Http\Response
      */
-    public function edit(ReturPembelian $returPembelian)
+    public function edit(ReturPenjualan $returPenjualan)
     {
-        $returPembelian->load('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail');
+        $returPenjualan->load('retur_penjualan_detail', 'gudang', 'penjualan')->withCount('retur_penjualan_detail');
 
-        return view('pembelian.retur.edit', compact('returPembelian'));
+        return view('penjualan.retur.edit', compact('returPenjualan'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ReturPembelian  $returPembelian
+     * @param  \App\Models\ReturPenjualan  $returPenjualan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, ReturPenjualan $returPenjualan)
     {
-        $returPembelian = ReturPembelian::findOrFail($id);
-
-        DB::transaction(function () use ($request, $returPembelian) {
-            $returPembelian->update([
+        DB::transaction(function () use ($request, $returPenjualan) {
+            $returPenjualan->update([
                 'gudang_id' => $request->gudang,
                 'keterangan' => $request->keterangan,
+                'rate' => $request->rate,
                 'subtotal' => floatval($request->subtotal),
                 'total_ppn' => floatval($request->total_ppn),
-                'total_pph' => floatval($request->total_pph),
                 'total_gross' => floatval($request->total_gross),
                 'total_diskon' => floatval($request->total_diskon),
-                'total_clr_fee' => floatval($request->total_clr_fee),
-                'total_biaya_masuk' => floatval($request->total_biaya_masuk),
                 'total_netto' => floatval($request->total_netto),
             ]);
 
             foreach ($request->barang as $i => $value) {
-                $returDetail[] = new ReturPembelianDetail([
+                $returDetail[] = new ReturPenjualanDetail([
                     'barang_id' => $value,
                     'harga' => $request->harga[$i],
                     'qty_beli' => $request->qty_beli[$i],
@@ -185,17 +162,14 @@ class ReturPembelianController extends Controller
                     'diskon_persen' => floatval($request->diskon_persen[$i]),
                     'diskon' => floatval($request->diskon[$i]),
                     'gross' => floatval($request->gross[$i]),
-                    'biaya_masuk' => floatval($request->biaya_masuk[$i]),
-                    'clr_fee' => floatval($request->clr_fee[$i]),
                     'ppn' => floatval($request->ppn[$i]),
-                    'pph' => floatval($request->pph[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
             }
 
-            $returPembelian->retur_pembelian_detail()->delete();
+            $returPenjualan->retur_penjualan_detail()->delete();
 
-            $returPembelian->retur_pembelian_detail()->saveMany($returDetail);
+            $returPenjualan->retur_penjualan_detail()->saveMany($returDetail);
         });
 
         return response()->json(['success'], 200);
@@ -204,44 +178,45 @@ class ReturPembelianController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ReturPembelian  $returPembelian
+     * @param  \App\Models\ReturPenjualan  $returPenjualan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ReturPembelian $returPembelian)
+    public function destroy(ReturPenjualan $returPenjualan)
     {
-        $returPembelian->delete();
+        $returPenjualan->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
 
         return back();
     }
 
-    protected function getPembelianById($id)
+    protected function getPenjualanById($id)
     {
+        // kalo ngakses dari browse
         abort_if(!request()->ajax(), 404);
 
-        $pembelian = Pembelian::with('supplier', 'matauang', 'pembelian_detail')->findOrFail($id);
+        $penjualan = Penjualan::with('pelanggan', 'salesman', 'matauang', 'penjualan_detail')->findOrFail($id);
 
-        return response()->json($pembelian, 200);
+        return response()->json($penjualan, 200);
     }
 
     protected function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
-        $checkLatestKode = ReturPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        $checkLatestKode = ReturPenjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
 
         if ($checkLatestKode == null) {
-            $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
             if ($checkLatestKode < 10) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
+                $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
             } elseif ($checkLatestKode > 10) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
+                $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
             } elseif ($checkLatestKode > 100) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
+                $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
             } elseif ($checkLatestKode > 1000) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
+                $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
             }
         }
 

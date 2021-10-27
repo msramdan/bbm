@@ -31,7 +31,7 @@ class ReturPembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $retur = ReturPembelian::with('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail');
+            $retur = ReturPembelian::with('gudang', 'pembelian')->withCount('retur_pembelian_detail');
 
             return Datatables::of($retur)
                 ->addIndexColumn()

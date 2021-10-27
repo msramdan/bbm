@@ -29,7 +29,7 @@ class PesananPembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pesanan = PesananPembelian::with('pesanan_pembelian_detail', 'supplier', 'matauang')->withCount('pesanan_pembelian_detail');
+            $pesanan = PesananPembelian::with('supplier', 'matauang')->withCount('pesanan_pembelian_detail');
 
             return Datatables::of($pesanan)
                 ->addIndexColumn()

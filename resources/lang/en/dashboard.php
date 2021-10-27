@@ -32,7 +32,8 @@ return [
         'setting' => 'Setting',
         'user' => 'User',
         'akun' => 'Account',
-        'profile' => 'Profile'
+        'profile' => 'Profile',
+        'penjualan' => 'Sales'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

@@ -29,7 +29,7 @@ class PembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pembelian = Pembelian::with('pembelian_detail', 'gudang', 'supplier', 'matauang')->withCount('pembelian_detail');
+            $pembelian = Pembelian::with('gudang', 'supplier', 'matauang')->withCount('pembelian_detail');
 
             return Datatables::of($pembelian)
                 ->addIndexColumn()
@@ -242,7 +242,7 @@ class PembelianController extends Controller
 
         Alert::success('Hapus Data', 'Berhasil');
 
-        return redirect()->route('pembelian.index');
+        return back();
     }
 
     protected function generateKode($tanggal)

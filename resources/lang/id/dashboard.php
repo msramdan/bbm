@@ -32,7 +32,8 @@ return [
         'setting' => 'Pengaturan',
         'user' => 'Pengguna',
         'akun' => 'Akun',
-        'profile' => 'Profil'
+        'profile' => 'Profil',
+        'penjualan' => 'Penjualan'
     ],
     'link' => [
         'dashboard' => 'Home',

@@ -165,6 +165,24 @@
                 </li>
             @endhasanyrole
 
+            {{-- menu penjualan --}}
+            @hasanyrole('salesman|admin')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>{{ trans('dashboard.menu.penjualan') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('penjualan.index') }}">
+                                {{ trans('dashboard.menu.penjualan') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endhasanyrole
+
             {{-- menu Setting --}}
             @role('admin')
                 <li class="has-sub">

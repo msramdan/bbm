@@ -349,3 +349,25 @@ Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
     $trail->parent('akun');
     $trail->push('Profile');
 });
+
+
+// Master Data > Penjualan
+Breadcrumbs::for('penjualan', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Penjualan', route('penjualan.index'));
+});
+// Master Data > Penjualan > Tambah
+Breadcrumbs::for('penjualan_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('penjualan');
+    $trail->push('Tambah', route('penjualan.create'));
+});
+// Master Data > Penjualan > Edit
+Breadcrumbs::for('penjualan_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('penjualan');
+    $trail->push('Edit');
+});
+// Master Data > Penjualan > Show
+Breadcrumbs::for('penjualan_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('penjualan');
+    $trail->push('Show');
+});

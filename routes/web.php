@@ -7,6 +7,7 @@ use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MasterData\{AreaController, BankController, BarangController, GudangController, KategoriController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
 use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController};
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
+use App\Http\Controllers\Penjualan\PenjualanController;
 use App\Http\Controllers\Setting\TokoController;
 use App\Http\Controllers\Setting\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +68,7 @@ Route::group(['prefix' => 'beli', 'middleware' => ['web', 'auth']], function () 
     Route::resource('/pesanan-pembelian', PesananPembelianController::class)->except('store', 'update');
 
 
-    // Pesanan Pembelian
+    // Pembelian
     Route::post('/pembelian/store', [PembelianController::class, 'store'])->name('pembelian.store');
     Route::put('/pembelian/update/{PesananPembelian}', [PembelianController::class, 'update'])->name('pembelian.update');
     Route::get('/pembelian/generate-kode/{tanggal}', [PembelianController::class, 'generateKode'])->name('pembelian.generateKode');
@@ -95,4 +96,16 @@ Route::group(['prefix' => 'akun', 'middleware' => ['web', 'auth']], function () 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
+});
+
+
+Route::group(['prefix' => 'jual', 'middleware' => ['web', 'auth']], function () {
+    // Penjualan
+    Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+    Route::put('/penjualan/update/{penjualan:id}', [PenjualanController::class, 'update'])->name('penjualan.update');
+    Route::get('/penjualan/generate-kode/{tanggal}', [PenjualanController::class, 'generateKode'])->name('penjualan.generateKode');
+    Route::get('/penjualan/get-rekening/{id}', [PenjualanController::class, 'getRekeningByBankId'])->name('penjualan.getRekeningByBankId');
+    Route::get('/penjualan/get-alamat/{tanggal}', [PenjualanController::class, 'getAlamatPelanggan'])->name('penjualan.getAlamatPelanggan');
+
+    Route::resource('/penjualan', PenjualanController::class)->except('store', 'update');
 });

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MasterData\{AreaController, BankController, BarangController, GudangController, KategoriController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
 use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController};
+use App\Http\Controllers\Keuangan\PelunasanHutangController;
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
 use App\Http\Controllers\Penjualan\PenjualanController;
 use App\Http\Controllers\Penjualan\ReturPenjualanController;
@@ -60,6 +61,7 @@ Route::group(['prefix' => 'inventory', 'middleware' => ['web', 'auth']], functio
     // Coming soon
 });
 
+
 // Pembelian
 Route::group(['prefix' => 'beli', 'middleware' => ['web', 'auth']], function () {
     // Pesanan Pembelian
@@ -84,6 +86,7 @@ Route::group(['prefix' => 'beli', 'middleware' => ['web', 'auth']], function () 
     Route::get('/retur-pembelian/get-pembelian/{id}', [ReturPembelianController::class, 'getPembelianById'])->name('retur-pembelian.getPembelianById');
     Route::resource('/retur-pembelian', ReturPembelianController::class)->except('store', 'update');
 });
+
 
 Route::group(['prefix' => 'setting', 'middleware' => ['web', 'auth']], function () {
     Route::get('/toko', [TokoController::class, 'index'])->name('toko.index')->middleware('permission:toko');
@@ -115,4 +118,14 @@ Route::group(['prefix' => 'jual', 'middleware' => ['web', 'auth']], function () 
     Route::get('/retur-penjualan/generate-kode/{tanggal}', [ReturPenjualanController::class, 'generateKode']);
     Route::get('/retur-penjualan/get-penjualan/{penjualan:id}', [ReturPenjualanController::class, 'getPenjualanById']);
     Route::resource('/retur-penjualan', ReturPenjualanController::class)->except('store', 'update');
+});
+
+
+Route::group(['prefix' => 'keuangan', 'middleware' => ['web', 'auth']], function () {
+    // Pelunasan Hutang
+    Route::get('/pelunasan-hutang/get-pembelian-belum-lunas/{id}', [PelunasanHutangController::class, 'getPembelianYgBelumLunas']);
+
+    Route::get('/pelunasan-hutang/generate-kode/{tanggal}', [PelunasanHutangController::class, 'generateKode']);
+
+    Route::resource('/pelunasan-hutang', PelunasanHutangController::class);
 });

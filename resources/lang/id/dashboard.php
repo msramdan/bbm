@@ -34,7 +34,10 @@ return [
         'akun' => 'Akun',
         'profile' => 'Profil',
         'penjualan' => 'Penjualan',
-        'retur_penjualan' => 'Retur Penjualan'
+        'retur_penjualan' => 'Retur Penjualan',
+        'keuangan' => 'Keuangan',
+        'pelunasan_hutang' => 'Pelunasan Hutang',
+        'pelunasan_piutang' => 'Pelunasan Piutang',
     ],
     'link' => [
         'dashboard' => 'Home',

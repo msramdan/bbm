@@ -34,7 +34,10 @@ return [
         'akun' => 'Account',
         'profile' => 'Profile',
         'penjualan' => 'Sales',
-        'retur_penjualan' => 'Sales Return'
+        'retur_penjualan' => 'Sales Return',
+        'keuangan' => 'Finance',
+        'pelunasan_hutang' => 'A/P Payment',
+        'pelunasan_piutang' => 'A/R Payment',
     ],
     'link' => [
         'dashboard' => 'Dashboard',

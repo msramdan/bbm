@@ -393,3 +393,26 @@ Breadcrumbs::for('retur_penjualan_show', function (BreadcrumbTrail $trail) {
     $trail->parent('retur_penjualan');
     $trail->push('Show');
 });
+
+
+
+// Master Data > Pelunasan Hutang
+Breadcrumbs::for('pelunasan_hutang', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Pelunasan Hutang', route('pelunasan-hutang.index'));
+});
+// Master Data > Pelunasan Hutang  > Tambah
+Breadcrumbs::for('pelunasan_hutang_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('pelunasan_hutang');
+    $trail->push('Tambah', route('pelunasan-hutang.create'));
+});
+// Master Data > Pelunasan Hutang  > Edit
+Breadcrumbs::for('pelunasan_hutang_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('pelunasan_hutang');
+    $trail->push('Edit');
+});
+// Master Data > Pelunasan Hutang  > Show
+Breadcrumbs::for('pelunasan_hutang_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('pelunasan_hutang');
+    $trail->push('Show');
+});

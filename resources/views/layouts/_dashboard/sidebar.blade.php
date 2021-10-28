@@ -189,6 +189,24 @@
                 </li>
             @endhasanyrole
 
+            {{-- menu pelunasan hutang --}}
+            @role('admin')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-money"></i>
+                        <span>{{ trans('dashboard.menu.keuangan') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('pelunasan-hutang.index') }}">
+                                {{ trans('dashboard.menu.pelunasan_hutang') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endrole
+
             {{-- menu Setting --}}
             @role('admin')
                 <li class="has-sub">

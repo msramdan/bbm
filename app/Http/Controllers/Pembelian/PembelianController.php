@@ -123,6 +123,8 @@ class PembelianController extends Controller
             }
 
             if ($request->jenis_pembayaran && $request->bayar) {
+                $pembelian->update(['status' => 'Lunas']);
+
                 foreach ($request->bank as $i => $value) {
                     $pembayaran[] = new PembelianPembayaran([
                         'jenis_pembayaran' => $request->jenis_pembayaran[$i],
@@ -210,22 +212,26 @@ class PembelianController extends Controller
                 ]);
             }
 
-            foreach ($request->bank as $i => $value) {
-                $pembayaran[] = new PembelianPembayaran([
-                    'bank_id' => $request->bank[$i],
-                    'rekening_bank_id' => $request->rekening[$i],
-                    'tgl_cek_giro' => $request->tgl_cek_giro[$i],
-                    'no_cek_giro' => $request->no_cek_giro[$i],
-                    'bayar' => $request->bayar[$i],
-                ]);
-            }
-
             // hapus list lama
             $pembelian->pembelian_pembayaran()->delete();
+            if ($request->jenis_pembayaran && $request->bayar) {
+                $pembelian->update(['status' => 'Lunas']);
+
+                foreach ($request->bank as $i => $value) {
+                    $pembayaran[] = new PembelianPembayaran([
+                        'bank_id' => $request->bank[$i],
+                        'rekening_bank_id' => $request->rekening[$i],
+                        'tgl_cek_giro' => $request->tgl_cek_giro[$i],
+                        'no_cek_giro' => $request->no_cek_giro[$i],
+                        'bayar' => $request->bayar[$i],
+                    ]);
+                }
+                // insert list baru
+                $pembelian->pembelian_pembayaran()->saveMany($pembayaran);
+            }
+
             $pembelian->pembelian_detail()->delete();
 
-            // insert list baru
-            $pembelian->pembelian_pembayaran()->saveMany($pembayaran);
             $pembelian->pembelian_detail()->saveMany($pembelianDetail);
         });
 

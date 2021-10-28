@@ -31,17 +31,8 @@ class Pembelian extends Model
         'total_clr_fee',
         'total_biaya_masuk',
         'total_netto',
+        'status'
     ];
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    // public function getRouteKeyName()
-    // {
-    //     return 'kode';
-    // }
 
     public function pembelian_detail()
     {

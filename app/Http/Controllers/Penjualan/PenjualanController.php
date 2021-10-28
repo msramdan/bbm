@@ -247,20 +247,15 @@ class PenjualanController extends Controller
     {
         abort_if(!request()->ajax(), 404);
 
-        $checkLatestKode = Penjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        $checkLatestKode = Penjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
             $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
-            if ($checkLatestKode < 10) {
-                $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 10) {
-                $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 100) {
-                $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 1000) {
-                $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
-            }
+            // hapus "SALES-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'SALES-');
+
+            $kode =  'SALES-' . intval($onlyNumberKode) + 1;
         }
 
         return response()->json($kode, 200);

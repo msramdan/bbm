@@ -8,7 +8,7 @@
         @endcan
 
         @can('detail pembelian')
-            <a href="{{ route('pembelian.show', $model->id) }}" class="btn btn-success btn-icon btn-circle">
+            <a href="{{ route('pembelian.show', $model->id) }}" class="btn btn-info btn-icon btn-circle">
                 <i class="fa fa-eye"></i>
             </a>
         @endcan

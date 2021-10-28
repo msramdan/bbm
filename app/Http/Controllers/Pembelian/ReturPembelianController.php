@@ -229,20 +229,15 @@ class ReturPembelianController extends Controller
     {
         abort_if(!request()->ajax(), 404);
 
-        $checkLatestKode = ReturPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        $checkLatestKode = ReturPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
             $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
-            if ($checkLatestKode < 10) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 10) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 100) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 1000) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
-            }
+            // hapus "PURRT-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PURRT-');
+
+            $kode =  'PURRT-' . intval($onlyNumberKode) + 1;
         }
 
         return response()->json($kode, 200);

@@ -79,7 +79,7 @@ class PelunasanHutangController extends Controller
         $attr = $request->validated();
         $attr['pembelian_id'] = $request->pembelian;
         $attr['bank_id'] = $request->bank;
-        $attr['rekening_id'] = $request->rekening;
+        $attr['rekening_bank_id'] = $request->rekening;
 
         $pelunasanHutang =  PelunasanHutang::create($attr);
 
@@ -138,7 +138,7 @@ class PelunasanHutangController extends Controller
         $attr = $request->validated();
         $attr['pembelian_id'] = $request->pembelian;
         $attr['bank_id'] = $request->bank;
-        $attr['rekening_id'] = $request->rekening;
+        $attr['rekening_bank_id'] = $request->rekening;
 
         // hapus pembayaran lama
         $pembayaranLama = PembelianPembayaran::where('pembelian_id', $pelunasanHutang->pembelian_id)->first();

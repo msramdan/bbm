@@ -190,26 +190,19 @@ class AdjustmentPlusController extends Controller
 
     protected function generateKode($tanggal)
     {
-        if (request()->ajax()) {
-            $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        abort_if(!request()->ajax(), 404);
 
-            if ($checkLatestKode == null) {
-                $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
-            } else {
-                if ($checkLatestKode < 10) {
-                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 10) {
-                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 100) {
-                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 1000) {
-                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
-                }
-            }
+        $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
-            return $kode;
+        if ($checkLatestKode == null) {
+            $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
-            abort(404);
+            // hapus "ADJPL-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'ADJPL-');
+
+            $kode =  'ADJPL-' . intval($onlyNumberKode) + 1;
         }
+
+        return response()->json($kode, 200);
     }
 }

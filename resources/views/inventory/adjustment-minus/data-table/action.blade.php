@@ -8,7 +8,7 @@
         @endcan
 
         @can('detail adjustment minus')
-            <a href="{{ route('adjustment-minus.show', $model->id) }}" class="btn btn-success btn-icon btn-circle">
+            <a href="{{ route('adjustment-minus.show', $model->id) }}" class="btn btn-info btn-icon btn-circle">
                 <i class="fa fa-eye"></i>
             </a>
         @endcan

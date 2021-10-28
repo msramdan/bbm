@@ -195,7 +195,7 @@ class ReturPenjualanController extends Controller
         // kalo ngakses dari browse
         abort_if(!request()->ajax(), 404);
 
-        $penjualan = Penjualan::with('pelanggan', 'salesman', 'matauang', 'penjualan_detail')->findOrFail($id);
+        $penjualan = Penjualan::with('pelanggan', 'SLSRTman', 'matauang', 'penjualan_detail')->findOrFail($id);
 
         return response()->json($penjualan, 200);
     }
@@ -204,20 +204,15 @@ class ReturPenjualanController extends Controller
     {
         abort_if(!request()->ajax(), 404);
 
-        $checkLatestKode = ReturPenjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        $checkLatestKode = ReturPenjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
             $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
-            if ($checkLatestKode < 10) {
-                $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 10) {
-                $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 100) {
-                $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
-            } elseif ($checkLatestKode > 1000) {
-                $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
-            }
+            // hapus "SLSRT-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'SLSRT-');
+
+            $kode =  'SLSRT-' . intval($onlyNumberKode) + 1;
         }
 
         return response()->json($kode, 200);

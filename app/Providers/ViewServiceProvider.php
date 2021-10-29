@@ -102,7 +102,9 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.edit',
             'penjualan.penjualan.create',
             'keuangan.pelunasan.hutang.edit',
-            'keuangan.pelunasan.hutang.create'
+            'keuangan.pelunasan.hutang.create',
+            'keuangan.pelunasan.piutang.edit',
+            'keuangan.pelunasan.piutang.create'
         ], function ($view) {
             return $view->with('bank', Bank::all());
         });
@@ -133,6 +135,14 @@ class ViewServiceProvider extends ServiceProvider
             return $view->with('pembelianBelumLunas', $pembelianBelumLunas);
         });
 
+        // list penjualan belum dibayar
+        View::composer([
+            'keuangan.pelunasan.piutang.edit',
+            'keuangan.pelunasan.piutang.create'
+        ], function ($view) {
+            $penjualanBelumLunas = Penjualan::select(['kode', 'id'])->whereStatus('Belum Lunas')->get();
+            return $view->with('penjualanBelumLunas', $penjualanBelumLunas);
+        });
 
         // list Pelanggan
         View::composer([
@@ -220,7 +230,9 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.edit',
             'penjualan.penjualan.create',
             'keuangan.pelunasan.hutang.edit',
-            'keuangan.pelunasan.hutang.create'
+            'keuangan.pelunasan.hutang.create',
+            'keuangan.pelunasan.piutang.edit',
+            'keuangan.pelunasan.piutang.create'
         ], function ($view) {
             $jenisPembayaran = Cache::rememberForever('jenisPembayaran', function () {
                 return collect([

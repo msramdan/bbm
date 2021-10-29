@@ -203,6 +203,12 @@
                                 {{ trans('dashboard.menu.pelunasan_hutang') }}
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('pelunasan-piutang.index') }}">
+                                {{ trans('dashboard.menu.pelunasan_piutang') }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endrole

@@ -288,6 +288,11 @@
                     $('#btn_add_payment').prop('disabled', true)
                     $('#btn_clear_form_payment').prop('disabled', true)
                 }
+
+                bank.prop('required', false)
+                rekening.prop('required', false)
+                no_cek_giro.prop('required', false)
+                tgl_cek_giro.prop('required', false)
             }
 
             if (jenis_pembayaran.val() == 'Transfer') {
@@ -306,6 +311,9 @@
                     $('#btn_add_payment').prop('disabled', true)
                     $('#btn_clear_form_payment').prop('disabled', true)
                 }
+
+                bank.prop('required', true)
+                rekening.prop('required', true)
             }
 
             if (jenis_pembayaran.val() == 'Giro') {
@@ -324,6 +332,9 @@
                     $('#btn_add_payment').prop('disabled', true)
                     $('#btn_clear_form_payment').prop('disabled', true)
                 }
+
+                no_cek_giro.prop('required', true)
+                tgl_cek_giro.prop('required', true)
             }
         })
 

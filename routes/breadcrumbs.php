@@ -416,3 +416,25 @@ Breadcrumbs::for('pelunasan_hutang_show', function (BreadcrumbTrail $trail) {
     $trail->parent('pelunasan_hutang');
     $trail->push('Show');
 });
+
+
+// Master Data > Pelunasan Piutang
+Breadcrumbs::for('pelunasan_piutang', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Pelunasan Piutang', route('pelunasan-piutang.index'));
+});
+// Master Data > Pelunasan Piutang  > Tambah
+Breadcrumbs::for('pelunasan_piutang_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('pelunasan_piutang');
+    $trail->push('Tambah', route('pelunasan-piutang.create'));
+});
+// Master Data > Pelunasan Piutang  > Edit
+Breadcrumbs::for('pelunasan_piutang_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('pelunasan_piutang');
+    $trail->push('Edit');
+});
+// Master Data > Pelunasan Piutang  > Show
+Breadcrumbs::for('pelunasan_piutang_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('pelunasan_piutang');
+    $trail->push('Show');
+});

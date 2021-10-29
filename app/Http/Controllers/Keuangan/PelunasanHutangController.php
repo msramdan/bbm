@@ -133,8 +133,6 @@ class PelunasanHutangController extends Controller
      */
     public function update(StorePelunasanHutangRequest $request, PelunasanHutang $pelunasanHutang)
     {
-        $oldPembelianId = $request->pembelian;
-
         $attr = $request->validated();
         $attr['pembelian_id'] = $request->pembelian;
         $attr['bank_id'] = $request->bank;

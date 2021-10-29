@@ -1,16 +1,16 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('pelunasan_hutang.title.tambah'))
+@section('title', trans('pelunasan_piutang.title.tambah'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('pelunasan_hutang_add') }}
+        {{ Breadcrumbs::render('pelunasan_piutang_add') }}
         <!-- begin row -->
         <div class="row">
-            <form action="{{ route('pelunasan-hutang.update', $pelunasanHutang->id) }}" method="post">
+            <form action="{{ route('pelunasan-piutang.store') }}" method="post">
                 @csrf
-                @method('put')
+                @method('post')
                 <!-- begin col-12 -->
                 <div class="col-md-12">
                     <!-- begin panel -->
@@ -33,7 +33,7 @@
                                     <i class="fa fa-times"></i>
                                 </a>
                             </div>
-                            <h4 class="panel-title">{{ trans('pelunasan_hutang.title.tambah') }} - Header</h4>
+                            <h4 class="panel-title">{{ trans('pelunasan_piutang.title.tambah') }} - Header</h4>
                         </div>
 
                         <div class="panel-body">
@@ -41,7 +41,7 @@
                                 <div class="col-md-3">
                                     <label for="kode" class="control-label">Kode</label>
                                     <input type="text" name="kode" class="form-control" placeholder="Kode" id="kode"
-                                        value="{{ $pelunasanHutang->kode }}" readonly />
+                                        readonly />
                                     @error('kode')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -49,8 +49,8 @@
 
                                 <div class="col-md-3">
                                     <label for="tanggal" class="control-label">Tanggal</label>
-                                    <input type="date" name="tanggal" class="form-control" value="{{ date('Y-m-d') }}"
-                                        id="tanggal" />
+                                    <input type="date" name="tanggal" class="form-control" required
+                                        value="{{ date('Y-m-d') }}" id="tanggal" />
                                     @error('tanggal')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -59,24 +59,25 @@
                                 <div class="col-md-3">
                                     <label for="rate" class="control-label">Rate</label>
                                     <input type="number" name="rate" class="form-control" placeholder="Rate" id="rate"
-                                        value="{{ $pelunasanHutang->rate }}" required />
+                                        required />
                                     @error('rate')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="pembelian">Kode Pembelian</label>
-                                    <select name="pembelian" id="pembelian" class="form-control">
-                                        <option value="{{ $pelunasanHutang->pembelian_id }}">
-                                            {{ $pelunasanHutang->pembelian->kode }}</option>
-                                        @foreach ($pembelianBelumLunas as $item)
+                                    <label for="penjualan">Kode penjualan</label>
+                                    <select name="penjualan" id="penjualan" class="form-control" required>
+                                        <option value="" disabled selected>-- Pilih --</option>
+                                        @forelse ($penjualanBelumLunas as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->kode }}
                                             </option>
-                                        @endforeach
+                                        @empty
+                                            <option value="" disabled>Data tidak ditemukan</option>
+                                        @endforelse
                                     </select>
-                                    @error('pembelian')
+                                    @error('penjualan')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
@@ -84,32 +85,28 @@
 
                             <div class="row form-group">
                                 <div class="col-md-3">
-                                    <label for="tgl_pembelian" class="control-label">Tanggal Pembelian</label>
-                                    <input type="text" name="tgl_pembelian" class="form-control"
-                                        placeholder="Tanggal Pembelian" id="tgl_pembelian" readonly
-                                        value="{{ $pelunasanHutang->pembelian->tanggal->format('d/m/Y') }}" />
-                                    @error('tgl_pembelian')
+                                    <label for="tgl_penjualan" class="control-label">Tanggal penjualan</label>
+                                    <input type="text" name="tgl_penjualan" class="form-control"
+                                        placeholder="Tanggal penjualan" id="tgl_penjualan" readonly />
+                                    @error('tgl_penjualan')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="supplier" class="control-label">Supplier</label>
-                                    <input type="text" name="supplier" class="form-control" placeholder="Supplier"
-                                        id="supplier"
-                                        value="{{ $pelunasanHutang->pembelian->supplier ? $pelunasanHutang->pembelian->supplier->nama_supplier : 'Tanpa Supplier' }}"
-                                        readonly />
-                                    @error('supplier')
+                                    <label for="pelanggan" class="control-label">Pelanggan</label>
+                                    <input type="text" name="pelanggan" class="form-control" placeholder="pelanggan"
+                                        id="pelanggan" readonly />
+                                    @error('pelanggan')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="saldo_hutang" class="control-label">Saldo Hutang</label>
-                                    <input type="text" name="saldo_hutang" class="form-control" placeholder="Saldo Hutang"
-                                        id="saldo_hutang" value="{{ $pelunasanHutang->pembelian->total_netto }}"
-                                        readonly />
-                                    @error('saldo_hutang')
+                                    <label for="saldo_piutang" class="control-label">Saldo piutang</label>
+                                    <input type="text" name="saldo_piutang" class="form-control"
+                                        placeholder="Saldo piutang" id="saldo_piutang" readonly />
+                                    @error('saldo_piutang')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
@@ -117,8 +114,7 @@
                                 <div class="col-md-3">
                                     <label for="matauang" class="control-label">Mata Uang</label>
                                     <input type="text" name="matauang" class="form-control" placeholder="Mata Uang"
-                                        id="matauang" value="{{ $pelunasanHutang->pembelian->matauang->nama }}"
-                                        readonly />
+                                        id="matauang" readonly />
                                     @error('matauang')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -152,19 +148,19 @@
                                     <i class="fa fa-times"></i>
                                 </a>
                             </div>
-                            <h4 class="panel-title">{{ trans('pelunasan_hutang.title.payment_list') }}</h4>
+                            <h4 class="panel-title">{{ trans('pelunasan_piutang.title.payment_list') }}</h4>
                         </div>
 
                         <div class="panel-body">
                             <div class="form-group row" style="margin-bottom: 10px">
+                                {{-- <form id="form_payment"> --}}
                                 {{-- Jenis Pembayaran --}}
                                 <div class="col-md-4">
                                     <label class="control-label">Jenis Pembayaran</label>
+
                                     <select name="jenis_pembayaran" id="jenis_pembayaran" class="form-control" required>
                                         @forelse ($jenisPembayaran as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $pelunasanHutang->jenis_pembayaran == $item->nama ? 'selected' : '' }}>
-                                                {{ $item->nama }}</option>
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @empty
                                             <option value="" disabled>Data tidak ditemukan</option>
                                         @endforelse
@@ -176,12 +172,11 @@
 
                                 <div class="col-md-4">
                                     <label class="control-label">Bank</label>
+
                                     <select name="bank" id="bank" class="form-control" disabled>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($bank as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $pelunasanHutang->bank && $pelunasanHutang->bank->id == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama }}</option>
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @empty
                                             <option value="" disabled>Data tidak ditemukan</option>
                                         @endforelse
@@ -205,8 +200,7 @@
                                 <div class="col-md-4" style="margin-top: 1em;">
                                     <label for="no_cek_giro">No. Cek/Giro </label>
                                     <input type="number" step="any" name="no_cek_giro" id="no_cek_giro"
-                                        class="form-control" placeholder="No. Cek/Giro " disabled
-                                        value="{{ $pelunasanHutang->no_cek_giro }}" />
+                                        class="form-control" placeholder="No. Cek/Giro " disabled />
                                     @error('no_cek_giro')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -216,8 +210,7 @@
                                 <div class="col-md-4" style="margin-top: 1em;">
                                     <label for="tgl_cek_giro">Tgl. Cek/Giro</label>
                                     <input type="date" name="tgl_cek_giro" id="tgl_cek_giro" class="form-control"
-                                        placeholder="Tgl. Cek/Giro" value="{{ $pelunasanHutang->tgl_cek_giro }}"
-                                        disabled />
+                                        placeholder="Tgl. Cek/Giro" disabled />
                                     @error('tgl_cek_giro')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -227,7 +220,7 @@
                                 <div class="col-md-4" style="margin-top: 1em;">
                                     <label for="bayar">Bayar</label>
                                     <input type="number" step="any" name="bayar" id="bayar" class="form-control" required
-                                        placeholder="Bayar" value="{{ $pelunasanHutang->bayar }}" />
+                                        placeholder="Bayar" />
                                     @error('bayar')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -237,7 +230,7 @@
                                 <div class="col-md-12" style="margin-top: 1em;">
                                     <label for="keterangan">Keterangan</label>
                                     <textarea name="keterangan" id="keterangan" class="form-control" required
-                                        placeholder="Keterangan" rows="5">{{ $pelunasanHutang->keterangan }}</textarea>
+                                        placeholder="Keterangan" rows="5"></textarea>
                                     @error('keterangan')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -245,7 +238,11 @@
 
                                 <div class="col-md-12" style="margin-top: 1em;">
                                     <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+                                    {{-- <a href="{{ route('pelunasan-piutang.index') }}" class="btn btn-sm btn-default">
+                                            Cancel
+                                        </a> --}}
                                 </div>
+                                {{-- </form> --}}
                             </div>
                         </div>
                         {{-- end panel-body --}}
@@ -262,7 +259,7 @@
 
 @push('custom-js')
     <script>
-        let selected_rekening = '{{ $pelunasanHutang->rekening_bank ? $pelunasanHutang->rekening_bank->id : '' }}'
+        get_kode()
 
         $('#jenis_pembayaran').change(function() {
             let jenis_pembayaran = $(this)
@@ -341,62 +338,30 @@
             }
         })
 
-        $('#pembelian').change(function() {
+        $('#penjualan').change(function() {
             $.ajax({
-                url: "/keuangan/pelunasan-hutang/get-pembelian-belum-lunas/" + $(this).val(),
+                url: "/keuangan/pelunasan-piutang/get-penjualan-belum-lunas/" + $(this).val(),
                 type: 'GET',
                 success: function(data) {
-                    $('#supplier').val('Loading...')
-                    $('#saldo_hutang').val('Loading...')
+                    $('#pelanggan').val('Loading...')
+                    $('#saldo_piutang').val('Loading...')
                     $('#matauang').val('Loading...')
-                    $('#tgl_pembelian').val('Loading...')
+                    $('#tgl_penjualan').val('Loading...')
 
                     setTimeout(() => {
                         let format = new Date(data.tanggal)
 
-                        $('#supplier').val(data.supplier ? data.supplier.nama_supplier :
-                            'Tanpa Supplier')
-                        $('#saldo_hutang').val(data.total_netto)
+                        $('#pelanggan').val(data.pelanggan ? data.pelanggan.nama_pelanggan :
+                            'Tanpa pelanggan')
+                        $('#saldo_piutang').val(data.total_netto)
                         $('#matauang').val(data.matauang.nama)
-                        $('#tgl_pembelian').val(format.toLocaleDateString('id-ID'))
+                        $('#tgl_penjualan').val(format.toLocaleDateString('id-ID'))
                     }, 1000);
                 }
             })
         })
 
-        $('#tanggal').change(function() {
-            $.ajax({
-                url: "keuangan/pelunasan-hutang/generate-kode/" + $('input[name="tanggal"]').val(),
-                type: 'GET',
-                success: function(data) {
-                    $('input[name="kode"]').val('Loading...')
-
-                    setTimeout(() => {
-                        $('input[name="kode"]').val(data)
-                    }, 1000)
-                }
-            })
-        })
-
         $('#bank').change(function() {
-            get_rekening()
-        })
-
-        if ($('#bank :selected').val()) {
-            $('#bank').prop('disabled', false)
-
-            get_rekening()
-        }
-
-        if ($('#tgl_cek_giro').val()) {
-            $('#tgl_cek_giro').prop('disabled', false)
-        }
-
-        if ($('#no_cek_giro').val()) {
-            $('#no_cek_giro').prop('disabled', false)
-        }
-
-        function get_rekening() {
             $.ajax({
                 url: "/beli/pembelian/get-rekening/" + $('#bank').val(),
                 type: 'GET',
@@ -418,17 +383,30 @@
                             $('#rekening').html(rekening)
 
                             $('#rekening').prop('disabled', false)
-
-                            if (selected_rekening) {
-                                $('#rekening option[value=' + selected_rekening + ']').attr('selected',
-                                    'selected')
-                            }
                         } else {
                             $('#rekening').html(
                                 '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
                             )
                         }
                     }, 1000);
+                }
+            })
+        })
+
+        $('#tanggal').change(function() {
+            get_kode()
+        })
+
+        function get_kode() {
+            $.ajax({
+                url: "/keuangan/pelunasan-piutang/generate-kode/" + $('input[name="tanggal"]').val(),
+                type: 'GET',
+                success: function(data) {
+                    $('input[name="kode"]').val('Loading...')
+
+                    setTimeout(() => {
+                        $('input[name="kode"]').val(data)
+                    }, 1000)
                 }
             })
         }

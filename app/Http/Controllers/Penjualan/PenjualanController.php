@@ -96,7 +96,7 @@ class PenjualanController extends Controller
                 'total_gross' => $request->total_gross,
                 'total_diskon' => $request->total_diskon,
                 'total_penjualan' => $request->total_penjualan,
-                'total_biaya_kirim' => $request->total_biaya_kirim,
+                'total_biaya_kirim' => $request->total_biaya_kirim ? $request->total_biaya_kirim : 0,
                 'total_netto' => $request->total_netto,
             ]);
 

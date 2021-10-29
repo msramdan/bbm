@@ -32,6 +32,7 @@ class Penjualan extends Model
         'total_netto',
         'total_netto ',
         'total_penjualan',
+        'status'
     ];
 
     public function penjualan_detail()
@@ -62,5 +63,10 @@ class Penjualan extends Model
     public function gudang()
     {
         return $this->belongsTo(Gudang::class);
+    }
+
+    public function pelunasan_piutang()
+    {
+        return $this->hasOne(PelunasanPiutang::class);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\{Area, Bank, Barang, Gudang, Kategori, Matauang, Pelanggan, Pembelian, Penjualan, PesananPembelian, Salesman, SatuanBarang, Supplier};
+use App\Models\{Area, Bank, Barang, CekGiro, Gudang, Kategori, Matauang, Pelanggan, Pembelian, Penjualan, PesananPembelian, Salesman, SatuanBarang, Supplier};
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\{Role, Permission};
 use Illuminate\Support\Facades\View;
@@ -104,7 +104,9 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.pelunasan.hutang.edit',
             'keuangan.pelunasan.hutang.create',
             'keuangan.pelunasan.piutang.edit',
-            'keuangan.pelunasan.piutang.create'
+            'keuangan.pelunasan.piutang.create',
+            'keuangan.cek-giro.cair.create',
+            'keuangan.cek-giro.cair.edit'
         ], function ($view) {
             return $view->with('bank', Bank::all());
         });
@@ -113,7 +115,7 @@ class ViewServiceProvider extends ServiceProvider
         // list pesananPembelian
         View::composer([
             'pembelian.pembelian.create',
-            'pembelian.pembelian.edit',
+            // 'pembelian.pembelian.edit',
         ], function ($view) {
             return $view->with('pesananPembelian', PesananPembelian::all());
         });
@@ -221,6 +223,38 @@ class ViewServiceProvider extends ServiceProvider
             'master-data.pelanggan.edit'
         ], function ($view) {
             return $view->with('area', Area::all());
+        });
+
+        // Cek/Giro yang belum dilunas/dibayar
+        View::composer([
+            'keuangan.cek-giro.cair.create',
+            'keuangan.cek-giro.cair.edit'
+        ], function ($view) {
+            $cekGiroBelumLunas = CekGiro::with('pembelian', 'penjualan', 'pembelian.pembelian_pembayaran', 'penjualan.penjualan_pembayaran')
+                ->where('status', 'Belum Lunas')
+                ->get();
+
+            return $view->with('cekGiroBelumLunas', $cekGiroBelumLunas);
+        });
+
+        // list dicairkan ke
+        View::composer([
+            'keuangan.cek-giro.cair.create',
+            'keuangan.cek-giro.cair.edit'
+        ], function ($view) {
+            return $view->with(
+                'dicairkanKe',
+                collect([
+                    (object)[
+                        'id' => 'Kas',
+                        'nama' => 'Kas'
+                    ],
+                    (object)[
+                        'id' => 'Bank',
+                        'nama' => 'Bank'
+                    ],
+                ])
+            );
         });
 
         // list jenisPembayaran

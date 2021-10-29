@@ -38,6 +38,8 @@ return [
         'keuangan' => 'Finance',
         'pelunasan_hutang' => 'A/P Payment',
         'pelunasan_piutang' => 'A/R Payment',
+        'cek_giro_cair' => 'Cheque Withdraw',
+        'cek_giro_tolak' => 'Cheque Rejected',
     ],
     'link' => [
         'dashboard' => 'Dashboard',

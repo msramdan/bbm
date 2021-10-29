@@ -420,8 +420,8 @@
                             $('#rekening').prop('disabled', false)
 
                             if (selected_rekening) {
-                                $('#rekening option[value=' + selected_rekening + ']').attr('selected',
-                                    'selected')
+                                $('#rekening option[value=' + selected_rekening + ']')
+                                    .attr('selected', 'selected')
                             }
                         } else {
                             $('#rekening').html(

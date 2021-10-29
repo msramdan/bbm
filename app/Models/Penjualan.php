@@ -69,4 +69,9 @@ class Penjualan extends Model
     {
         return $this->hasOne(PelunasanPiutang::class);
     }
+
+    public function cek_giro()
+    {
+        return $this->hasMany(CekGiro::class);
+    }
 }

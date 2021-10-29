@@ -438,3 +438,25 @@ Breadcrumbs::for('pelunasan_piutang_show', function (BreadcrumbTrail $trail) {
     $trail->parent('pelunasan_piutang');
     $trail->push('Show');
 });
+
+
+// Master Data > Cek-Giro Cair
+Breadcrumbs::for('cek_giro_cair', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Cek-Giro Cair', route('cek-giro-cair.index'));
+});
+// Master Data > Cek-Giro Cair  > Tambah
+Breadcrumbs::for('cek_giro_cair_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('cek_giro_cair');
+    $trail->push('Tambah', route('cek-giro-cair.create'));
+});
+// Master Data > Cek-Giro Cair  > Edit
+Breadcrumbs::for('cek_giro_cair_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('cek_giro_cair');
+    $trail->push('Edit');
+});
+// Master Data > Cek-Giro Cair  > Show
+Breadcrumbs::for('cek_giro_cair_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('cek_giro_cair');
+    $trail->push('Show');
+});

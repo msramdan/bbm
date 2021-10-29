@@ -38,6 +38,8 @@ return [
         'keuangan' => 'Keuangan',
         'pelunasan_hutang' => 'Pelunasan Hutang',
         'pelunasan_piutang' => 'Pelunasan Piutang',
+        'cek_giro_cair' => 'Cek/Giro Cair',
+        'cek_giro_tolak' => 'Cek/Giro Tolak',
     ],
     'link' => [
         'dashboard' => 'Home',

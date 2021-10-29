@@ -13,6 +13,8 @@ class Pembelian extends Model
 
     protected $casts = ['tanggal' => 'date'];
 
+    // protected $with = ['supplier', 'matauang'];
+
     protected $fillable = [
         'kode',
         'tanggal',
@@ -62,5 +64,10 @@ class Pembelian extends Model
     public function pesanan_pembelian()
     {
         return $this->belongsTo(PesananPembelian::class);
+    }
+
+    public function cek_giro()
+    {
+        return $this->hasMany(CekGiro::class);
     }
 }

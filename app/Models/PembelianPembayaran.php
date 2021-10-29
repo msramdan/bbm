@@ -21,7 +21,7 @@ class PembelianPembayaran extends Model
         'bayar'
     ];
 
-    protected $with = ['bank', 'rekening'];
+    // protected $with = ['bank', 'rekening'];
 
     protected $casts = ['tgl_cek_giro' => 'date'];
 

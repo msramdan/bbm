@@ -124,6 +124,16 @@ class PenjualanController extends Controller
                         'no_cek_giro' => $request->no_cek_giro[$i],
                         'bayar' => $request->bayar[$i],
                     ]);
+
+                    if ($request->jenis_pembayaran[$i] == 'Giro') {
+                        DB::table('cek_giro')->insert([
+                            'penjualan_id' => $penjualan->id,
+                            'jenis_cek' => 'In',
+                            'status' => 'Belum Lunas',
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    }
                 }
 
                 $penjualan->penjualan_pembayaran()->saveMany($pembayaran);
@@ -203,6 +213,7 @@ class PenjualanController extends Controller
 
             // hapus list lama
             $penjualan->penjualan_pembayaran()->delete();
+            $penjualan->cek_giro()->delete();
 
             // kalo user isi jenis pembayaran dan bayar berarti di ga ngutag
             if ($request->jenis_pembayaran && $request->bayar) {
@@ -215,6 +226,16 @@ class PenjualanController extends Controller
                         'no_cek_giro' => $request->no_cek_giro[$i],
                         'bayar' => $request->bayar[$i],
                     ]);
+
+                    if ($request->jenis_pembayaran[$i] == 'Giro') {
+                        DB::table('cek_giro')->insert([
+                            'penjualan_id' => $penjualan->id,
+                            'jenis_cek' => 'In',
+                            'status' => 'Belum Lunas',
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    }
                 }
 
                 $penjualan->penjualan_pembayaran()->saveMany($pembayaran);

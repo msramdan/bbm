@@ -189,7 +189,7 @@
                 </li>
             @endhasanyrole
 
-            {{-- menu pelunasan hutang --}}
+            {{-- menu keuangan --}}
             @role('admin')
                 <li class="has-sub">
                     <a href="javascript:;">
@@ -207,6 +207,12 @@
                         <li>
                             <a href="{{ route('pelunasan-piutang.index') }}">
                                 {{ trans('dashboard.menu.pelunasan_piutang') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('cek-giro-cair.index') }}">
+                                {{ trans('dashboard.menu.cek_giro_cair') }}
                             </a>
                         </li>
                     </ul>

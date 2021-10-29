@@ -134,6 +134,16 @@ class PembelianController extends Controller
                         'no_cek_giro' => $request->no_cek_giro[$i],
                         'bayar' => $request->bayar[$i],
                     ]);
+
+                    if ($request->jenis_pembayaran[$i] == 'Giro') {
+                        DB::table('cek_giro')->insert([
+                            'pembelian_id' => $pembelian->id,
+                            'jenis_cek' => 'Out',
+                            'status' => 'Belum Lunas',
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    }
                 }
 
                 $pembelian->pembelian_pembayaran()->saveMany($pembayaran);
@@ -166,7 +176,7 @@ class PembelianController extends Controller
      */
     public function edit(Pembelian $pembelian)
     {
-        $pembelian->load('pembelian_detail', 'gudang', 'supplier', 'matauang', 'pembelian_pembayaran', 'pesanan_pembelian');
+        $pembelian->load('pembelian_detail', 'gudang', 'supplier', 'matauang', 'pembelian_pembayaran');
 
         return view('pembelian.pembelian.edit', compact('pembelian'));
     }
@@ -214,6 +224,8 @@ class PembelianController extends Controller
 
             // hapus list lama
             $pembelian->pembelian_pembayaran()->delete();
+            $pembelian->cek_giro()->delete();
+
             if ($request->jenis_pembayaran && $request->bayar) {
                 $pembelian->update(['status' => 'Lunas']);
 
@@ -225,6 +237,16 @@ class PembelianController extends Controller
                         'no_cek_giro' => $request->no_cek_giro[$i],
                         'bayar' => $request->bayar[$i],
                     ]);
+
+                    if ($request->jenis_pembayaran[$i] == 'Giro') {
+                        DB::table('cek_giro')->insert([
+                            'pembelian_id' => $pembelian->id,
+                            'jenis_cek' => 'Out',
+                            'status' => 'Belum Lunas',
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    }
                 }
                 // insert list baru
                 $pembelian->pembelian_pembayaran()->saveMany($pembayaran);

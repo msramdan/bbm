@@ -9,7 +9,7 @@ use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusCon
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
 use App\Http\Controllers\Penjualan\{PenjualanController, ReturPenjualanController};
 use App\Http\Controllers\Setting\{TokoController, UserController};
-use App\Http\Controllers\Keuangan\{PelunasanHutangController, PelunasanPiutangController};
+use App\Http\Controllers\Keuangan\{CekGiroCairController, PelunasanHutangController, PelunasanPiutangController};
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -120,15 +120,20 @@ Route::group(['prefix' => 'jual', 'middleware' => ['web', 'auth']], function () 
 Route::group(['prefix' => 'keuangan', 'middleware' => ['web', 'auth']], function () {
     // Pelunasan Hutang
     Route::get('/pelunasan-hutang/get-pembelian-belum-lunas/{id}', [PelunasanHutangController::class, 'getPembelianYgBelumLunas']);
-
     Route::get('/pelunasan-hutang/generate-kode/{tanggal}', [PelunasanHutangController::class, 'generateKode']);
-
     Route::resource('/pelunasan-hutang', PelunasanHutangController::class);
 
     // Pelunasan Piutang
     Route::get('/pelunasan-piutang/get-penjualan-belum-lunas/{id}', [PelunasanPiutangController::class, 'getPenjualanYgBelumLunas']);
-
     Route::get('/pelunasan-piutang/generate-kode/{tanggal}', [PelunasanPiutangController::class, 'generateKode']);
-
     Route::resource('/pelunasan-piutang', PelunasanPiutangController::class);
+
+    // Route::get('/cek', function () {
+    //     return App\Models\CekGiro::with('pembelian', 'penjualan')->get();
+    // });
+
+    // Giro Cair
+    Route::get('/cek-giro-cair/generate-kode/{tanggal}', [CekGiroCairController::class, 'generateKode']);
+    Route::get('/cek-giro-cair/get-cek-giro-by-id/{id}', [CekGiroCairController::class, 'getCekGiroById']);
+    Route::resource('/cek-giro-cair', CekGiroCairController::class);
 });

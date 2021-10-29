@@ -1,14 +1,14 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('cek_giro_cair.title.edit'))
+@section('title', trans('cek_giro_tolak.title.edit'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('cek_giro_cair_edit') }}
+        {{ Breadcrumbs::render('cek_giro_tolak_edit') }}
         <!-- begin row -->
         <div class="row">
-            <form action="{{ route('cek-giro-cair.update', $cekGiroCair->id) }}" method="post">
+            <form action="{{ route('cek-giro-tolak.update', $cekGiroTolak->id) }}" method="post">
                 @csrf
                 @method('put')
 
@@ -34,7 +34,7 @@
                                     <i class="fa fa-times"></i>
                                 </a>
                             </div>
-                            <h4 class="panel-title">{{ trans('cek_giro_cair.title.header_entry') }}</h4>
+                            <h4 class="panel-title">{{ trans('cek_giro_tolak.title.header_entry') }}</h4>
                         </div>
 
                         <div class="panel-body">
@@ -48,7 +48,7 @@
                                 <div class="col-md-4">
                                     <label for="kode" class="control-label">Kode</label>
                                     <input type="text" name="kode" class="form-control" placeholder="Kode" id="kode"
-                                        value="{{ $cekGiroCair->kode }}" readonly />
+                                        value="{{ $cekGiroTolak->kode }}" readonly />
                                     @error('kode')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -57,7 +57,7 @@
                                 <div class="col-md-4">
                                     <label for="tanggal" class="control-label">Tanggal</label>
                                     <input type="date" name="tanggal" class="form-control" required
-                                        value="{{ $cekGiroCair->tanggal->format('Y-m-d') }}" id="tanggal" />
+                                        value="{{ $cekGiroTolak->tanggal->format('Y-m-d') }}" id="tanggal" />
                                     @error('tanggal')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -66,11 +66,11 @@
                                 <div class="col-md-4">
                                     <label for="no_cek_giro">No. Cek/Giro</label>
                                     <select name="no_cek_giro" id="no_cek_giro" class="form-control" required>
-                                        <option value="{{ $cekGiroCair->cek_giro->id }}">
-                                            @if ($cekGiroCair->cek_giro->pembelian)
-                                                {{ $cekGiroCair->cek_giro->pembelian->pembelian_pembayaran[0]->no_cek_giro }}
+                                        <option value="{{ $cekGiroTolak->cek_giro->id }}">
+                                            @if ($cekGiroTolak->cek_giro->pembelian)
+                                                {{ $cekGiroTolak->cek_giro->pembelian->pembelian_pembayaran[0]->no_cek_giro }}
                                             @else
-                                                {{ $cekGiroCair->cek_giro->penjualan->penjualan_pembayaran[0]->no_cek_giro }}
+                                                {{ $cekGiroTolak->cek_giro->penjualan->penjualan_pembayaran[0]->no_cek_giro }}
                                             @endif
                                         </option>
                                         @forelse ($cekGiroBelumLunas as $item)
@@ -102,20 +102,20 @@
                                     <label for="jenis_cek_giro" class="control-label">Jenis Cek/Giro</label>
                                     <input type="text" name="jenis_cek_giro" class="form-control"
                                         placeholder="Jenis Cek/Giro" id="jenis_cek_giro"
-                                        value="{{ strtoupper($cekGiroCair->cek_giro->jenis_cek) }}" disabled />
+                                        value="{{ strtoupper($cekGiroTolak->cek_giro->jenis_cek) }}" disabled />
                                 </div>
 
                                 <div class="col-md-3">
                                     <label for="tgl_cek_giro" class="control-label">Tanggal Cek/Giro</label>
-                                    @if ($cekGiroCair->cek_giro->penjualan)
+                                    @if ($cekGiroTolak->cek_giro->penjualan)
                                         <input type="text" name="tgl_cek_giro" id="tgl_cek_giro" class="form-control"
                                             placeholder="Nilai Cek/Giro"
-                                            value="{{ $cekGiroCair->cek_giro->penjualan->penjualan_pembayaran[0]->tgl_cek_giro->format('d/m/Y') }}"
+                                            value="{{ $cekGiroTolak->cek_giro->penjualan->penjualan_pembayaran[0]->tgl_cek_giro->format('d/m/Y') }}"
                                             disabled />
                                     @else
                                         <input type="text" name="tgl_cek_giro" id="tgl_cek_giro" class="form-control"
                                             placeholder="Nilai Cek/Giro"
-                                            value="{{ $cekGiroCair->cek_giro->pembelian->pembelian_pembayaran[0]->tgl_cek_giro->format('d/m/Y') }}"
+                                            value="{{ $cekGiroTolak->cek_giro->pembelian->pembelian_pembayaran[0]->tgl_cek_giro->format('d/m/Y') }}"
                                             disabled />
                                     @endif
                                 </div>
@@ -124,55 +124,14 @@
                                     <label for="matauang" class="control-label">Mata Uang</label>
                                     <input type="text" name="matauang" class="form-control" placeholder="Mata Uang"
                                         id="matauang" disabled
-                                        value="{{ $cekGiroCair->cek_giro->pembelian ? $cekGiroCair->cek_giro->pembelian->matauang->kode : $cekGiroCair->cek_giro->penjualan->matauang->kode }}" />
+                                        value="{{ $cekGiroTolak->cek_giro->pembelian ? $cekGiroTolak->cek_giro->pembelian->matauang->kode : $cekGiroTolak->cek_giro->penjualan->matauang->kode }}" />
                                 </div>
 
                                 <div class="col-md-3">
                                     <label for="rate" class="control-label">Rate</label>
                                     <input type="text" name="rate" class="form-control" placeholder="Rate" id="rate"
-                                        value="{{ $cekGiroCair->cek_giro->pembelian ? $cekGiroCair->cek_giro->pembelian->rate : $cekGiroCair->cek_giro->penjualan->rate }}"
+                                        value="{{ $cekGiroTolak->cek_giro->pembelian ? $cekGiroTolak->cek_giro->pembelian->rate : $cekGiroTolak->cek_giro->penjualan->rate }}"
                                         disabled />
-                                </div>
-
-                                <div class="col-md-4" style="margin-top: 1em;">
-                                    <label for="dicairkan_ke" class="control-label">Dicairkan Ke</label>
-                                    <select name="dicairkan_ke" class="form-control" id="dicairkan_ke">
-                                        @foreach ($dicairkanKe as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $cekGiroCair->dicairkan_ke == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('dicairkan_ke')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-4" style="margin-top: 1em;">
-                                    <label for="bank" class="control-label">Bank</label>
-                                    <select name="bank" class="form-control" id="bank" disabled>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @foreach ($bank as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $cekGiroCair->bank && $cekGiroCair->bank->id == $item->id ? 'selected' : '-' }}>
-                                                {{ $item->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('bank')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-4" style="margin-top: 1em;">
-                                    <label for="rekening" class="control-label">Rekening</label>
-                                    <select name="rekening" class="form-control" id="rekening" disabled>
-                                        <option value="" selected disabled>-- Plih bank terlebih dahulu --</option>
-                                    </select>
-                                    @error('rekening')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -202,7 +161,7 @@
                                     <i class="fa fa-times"></i>
                                 </a>
                             </div>
-                            <h4 class="panel-title">{{ trans('cek_giro_cair.title.detail_info') }}</h4>
+                            <h4 class="panel-title">{{ trans('cek_giro_tolak.title.detail_info') }}</h4>
                         </div>
 
                         <div class="panel-body">
@@ -210,29 +169,29 @@
                                 {{-- Referensi Nomor --}}
                                 <div class="col-md-4" style="margin-top: 1em;">
                                     <label for="referensi_nomor">Referensi Nomor</label>
-                                    @if ($cekGiroCair->cek_giro->penjualan)
+                                    @if ($cekGiroTolak->cek_giro->penjualan)
                                         <input type="text" step="any" name="referensi_nomor" id="referensi_nomor"
                                             class="form-control" placeholder="Referensi Nomor"
-                                            value="{{ $cekGiroCair->cek_giro->penjualan->kode }}" disabled />
+                                            value="{{ $cekGiroTolak->cek_giro->penjualan->kode }}" disabled />
                                     @else
                                         <input type="text" step="any" name="referensi_nomor" id="referensi_nomor"
                                             class="form-control" placeholder="Referensi Nomor"
-                                            value="{{ $cekGiroCair->cek_giro->pembelian->kode }}" disabled />
+                                            value="{{ $cekGiroTolak->cek_giro->pembelian->kode }}" disabled />
                                     @endif
                                 </div>
 
                                 {{-- Referensi Nama --}}
                                 <div class="col-md-4" style="margin-top: 1em;">
                                     <label for="referensi_nama">Referensi Nama</label>
-                                    @if ($cekGiroCair->cek_giro->penjualan)
+                                    @if ($cekGiroTolak->cek_giro->penjualan)
                                         <input type="text" name="referensi_nama" id="referensi_nama" class="form-control"
                                             placeholder="Referensi Nama"
-                                            value="{{ $cekGiroCair->cek_giro->penjualan->pelanggan->nama_pelanggan }}"
+                                            value="{{ $cekGiroTolak->cek_giro->penjualan->pelanggan->nama_pelanggan }}"
                                             disabled />
                                     @else
                                         <input type="text" name="referensi_nama" id="referensi_nama" class="form-control"
                                             placeholder="Referensi Nama"
-                                            value="{{ $cekGiroCair->cek_giro->pembelian->supplier ? $cekGiroCair->cek_giro->pembelian->supplier->nama_supplier : 'Tanpa Supplier' }}"
+                                            value="{{ $cekGiroTolak->cek_giro->pembelian->supplier ? $cekGiroTolak->cek_giro->pembelian->supplier->nama_supplier : 'Tanpa Supplier' }}"
                                             disabled />
                                     @endif
                                 </div>
@@ -240,15 +199,15 @@
                                 {{-- nilai_cek_giro --}}
                                 <div class="col-md-4" style="margin-top: 1em;">
                                     <label for="nilai_cek_giro">Nilai Cek/Giro</label>
-                                    @if ($cekGiroCair->cek_giro->penjualan)
+                                    @if ($cekGiroTolak->cek_giro->penjualan)
                                         <input type="text" name="nilai_cek_giro" id="nilai_cek_giro" class="form-control"
                                             placeholder="Nilai Cek/Giro"
-                                            value="{{ number_format($cekGiroCair->cek_giro->penjualan->penjualan_pembayaran[0]->bayar) }}"
+                                            value="{{ number_format($cekGiroTolak->cek_giro->penjualan->penjualan_pembayaran[0]->bayar) }}"
                                             disabled />
                                     @else
                                         <input type="text" name="nilai_cek_giro" id="nilai_cek_giro" class="form-control"
                                             placeholder="Nilai Cek/Giro"
-                                            value="{{ number_format($cekGiroCair->cek_giro->pembelian->pembelian_pembayaran[0]->bayar) }}"
+                                            value="{{ number_format($cekGiroTolak->cek_giro->pembelian->pembelian_pembayaran[0]->bayar) }}"
                                             disabled />
                                     @endif
                                 </div>
@@ -257,7 +216,7 @@
                                 <div class="col-md-12" style="margin-top: 1em;">
                                     <label for="keterangan">Keterangan</label>
                                     <textarea name="keterangan" id="keterangan" class="form-control"
-                                        placeholder="Keterangan" rows="5">{{ $cekGiroCair->keterangan }}</textarea>
+                                        placeholder="Keterangan" rows="5">{{ $cekGiroTolak->keterangan }}</textarea>
                                 </div>
 
                                 <div class="col-md-12" style="margin-top: 1em;">
@@ -280,14 +239,6 @@
 
 @push('custom-js')
     <script>
-        let selected_rekening = '{{ $cekGiroCair->rekening ? $cekGiroCair->rekening->id : '' }}'
-
-        if ($('#bank :selected').val()) {
-            $('#bank').prop('disabled', false)
-
-            get_rekening()
-        }
-
         $('#no_cek_giro').change(function() {
             // tipe cek in/out | pembelian/penjualan
             let tipe_cek_giro = []
@@ -301,7 +252,7 @@
             let nilai_cek_giro = $('#nilai_cek_giro')
 
             $.ajax({
-                url: "/keuangan/cek-giro-cair/get-cek-giro-by-id/" + $(this).val(),
+                url: "/keuangan/cek-giro-tolak/get-cek-giro-by-id/" + $(this).val(),
                 type: 'GET',
                 success: function(data) {
                     if (data.penjualan) {
@@ -346,70 +297,18 @@
 
                         nilai_cek_giro.val(tipe_cek_giro[0].bayar)
                     }, 1500);
+
                 }
             })
-        })
-
-        $('#bank').change(function() {
-            get_rekening()
-        })
-
-        $('#dicairkan_ke').change(function() {
-            if ($(this).val() == 'Bank') {
-                $('#bank').prop('disabled', false)
-                $('#rekening').prop('required', true)
-                $('#bank').prop('required', true)
-            } else {
-                $('#bank').prop('disabled', true)
-                $('#rekening').prop('required', false)
-                $('#bank').prop('required', false)
-            }
         })
 
         $('#tanggal').change(function() {
             get_kode()
         })
 
-        function get_rekening() {
-            $.ajax({
-                url: "/beli/pembelian/get-rekening/" + $('#bank').val(),
-                type: 'GET',
-                success: function(data) {
-                    let rekening = []
-
-                    $('#rekening').prop('disabled', true)
-                    $('#rekening').html(
-                        '<option value="" disabled selected>Loading...</option>')
-
-                    setTimeout(() => {
-                        if (data.length > 0) {
-                            data.forEach(elm => {
-                                rekening.push(
-                                    `<option value="${elm.id}">${elm.nomor_rekening} - ${elm.nama_rekening}</option>`
-                                )
-                            })
-
-                            $('#rekening').html(rekening)
-
-                            $('#rekening').prop('disabled', false)
-
-                            if (selected_rekening) {
-                                $('#rekening option[value=' + selected_rekening + ']')
-                                    .attr('selected', 'selected')
-                            }
-                        } else {
-                            $('#rekening').html(
-                                '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
-                            )
-                        }
-                    }, 1500);
-                }
-            })
-        }
-
         function get_kode() {
             $.ajax({
-                url: "/keuangan/cek-giro-cair/generate-kode/" + $('input[name="tanggal"]').val(),
+                url: "/keuangan/cek-giro-tolak/generate-kode/" + $('input[name="tanggal"]').val(),
                 type: 'GET',
                 success: function(data) {
                     $('input[name="kode"]').val('Loading...')

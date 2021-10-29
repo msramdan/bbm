@@ -9,7 +9,7 @@ use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusCon
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
 use App\Http\Controllers\Penjualan\{PenjualanController, ReturPenjualanController};
 use App\Http\Controllers\Setting\{TokoController, UserController};
-use App\Http\Controllers\Keuangan\{CekGiroCairController, PelunasanHutangController, PelunasanPiutangController};
+use App\Http\Controllers\Keuangan\{CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -128,12 +128,13 @@ Route::group(['prefix' => 'keuangan', 'middleware' => ['web', 'auth']], function
     Route::get('/pelunasan-piutang/generate-kode/{tanggal}', [PelunasanPiutangController::class, 'generateKode']);
     Route::resource('/pelunasan-piutang', PelunasanPiutangController::class);
 
-    // Route::get('/cek', function () {
-    //     return App\Models\CekGiro::with('pembelian', 'penjualan')->get();
-    // });
-
     // Giro Cair
     Route::get('/cek-giro-cair/generate-kode/{tanggal}', [CekGiroCairController::class, 'generateKode']);
     Route::get('/cek-giro-cair/get-cek-giro-by-id/{id}', [CekGiroCairController::class, 'getCekGiroById']);
     Route::resource('/cek-giro-cair', CekGiroCairController::class);
+
+    // Giro Tolak
+    Route::get('/cek-giro-tolak/generate-kode/{tanggal}', [CekGiroTolakController::class, 'generateKode']);
+    Route::get('/cek-giro-tolak/get-cek-giro-by-id/{id}', [CekGiroTolakController::class, 'getCekGiroById']);
+    Route::resource('/cek-giro-tolak', CekGiroTolakController::class);
 });

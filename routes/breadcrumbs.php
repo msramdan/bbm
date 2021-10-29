@@ -460,3 +460,25 @@ Breadcrumbs::for('cek_giro_cair_show', function (BreadcrumbTrail $trail) {
     $trail->parent('cek_giro_cair');
     $trail->push('Show');
 });
+
+
+// Master Data > Cek-Giro Tolak
+Breadcrumbs::for('cek_giro_tolak', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Cek-Giro Tolak', route('cek-giro-tolak.index'));
+});
+// Master Data > Cek-Giro Tolak  > Tambah
+Breadcrumbs::for('cek_giro_tolak_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('cek_giro_tolak');
+    $trail->push('Tambah', route('cek-giro-tolak.create'));
+});
+// Master Data > Cek-Giro Tolak  > Edit
+Breadcrumbs::for('cek_giro_tolak_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('cek_giro_tolak');
+    $trail->push('Edit');
+});
+// Master Data > Cek-Giro Tolak  > Show
+Breadcrumbs::for('cek_giro_tolak_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('cek_giro_tolak');
+    $trail->push('Show');
+});

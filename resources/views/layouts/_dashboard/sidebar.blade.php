@@ -215,6 +215,12 @@
                                 {{ trans('dashboard.menu.cek_giro_cair') }}
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('cek-giro-tolak.index') }}">
+                                {{ trans('dashboard.menu.cek_giro_tolak') }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endrole

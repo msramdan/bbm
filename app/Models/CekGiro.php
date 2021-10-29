@@ -35,6 +35,6 @@ class CekGiro extends Model
 
     public function tolak_cek()
     {
-        return $this->hasOne(CekGiroCair::class);
+        return $this->hasOne(CekGiroTolak::class);
     }
 }

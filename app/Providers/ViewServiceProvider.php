@@ -228,7 +228,9 @@ class ViewServiceProvider extends ServiceProvider
         // Cek/Giro yang belum dilunas/dibayar
         View::composer([
             'keuangan.cek-giro.cair.create',
-            'keuangan.cek-giro.cair.edit'
+            'keuangan.cek-giro.cair.edit',
+            'keuangan.cek-giro.tolak.create',
+            'keuangan.cek-giro.tolak.edit'
         ], function ($view) {
             $cekGiroBelumLunas = CekGiro::with('pembelian', 'penjualan', 'pembelian.pembelian_pembayaran', 'penjualan.penjualan_pembayaran')
                 ->where('status', 'Belum Lunas')

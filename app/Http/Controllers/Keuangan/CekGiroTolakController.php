@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CekGiroCairRequest;
-use App\Models\{CekGiro, CekGiroCair};
+use App\Http\Requests\CekGiroTolakRequest;
+use App\Models\CekGiro;
+use App\Models\CekGiroTolak;
+use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
-class CekGiroCairController extends Controller
+class CekGiroTolakController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +20,11 @@ class CekGiroCairController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $cekGiroCair = CekGiroCair::with('cek_giro', 'cek_giro.pembelian', 'cek_giro.pembelian.pembelian_pembayaran', 'cek_giro.penjualan', 'cek_giro.penjualan.penjualan_pembayaran');
+            $cekGiroTolak =  CekGiroTolak::with('cek_giro', 'cek_giro.pembelian', 'cek_giro.pembelian.pembelian_pembayaran', 'cek_giro.penjualan', 'cek_giro.penjualan.penjualan_pembayaran');
 
-            return DataTables::of($cekGiroCair)
+            return DataTables::of($cekGiroTolak)
                 ->addIndexColumn()
-                ->addColumn('action', 'keuangan.cek-giro.cair.data-table.action')
+                ->addColumn('action', 'keuangan.cek-giro.tolak.data-table.action')
                 ->addColumn('nilai_cek_giro', function ($row) {
                     if ($row->cek_giro->penjualan) {
                         return number_format($row->cek_giro->penjualan->penjualan_pembayaran[0]->bayar);
@@ -52,7 +54,7 @@ class CekGiroCairController extends Controller
                 ->toJson();
         }
 
-        return view('keuangan.cek-giro.cair.index');
+        return view('keuangan.cek-giro.tolak.index');
     }
 
     /**
@@ -62,7 +64,7 @@ class CekGiroCairController extends Controller
      */
     public function create()
     {
-        return view('keuangan.cek-giro.cair.create');
+        return view('keuangan.cek-giro.tolak.create');
     }
 
     /**
@@ -71,40 +73,36 @@ class CekGiroCairController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CekGiroCairRequest $request)
+    public function store(CekGiroTolakRequest $request)
     {
-        $attr = $request->validated();
-        $attr['bank_id'] = $request->bank;
-        $attr['rekening_bank_id'] = $request->rekening;
-
         $cekGiro = CekGiro::with('pembelian', 'penjualan')->findOrFail($request->no_cek_giro);
 
         if ($cekGiro->pembelian) {
-            $cekGiro->pembelian->update(['status' => 'Lunas']);
+            $cekGiro->pembelian->update(['status' => 'Belum Lunas']);
         }
 
         if ($cekGiro->penjualan) {
-            $cekGiro->penjualan->update(['status' => 'Lunas']);
+            $cekGiro->penjualan->update(['status' => 'Belum Lunas']);
         }
 
-        $cekGiro->update(['status' => 'Cair']);
+        $cekGiro->update(['status' => 'Tolak']);
 
-        $cekGiro->pencairan_cek()->create($attr);
+        $cekGiro->tolak_cek()->create($request->validated());
 
         Alert::success('Simpan Data', 'Berhasil');
 
-        return redirect()->route('cek-giro-cair.index');
+        return redirect()->route('cek-giro-tolak.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CekGiroCair  $cekGiroCair
+     * @param  \App\Models\CekGiroTolak  $cekGiroTolak
      * @return \Illuminate\Http\Response
      */
-    public function show(CekGiroCair $cekGiroCair)
+    public function show(CekGiroTolak $cekGiroTolak)
     {
-        $cekGiroCair->load(
+        $cekGiroTolak->load(
             'cek_giro',
             'cek_giro.pembelian',
             'cek_giro.pembelian.matauang',
@@ -113,23 +111,21 @@ class CekGiroCairController extends Controller
             'cek_giro.penjualan',
             'cek_giro.penjualan.matauang',
             'cek_giro.penjualan.pelanggan',
-            'cek_giro.penjualan.penjualan_pembayaran',
-            'rekening',
-            'bank'
+            'cek_giro.penjualan.penjualan_pembayaran'
         );
 
-        return view('keuangan.cek-giro.cair.show', compact('cekGiroCair'));
+        return view('keuangan.cek-giro.tolak.show', compact('cekGiroTolak'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\CekGiroCair  $cekGiroCair
+     * @param  \App\Models\CekGiroTolak  $cekGiroTolak
      * @return \Illuminate\Http\Response
      */
-    public function edit(CekGiroCair $cekGiroCair)
+    public function edit(CekGiroTolak $cekGiroTolak)
     {
-        $cekGiroCair->load(
+        $cekGiroTolak->load(
             'cek_giro',
             'cek_giro.pembelian',
             'cek_giro.pembelian.matauang',
@@ -138,100 +134,79 @@ class CekGiroCairController extends Controller
             'cek_giro.penjualan',
             'cek_giro.penjualan.matauang',
             'cek_giro.penjualan.pelanggan',
-            'cek_giro.penjualan.penjualan_pembayaran',
-            'rekening',
-            'bank'
+            'cek_giro.penjualan.penjualan_pembayaran'
         );
 
-        return view('keuangan.cek-giro.cair.edit', compact('cekGiroCair'));
+        return view('keuangan.cek-giro.tolak.edit', compact('cekGiroTolak'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CekGiroCair  $cekGiroCair
+     * @param  \App\Models\CekGiroTolak  $cekGiroTolak
      * @return \Illuminate\Http\Response
      */
-    public function update(CekGiroCairRequest $request, CekGiroCair $cekGiroCair)
+    public function update(CekGiroTolakRequest $request, CekGiroTolak $cekGiroTolak)
     {
         $attr = $request->validated();
-        $attr['bank_id'] = $request->bank;
-        $attr['rekening_bank_id'] = $request->rekening;
         $attr['cek_giro_id'] = $request->no_cek_giro;
-
-        // hapus data lama
-        if ($cekGiroCair->cek_giro->pembelian) {
-            $cekGiroCair->cek_giro->pembelian->update(['status' => 'Belum Lunas']);
-        }
-
-        if ($cekGiroCair->cek_giro->penjualan) {
-            $cekGiroCair->cek_giro->penjualan->update(['status' => 'Belum Lunas']);
-        }
-
-        // ubah cek giro dari cair menjadi belum lunas
-        $cekGiroCair->cek_giro()->update(['status' => 'Belum Lunas']);
-        // end hapus data lama
-
 
         // insert data baru
         $cekGiroBaru = CekGiro::with('pembelian', 'penjualan')->findOrFail($request->no_cek_giro);
 
-        $cekGiroBaru->update(['status' => 'Cair']);
+        $cekGiroBaru->update(['status' => 'Tolak']);
 
         if ($cekGiroBaru->pembelian) {
-            $cekGiroBaru->pembelian->update(['status' => 'Lunas']);
+            $cekGiroBaru->pembelian->update(['status' => 'Belum Lunas']);
         }
 
         if ($cekGiroBaru->penjualan) {
-            $cekGiroBaru->penjualan->update(['status' => 'Lunas']);
+            $cekGiroBaru->penjualan->update(['status' => 'Belum Lunas']);
         }
         // end insert data baru
 
+        $cekGiroTolak->cek_giro()->update(['status' => 'Belum Lunas']);
+
         // update pencairan cek
-        $cekGiroCair->update($attr);
+        $cekGiroTolak->update($attr);
 
         Alert::success('Update Data', 'Berhasil');
 
-        return redirect()->route('cek-giro-cair.index');
+        return redirect()->route('cek-giro-tolak.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CekGiroCair  $cekGiroCair
+     * @param  \App\Models\CekGiroTolak  $cekGiroTolak
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CekGiroCair $cekGiroCair)
+    public function destroy(CekGiroTolak $cekGiroTolak)
     {
-        if ($cekGiroCair->cek_giro->pembelian) {
-            $cekGiroCair->cek_giro->pembelian->update(['status' => 'Belum Lunas']);
-        } else {
-            $cekGiroCair->cek_giro->penjualan->update(['status' => 'Belum Lunas']);
-        }
+        $cekGiroTolak->cek_giro->update(['status' => 'Belum Lunas']);
 
-        $cekGiroCair->cek_giro->update(['status' => 'Belum Lunas']);
-
-        $cekGiroCair->delete();
+        $cekGiroTolak->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
 
         return back();
     }
 
+
     protected function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
-        $checkLatestKode = CekGiroCair::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
+        $checkLatestKode = CekGiroTolak::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'CHWDL-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'CHRJC-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
-            // hapus "CHWDL-" dan ambil angka buat ditambahin
-            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'CHWDL-');
+            // hapus "CHRJC-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'CHRJC-');
 
-            $kode =  'CHWDL-' . intval($onlyNumberKode) + 1;
+            $kode =  'CHRJC-' . intval($onlyNumberKode) + 1;
         }
 
         return response()->json($kode, 200);

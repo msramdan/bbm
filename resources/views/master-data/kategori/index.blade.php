@@ -31,7 +31,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('kategori.create') }}" class="btn btn-success">
+                        <a href="{{ route('kategori.create') }}" class="btn btn-success{{ !auth()->user()->can('create kategori') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('kategori.button.tambah') }}
                         </a>
                     </div>

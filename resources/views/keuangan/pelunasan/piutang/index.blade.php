@@ -31,7 +31,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('pelunasan-piutang.create') }}" class="btn btn-success">
+                        <a href="{{ route('pelunasan-piutang.create') }}" class="btn btn-success{{ !auth()->user()->can('create pelunasan piutang') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('pelunasan_piutang.button.tambah') }}
                         </a>
                     </div>

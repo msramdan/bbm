@@ -33,10 +33,7 @@
                         </div>
 
                         <a href="{{ route('biaya.create') }}"
-                            class="btn btn-success
-                            {{ !auth()->user()->can('create biaya')
-    ? ' disabled'
-    : '' }}">
+                            class="btn btn-success{{ !auth()->user()->can('create biaya') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('biaya.button.tambah') }}
                         </a>
                     </div>
@@ -55,8 +52,7 @@
                                         <th>Grandtotal</th>
                                         <th>Created At</th>
                                         <th>Updated At</th>
-                                        @if (auth()->user()->can('edit biaya') ||
-        auth()->user()->can('delete biaya'))
+                                        @if (auth()->user()->can('edit biaya') || auth()->user()->can('delete biaya'))
                                             <th>Action</th>
                                         @endif
                                     </tr>

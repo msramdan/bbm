@@ -31,7 +31,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('adjustment-minus.create') }}" class="btn btn-success">
+                        <a href="{{ route('adjustment-minus.create') }}" class="btn btn-success{{ !auth()->user()->can('create adjustment minus') ? ' disabled' : '' }}">
                             <i class="fa fa-minus-square-o"></i> {{ trans('adjustment_minus.button.tambah') }}
                         </a>
                     </div>

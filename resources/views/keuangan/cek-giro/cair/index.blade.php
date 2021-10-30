@@ -31,7 +31,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('cek-giro-cair.create') }}" class="btn btn-success">
+                        <a href="{{ route('cek-giro-cair.create') }}" class="btn btn-success{{ !auth()->user()->can('create cek/giro cair') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('cek_giro_cair.button.tambah') }}
                         </a>
                     </div>

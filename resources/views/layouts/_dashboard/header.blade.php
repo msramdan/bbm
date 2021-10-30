@@ -1,7 +1,7 @@
 <div id="header" class="header navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="index.html" class="navbar-brand"><span class="navbar-logo"></span>
+            <a href="{{ route('dashboard.index') }}" class="navbar-brand"><span class="navbar-logo"></span>
                 {{ config('app.name') }}</a>
             <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
                 <span class="icon-bar"></span>

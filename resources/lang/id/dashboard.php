@@ -3,7 +3,7 @@
 
 return [
     'title' => [
-        'index' => 'Dashboard',
+        'index' => 'Dasbor',
     ],
     'greeting' => [
         'welcome' => "Selamat Datang :a",
@@ -43,7 +43,7 @@ return [
         'biaya' => 'Biaya'
     ],
     'link' => [
-        'dashboard' => 'Home',
+        'dashboard' => 'Dasbor',
         'profile' => 'Rubah Profil',
         'logout' => 'Keluar',
     ]

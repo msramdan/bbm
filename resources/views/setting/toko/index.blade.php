@@ -190,7 +190,7 @@
 
                             <div class="form-group row" style="margin-top: 1em;">
                                 <div class="col-md-12">
-                                    <button class="btn btn-primary" type="submit">Simpan</button>
+                                    <button class="btn btn-success" type="submit">Simpan</button>
                                 </div>
                             </div>
                             {{-- form-group row --}}

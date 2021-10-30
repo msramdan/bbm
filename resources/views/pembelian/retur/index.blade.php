@@ -31,7 +31,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('retur-pembelian.create') }}" class="btn btn-success">
+                        <a href="{{ route('retur-pembelian.create') }}" class="btn btn-success{{ !auth()->user()->can('create retur pembelian') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('retur_pembelian.button.tambah') }}
                         </a>
                     </div>

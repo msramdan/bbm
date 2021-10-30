@@ -10,6 +10,16 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PelunasanPiutangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create pelunasan piutang')->only('create');
+        $this->middleware('permission:read pelunasan piutang')->only('index');
+        $this->middleware('permission:edit pelunasan piutang')->only('edit');
+        $this->middleware('permission:detail pelunasan piutang')->only('show');
+        $this->middleware('permission:update pelunasan piutang')->only('update');
+        $this->middleware('permission:delete pelunasan piutang')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

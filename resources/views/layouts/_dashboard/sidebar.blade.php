@@ -221,6 +221,12 @@
                                 {{ trans('dashboard.menu.cek_giro_tolak') }}
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('biaya.index') }}">
+                                {{ trans('dashboard.menu.biaya') }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endrole

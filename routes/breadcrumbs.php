@@ -482,3 +482,25 @@ Breadcrumbs::for('cek_giro_tolak_show', function (BreadcrumbTrail $trail) {
     $trail->parent('cek_giro_tolak');
     $trail->push('Show');
 });
+
+
+// Master Data > Biaya
+Breadcrumbs::for('biaya', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Biaya', route('biaya.index'));
+});
+// Master Data > Biaya  > Tambah
+Breadcrumbs::for('biaya_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('biaya');
+    $trail->push('Tambah', route('biaya.create'));
+});
+// Master Data > Biaya  > Edit
+Breadcrumbs::for('biaya_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('biaya');
+    $trail->push('Edit');
+});
+// Master Data > Biaya  > Show
+Breadcrumbs::for('biaya_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('biaya');
+    $trail->push('Show');
+});

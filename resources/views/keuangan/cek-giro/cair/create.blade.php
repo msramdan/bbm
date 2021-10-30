@@ -362,8 +362,12 @@
                 $('#bank').prop('required', true)
             } else {
                 $('#bank').prop('disabled', true)
-                $('#rekening').prop('required', false)
                 $('#bank').prop('required', false)
+                $('#bank option[value=""]').attr('selected', 'selected')
+                $('#rekening').prop('disabled', true)
+                $('#rekening').prop('required', false)
+                $('#rekening').html(
+                    '<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
             }
         })
 

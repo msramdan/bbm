@@ -4,17 +4,23 @@ namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePelunasanHutangRequest;
-use App\Models\PelunasanHutang;
-use App\Models\Pembelian;
-use App\Models\PembelianPembayaran;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\{PelunasanHutang, Pembelian, PembelianPembayaran};
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 
 class PelunasanHutangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create pelunasan hutang')->only('create');
+        $this->middleware('permission:read pelunasan hutang')->only('index');
+        $this->middleware('permission:edit pelunasan hutang')->only('edit');
+        $this->middleware('permission:detail pelunasan hutang')->only('show');
+        $this->middleware('permission:update pelunasan hutang')->only('update');
+        $this->middleware('permission:delete pelunasan hutang')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

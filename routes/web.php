@@ -9,7 +9,7 @@ use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusCon
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
 use App\Http\Controllers\Penjualan\{PenjualanController, ReturPenjualanController};
 use App\Http\Controllers\Setting\{TokoController, UserController};
-use App\Http\Controllers\Keuangan\{CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
+use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -137,4 +137,8 @@ Route::group(['prefix' => 'keuangan', 'middleware' => ['web', 'auth']], function
     Route::get('/cek-giro-tolak/generate-kode/{tanggal}', [CekGiroTolakController::class, 'generateKode']);
     Route::get('/cek-giro-tolak/get-cek-giro-by-id/{id}', [CekGiroTolakController::class, 'getCekGiroById']);
     Route::resource('/cek-giro-tolak', CekGiroTolakController::class);
+
+    // Biaya
+    Route::get('/biaya/generate-kode/{tanggal}', [BiayaController::class, 'generateKode']);
+    Route::resource('/biaya', BiayaController::class);
 });

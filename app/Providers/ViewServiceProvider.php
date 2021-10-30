@@ -87,7 +87,9 @@ class ViewServiceProvider extends ServiceProvider
             'master-data.barang.create',
             'master-data.barang.edit',
             'penjualan.penjualan.edit',
-            'penjualan.penjualan.create'
+            'penjualan.penjualan.create',
+            'keuangan.biaya.create',
+            'keuangan.biaya.edit'
         ], function ($view) {
             return $view->with('matauang', Matauang::all());
         });
@@ -106,7 +108,9 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.pelunasan.piutang.edit',
             'keuangan.pelunasan.piutang.create',
             'keuangan.cek-giro.cair.create',
-            'keuangan.cek-giro.cair.edit'
+            'keuangan.cek-giro.cair.edit',
+            'keuangan.biaya.create',
+            'keuangan.biaya.edit'
         ], function ($view) {
             return $view->with('bank', Bank::all());
         });
@@ -242,7 +246,9 @@ class ViewServiceProvider extends ServiceProvider
         // list dicairkan ke
         View::composer([
             'keuangan.cek-giro.cair.create',
-            'keuangan.cek-giro.cair.edit'
+            'keuangan.cek-giro.cair.edit',
+            'keuangan.biaya.create',
+            'keuangan.biaya.edit'
         ], function ($view) {
             return $view->with(
                 'dicairkanKe',
@@ -254,6 +260,26 @@ class ViewServiceProvider extends ServiceProvider
                     (object)[
                         'id' => 'Bank',
                         'nama' => 'Bank'
+                    ],
+                ])
+            );
+        });
+
+        // list jenis transaksi
+        View::composer([
+            'keuangan.biaya.create',
+            'keuangan.biaya.edit'
+        ], function ($view) {
+            return $view->with(
+                'jenisTransaksi',
+                collect([
+                    (object)[
+                        'id' => 'Pemasukan',
+                        'nama' => 'Pemasukan'
+                    ],
+                    (object)[
+                        'id' => 'Pengeluaran',
+                        'nama' => 'Pengeluaran'
                     ],
                 ])
             );

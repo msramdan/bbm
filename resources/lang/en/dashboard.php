@@ -40,6 +40,7 @@ return [
         'pelunasan_piutang' => 'A/R Payment',
         'cek_giro_cair' => 'Cheque Withdraw',
         'cek_giro_tolak' => 'Cheque Rejected',
+        'biaya' => 'Expense'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

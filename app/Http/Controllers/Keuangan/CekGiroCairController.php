@@ -10,6 +10,16 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CekGiroCairController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create cek/giro cair')->only('create');
+        $this->middleware('permission:read cek/giro cair')->only('index');
+        $this->middleware('permission:edit cek/giro cair')->only('edit');
+        $this->middleware('permission:detail cek/giro cair')->only('show');
+        $this->middleware('permission:update cek/giro cair')->only('update');
+        $this->middleware('permission:delete cek/giro cair')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

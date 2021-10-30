@@ -4,14 +4,22 @@ namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CekGiroTolakRequest;
-use App\Models\CekGiro;
-use App\Models\CekGiroTolak;
-use Illuminate\Http\Request;
+use App\Models\{CekGiro, CekGiroTolak};
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
 class CekGiroTolakController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create cek/giro tolak')->only('create');
+        $this->middleware('permission:read cek/giro tolak')->only('index');
+        $this->middleware('permission:edit cek/giro tolak')->only('edit');
+        $this->middleware('permission:detail cek/giro tolak')->only('show');
+        $this->middleware('permission:update cek/giro tolak')->only('update');
+        $this->middleware('permission:delete cek/giro tolak')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -192,7 +200,6 @@ class CekGiroTolakController extends Controller
 
         return back();
     }
-
 
     protected function generateKode($tanggal)
     {

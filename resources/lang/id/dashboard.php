@@ -40,7 +40,8 @@ return [
         'pelunasan_piutang' => 'Pelunasan Piutang',
         'cek_giro_cair' => 'Cek/Giro Cair',
         'cek_giro_tolak' => 'Cek/Giro Tolak',
-        'biaya' => 'Biaya'
+        'biaya' => 'Biaya',
+        'perakitan_paket' => 'Perakitan Paket'
     ],
     'link' => [
         'dashboard' => 'Dasbor',

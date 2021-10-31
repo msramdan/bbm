@@ -40,7 +40,8 @@ return [
         'pelunasan_piutang' => 'A/R Payment',
         'cek_giro_cair' => 'Cheque Withdraw',
         'cek_giro_tolak' => 'Cheque Rejected',
-        'biaya' => 'Expense'
+        'biaya' => 'Expense',
+        'perakitan_paket' => 'Package Assembly'
     ],
     'link' => [
         'dashboard' => 'Dashboard',

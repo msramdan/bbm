@@ -39,8 +39,20 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.pembelian.edit',
             'penjualan.penjualan.edit',
             'penjualan.penjualan.create',
+            'inventory.perakitan-paket.create',
+            'inventory.perakitan-paket.edit'
         ], function ($view) {
-            return $view->with('barang', Barang::all());
+            return $view->with('barang', Barang::where('jenis', 1)->get());
+        });
+
+        // 1 =  barang, 2 = paket
+
+        // list paket
+        View::composer([
+            'inventory.perakitan-paket.create',
+            'inventory.perakitan-paket.edit'
+        ], function ($view) {
+            return $view->with('paket', Barang::where('jenis', 2)->get());
         });
 
 
@@ -71,7 +83,9 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.edit',
             'penjualan.penjualan.create',
             'penjualan.retur.edit',
-            'penjualan.retur.create'
+            'penjualan.retur.create',
+            'inventory.perakitan-paket.create',
+            'inventory.perakitan-paket.edit'
         ], function ($view) {
             return $view->with('gudang', Gudang::all());
         });

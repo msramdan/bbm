@@ -131,6 +131,12 @@
                                 {{ trans('dashboard.menu.adjustment_minus') }}
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('perakitan-paket.index') }}">
+                                {{ trans('dashboard.menu.perakitan_paket') }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endrole
@@ -271,11 +277,11 @@
 
                     <li>
                         <a class="dropdown-item" href="http://bbm.test/logout"
-                            onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                            onclick="event.preventDefault();document.getElementById('logout-form-sidebar').submit();">
                             Logout
                         </a>
 
-                        <form id="logout-form" action="http://bbm.test/logout" method="POST" class="d-none">
+                        <form id="logout-form-sidebar" action="http://bbm.test/logout" method="POST" class="d-none">
                             @csrf
                         </form>
                     </li>

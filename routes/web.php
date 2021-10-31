@@ -5,7 +5,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MasterData\{AreaController, BankController, BarangController, GudangController, KategoriController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
-use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController};
+use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController, PerakitanPaketController};
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
 use App\Http\Controllers\Penjualan\{PenjualanController, ReturPenjualanController};
 use App\Http\Controllers\Setting\{TokoController, UserController};
@@ -39,6 +39,8 @@ Route::group(['prefix' => 'masterdata', 'middleware' => ['web', 'auth']], functi
     Route::resource('/gudang', GudangController::class)->except('show');
     Route::resource('/kategori', KategoriController::class)->except('show');
     Route::resource('/barang', BarangController::class)->except('show');
+
+    Route::get('/barang/cek-stok/{id}', [BarangController::class, 'cekStok']);
 });
 
 // Inventory
@@ -56,7 +58,10 @@ Route::group(['prefix' => 'inventory', 'middleware' => ['web', 'auth']], functio
     Route::resource('/adjustment-minus', AdjustmentMinusController::class)->except('store', 'update');
 
     // Perakitan Paket
-    // Coming soon
+    Route::post('/perakitan-paket/store', [PerakitanPaketController::class, 'store'])->name('perakitan-paket.store');
+    Route::put('/perakitan-paket/update/{id}', [PerakitanPaketController::class, 'update'])->name('perakitan-paket.update');
+    Route::get('/perakitan-paket/generate-kode/{tanggal}', [PerakitanPaketController::class, 'generateKode'])->name('perakitan-paket.generateKode');
+    Route::resource('/perakitan-paket', PerakitanPaketController::class)->except('store', 'update');
 });
 
 // Pembelian

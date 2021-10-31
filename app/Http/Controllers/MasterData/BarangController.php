@@ -178,4 +178,22 @@ class BarangController extends Controller
 
         return redirect()->route('barang.index');
     }
+
+    public function cekStok($id)
+    {
+        $barang = Barang::findOrFail($id);
+
+        // if ($barang->stok == $barang->min_stok) {
+        //     return response()->json('Stok tersisa minimal', 403);
+        // }
+
+        // if ($qty > $barang->stok) {
+        //     return response()->json('Stok hanya tersisa ' . $barang->stok, 403);
+        // }
+
+        return response()->json([
+            'stok' => $barang->stok,
+            'min_stok' => $barang->min_stok
+        ], 200);
+    }
 }

@@ -239,6 +239,29 @@ Breadcrumbs::for('adjustment_minus_edit', function (BreadcrumbTrail $trail) {
 });
 
 
+// Master Data > Perakitan Paket
+Breadcrumbs::for('perakitan_paket', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('Perakitan Paket', route('perakitan-paket.index'));
+});
+// Master Data > Perakitan Paket > Tambah
+Breadcrumbs::for('perakitan_paket_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('perakitan_paket');
+    $trail->push('Tambah', route('perakitan-paket.create'));
+});
+// Master Data > Perakitan Paket > Edit
+Breadcrumbs::for('perakitan_paket_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('perakitan_paket');
+    $trail->push('Edit');
+});
+// Master Data > Pesanan Pembelian > Show
+Breadcrumbs::for('perakitan_paket_show', function (BreadcrumbTrail $trail) {
+    $trail->parent('perakitan_paket');
+    $trail->push('Show');
+});
+
+
+
 // Master Data > Pesanan Pembelian
 Breadcrumbs::for('pesanan_pembelian', function (BreadcrumbTrail $trail) {
     $trail->parent('master');

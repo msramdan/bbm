@@ -10,6 +10,7 @@ use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianControlle
 use App\Http\Controllers\Penjualan\{PenjualanController, ReturPenjualanController};
 use App\Http\Controllers\Setting\{TokoController, UserController};
 use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
+use App\Http\Controllers\Laporan\AdjustmentMinusReportController;
 use App\Http\Controllers\Laporan\AdjustmentPlusReportController;
 use Illuminate\Support\Facades\Auth;
 
@@ -153,9 +154,8 @@ Route::group(['prefix' => 'keuangan', 'middleware' => ['web', 'auth']], function
 Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function () {
     Route::get('/adjusment-plus/pdf', [AdjustmentPlusReportController::class, 'pdf'])->name('adjustment-plus.pdf');
     Route::get('/adjusment-plus', [AdjustmentPlusReportController::class, 'index'])->name('adjustment-plus.laporan');
-});
 
-// // PDF
-// Route::group(['prefix' => 'pdf', 'middleware' => ['web', 'auth']], function () {
-//     Route::get('/adjusment-plus', [AdjustmentPlusReportController::class, 'pdf'])->name('adjustment-plus.pdf');
-// });
+    // Adjustment Minus
+    Route::get('/adjusment-minus/pdf', [AdjustmentMinusReportController::class, 'pdf'])->name('adjustment-minus.pdf');
+    Route::get('/adjusment-minus', [AdjustmentMinusReportController::class, 'index'])->name('adjustment-minus.laporan');
+});

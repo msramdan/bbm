@@ -274,6 +274,12 @@
                             {{ trans('dashboard.laporan.adjustment_plus') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('adjustment-minus.laporan') }}">
+                            {{ trans('dashboard.laporan.adjustment_minus') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
 

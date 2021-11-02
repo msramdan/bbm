@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
-use App\Models\AdjustmentPlus;
-use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\AdjustmentMinus;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
 
-class AdjustmentPlusReportController extends Controller
+class AdjustmentMinusReportController extends Controller
 {
     public function index()
     {
@@ -17,7 +17,7 @@ class AdjustmentPlusReportController extends Controller
             $laporan = $this->getLaporan();
         }
 
-        return view('laporan.adjustment.plus.index', compact('laporan'));
+        return view('laporan.adjustment.minus.index', compact('laporan'));
     }
 
     public function pdf()
@@ -28,9 +28,9 @@ class AdjustmentPlusReportController extends Controller
 
         $toko = $this->getToko();
 
-        $pdf = PDF::loadView('laporan.adjustment.plus.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadView('laporan.adjustment.minus.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
 
-        $namaFile = trans('dashboard.laporan.adjustment_plus') . ' - ' . date('d F Y') . '.pdf';
+        $namaFile = trans('dashboard.laporan.adjustment_minus') . ' - ' . date('d F Y') . '.pdf';
 
         return $pdf->stream($namaFile);
 
@@ -41,14 +41,13 @@ class AdjustmentPlusReportController extends Controller
     protected function getLaporan()
     {
         // Optional: ganti make query builder
-        return AdjustmentPlus::with(
+        return AdjustmentMinus::with(
             'gudang',
-            'matauang',
-            'adjustment_plus_detail',
-            'adjustment_plus_detail.barang',
-            'adjustment_plus_detail.supplier',
+            'adjustment_minus_detail',
+            'adjustment_minus_detail.barang',
+            'adjustment_minus_detail.supplier',
         )
-            ->whereHas('adjustment_plus_detail', function ($q) {
+            ->whereHas('adjustment_minus_detail', function ($q) {
                 $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
                     $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
                 });
@@ -57,7 +56,7 @@ class AdjustmentPlusReportController extends Controller
                     $q->where('barang_id',  request()->query('barang'));
                 });
             })
-            ->whereHas('adjustment_plus_detail.supplier', function ($q) {
+            ->whereHas('adjustment_minus_detail.supplier', function ($q) {
                 $q->when(request()->query('supplier'), function ($q) {
                     $q->where('id',  request()->query('supplier'));
                 });

@@ -50,8 +50,8 @@ return [
         'logout' => 'Logout',
     ],
     'laporan' => [
-        'adjustment_plus' => 'Adjusment Plus Report',
-        'adjustment_minus' => 'Adjusment Minus Report'
+        'adjustment_plus' => 'Adjustment Plus Report',
+        'adjustment_minus' => 'Adjustment Minus Report'
 
     ]
 

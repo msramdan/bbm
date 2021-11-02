@@ -41,7 +41,8 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.create',
             'inventory.perakitan-paket.create',
             'inventory.perakitan-paket.edit',
-            'laporan.adjustment.plus.index'
+            'laporan.adjustment.plus.index',
+            'laporan.adjustment.minus.index'
         ], function ($view) {
             return $view->with('barang', Barang::where('jenis', 1)->get());
         });
@@ -66,7 +67,8 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.pesanan-pembelian.create',
             'pembelian.pesanan-pembelian.edit',
             'pembelian.pembelian.create',
-            'laporan.adjustment.plus.index'
+            'laporan.adjustment.plus.index',
+            'laporan.adjustment.minus.index'
         ], function ($view) {
             return $view->with('supplier', Supplier::all());
         });
@@ -88,7 +90,8 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.retur.create',
             'inventory.perakitan-paket.create',
             'inventory.perakitan-paket.edit',
-            'laporan.adjustment.plus.index'
+            'laporan.adjustment.plus.index',
+            'laporan.adjustment.minus.index'
         ], function ($view) {
             return $view->with('gudang', Gudang::all());
         });
@@ -304,7 +307,8 @@ class ViewServiceProvider extends ServiceProvider
 
         // list bentuk kepemilikan stok
         View::composer([
-            'laporan.adjustment.plus.index'
+            'laporan.adjustment.plus.index',
+            'laporan.adjustment.minus.index'
         ], function ($view) {
             return $view->with(
                 'bentukKepemilikanStok',

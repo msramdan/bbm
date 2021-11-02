@@ -182,12 +182,12 @@ class AdjustmentMinusController extends Controller
         $checkLatestKode = AdjustmentMinus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'ADJMN-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'ADJMN-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "ADJMN-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'ADJMN-');
 
-            $kode =  'ADJMN-' . intval($onlyNumberKode) + 1;
+            $kode =  'ADJMN-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

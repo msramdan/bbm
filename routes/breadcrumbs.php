@@ -535,8 +535,14 @@ Breadcrumbs::for('biaya_show', function (BreadcrumbTrail $trail) {
 });
 
 // Laporan
-// Laporan > Biaya
+// Laporan > Adjustment Plus
 Breadcrumbs::for('laporan_adjustment_plus', function (BreadcrumbTrail $trail) {
     $trail->parent('laporan');
     $trail->push('Adjustment Plus', route('adjustment-plus.laporan'));
+});
+
+// Laporan > Adjustment Minus
+Breadcrumbs::for('laporan_adjustment_minus', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Adjustment Minus', route('adjustment-minus.laporan'));
 });

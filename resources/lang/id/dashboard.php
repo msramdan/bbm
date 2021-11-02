@@ -50,8 +50,8 @@ return [
         'logout' => 'Keluar',
     ],
     'laporan' => [
-        'adjustment_plus' => 'Adjusment Plus Laporan',
-        'adjustment_minus' => 'Adjusment Minus Laporan'
+        'adjustment_plus' => 'Adjustment Plus',
+        'adjustment_minus' => 'Adjustment Minus'
 
     ]
 

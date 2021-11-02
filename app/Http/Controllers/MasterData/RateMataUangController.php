@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RateMataUangRequest;
 use App\Models\RateMataUang;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class RateMataUangController extends Controller
 {
@@ -25,9 +26,31 @@ class RateMataUangController extends Controller
      */
     public function index()
     {
-        $rateMataUang = RateMataUang::with('matauang_asing', 'matauang_default')->get();
+        $rateMataUang = RateMataUang::with('matauang_asing', 'mata_uang_default')->orderByDesc('id');
 
-        return view('master-data.rate-matauang.index', compact('rateMataUang'));
+        if (request()->ajax()) {
+            return Datatables::of($rateMataUang)
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.rate-matauang.data-table.action')
+                ->addColumn('matauang_asing', function ($row) {
+                    return $row->matauang_asing->nama;
+                })
+                ->addColumn('mata_uang_default', function ($row) {
+                    return $row->mata_uang_default->nama;
+                })
+                ->addColumn('rate', function ($row) {
+                    return number_format($row->rate);
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('master-data.rate-matauang.index');
     }
 
     /**
@@ -63,7 +86,7 @@ class RateMataUangController extends Controller
      */
     public function edit($id)
     {
-        $rateMataUang = RateMataUang::with('matauang_asing', 'matauang_default')->findOrFail($id);
+        $rateMataUang = RateMataUang::with('matauang_asing', 'mata_uang_default')->findOrFail($id);
 
         return view('master-data.rate-matauang.edit', compact('rateMataUang'));
     }

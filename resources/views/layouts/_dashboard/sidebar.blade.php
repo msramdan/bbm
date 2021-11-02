@@ -8,7 +8,7 @@
                             <img src="{{ asset('storage/img/foto/' . auth()->user()->foto) }}" alt="Avatar"
                                 class="img-fluid rounded" style="width: 40px; height: 40px; object-fit: cover;">
                         @else
-                            <img src="https://www.gravatar.com/avatar/fa24c69431e3df73ef30d06860dd6258?s=40"
+                            <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}&s=40"
                                 alt="Avatar" class="img-fluid rounded"
                                 style="width: 40px; height: 40px; object-fit: cover;">
                         @endif
@@ -131,6 +131,12 @@
                                 {{ trans('dashboard.menu.adjustment_minus') }}
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('perakitan-paket.index') }}">
+                                {{ trans('dashboard.menu.perakitan_paket') }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endrole
@@ -165,6 +171,72 @@
                 </li>
             @endhasanyrole
 
+            {{-- menu penjualan --}}
+            @hasanyrole('salesman|admin')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>{{ trans('dashboard.menu.penjualan') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('penjualan.index') }}">
+                                {{ trans('dashboard.menu.penjualan') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('retur-penjualan.index') }}">
+                                {{ trans('dashboard.menu.retur_penjualan') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endhasanyrole
+
+            {{-- menu keuangan --}}
+            @role('admin')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-money"></i>
+                        <span>{{ trans('dashboard.menu.keuangan') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('pelunasan-hutang.index') }}">
+                                {{ trans('dashboard.menu.pelunasan_hutang') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pelunasan-piutang.index') }}">
+                                {{ trans('dashboard.menu.pelunasan_piutang') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('cek-giro-cair.index') }}">
+                                {{ trans('dashboard.menu.cek_giro_cair') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('cek-giro-tolak.index') }}">
+                                {{ trans('dashboard.menu.cek_giro_tolak') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('biaya.index') }}">
+                                {{ trans('dashboard.menu.biaya') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endrole
+
             {{-- menu Setting --}}
             @role('admin')
                 <li class="has-sub">
@@ -189,6 +261,23 @@
                 </li>
             @endrole
 
+            {{-- menu Laporan --}}
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-book"></i>
+                    <span>{{ trans('dashboard.menu.laporan') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('adjustment-plus.laporan') }}">
+                            {{ trans('dashboard.laporan.adjustment_plus') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
             {{-- menu Akun --}}
             <li class="has-sub">
                 <a href="javascript:;">
@@ -205,11 +294,12 @@
 
                     <li>
                         <a class="dropdown-item" href="http://bbm.test/logout"
-                            onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                            onclick="event.preventDefault();document.getElementById('logout-form-sidebar').submit();">
                             Logout
                         </a>
 
-                        <form id="logout-form" action="http://bbm.test/logout" method="POST" class="d-none">
+                        <form id="logout-form-sidebar" action="http://bbm.test/logout" method="POST"
+                            class="d-none">
                             @csrf
                         </form>
                     </li>

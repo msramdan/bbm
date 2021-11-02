@@ -16,14 +16,4 @@ class Matauang extends Model
         'default',
         'status',
     ];
-
-    // public function rate_matauang_asing()
-    // {
-    //     return $this->belongsTo(RateMataUang::class, 'matauang_id');
-    // }
-
-    // public function rate_matauang_default()
-    // {
-    //     return $this->belongsTo(RateMataUang::class, 'matauang_default');
-    // }
 }

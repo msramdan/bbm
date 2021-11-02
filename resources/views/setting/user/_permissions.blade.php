@@ -413,7 +413,7 @@
     </div>
 
     {{-- cek/giro cair --}}
-    <div class="col-md-3">
+    <div class="col-md-2">
         <strong>Cek/Giro Cair</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'cek/giro cair'))
@@ -428,12 +428,27 @@
         @endforeach
     </div>
 
-
     {{-- cek/giro tolak --}}
-    <div class="col-md-3">
+    <div class="col-md-2">
         <strong>Cek/Giro Tolak</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'cek/giro tolak'))
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="permissions[]" value="{{ $permission->name }}"
+                            {{ isset($user) && $user->permissions->contains($permission->id) ? 'checked' : '' }}>
+                        {{ ucwords($permission->name) }}
+                    </label>
+                </div>
+            @endif
+        @endforeach
+    </div>
+
+    {{-- biaya --}}
+    <div class="col-md-2">
+        <strong>Biaya</strong>
+        @foreach ($permissions as $permission)
+            @if (Str::contains($permission->name, 'biaya') && !Str::contains($permission->name, 'laporan'))
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="permissions[]" value="{{ $permission->name }}"

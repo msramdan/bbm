@@ -31,72 +31,33 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('pesanan-pembelian.create') }}" class="btn btn-success">
+                        <a href="{{ route('pesanan-pembelian.create') }}" class="btn btn-success{{ !auth()->user()->can('create pesanan pembelian') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('pesanan_pembelian.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
-                        <table id="data-table" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kode</th>
-                                    <th>Tanggal</th>
-                                    <th>Mata Uang</th>
-                                    <th>Supplier</th>
-                                    <th>Rate</th>
-                                    <th>Total Item</th>
-                                    <th>Grandtotal</th>
-                                     @if (auth()->user()->can('edit pesanan pembelian') || auth()->user()->can('delete pesanan pembelian'))
-                                        <th>Action</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($pesanan as $data)
-                                    <tr class="odd gradeX">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $data->kode }}</td>
-                                        <td>{{ $data->tanggal->format('d m Y') }}</td>
-                                        <td>{{ $data->matauang->nama }}</td>
-                                        <td>{{ $data->supplier ? $data->supplier->nama_supplier : 'Tanpa Supplier' }}</td>
-                                        <td>{{ $data->rate }}</td>
-                                        <td>{{ $data->pesanan_pembelian_detail_count }}</td>
-                                        <td>{{ $data->matauang->kode . ' ' . number_format($data->total_netto) }}</td>
-                                        @if (auth()->user()->can('edit pesanan pembelian') || auth()->user()->can('delete pesanan pembelian'))
-                                            <td>
-                                                @can('edit pesanan pembelian')
-                                                    <a href="{{ route('pesanan-pembelian.edit', $data->id) }}"
-                                                        class="btn btn-success btn-icon btn-circle">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @endcan
-
-                                                @can('detail pesanan pembelian')
-                                                    <a href="{{ route('pesanan-pembelian.show', $data->id) }}"
-                                                        class="btn btn-success btn-icon btn-circle">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                @endcan
-
-                                                @can('delete pesanan pembelian')
-                                                    <form action="{{ route('pesanan-pembelian.destroy', $data->id) }}" method="post"
-                                                        class="d-inline"
-                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                        @csrf
-                                                        @method('delete')
-
-                                                        <button class="btn btn-danger btn-icon btn-circle">
-                                                            <i class="ace-icon fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            </td>
+                        <div class="table-responsive">
+                            <table class="table table-striped data-table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode</th>
+                                        <th>Tanggal</th>
+                                        <th>Mata Uang</th>
+                                        <th>Supplier</th>
+                                        <th>Rate</th>
+                                        <th>Total Item</th>
+                                        <th>Grandtotal</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
+                                        @if (auth()->user()->can('edit pesanan pembelian') ||
+        auth()->user()->can('delete pesanan pembelian'))
+                                            <th>Action</th>
                                         @endif
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- end panel -->
@@ -107,3 +68,73 @@
     </div>
     <!-- end #content -->
 @endsection
+
+@push('custom-js')
+    <script>
+        const action =
+            '{{ auth()->user()->can('edit pesanan pembelian') ||
+auth()->user()->can('delete pesanan pembelian')
+    ? 'yes yes yes'
+    : '' }}'
+
+        let columns = [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'kode',
+                name: 'kode'
+            },
+            {
+                data: 'tanggal',
+                name: 'tanggal'
+            },
+            {
+                data: 'matauang',
+                name: 'matauang'
+            },
+            {
+                data: 'supplier',
+                name: 'supplier'
+            },
+            {
+                data: 'rate',
+                name: 'rate'
+            },
+            {
+                data: 'total_barang',
+                name: 'total_barang'
+            },
+            {
+                data: 'grand_total',
+                name: 'grand_total'
+            },
+            {
+                data: 'created_at',
+                name: 'created_at'
+            },
+            {
+                data: 'updated_at',
+                name: 'updated_at'
+            }
+        ]
+
+        if (action) {
+            columns.push({
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            })
+        }
+
+        $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('pesanan-pembelian.index') }}",
+            columns: columns,
+        });
+    </script>
+@endpush

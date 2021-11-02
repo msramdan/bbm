@@ -19,7 +19,7 @@ class MatauangSeeder extends Seeder
         DB::table('matauang')->insert(
             [
                 [
-                    'kode' => 'Rp',
+                    'kode' => 'Rp.',
                     'nama' => 'Rupiah',
                     'default' => 'Y',
                     'status' => 'Y',

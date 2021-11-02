@@ -609,9 +609,8 @@
         // hitung jumlan <tr> pada table#tbl_trx dan table#tbl_payemnt
         function cek_table_length() {
             let table_trx = $('#tbl_trx tbody tr').length
-            let table_payment = $('#tbl_payment tbody tr').length
 
-            if (table_trx > 0 && table_payment > 0) {
+            if (table_trx > 0) {
                 $('#btn_simpan').prop('disabled', false)
                 $('#btn_clear_table').prop('disabled', false)
             } else {

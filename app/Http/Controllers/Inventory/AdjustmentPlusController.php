@@ -7,6 +7,7 @@ use App\Models\{AdjustmentPlus, AdjustmentPlusDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class AdjustmentPlusController extends Controller
 {
@@ -26,9 +27,37 @@ class AdjustmentPlusController extends Controller
      */
     public function index()
     {
-        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')->withCount('adjustment_plus_detail')->get();
+        if (request()->ajax()) {
+            $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')->withCount('adjustment_plus_detail')->orderByDesc('updated_at');
 
-        return view('inventory.adjustment-plus.index', compact('adjustmentPlus'));
+            return Datatables::of($adjustmentPlus)
+                ->addIndexColumn()
+                ->addColumn('action', 'inventory.adjustment-plus.data-table.action')
+                ->addColumn('gudang', function ($row) {
+                    return $row->gudang->nama;
+                })
+                ->addColumn('total_barang', function ($row) {
+                    return $row->adjustment_plus_detail_count;
+                })
+                ->addColumn('matauang', function ($row) {
+                    return $row->matauang->nama;
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('grand_total', function ($row) {
+                    return $row->matauang->kode . ' ' . number_format($row->grand_total);
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->addColumn('tanggal', function ($row) {
+                    return $row->tanggal->format('d F Y');
+                })
+                ->toJson();
+        }
+
+        return view('inventory.adjustment-plus.index');
     }
 
     /**
@@ -159,28 +188,21 @@ class AdjustmentPlusController extends Controller
         return redirect()->route('adjustment-plus.index');
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
-        if (request()->ajax()) {
-            $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        abort_if(!request()->ajax(), 404);
 
-            if ($checkLatestKode == null) {
-                $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
-            } else {
-                if ($checkLatestKode < 10) {
-                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 10) {
-                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 100) {
-                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 1000) {
-                    $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
-                }
-            }
+        $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
-            return $kode;
+        if ($checkLatestKode == null) {
+            $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
-            abort(404);
+            // hapus "ADJPL-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'ADJPL-');
+
+            $kode =  'ADJPL-' . (intval($onlyNumberKode) + 1);
         }
+
+        return response()->json($kode, 200);
     }
 }

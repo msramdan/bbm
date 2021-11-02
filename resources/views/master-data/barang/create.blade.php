@@ -34,7 +34,7 @@
                     </div>
                     <div class="panel-body">
                         <form class="form-horizontal" action="{{ route('barang.store') }}" method="post"
-                            enctype="multipart/form-data" novalidate>
+                            enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-group">

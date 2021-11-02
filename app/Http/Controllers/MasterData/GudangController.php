@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreGudangRequest, UpdateGudangRequest};
 use App\Models\Gudang;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class GudangController extends Controller
 {
@@ -25,9 +26,26 @@ class GudangController extends Controller
      */
     public function index()
     {
-        $gudang = Gudang::get();
+        if (request()->ajax()) {
+            return Datatables::of(Gudang::query())
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.gudang.data-table.action')
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('gudang_penjualan', function ($row) {
+                    return $row->gudang_penjualan == 1 ? 'Ya' : 'Bukan';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
 
-        return view('master-data.gudang.index', compact('gudang'));
+        return view('master-data.gudang.index');
     }
 
     /**

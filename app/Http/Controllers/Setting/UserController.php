@@ -7,6 +7,7 @@ use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
 use App\Models\Salesman;
 use App\Models\User;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -26,9 +27,25 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get();
+        if (request()->ajax()) {
+            $users = User::with('roles');
 
-        return view('setting.user.index', compact('users'));
+            return Datatables::of($users)
+                ->addIndexColumn()
+                ->addColumn('action', 'setting.user.data-table.action')
+                ->addColumn('role', function ($row) {
+                    return ucfirst($row->roles[0]->name);
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('setting.user.index');
     }
 
     /**

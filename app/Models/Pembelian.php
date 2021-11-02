@@ -13,6 +13,8 @@ class Pembelian extends Model
 
     protected $casts = ['tanggal' => 'date'];
 
+    // protected $with = ['supplier', 'matauang'];
+
     protected $fillable = [
         'kode',
         'tanggal',
@@ -31,17 +33,8 @@ class Pembelian extends Model
         'total_clr_fee',
         'total_biaya_masuk',
         'total_netto',
+        'status'
     ];
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    // public function getRouteKeyName()
-    // {
-    //     return 'kode';
-    // }
 
     public function pembelian_detail()
     {
@@ -71,5 +64,10 @@ class Pembelian extends Model
     public function pesanan_pembelian()
     {
         return $this->belongsTo(PesananPembelian::class);
+    }
+
+    public function cek_giro()
+    {
+        return $this->hasMany(CekGiro::class);
     }
 }

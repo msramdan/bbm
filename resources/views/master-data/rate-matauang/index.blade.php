@@ -32,59 +32,30 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('rate-matauang.create') }}" class="btn btn-success">
+                        <a href="{{ route('rate-matauang.create') }}" class="btn btn-success{{ !auth()->user()->can('create rate mata uang') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('rate_matauang.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
-                        <table id="data-table" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Mata Uang Asing</th>
-                                    <th>Mata Uang Default</th>
-                                    <th>Rate</th>
-                                     @if (auth()->user()->can('edit rate mata uang') || auth()->user()->can('delete rate mata uang'))
-                                        <th>Action</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($rateMataUang as $data)
-                                    <tr class="odd gradeX">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $data->tanggal }}</td>
-                                        <td>{{ $data->matauang_asing->nama }}</td>
-                                        <td>{{ $data->matauang_default }}</td>
-                                        <td>{{ number_format($data->rate) . '.00' }}</td>
-                                        @if (auth()->user()->can('edit rate mata uang') || auth()->user()->can('delete rate mata uang'))
-                                            <td>
-                                                @can('edit rate mata uang')
-                                                    <a href="{{ route('rate-matauang.edit', $data->id) }}"
-                                                        class="btn btn-success btn-icon btn-circle">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @endcan
-
-                                                @can('delete rate mata uang')
-                                                    <form action="{{ route('rate-matauang.destroy', $data->id) }}" method="post"
-                                                        class="d-inline"
-                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                        @csrf
-                                                        @method('delete')
-
-                                                        <button class="btn btn-danger btn-icon btn-circle">
-                                                            <i class="ace-icon fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            </td>
+                        <div class="table-responsive">
+                            <table class="table table-striped data-table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Tanggal</th>
+                                        <th>Mata Uang Asing</th>
+                                        <th>Mata Uang Default</th>
+                                        <th>Rate</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
+                                        @if (auth()->user()->can('edit rate mata uang') ||
+        auth()->user()->can('delete rate mata uang'))
+                                            <th>Action</th>
                                         @endif
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- end panel -->
@@ -95,3 +66,61 @@
     </div>
     <!-- end #content -->
 @endsection
+
+@push('custom-js')
+    <script>
+        const action =
+            '{{ auth()->user()->can('edit rate mata uang') ||
+auth()->user()->can('delete rate mata uang')
+    ? 'yes yes yes'
+    : '' }}'
+
+        let columns = [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'tanggal',
+                name: 'tanggal'
+            },
+            {
+                data: 'matauang_asing',
+                name: 'matauang_asing'
+            },
+            {
+                data: 'mata_uang_default',
+                name: 'mata_uang_default'
+            },
+            {
+                data: 'rate',
+                name: 'rate'
+            },
+            {
+                data: 'created_at',
+                name: 'created_at'
+            },
+            {
+                data: 'updated_at',
+                name: 'updated_at'
+            }
+        ]
+
+        if (action) {
+            columns.push({
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            })
+        }
+
+        $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('rate-matauang.index') }}",
+            columns: columns,
+        });
+    </script>
+@endpush

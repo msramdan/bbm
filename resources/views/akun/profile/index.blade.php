@@ -68,9 +68,9 @@
                                                     alt="Avatar" class="img-fluid rounded"
                                                     style="width: 100%; height: 100px; object-fit: cover; border-radius: 3px;">
                                             @else
-                                                <img src="https://www.gravatar.com/avatar/fa24c69431e3df73ef30d06860dd6258?s=350"
+                                                <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}&s=200"
                                                     alt="Avatar" class="img-fluid rounded"
-                                                    style="width: 100%; height: 100px; object-fit: cover; border-radius: 3px;">
+                                                    style="width: 120px; height: 100px; object-fit: cover; border-radius: 3px;">
                                             @endif
                                         </div>
 
@@ -134,8 +134,6 @@
                                 <label class="control-label"></label>
 
                                 <button type="submit" class="btn btn-sm btn-success"> Simpan</button>
-                                <a href="{{ route('profile.index') }}" class="btn btn-sm btn-default"> Cancel
-                                </a>
                             </div>
                         </form>
                     </div>

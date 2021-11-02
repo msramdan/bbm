@@ -37,7 +37,7 @@
 
                     <div class="panel-body">
                         <form class="form-horizontal" action="{{ route('barang.update', $barang->id) }}" method="post"
-                            enctype="multipart/form-data" novalidate>
+                            enctype="multipart/form-data">
                             @csrf
                             @method('put')
 

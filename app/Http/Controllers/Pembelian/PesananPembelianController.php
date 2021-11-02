@@ -7,6 +7,7 @@ use App\Models\{PesananPembelian, PesananPembelianDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class PesananPembelianController extends Controller
 {
@@ -27,9 +28,37 @@ class PesananPembelianController extends Controller
      */
     public function index()
     {
-        $pesanan = PesananPembelian::with('pesanan_pembelian_detail', 'supplier', 'matauang')->withCount('pesanan_pembelian_detail')->get();
+        if (request()->ajax()) {
+            $pesanan = PesananPembelian::with('supplier', 'matauang')->withCount('pesanan_pembelian_detail');
 
-        return view('pembelian.pesanan-pembelian.index', compact('pesanan'));
+            return Datatables::of($pesanan)
+                ->addIndexColumn()
+                ->addColumn('action', 'pembelian.pesanan-pembelian.data-table.action')
+                ->addColumn('tanggal', function ($row) {
+                    return $row->tanggal->format('d F Y');
+                })
+                ->addColumn('total_barang', function ($row) {
+                    return $row->pesanan_pembelian_detail_count;
+                })
+                ->addColumn('matauang', function ($row) {
+                    return $row->matauang->nama;
+                })
+                ->addColumn('grand_total', function ($row) {
+                    return $row->matauang->kode . ' ' . number_format($row->total_netto);
+                })
+                ->addColumn('supplier', function ($row) {
+                    return $row->supplier ? $row->supplier->nama_supplier : 'Tanpa Supplier';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('pembelian.pesanan-pembelian.index');
     }
 
     /**
@@ -183,26 +212,19 @@ class PesananPembelianController extends Controller
 
     protected function generateKode($tanggal)
     {
-        if (request()->ajax()) {
-            $checkLatestKode = PesananPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        abort_if(!request()->ajax(), 404);
 
-            if ($checkLatestKode == null) {
-                $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
-            } else {
-                if ($checkLatestKode < 10) {
-                    $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 10) {
-                    $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 100) {
-                    $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 1000) {
-                    $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
-                }
-            }
+        $checkLatestKode = PesananPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
-            return response()->json($kode, 200);
+        if ($checkLatestKode == null) {
+            $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
-            abort(404);
+            // hapus "PUROR-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PUROR-');
+
+            $kode =  'PUROR-' . intval($onlyNumberKode) + 1;
         }
+
+        return response()->json($kode, 200);
     }
 }

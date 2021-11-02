@@ -31,76 +31,34 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('retur-pembelian.create') }}" class="btn btn-success">
+                        <a href="{{ route('retur-pembelian.create') }}" class="btn btn-success{{ !auth()->user()->can('create retur pembelian') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('retur_pembelian.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
-                        <table id="data-table" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kode</th>
-                                    <th>Kode Pembelian</th>
-                                    <th>Tanggal</th>
-                                    <th>Supplier</th>
-                                    <th>Gudang</th>
-                                    <th>Rate</th>
-                                    <th>Total Item</th>
-                                    <th>Grandtotal</th>
-                                   @if (auth()->user()->can('edit retur pembelian') || auth()->user()->can('delete retur pembelian'))
-                                        <th>Action</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($retur as $data)
-                                    <tr class="odd gradeX">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $data->kode }}</td>
-                                        <td>{{ $data->pembelian->kode }}</td>
-                                        <td>{{ $data->tanggal->format('d F Y') }}</td>
-                                        <td>{{ $data->pembelian->supplier ? $data->pembelian->supplier->nama_supplier : 'Tanpa Supplier' }}
-                                        </td>
-                                        <td>{{ $data->gudang->nama }}</td>
-                                        <td>{{ $data->rate }}</td>
-                                        <td>{{ $data->retur_pembelian_detail_count }}</td>
-                                        <td>{{ $data->pembelian->matauang->kode . ' ' . number_format($data->total_netto) }}
-                                        </td>
-                                       @if (auth()->user()->can('edit retur pembelian') || auth()->user()->can('delete retur pembelian'))
-                                            <td>
-                                                @can('edit retur pembelian')
-                                                        <a href="{{ route('retur-pembelian.edit', $data->id) }}"
-                                                            class="btn btn-success btn-icon btn-circle">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                @endcan
-
-                                                @can('detail retur pembelian')
-                                                        <a href="{{ route('retur-pembelian.show', $data->id) }}"
-                                                            class="btn btn-success btn-icon btn-circle">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                @endcan
-
-                                                @can('delete retur pembelian')
-                                                        <form action="{{ route('retur-pembelian.destroy', $data->id) }}" method="post"
-                                                            class="d-inline"
-                                                            onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                            @csrf
-                                                            @method('delete')
-
-                                                            <button class="btn btn-danger btn-icon btn-circle">
-                                                                <i class="ace-icon fa fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                @endcan
-                                            </td>
+                        <div class="table-responsive">
+                            <table class="table table-striped data-table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode</th>
+                                        <th>Kode Pembelian</th>
+                                        <th>Tanggal</th>
+                                        <th>Supplier</th>
+                                        <th>Gudang</th>
+                                        <th>Rate</th>
+                                        <th>Total Item</th>
+                                        <th>Grandtotal</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
+                                        @if (auth()->user()->can('edit retur pembelian') ||
+        auth()->user()->can('delete retur pembelian'))
+                                            <th>Action</th>
                                         @endif
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- end panel -->
@@ -111,3 +69,77 @@
     </div>
     <!-- end #content -->
 @endsection
+
+@push('custom-js')
+    <script>
+        const action =
+            '{{ auth()->user()->can('edit retur pembelian') ||
+auth()->user()->can('delete retur pembelian')
+    ? 'yes yes yes'
+    : '' }}'
+
+        let columns = [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'kode',
+                name: 'kode'
+            },
+            {
+                data: 'kode_beli',
+                name: 'kode_beli'
+            },
+            {
+                data: 'tanggal',
+                name: 'tanggal'
+            },
+            {
+                data: 'supplier',
+                name: 'supplier'
+            },
+            {
+                data: 'gudang',
+                name: 'gudang'
+            },
+            {
+                data: 'rate',
+                name: 'rate'
+            },
+            {
+                data: 'total_barang',
+                name: 'total_barang'
+            },
+            {
+                data: 'grand_total',
+                name: 'grand_total'
+            },
+            {
+                data: 'created_at',
+                name: 'created_at'
+            },
+            {
+                data: 'updated_at',
+                name: 'updated_at'
+            }
+        ]
+
+        if (action) {
+            columns.push({
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            })
+        }
+
+        $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('retur-pembelian.index') }}",
+            columns: columns,
+        });
+    </script>
+@endpush

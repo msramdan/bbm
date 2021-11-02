@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreSupplierRequest, UpdateSupplierRequest};
 use App\Models\Supplier;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class SupplierController extends Controller
 {
@@ -25,9 +26,23 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::get();
+        if (request()->ajax()) {
+            return Datatables::of(Supplier::query())
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.supplier.data-table.action')
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
 
-        return view('master-data.supplier.index', compact('suppliers'));
+        return view('master-data.supplier.index');
     }
 
     /**

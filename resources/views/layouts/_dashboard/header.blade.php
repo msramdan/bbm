@@ -1,7 +1,7 @@
 <div id="header" class="header navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="index.html" class="navbar-brand"><span class="navbar-logo"></span>
+            <a href="{{ route('dashboard.index') }}" class="navbar-brand"><span class="navbar-logo"></span>
                 {{ config('app.name') }}</a>
             <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
                 <span class="icon-bar"></span>
@@ -49,15 +49,16 @@
                         <img src="{{ asset('storage/img/foto/' . auth()->user()->foto) }}" alt="Avatar"
                             class="img-fluid rounded" style="width: 30px; height: 30px; object-fit: cover;">
                     @else
-                        <img src="https://www.gravatar.com/avatar/fa24c69431e3df73ef30d06860dd6258?s=40" alt="Avatar"
-                            class="img-fluid rounded" style="width: 30px; height: 30px; object-fit: cover;">
+                        <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}&s=30"
+                            alt="Avatar" class="img-fluid rounded"
+                            style="width: 30px; height: 30px; object-fit: cover;">
                     @endif
                     <span class="hidden-xs">{{ Auth::user()->name }}</span> <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu animated fadeInLeft">
                     <li class="arrow"></li>
                     <li>
-                        <a href="javascript:;">{{ trans('dashboard.link.profile') }}</a>
+                        <a href="{{ route('profile.index') }}">{{ trans('dashboard.link.profile') }}</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ route('logout') }}"

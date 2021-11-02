@@ -16,7 +16,7 @@ class AdjustmentMinusSeeder extends Seeder
     public function run()
     {
         $adjusmentMinus = AdjustmentMinus::create([
-            'kode' => 'ADJPL-' . now()->format('Ym') . '00001',
+            'kode' => 'ADJMN-' . now()->format('Ym') . '00001',
             'tanggal' => today(),
             'gudang_id' => 1,
         ]);

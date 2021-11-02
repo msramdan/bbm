@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreSalesmanRequest, UpdateSalesmanRequest};
 use App\Models\Salesman;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class SalesmanController extends Controller
 {
@@ -24,9 +25,23 @@ class SalesmanController extends Controller
      */
     public function index()
     {
-        $salesman = Salesman::get();
+        if (request()->ajax()) {
+            return Datatables::of(Salesman::query())
+                ->addIndexColumn()
+                ->addColumn('action', 'master-data.salesman.data-table.action')
+                ->addColumn('status', function ($row) {
+                    return $row->status == 'Y' ? 'Aktif' : 'Non aktif';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
 
-        return view('master-data.salesman.index', compact('salesman'));
+        return view('master-data.salesman.index');
     }
 
     /**

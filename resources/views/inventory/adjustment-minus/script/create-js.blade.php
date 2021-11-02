@@ -10,7 +10,7 @@
             get_kode()
         })
 
-        $('#kode_input, #supplier_input, #bentuk_kepemilikan_input').on('keyup keydown change',
+        $('#kode_input, #bentuk_kepemilikan_input, #qty_input').on('keyup keydown change',
             function() {
                 cek_form_entry()
             })

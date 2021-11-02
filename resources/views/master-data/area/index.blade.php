@@ -31,57 +31,29 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('area.create') }}" class="btn btn-success">
+                        <a href="{{ route('area.create') }}" class="btn btn-success{{ !auth()->user()->can('create area') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('area.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
-                        <table id="data-table" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kode</th>
-                                    <th>Nama</th>
-                                    <th>Status</th>
-                                    @if (auth()->user()->can('edit area') || auth()->user()->can('delete area'))
-                                        <th>Action</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($areas as $area)
-                                    <tr class="odd gradeX">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $area->kode }}</td>
-                                        <td>{{ $area->nama }}</td>
-                                        <td>{{ $area->status == 'Y' ? 'Aktif' : 'No' }}</td>
-                                        @if (auth()->user()->can('edit area') || auth()->user()->can('delete area'))
-                                            <td>
-                                                @can('edit area')
-                                                    <a href="{{ route('area.edit', $area->id) }}"
-                                                        class="btn btn-success btn-icon btn-circle">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @endcan
-
-                                                @can('delete area')
-                                                    <form action="{{ route('area.destroy', $area->id) }}" method="post"
-                                                        class="d-inline"
-                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                        @csrf
-                                                        @method('delete')
-
-                                                        <button class="btn btn-danger btn-icon btn-circle">
-                                                            <i class="ace-icon fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            </td>
+                        <div class="table-responsive">
+                            <table class="table table-striped data-table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode</th>
+                                        <th>Nama</th>
+                                        <th>Status</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
+                                        @if (auth()->user()->can('edit area') ||
+        auth()->user()->can('delete area'))
+                                            <th>Action</th>
                                         @endif
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- end panel -->
@@ -92,3 +64,57 @@
     </div>
     <!-- end #content -->
 @endsection
+
+@push('custom-js')
+    <script>
+        const action =
+            '{{ auth()->user()->can('edit area') ||
+auth()->user()->can('delete area')
+    ? 'yes yes yes'
+    : '' }}'
+
+        let columns = [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'kode',
+                name: 'kode'
+            },
+            {
+                data: 'nama',
+                name: 'nama'
+            },
+            {
+                data: 'status',
+                name: 'status'
+            },
+            {
+                data: 'created_at',
+                name: 'created_at'
+            },
+            {
+                data: 'updated_at',
+                name: 'updated_at'
+            }
+        ]
+
+        if (action) {
+            columns.push({
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            })
+        }
+
+        $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('area.index') }}",
+            columns: columns,
+        });
+    </script>
+@endpush

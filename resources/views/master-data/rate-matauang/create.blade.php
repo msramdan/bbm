@@ -35,8 +35,7 @@
                     </div>
 
                     <div class="panel-body">
-                        <form class="form-horizontal" action="{{ route('rate-matauang.store') }}" method="post"
-                            novalidate>
+                        <form class="form-horizontal" action="{{ route('rate-matauang.store') }}" method="post">
                             @csrf
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Tanggal</label>

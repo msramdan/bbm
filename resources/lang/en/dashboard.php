@@ -32,12 +32,27 @@ return [
         'setting' => 'Setting',
         'user' => 'User',
         'akun' => 'Account',
-        'profile' => 'Profile'
+        'profile' => 'Profile',
+        'penjualan' => 'Sales',
+        'retur_penjualan' => 'Sales Return',
+        'keuangan' => 'Finance',
+        'pelunasan_hutang' => 'A/P Payment',
+        'pelunasan_piutang' => 'A/R Payment',
+        'cek_giro_cair' => 'Cheque Withdraw',
+        'cek_giro_tolak' => 'Cheque Rejected',
+        'biaya' => 'Expense',
+        'perakitan_paket' => 'Package Assembly',
+        'laporan' => 'Report',
     ],
     'link' => [
         'dashboard' => 'Dashboard',
         'profile' => 'Edit Profile',
         'logout' => 'Logout',
+    ],
+    'laporan' => [
+        'adjustment_plus' => 'Adjusment Plus Report',
+        'adjustment_minus' => 'Adjusment Minus Report'
+
     ]
 
 ];

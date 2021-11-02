@@ -58,7 +58,7 @@
                                         @forelse ($gudang as $item)
                                             <option value="{{ $item->id }}"
                                                 {{ $pembelian->gudang_id == $item->id ? 'selected' : '' }}>
-                                                {{ $item->kode }}</option>
+                                                {{ $item->nama }}</option>
                                         @empty
                                             <option value="" disabled>Data tidak ditemukan</option>
                                         @endforelse

@@ -22,11 +22,15 @@ class SatuanBarangSeeder extends Seeder
                     'kode' => 'pcs',
                     'nama' => 'Pieces',
                     'status' => 'Y',
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ],
                 [
                     'kode' => 'set',
                     'nama' => 'SET',
                     'status' => 'Y',
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]
             ]
         );

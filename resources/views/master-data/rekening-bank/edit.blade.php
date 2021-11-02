@@ -36,7 +36,7 @@
                     </div>
                     <div class="panel-body">
                         <form class="form-horizontal" action="{{ route('rekening-bank.update', $rekeningBank->id) }}"
-                            method="post" novalidate>
+                            method="post">
                             @csrf
                             @method('put')
 

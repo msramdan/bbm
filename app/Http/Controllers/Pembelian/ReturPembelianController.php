@@ -9,6 +9,7 @@ use App\Models\ReturPembelianDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class ReturPembelianController extends Controller
 {
@@ -29,9 +30,40 @@ class ReturPembelianController extends Controller
      */
     public function index()
     {
-        $retur = ReturPembelian::with('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail')->get();
+        if (request()->ajax()) {
+            $retur = ReturPembelian::with('gudang', 'pembelian')->withCount('retur_pembelian_detail');
 
-        return view('pembelian.retur.index', compact('retur'));
+            return Datatables::of($retur)
+                ->addIndexColumn()
+                ->addColumn('action', 'pembelian.retur.data-table.action')
+                ->addColumn('tanggal', function ($row) {
+                    return $row->tanggal->format('d F Y');
+                })
+                ->addColumn('kode_beli', function ($row) {
+                    return $row->pembelian->kode;
+                })
+                ->addColumn('supplier', function ($row) {
+                    return $row->supplier ? $row->supplier->nama_supplier : 'Tanpa Supplier';
+                })
+                ->addColumn('gudang', function ($row) {
+                    return $row->gudang->nama;
+                })
+                ->addColumn('total_barang', function ($row) {
+                    return $row->retur_pembelian_detail_count;
+                })
+                ->addColumn('grand_total', function ($row) {
+                    return $row->pembelian->matauang->kode . ' ' . number_format($row->total_netto);
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->toJson();
+        }
+
+        return view('pembelian.retur.index');
     }
 
     /**
@@ -186,6 +218,8 @@ class ReturPembelianController extends Controller
 
     protected function getPembelianById($id)
     {
+        abort_if(!request()->ajax(), 404);
+
         $pembelian = Pembelian::with('supplier', 'matauang', 'pembelian_detail')->findOrFail($id);
 
         return response()->json($pembelian, 200);
@@ -193,26 +227,19 @@ class ReturPembelianController extends Controller
 
     protected function generateKode($tanggal)
     {
-        if (request()->ajax()) {
-            $checkLatestKode = ReturPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        abort_if(!request()->ajax(), 404);
 
-            if ($checkLatestKode == null) {
-                $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
-            } else {
-                if ($checkLatestKode < 10) {
-                    $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 10) {
-                    $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 100) {
-                    $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 1000) {
-                    $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
-                }
-            }
+        $checkLatestKode = ReturPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
-            return response()->json($kode, 200);
+        if ($checkLatestKode == null) {
+            $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
-            abort(404);
+            // hapus "PURRT-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PURRT-');
+
+            $kode =  'PURRT-' . intval($onlyNumberKode) + 1;
         }
+
+        return response()->json($kode, 200);
     }
 }

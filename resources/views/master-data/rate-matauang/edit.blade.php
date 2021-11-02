@@ -36,7 +36,7 @@
                     </div>
                     <div class="panel-body">
                         <form class="form-horizontal" action="{{ route('rate-matauang.update', $rateMataUang->id) }}"
-                            method="post" novalidate>
+                            method="post">
                             @csrf
                             @method('put')
 
@@ -76,7 +76,7 @@
                                     <select name="matauang_default" class="form-control" required>
                                         @forelse ($matauang as $data)
                                             <option value="{{ $data->id }}"
-                                                {{ $rateMataUang->matauang_default == $data->id ?? 'selected' }}>
+                                                {{ $rateMataUang->mata_uang_default->id == $data->id ?? 'selected' }}>
                                                 {{ $data->nama }}</option>
                                         @empty
                                             <option value="" disabled>Mata uang tidak ditemukan</option>

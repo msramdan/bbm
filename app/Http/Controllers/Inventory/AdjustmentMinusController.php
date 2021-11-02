@@ -8,6 +8,7 @@ use App\Models\{AdjustmentMinus, AdjustmentMinusDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class AdjustmentMinusController extends Controller
 {
@@ -27,9 +28,31 @@ class AdjustmentMinusController extends Controller
      */
     public function index()
     {
-        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail',  'gudang')->withCount('adjustment_minus_detail')->get();
+        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail',  'gudang')->withCount('adjustment_minus_detail')->orderByDesc('updated_at');
 
-        return view('inventory.adjustment-minus.index', compact('adjustmentMinus'));
+        if (request()->ajax()) {
+            return Datatables::of($adjustmentMinus)
+                ->addIndexColumn()
+                ->addColumn('action', 'inventory.adjustment-minus.data-table.action')
+                ->addColumn('gudang', function ($row) {
+                    return $row->gudang->nama;
+                })
+                ->addColumn('total_barang', function ($row) {
+                    return $row->adjustment_minus_detail_count;
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at->format('d F Y H:i');
+                })
+                ->addColumn('updated_at', function ($row) {
+                    return $row->updated_at->format('d F Y H:i');
+                })
+                ->addColumn('tanggal', function ($row) {
+                    return $row->tanggal->format('d F Y');
+                })
+                ->toJson();
+        }
+
+        return view('inventory.adjustment-minus.index');
     }
 
     /**
@@ -154,26 +177,19 @@ class AdjustmentMinusController extends Controller
 
     protected function generateKode($tanggal)
     {
-        if (request()->ajax()) {
-            $checkLatestKode = AdjustmentMinus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->count();
+        abort_if(!request()->ajax(), 404);
 
-            if ($checkLatestKode == null) {
-                $kode = 'ADJMN-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
-            } else {
-                if ($checkLatestKode < 10) {
-                    $kode = 'ADJMN-' . date('Ym', strtotime($tanggal)) . '0000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 10) {
-                    $kode = 'ADJMN-' . date('Ym', strtotime($tanggal)) . '000' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 100) {
-                    $kode = 'ADJMN-' . date('Ym', strtotime($tanggal)) . '00' . $checkLatestKode + 1;
-                } elseif ($checkLatestKode > 1000) {
-                    $kode = 'ADJMN-' . date('Ym', strtotime($tanggal)) . '0' . $checkLatestKode + 1;
-                }
-            }
+        $checkLatestKode = AdjustmentMinus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
-            return $kode;
+        if ($checkLatestKode == null) {
+            $kode = 'ADJMN-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
         } else {
-            abort(404);
+            // hapus "ADJMN-" dan ambil angka buat ditambahin
+            $onlyNumberKode = \Str::after($checkLatestKode->kode, 'ADJMN-');
+
+            $kode =  'ADJMN-' . intval($onlyNumberKode) + 1;
         }
+
+        return response()->json($kode, 200);
     }
 }

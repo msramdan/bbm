@@ -31,61 +31,31 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('rekening-bank.create') }}" class="btn btn-success">
+                        <a href="{{ route('rekening-bank.create') }}" class="btn btn-success{{ !auth()->user()->can('create rekening') ? ' disabled' : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('rekening_bank.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
-                        <table id="data-table" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kode</th>
-                                    <th>Bank</th>
-                                    <th>No. Rekening</th>
-                                    <th>Nama Rekening</th>
-                                    <th>Status</th>
-                                    @if (auth()->user()->can('edit rekening') || auth()->user()->can('delete rekening'))
-                                        <th>Action</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($rekeningBank as $data)
-                                    <tr class="odd gradeX">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $data->kode }}</td>
-                                        <td>{{ $data->bank->nama }}</td>
-                                        <td>{{ $data->nomor_rekening }}</td>
-                                        <td>{{ $data->nama_rekening }}</td>
-                                        <td>{{ $data->status == 'Y' ? 'Aktif' : 'No' }}</td>
-                                        @if (auth()->user()->can('edit rekening') || auth()->user()->can('delete rekening'))
-                                            <td>
-                                                @can('edit rekening')
-                                                    <a href="{{ route('rekening-bank.edit', $data->id) }}"
-                                                        class="btn btn-success btn-icon btn-circle">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @endcan
-
-                                                @can('delete rekening')
-                                                    <form action="{{ route('rekening-bank.destroy', $data->id) }}" method="post"
-                                                        class="d-inline"
-                                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                        @csrf
-                                                        @method('delete')
-
-                                                        <button class="btn btn-danger btn-icon btn-circle">
-                                                            <i class="ace-icon fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            </td>
+                        <div class="table-responsive">
+                            <table class="table table-striped data-table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode</th>
+                                        <th>Bank</th>
+                                        <th>No. Rekening</th>
+                                        <th>Nama Rekening</th>
+                                        <th>Status</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
+                                        @if (auth()->user()->can('edit rekening') ||
+        auth()->user()->can('delete rekening'))
+                                            <th>Action</th>
                                         @endif
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- end panel -->
@@ -96,3 +66,64 @@
     </div>
     <!-- end #content -->
 @endsection
+@push('custom-js')
+    <script>
+        const action =
+            '{{ auth()->user()->can('edit rekening') ||
+auth()->user()->can('delete rekening')
+    ? 'yes yes yes'
+    : '' }}'
+
+        let columns = [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'kode',
+                name: 'kode'
+            },
+            {
+                data: 'bank',
+                name: 'bank'
+            },
+            {
+                data: 'nama_rekening',
+                name: 'nama_rekening'
+            },
+            {
+                data: 'nomor_rekening',
+                name: 'nomor_rekening'
+            },
+            {
+                data: 'status',
+                name: 'status'
+            },
+            {
+                data: 'created_at',
+                name: 'created_at'
+            },
+            {
+                data: 'updated_at',
+                name: 'updated_at'
+            }
+        ]
+
+        if (action) {
+            columns.push({
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            })
+        }
+
+        $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('rekening-bank.index') }}",
+            columns: columns,
+        });
+    </script>
+@endpush

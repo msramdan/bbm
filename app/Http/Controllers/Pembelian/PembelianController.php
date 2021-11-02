@@ -275,25 +275,25 @@ class PembelianController extends Controller
         return back();
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = Pembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'PURCH-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'PURCH-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "PURCH-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PURCH-');
 
-            $kode =  'PURCH-' . intval($onlyNumberKode) + 1;
+            $kode =  'PURCH-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);
     }
 
-    protected function getRekeningByBankId($id)
+    public function getRekeningByBankId($id)
     {
         abort_if(!request()->ajax(), 404);
 
@@ -302,7 +302,7 @@ class PembelianController extends Controller
         return response()->json($rekening, 200);
     }
 
-    protected function getDataPO($id)
+    public function getDataPO($id)
     {
         abort_if(!request()->ajax(), 404);
 

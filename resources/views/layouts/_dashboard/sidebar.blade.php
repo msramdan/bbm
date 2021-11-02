@@ -286,6 +286,12 @@
                             {{ trans('dashboard.laporan.pesanan_pembelian') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('pembelian.laporan') }}">
+                            {{ trans('dashboard.laporan.pembelian') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
 

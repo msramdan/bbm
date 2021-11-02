@@ -552,3 +552,9 @@ Breadcrumbs::for('laporan_pesanan_pembelian', function (BreadcrumbTrail $trail) 
     $trail->parent('laporan');
     $trail->push('Pesanan Pembelian', route('pesanan-pembelian.laporan'));
 });
+
+// Laporan > Pembelian
+Breadcrumbs::for('laporan_pembelian', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Pembelian', route('pembelian.laporan'));
+});

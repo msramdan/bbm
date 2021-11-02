@@ -41,12 +41,18 @@ return [
         'cek_giro_cair' => 'Cek/Giro Cair',
         'cek_giro_tolak' => 'Cek/Giro Tolak',
         'biaya' => 'Biaya',
-        'perakitan_paket' => 'Perakitan Paket'
+        'perakitan_paket' => 'Perakitan Paket',
+        'laporan' => 'Laporan',
     ],
     'link' => [
         'dashboard' => 'Dasbor',
         'profile' => 'Rubah Profil',
         'logout' => 'Keluar',
+    ],
+    'laporan' => [
+        'adjustment_plus' => 'Adjusment Plus Laporan',
+        'adjustment_minus' => 'Adjusment Minus Laporan'
+
     ]
 
 

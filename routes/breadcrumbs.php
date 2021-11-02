@@ -11,6 +11,12 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('master', function (BreadcrumbTrail $trail) {
     $trail->push('Master Data');
 });
+// laporan
+Breadcrumbs::for('laporan', function (BreadcrumbTrail $trail) {
+    $trail->push('Laporan');
+});
+
+
 // Master Data > Mata Uang
 Breadcrumbs::for('matauang', function (BreadcrumbTrail $trail) {
     $trail->parent('master');
@@ -526,4 +532,11 @@ Breadcrumbs::for('biaya_edit', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('biaya_show', function (BreadcrumbTrail $trail) {
     $trail->parent('biaya');
     $trail->push('Show');
+});
+
+// Laporan
+// Laporan > Biaya
+Breadcrumbs::for('laporan_adjustment_plus', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Adjustment Plus', route('adjustment-plus.laporan'));
 });

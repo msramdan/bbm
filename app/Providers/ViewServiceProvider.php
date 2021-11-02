@@ -40,7 +40,8 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.edit',
             'penjualan.penjualan.create',
             'inventory.perakitan-paket.create',
-            'inventory.perakitan-paket.edit'
+            'inventory.perakitan-paket.edit',
+            'laporan.adjustment.plus.index'
         ], function ($view) {
             return $view->with('barang', Barang::where('jenis', 1)->get());
         });
@@ -65,6 +66,7 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.pesanan-pembelian.create',
             'pembelian.pesanan-pembelian.edit',
             'pembelian.pembelian.create',
+            'laporan.adjustment.plus.index'
         ], function ($view) {
             return $view->with('supplier', Supplier::all());
         });
@@ -85,7 +87,8 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.retur.edit',
             'penjualan.retur.create',
             'inventory.perakitan-paket.create',
-            'inventory.perakitan-paket.edit'
+            'inventory.perakitan-paket.edit',
+            'laporan.adjustment.plus.index'
         ], function ($view) {
             return $view->with('gudang', Gudang::all());
         });
@@ -294,6 +297,25 @@ class ViewServiceProvider extends ServiceProvider
                     (object)[
                         'id' => 'Pengeluaran',
                         'nama' => 'Pengeluaran'
+                    ],
+                ])
+            );
+        });
+
+        // list bentuk kepemilikan stok
+        View::composer([
+            'laporan.adjustment.plus.index'
+        ], function ($view) {
+            return $view->with(
+                'bentukKepemilikanStok',
+                collect([
+                    (object)[
+                        'id' => 'Stok Sendiri',
+                        'nama' => 'Stok Sendiri'
+                    ],
+                    (object)[
+                        'id' => 'Konsinyasi',
+                        'nama' => 'Konsinyasi'
                     ],
                 ])
             );

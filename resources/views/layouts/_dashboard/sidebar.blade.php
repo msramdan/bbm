@@ -261,6 +261,23 @@
                 </li>
             @endrole
 
+            {{-- menu Laporan --}}
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-book"></i>
+                    <span>{{ trans('dashboard.menu.laporan') }}</span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li>
+                        <a href="{{ route('adjustment-plus.laporan') }}">
+                            {{ trans('dashboard.laporan.adjustment_plus') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
             {{-- menu Akun --}}
             <li class="has-sub">
                 <a href="javascript:;">
@@ -281,7 +298,8 @@
                             Logout
                         </a>
 
-                        <form id="logout-form-sidebar" action="http://bbm.test/logout" method="POST" class="d-none">
+                        <form id="logout-form-sidebar" action="http://bbm.test/logout" method="POST"
+                            class="d-none">
                             @csrf
                         </form>
                     </li>

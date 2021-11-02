@@ -188,19 +188,19 @@ class AdjustmentPlusController extends Controller
         return redirect()->route('adjustment-plus.index');
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = AdjustmentPlus::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'ADJPL-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "ADJPL-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'ADJPL-');
 
-            $kode =  'ADJPL-' . intval($onlyNumberKode) + 1;
+            $kode =  'ADJPL-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

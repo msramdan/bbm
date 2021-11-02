@@ -546,3 +546,9 @@ Breadcrumbs::for('laporan_adjustment_minus', function (BreadcrumbTrail $trail) {
     $trail->parent('laporan');
     $trail->push('Adjustment Minus', route('adjustment-minus.laporan'));
 });
+
+// Laporan > Pesanan Pembelian
+Breadcrumbs::for('laporan_pesanan_pembelian', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Pesanan Pembelian', route('pesanan-pembelian.laporan'));
+});

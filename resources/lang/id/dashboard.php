@@ -50,10 +50,10 @@ return [
         'logout' => 'Keluar',
     ],
     'laporan' => [
-        'adjustment_plus' => 'Adjustment Plus',
-        'adjustment_minus' => 'Adjustment Minus'
-
+        'adjustment_plus' => 'Laporan Adjustment Plus',
+        'adjustment_minus' => 'Laporan Adjustment Minus',
+        'pesanan_pembelian' => 'Laporan Pesanan Pembelian',
+        'pembelian' => 'Laporan Pembelian',
+        'retur_pembelian' => 'Laporan Retur Pembelian',
     ]
-
-
 ];

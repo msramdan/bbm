@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdjustmentMinus;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\DB;
 
 class AdjustmentMinusReportController extends Controller
 {
@@ -41,6 +42,15 @@ class AdjustmentMinusReportController extends Controller
     protected function getLaporan()
     {
         // Optional: ganti make query builder
+        // return DB::table('adjustment_minus as am')
+        //     ->join('adjusment_minus_detail as amd', 'amd.adjustment_minus_id', '=', 'am.id')
+        //     ->join('barang as b', 'b.id', '=', 'amd.barang_id')
+        //     ->join('gudang as g', 'gudang.id', '=', 'am.gudang_id')
+        //     ->join('matauang as m', 'm.id', '=', 'am.matauang_id')
+        //     ->select('*')
+        //     ->get();
+
+        // Optional: ganti make query builder
         return AdjustmentMinus::with(
             'gudang',
             'adjustment_minus_detail',
@@ -51,9 +61,10 @@ class AdjustmentMinusReportController extends Controller
                 $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
                     $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
                 });
-
+            })
+            ->whereHas('adjustment_minus_detail.barang', function ($q) {
                 $q->when(request()->query('barang'), function ($q) {
-                    $q->where('barang_id',  request()->query('barang'));
+                    $q->where('id',  request()->query('barang'));
                 });
             })
             ->whereHas('adjustment_minus_detail.supplier', function ($q) {

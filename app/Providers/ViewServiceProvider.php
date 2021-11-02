@@ -42,7 +42,8 @@ class ViewServiceProvider extends ServiceProvider
             'inventory.perakitan-paket.create',
             'inventory.perakitan-paket.edit',
             'laporan.adjustment.plus.index',
-            'laporan.adjustment.minus.index'
+            'laporan.adjustment.minus.index',
+            'laporan.pembelian.pesanan.index',
         ], function ($view) {
             return $view->with('barang', Barang::where('jenis', 1)->get());
         });
@@ -68,7 +69,8 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.pesanan-pembelian.edit',
             'pembelian.pembelian.create',
             'laporan.adjustment.plus.index',
-            'laporan.adjustment.minus.index'
+            'laporan.adjustment.minus.index',
+            'laporan.pembelian.pesanan.index',
         ], function ($view) {
             return $view->with('supplier', Supplier::all());
         });
@@ -263,6 +265,29 @@ class ViewServiceProvider extends ServiceProvider
             return $view->with('cekGiroBelumLunas', $cekGiroBelumLunas);
         });
 
+        // list Status PO
+        View::composer([
+            'laporan.pembelian.pesanan.index'
+        ], function ($view) {
+            return $view->with(
+                'statusPo',
+                collect([
+                    (object)[
+                        'id' => 'Open',
+                        'nama' => 'Open'
+                    ],
+                    (object)[
+                        'id' => 'Used',
+                        'nama' => 'Used'
+                    ],
+                    (object)[
+                        'id' => 'Cancel',
+                        'nama' => 'Cancel'
+                    ],
+                ])
+            );
+        });
+
         // list dicairkan ke
         View::composer([
             'keuangan.cek-giro.cair.create',
@@ -308,7 +333,8 @@ class ViewServiceProvider extends ServiceProvider
         // list bentuk kepemilikan stok
         View::composer([
             'laporan.adjustment.plus.index',
-            'laporan.adjustment.minus.index'
+            'laporan.adjustment.minus.index',
+            'laporan.pembelian.pesanan.index',
         ], function ($view) {
             return $view->with(
                 'bentukKepemilikanStok',

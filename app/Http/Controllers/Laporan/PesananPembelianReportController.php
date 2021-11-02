@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
-use App\Models\AdjustmentPlus;
+use App\Models\PesananPembelian;
 use Barryvdh\DomPDF\Facade as PDF;
 
-class AdjustmentPlusReportController extends Controller
+class PesananPembelianReportController extends Controller
 {
     public function index()
     {
@@ -16,7 +16,7 @@ class AdjustmentPlusReportController extends Controller
             $laporan = $this->getLaporan();
         }
 
-        return view('laporan.adjustment.plus.index', compact('laporan'));
+        return view('laporan.pembelian.pesanan.index', compact('laporan'));
     }
 
     public function pdf()
@@ -27,43 +27,34 @@ class AdjustmentPlusReportController extends Controller
 
         $toko = $this->getToko();
 
-        $pdf = PDF::loadView('laporan.adjustment.plus.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadView('laporan.pembelian.pesanan.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
 
-        $namaFile = trans('dashboard.laporan.adjustment_plus') . ' - ' . date('d F Y') . '.pdf';
+        $namaFile = trans('dashboard.laporan.pesanan_pembelian') . ' - ' . date('d F Y') . '.pdf';
 
         return $pdf->stream($namaFile);
-
-        // kalo pengen langsung download/tanpa priview
-        // return $pdf->download($namaFile);
     }
 
     protected function getLaporan()
     {
-        // Optional: ganti make query builder
-        return AdjustmentPlus::with(
-            'gudang',
-            'matauang',
-            'adjustment_plus_detail',
-            'adjustment_plus_detail.barang',
-            'adjustment_plus_detail.supplier',
+        return PesananPembelian::with(
+            'pesanan_pembelian_detail',
+            'pesanan_pembelian_detail.barang',
+            'supplier',
+            'matauang'
         )
-            ->whereHas('adjustment_plus_detail', function ($q) {
+            ->whereHas('pesanan_pembelian_detail', function ($q) {
                 $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
                     $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
                 });
-
+            })
+            ->whereHas('pesanan_pembelian_detail.barang', function ($q) {
                 $q->when(request()->query('barang'), function ($q) {
                     $q->where('barang_id',  request()->query('barang'));
                 });
             })
-            ->whereHas('adjustment_plus_detail.supplier', function ($q) {
+            ->whereHas('supplier', function ($q) {
                 $q->when(request()->query('supplier'), function ($q) {
                     $q->where('id',  request()->query('supplier'));
-                });
-            })
-            ->whereHas('gudang', function ($q) {
-                $q->when(request()->query('gudang'), function ($q) {
-                    $q->where('id',  request()->query('gudang'));
                 });
             })
             ->whereBetween('tanggal', [

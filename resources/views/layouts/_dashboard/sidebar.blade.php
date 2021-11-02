@@ -280,6 +280,12 @@
                             {{ trans('dashboard.laporan.adjustment_minus') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('pesanan-pembelian.laporan') }}">
+                            {{ trans('dashboard.laporan.pesanan_pembelian') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
 

@@ -51,8 +51,10 @@ return [
     ],
     'laporan' => [
         'adjustment_plus' => 'Adjustment Plus Report',
-        'adjustment_minus' => 'Adjustment Minus Report'
-
+        'adjustment_minus' => 'Adjustment Minus Report',
+        'pesanan_pembelian' => 'Purchase Order Report',
+        'pembelian' => 'Purchase Report',
+        'retur_pembelian' => 'Purchase Return Report',
     ]
 
 ];

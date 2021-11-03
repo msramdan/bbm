@@ -55,6 +55,8 @@ return [
         'pesanan_pembelian' => 'Purchase Order Report',
         'pembelian' => 'Purchase Report',
         'retur_pembelian' => 'Purchase Return Report',
+        'penjualan' => 'Sales Report',
+        'retur_penjualan' => 'Sales Return Report',
     ]
 
 ];

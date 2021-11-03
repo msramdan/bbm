@@ -264,25 +264,25 @@ class PenjualanController extends Controller
         return back();
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = Penjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "SALES-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'SALES-');
 
-            $kode =  'SALES-' . intval($onlyNumberKode) + 1;
+            $kode =  'SALES-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);
     }
 
-    protected function getRekeningByBankId($id)
+    public function getRekeningByBankId($id)
     {
         abort_if(!request()->ajax(), 404);
 
@@ -291,7 +291,7 @@ class PenjualanController extends Controller
         return response()->json($rekening, 200);
     }
 
-    protected function getAlamatPelanggan($id)
+    public function getAlamatPelanggan($id)
     {
         abort_if(!request()->ajax(), 404);
 

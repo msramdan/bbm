@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pembelian;
+use App\Models\Penjualan;
 use Barryvdh\DomPDF\Facade as PDF;
 
-class PembelianReportController extends Controller
+class PenjualanReportController extends Controller
 {
     public function index()
     {
@@ -16,7 +16,7 @@ class PembelianReportController extends Controller
             $laporan = $this->getLaporan();
         }
 
-        return view('laporan.pembelian.pembelian.index', compact('laporan'));
+        return view('laporan.penjualan.penjualan.index', compact('laporan'));
     }
 
     public function pdf()
@@ -27,35 +27,34 @@ class PembelianReportController extends Controller
 
         $toko = $this->getToko();
 
-        $pdf = PDF::loadView('laporan.pembelian.pembelian.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadView('laporan.penjualan.penjualan.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
 
-        $namaFile = trans('dashboard.laporan.pembelian') . ' - ' . date('d F Y') . '.pdf';
+        $namaFile = trans('dashboard.laporan.penjualan') . ' - ' . date('d F Y') . '.pdf';
 
         return $pdf->stream($namaFile);
     }
 
     protected function getLaporan()
     {
-        return Pembelian::with(
-            'pembelian_detail',
-            'pembelian_detail.barang',
-            'supplier',
-            'matauang',
-            'gudang'
-        )
-            ->whereHas('pembelian_detail', function ($q) {
+        return Penjualan::with('penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang')
+            ->whereHas('penjualan_detail', function ($q) {
                 $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
                     $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
                 });
             })
-            ->whereHas('pembelian_detail.barang', function ($q) {
+            ->whereHas('penjualan_detail.barang', function ($q) {
                 $q->when(request()->query('barang'), function ($q) {
                     $q->where('barang_id',  request()->query('barang'));
                 });
             })
-            ->whereHas('supplier', function ($q) {
-                $q->when(request()->query('supplier'), function ($q) {
-                    $q->where('id',  request()->query('supplier'));
+            ->whereHas('pelanggan', function ($q) {
+                $q->when(request()->query('pelanggan'), function ($q) {
+                    $q->where('id',  request()->query('pelanggan'));
+                });
+            })
+            ->whereHas('salesman', function ($q) {
+                $q->when(request()->query('salesman'), function ($q) {
+                    $q->where('id',  request()->query('salesman'));
                 });
             })
             ->whereHas('gudang', function ($q) {

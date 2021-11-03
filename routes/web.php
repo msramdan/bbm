@@ -13,6 +13,7 @@ use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGi
 use App\Http\Controllers\Laporan\AdjustmentMinusReportController;
 use App\Http\Controllers\Laporan\AdjustmentPlusReportController;
 use App\Http\Controllers\Laporan\PembelianReportController;
+use App\Http\Controllers\Laporan\PenjualanReportController;
 use App\Http\Controllers\Laporan\PesananPembelianReportController;
 use Illuminate\Support\Facades\Auth;
 
@@ -168,4 +169,8 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     // Pembelian
     Route::get('/pembelian/pdf', [PembelianReportController::class, 'pdf'])->name('pembelian.pdf');
     Route::get('/pembelian', [PembelianReportController::class, 'index'])->name('pembelian.laporan');
+
+    // Penjualan
+    Route::get('/penjualan/pdf', [PenjualanReportController::class, 'pdf'])->name('penjualan.pdf');
+    Route::get('/penjualan', [PenjualanReportController::class, 'index'])->name('penjualan.laporan');
 });

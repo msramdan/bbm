@@ -55,5 +55,7 @@ return [
         'pesanan_pembelian' => 'Laporan Pesanan Pembelian',
         'pembelian' => 'Laporan Pembelian',
         'retur_pembelian' => 'Laporan Retur Pembelian',
+        'penjualan' => 'Laporan Penjualan',
+        'retur_penjualan' => 'Laporan Retur Penjualan',
     ]
 ];

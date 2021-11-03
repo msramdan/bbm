@@ -97,6 +97,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.adjustment.plus.index',
             'laporan.adjustment.minus.index',
             'laporan.pembelian.pembelian.index',
+            'laporan.penjualan.penjualan.index',
         ], function ($view) {
             return $view->with('gudang', Gudang::all());
         });
@@ -179,7 +180,8 @@ class ViewServiceProvider extends ServiceProvider
         View::composer([
             'penjualan.penjualan.create',
             'penjualan.penjualan.edit',
-            'penjualan.retur.create'
+            'penjualan.retur.create',
+            'laporan.penjualan.penjualan.index',
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::all());
         });
@@ -241,7 +243,8 @@ class ViewServiceProvider extends ServiceProvider
             'setting.user.create',
             'setting.user.edit',
             'penjualan.penjualan.edit',
-            'penjualan.penjualan.create'
+            'penjualan.penjualan.create',
+            'laporan.penjualan.penjualan.index',
         ], function ($view) {
             return $view->with('salesman', Salesman::all());
         });

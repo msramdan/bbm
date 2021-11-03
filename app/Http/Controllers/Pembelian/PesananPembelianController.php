@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
-use App\Models\{PesananPembelian, PesananPembelianDetail};
+use App\Models\{Barang, PesananPembelian, PesananPembelianDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;

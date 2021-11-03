@@ -181,7 +181,7 @@ class BarangController extends Controller
 
     public function cekStok($id)
     {
-        $barang = Barang::findOrFail($id);
+        $barang = Barang::select('stok', 'min_stok', 'harga_jual', 'harga_jual')->findOrFail($id);
 
         // if ($barang->stok == $barang->min_stok) {
         //     return response()->json('Stok tersisa minimal', 403);
@@ -193,7 +193,9 @@ class BarangController extends Controller
 
         return response()->json([
             'stok' => $barang->stok,
-            'min_stok' => $barang->min_stok
+            'min_stok' => $barang->min_stok,
+            'harga_jual' => $barang->harga_jual,
+            'harga_beli' => $barang->harga_beli,
         ], 200);
     }
 }

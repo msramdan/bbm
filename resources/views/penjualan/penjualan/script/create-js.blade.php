@@ -18,6 +18,42 @@
             get_rekening()
         })
 
+        // Cek stok
+        $('#kode_barang_input').change(function() {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + $(this).val(),
+                type: 'GET',
+                success: function(data) {
+                    $('#stok').val(data.stok)
+                    $('#min_stok').val(data.min_stok)
+                    harga.val(data.harga_jual)
+
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+                    $('#qty_input').focus()
+
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
+        })
+
+        // $('#qty_input').on('change keyup keydown', function() {
+
+        // })
+
         $('#pelanggan').change(function() {
             $.ajax({
                 url: "/jual/penjualan/get-alamat/" + $('#pelanggan').val(),
@@ -44,6 +80,10 @@
             }
         })
 
+        $('#btn_update_brg').on('mouseenter', function() {
+            cek_form_entry_brg()
+        })
+
         $('#qty_input, #harga_input, #kode_input, #diskon_input, #diskon_persen_input, #ppn_input,#gross_input, #checkbox_ppn')
             .on('keyup keydown change',
                 function() {
@@ -62,8 +102,10 @@
                 cek_table_length()
             })
 
+
         $('#form_trx').submit(function(e) {
             e.preventDefault()
+
             if (
                 !$('input[name="tanggal"]').val() ||
                 !$('input[name="rate"]').val() ||
@@ -71,9 +113,8 @@
                 !$('select[name="matauang"]').val() ||
                 !$('select[name="gudang"]').val() ||
                 !$('select[name="pelanggan"]').val() ||
-                !$('select[name="salesman"]') ||
-                !$('textarea[name="alamat"]')
-                .val()
+                !$('select[name="salesman"]').val() ||
+                !$('textarea[name="alamat"]').val()
             ) {
                 $('select[name="gudang"]').focus()
 
@@ -85,7 +126,7 @@
             } else {
                 let kode_barang = $('#kode_barang_input option:selected')
                 let harga = $('#harga_input').val()
-                let qty = $('#qty_input').val()
+                let qty = parseInt($('#qty_input').val())
                 let ppn = $('#ppn_input').val()
                 let diskon = $('#diskon_input').val()
                 let diskon_persen = $('#diskon_persen_input').val() ? parseFloat($('#diskon_persen_input').val()) :
@@ -94,77 +135,95 @@
 
                 let gross = harga * qty
 
-                // cek duplikasi barang
-                $('input[name="barang[]"]').each(function() {
-                    // cari index tr ke berapa
-                    let index = $(this).parent().parent().index()
+                let stok = parseInt($('#stok').val())
+                let min_stok = parseInt($('#min_stok').val())
 
-                    // kalo id barang di cart dan form input(barang) sama
-                    //  kalo id supplier di cart dan form input(barang) sama
-                    if ($(this).val() == kode_barang.val()) {
-                        // hapus tr berdasarkan index
-                        $('#tbl_trx tbody tr:eq(' + index + ')').remove()
+                // kalo stok - qty lebih besar dari min stok
+                // let min_stok_qty = stok - qty
+                // kalo mau validasi min stok
+                // if (stok == min_stok || qty > stok || min_stok_qty < min_stok)
 
-                        generate_nomer_brg()
-                    }
-                })
+                if (stok == min_stok || qty > stok) {
+                    $('#qty_input').val(stok)
+                    $('#qty_input').focus()
 
-                let no = $('#tbl_trx tbody tr').length + 1
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Stok tidak mencukupi untuk dikeluarkan',
+                        text: `Stok: ${stok}, Stok Minim: ${min_stok}`
+                    })
+                } else {
+                    // cek duplikasi barang
+                    $('input[name="barang[]"]').each(function() {
+                        // cari index tr ke berapa
+                        let index = $(this).parent().parent().index()
 
-                let data_trx = `<tr>
-                    <td>${no}</td>
-                    <td>
-                        ${kode_barang.html()}
-                        <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
-                    </td>
-                    <td>
-                        ${format_ribuan(harga)}
-                        <input type="hidden"  class="harga_hidden" name="harga[]" value="${harga}">
-                    </td>
-                    <td>
-                        ${format_ribuan(qty)}
-                        <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
-                    </td>
-                    <td>
-                        ${format_ribuan(diskon_persen)}%
-                        <input type="hidden"  class="diskon_persen_hidden" name="diskon_persen[]" value="${diskon_persen}">
-                    </td>
-                    <td>
-                        ${format_ribuan(diskon)}
-                        <input type="hidden"  class="diskon_hidden" name="diskon[]" value="${diskon}">
-                    </td>
-                    <td>
-                        ${format_ribuan(gross)}
-                        <input type="hidden" name="gross[]" class="gross_hidden" value="${gross}">
-                    </td>
-                    <td>
-                        ${format_ribuan(ppn)}
-                        <input type="hidden"  class="ppn_hidden" name="ppn[]" value="${ppn}">
-                    </td>
-                    <td>
-                        ${format_ribuan(netto)}
-                        <input type="hidden"  class="netto_hidden" name="netto[]" value="${netto}">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs btn_edit_brg">
-                            <i class="fa fa-edit"></i>
-                        </button>
+                        // kalo id barang di cart dan form input(barang) sama
+                        if ($(this).val() == kode_barang.val()) {
+                            // hapus tr berdasarkan index
+                            $('#tbl_trx tbody tr:eq(' + index + ')').remove()
 
-                        <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </td>
-                </tr>`
+                            generate_nomer_brg()
+                        }
+                    })
 
-                $('#tbl_trx').append(data_trx)
+                    let no = $('#tbl_trx tbody tr').length + 1
 
-                cek_table_length()
+                    let data_trx = `<tr>
+                        <td>${no}</td>
+                        <td>
+                            ${kode_barang.html()}
+                            <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
+                        </td>
+                        <td>
+                            ${format_ribuan(harga)}
+                            <input type="hidden"  class="harga_hidden" name="harga[]" value="${harga}">
+                        </td>
+                        <td>
+                            ${format_ribuan(qty)}
+                            <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
+                        </td>
+                        <td>
+                            ${format_ribuan(diskon_persen)}%
+                            <input type="hidden"  class="diskon_persen_hidden" name="diskon_persen[]" value="${diskon_persen}">
+                        </td>
+                        <td>
+                            ${format_ribuan(diskon)}
+                            <input type="hidden"  class="diskon_hidden" name="diskon[]" value="${diskon}">
+                        </td>
+                        <td>
+                            ${format_ribuan(gross)}
+                            <input type="hidden" name="gross[]" class="gross_hidden" value="${gross}">
+                        </td>
+                        <td>
+                            ${format_ribuan(ppn)}
+                            <input type="hidden"  class="ppn_hidden" name="ppn[]" value="${ppn}">
+                        </td>
+                        <td>
+                            ${format_ribuan(netto)}
+                            <input type="hidden"  class="netto_hidden" name="netto[]" value="${netto}">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-xs btn_edit_brg">
+                                <i class="fa fa-edit"></i>
+                            </button>
 
-                clear_form_entry_brg()
+                            <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`
 
-                hitung_semua_total_brg()
+                    $('#tbl_trx').append(data_trx)
 
-                $('#kode_barang_input').focus()
+                    cek_table_length()
+
+                    clear_form_entry_brg()
+
+                    hitung_semua_total_brg()
+
+                    $('#kode_barang_input').focus()
+                }
             }
         })
 
@@ -413,6 +472,7 @@
 
         $(document).on('click', '.btn_edit_brg', function(e) {
             e.preventDefault()
+            $('#btn_update_brg').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -539,54 +599,68 @@
 
             let no = parseInt(parseInt(index) + 1)
 
-            let data_trx = `<td>${no}</td>
-                <td>
-                    ${kode_barang.html()}
-                    <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
-                </td>
-                <td>
-                    ${format_ribuan(harga)}
-                        <input type="hidden"  class="harga_hidden" name="harga[]" value="${harga}">
-                </td>
-                <td>
-                    ${format_ribuan(qty)}
-                        <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
-                </td>
-                <td>
-                    ${format_ribuan(diskon_persen)}%
-                    <input type="hidden"  class="diskon_persen_hidden" name="diskon_persen[]" value="${diskon_persen}">
-                </td>
-                <td>
-                    ${format_ribuan(diskon)}
-                    <input type="hidden"  class="diskon_hidden" name="diskon[]" value="${diskon}">
-                </td>
-                <td>
-                    ${format_ribuan(gross)}
-                    <input type="hidden" name="gross[]" class="gross_hidden" value="${gross}">
-                </td>
-                <td>
-                    ${format_ribuan(ppn)}
-                    <input type="hidden"  class="ppn_hidden" name="ppn[]" value="${ppn}">
-                </td>
-                <td>
-                    ${format_ribuan(netto)}
-                    <input type="hidden"  class="netto_hidden" name="netto[]" value="${netto}">
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info btn-xs btn_edit_brg">
-                        <i class="fa fa-edit"></i>
-                    </button>
+            let stok = parseInt($('#stok').val())
+            let min_stok = parseInt($('#min_stok').val())
 
-                    <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </td>`
+            if (stok == min_stok || qty > stok) {
+                $('#qty_input').val(stok)
+                $('#qty_input').focus()
 
-            $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Stok tidak mencukupi untuk dikeluarkan',
+                    text: `Stok: ${stok}, Stok Minim: ${min_stok}`
+                })
+            } else {
+                let data_trx = `<td>${no}</td>
+                    <td>
+                        ${kode_barang.html()}
+                        <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
+                    </td>
+                    <td>
+                        ${format_ribuan(harga)}
+                            <input type="hidden"  class="harga_hidden" name="harga[]" value="${harga}">
+                    </td>
+                    <td>
+                        ${format_ribuan(qty)}
+                            <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
+                    </td>
+                    <td>
+                        ${format_ribuan(diskon_persen)}%
+                        <input type="hidden"  class="diskon_persen_hidden" name="diskon_persen[]" value="${diskon_persen}">
+                    </td>
+                    <td>
+                        ${format_ribuan(diskon)}
+                        <input type="hidden"  class="diskon_hidden" name="diskon[]" value="${diskon}">
+                    </td>
+                    <td>
+                        ${format_ribuan(gross)}
+                        <input type="hidden" name="gross[]" class="gross_hidden" value="${gross}">
+                    </td>
+                    <td>
+                        ${format_ribuan(ppn)}
+                        <input type="hidden"  class="ppn_hidden" name="ppn[]" value="${ppn}">
+                    </td>
+                    <td>
+                        ${format_ribuan(netto)}
+                        <input type="hidden"  class="netto_hidden" name="netto[]" value="${netto}">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs btn_edit_brg">
+                            <i class="fa fa-edit"></i>
+                        </button>
 
-            clear_form_entry_brg()
+                        <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>`
 
-            hitung_semua_total_brg()
+                $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
+
+                clear_form_entry_brg()
+
+                hitung_semua_total_brg()
+            }
         }
 
         function update_list_payment(index) {
@@ -783,10 +857,12 @@
                 !$('#qty_input').val()
             ) {
                 $('#btn_add_brg').prop('disabled', true)
+                $('#btn_update_brg').prop('disabled', true)
                 $('#btn_clear_form_brg').prop('disabled', true)
             } else {
                 $('#btn_add_brg').prop('disabled', false)
                 $('#btn_clear_form_brg').prop('disabled', false)
+                $('#btn_update_brg').prop('disabled', false)
             }
         }
 

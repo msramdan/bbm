@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Penjualan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\Pelanggan;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
@@ -111,6 +112,11 @@ class PenjualanController extends Controller
                     'ppn' => $request->ppn[$i],
                     'netto' => $request->netto[$i],
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             // kalo user isi jenis pembayaran dan bayar berarti di ga ngutag
@@ -209,6 +215,11 @@ class PenjualanController extends Controller
                     'ppn' => $request->ppn[$i],
                     'netto' => $request->netto[$i],
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             // hapus list lama

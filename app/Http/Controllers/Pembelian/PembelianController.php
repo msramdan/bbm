@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Pembelian, PembelianDetail, PembelianPembayaran, PesananPembelian, RekeningBank};
+use App\Models\{Barang, Pembelian, PembelianDetail, PembelianPembayaran, PesananPembelian, RekeningBank};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -120,6 +120,11 @@ class PembelianController extends Controller
                     'pph' => $request->pph[$i],
                     'netto' => $request->netto[$i],
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
 
             if ($request->jenis_pembayaran && $request->bayar) {
@@ -220,6 +225,11 @@ class PembelianController extends Controller
                     'pph' => $request->pph[$i],
                     'netto' => $request->netto[$i],
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
 
             // hapus list lama

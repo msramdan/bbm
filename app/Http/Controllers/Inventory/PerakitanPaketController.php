@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\PerakitanPaket;
 use App\Models\PerakitanPaketDetail;
 use Illuminate\Http\Request;
@@ -83,6 +84,11 @@ class PerakitanPaketController extends Controller
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
                     'qty' => $request->qty[$i]
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
 
             $paket->perakitan_paket_detail()->saveMany($paketDetail);
@@ -144,6 +150,11 @@ class PerakitanPaketController extends Controller
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
                     'qty' => $request->qty[$i]
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             // hapus list barang lama

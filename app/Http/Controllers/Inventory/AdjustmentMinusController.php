@@ -4,7 +4,7 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
-use App\Models\{AdjustmentMinus, AdjustmentMinusDetail};
+use App\Models\{AdjustmentMinus, AdjustmentMinusDetail, Barang};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -87,6 +87,11 @@ class AdjustmentMinusController extends Controller
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
                     'qty' => $request->qty[$i]
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             $adjusment->adjustment_minus_detail()->saveMany($adjusmentDetail);
@@ -148,6 +153,11 @@ class AdjustmentMinusController extends Controller
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
                     'qty' => $request->qty[$i]
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             // hapus list barang lama
@@ -175,7 +185,7 @@ class AdjustmentMinusController extends Controller
         return redirect()->route('adjustment-minus.index');
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 

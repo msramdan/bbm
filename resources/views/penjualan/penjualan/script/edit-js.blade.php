@@ -11,9 +11,34 @@
             hitung_semua_total_brg()
         })
 
-
         $('#bank_input').change(function() {
             get_rekening()
+        })
+
+        // Cek stok
+        $('#kode_barang_input').change(function() {
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + $(this).val(),
+                type: 'GET',
+                success: function(data) {
+                    $('#stok').val(data.stok)
+                    $('#min_stok').val(data.min_stok)
+                    $('#harga_input').val(data.harga_jual)
+
+                    console.log('stok: ' + data.stok);
+                    console.log('min_stok: ' + data.min_stok);
+                    console.log('harga: ' + data.harga_jual);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         })
 
         $('#pelanggan').change(function() {

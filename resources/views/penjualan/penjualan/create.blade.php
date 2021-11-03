@@ -517,6 +517,8 @@
         <!-- end row -->
     </div>
     <!-- end #content -->
+    <input type="hidden" id="stok">
+    <input type="hidden" id="min_stok">
 @endsection
 
 @include('penjualan.penjualan.script.create-js')

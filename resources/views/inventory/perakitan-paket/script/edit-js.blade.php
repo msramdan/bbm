@@ -14,33 +14,6 @@
                 cek_form_entry()
             })
 
-        function cek_stok(id) {
-            // kosongin dulu
-            $('#stok').val('')
-            $('#min_stok').val('')
-
-            $.ajax({
-                url: `/masterdata/barang/cek-stok/${id}`,
-                type: 'GET',
-                success: function(data) {
-                    // baru isi lagi dengan yang baru
-                    $('#stok').val(data.stok)
-                    $('#min_stok').val(data.min_stok)
-                    console.log('cek_stok() stok: ' + $('#stok').val());
-                    console.log('cek_stok() min_stok: ' + $('#min_stok').val());
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!'
-                    })
-                }
-            })
-        }
-
         $('#form_trx').submit(function(e) {
             e.preventDefault()
             $('#btn_add').text('Loading...')

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Penjualan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\Penjualan;
 use App\Models\ReturPenjualan;
 use App\Models\ReturPenjualanDetail;
@@ -98,6 +99,11 @@ class ReturPenjualanController extends Controller
                     'ppn' => floatval($request->ppn[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
 
             $retur->retur_penjualan_detail()->saveMany($returDetail);
@@ -165,6 +171,11 @@ class ReturPenjualanController extends Controller
                     'ppn' => floatval($request->ppn[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
 
             $returPenjualan->retur_penjualan_detail()->delete();

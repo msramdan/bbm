@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\Pembelian;
 use App\Models\ReturPembelian;
 use App\Models\ReturPembelianDetail;
@@ -117,6 +118,11 @@ class ReturPembelianController extends Controller
                     'pph' => floatval($request->pph[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             $retur->retur_pembelian_detail()->saveMany($returDetail);
@@ -191,6 +197,11 @@ class ReturPembelianController extends Controller
                     'pph' => floatval($request->pph[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             $returPembelian->retur_pembelian_detail()->delete();

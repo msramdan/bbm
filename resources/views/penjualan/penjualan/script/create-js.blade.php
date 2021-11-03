@@ -6,6 +6,38 @@
         get_kode()
         cek_form_entry_brg()
 
+        function cek_stok(id) {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    $('#stok').val(data.stok)
+                    $('#min_stok').val(data.min_stok)
+
+                    harga.val(data.harga_jual)
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+
+                    $('#qty_input').focus()
+                    console.log(`stok: ${stok}, min: ${min_stok}`);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
+        }
+
         $('#matauang').change(function() {
             hitung_semua_total_brg()
         })
@@ -20,39 +52,8 @@
 
         // Cek stok
         $('#kode_barang_input').change(function() {
-            let harga = $('#harga_input')
-            harga.prop('disabled', true)
-            harga.val('')
-            harga.prop('placeholder', 'Loading...')
-
-            $.ajax({
-                url: '/masterdata/barang/cek-stok/' + $(this).val(),
-                type: 'GET',
-                success: function(data) {
-                    $('#stok').val(data.stok)
-                    $('#min_stok').val(data.min_stok)
-                    harga.val(data.harga_jual)
-
-                    harga.prop('disabled', false)
-                    harga.prop('placeholder', 'Harga')
-                    $('#qty_input').focus()
-
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!'
-                    })
-                }
-            })
+            cek_stok($(this).val())
         })
-
-        // $('#qty_input').on('change keyup keydown', function() {
-
-        // })
 
         $('#pelanggan').change(function() {
             $.ajax({
@@ -223,6 +224,8 @@
                     hitung_semua_total_brg()
 
                     $('#kode_barang_input').focus()
+                    $('#stok').val('')
+                    $('min_stok').val()
                 }
             }
         })
@@ -500,6 +503,10 @@
             $('#btn_update_brg').show()
 
             $('#index_tr_brg').val(index)
+
+            cek_stok(kode_barang)
+
+            console.log($('#stok').val());
         })
 
         $(document).on('click', '.btn_edit_payment', function(e) {
@@ -656,6 +663,15 @@
                     </td>`
 
                 $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
+
+                // cek duplikasi pas update
+                let cek = 0
+                $('input[name="barang[]"]').each(function(i) {
+                    // i = index each
+                    if ($(this).val() == kode_barang.val() && i != index) {
+                        $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                    }
+                })
 
                 clear_form_entry_brg()
 

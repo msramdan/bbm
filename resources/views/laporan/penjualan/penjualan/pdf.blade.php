@@ -17,12 +17,13 @@
             width: 100%;
             font-size: 11px;
             border-left: 0;
+            margin-bottom: 1em;
         }
 
         table td,
         table th,
         table tfoot {
-            border: 1px solid #dddd;
+            border: 1px solid black;
             padding: 3px;
             border-left: 0px solid;
             border-right: 0px solid;
@@ -44,6 +45,10 @@
         p,
         h4 {
             line-height: 8px;
+        }
+
+        small {
+            font-size: 12px;
         }
 
         .garis {
@@ -187,6 +192,13 @@
                 @endforelse
             </tbody>
         </table>
+
+        <small>
+            <strong>
+                Dari:
+                {{ date('d F Y', strtotime(request()->query('dari_tanggal'))) . ' - ' . date('d F Y', strtotime(request()->query('sampai_tanggal'))) }}
+            </strong>
+        </small>
     </div>
 
 </body>

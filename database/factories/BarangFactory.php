@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\{Barang,Kategori,Matauang,SatuanBarang};
+use App\Models\{Barang, Kategori, Matauang, SatuanBarang};
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -36,11 +36,11 @@ class BarangFactory extends Factory
             'satuan_id' => rand(1, $satuan->id),
             'harga_beli_matauang' => rand(1, $matauang->id),
             'harga_jual_matauang' => rand(1, $matauang->id),
-            'harga_beli' => rand(1, 5000),
-            'harga_jual' => rand(1, 5000),
+            'harga_beli' => rand(100, 90000),
+            'harga_jual' => rand(100, 90000),
             'harga_jual_min' => rand(1, 5000),
-            'stok' => rand(5, 30),
-            'min_stok' => rand(0, 5),
+            'stok' => rand(10, 80),
+            'min_stok' => rand(1, 5),
             'gambar' => 'noimage.png',
             'status' => 'Y',
         ];

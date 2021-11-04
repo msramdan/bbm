@@ -8,6 +8,11 @@ use Barryvdh\DomPDF\Facade as PDF;
 
 class PembelianReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:laporan pembelian');
+    }
+
     public function index()
     {
         $laporan = [];

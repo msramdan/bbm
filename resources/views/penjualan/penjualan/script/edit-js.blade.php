@@ -50,10 +50,6 @@
             }
         })
 
-        $('#btn_update_brg').on('mouseover mouseenter', function() {
-            cek_form_entry_brg()
-        })
-
         $('#qty_input, #harga_input, #kode_input, #diskon_input, #diskon_persen_input, #ppn_input,#gross_input, #checkbox_ppn')
             .on('keyup keydown change',
                 function() {

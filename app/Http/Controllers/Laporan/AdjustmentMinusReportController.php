@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class AdjustmentMinusReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:laporan adjustment minus');
+    }
     public function index()
     {
         $laporan = [];

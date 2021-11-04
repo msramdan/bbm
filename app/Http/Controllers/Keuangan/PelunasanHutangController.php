@@ -191,7 +191,7 @@ class PelunasanHutangController extends Controller
         return back();
     }
 
-    protected function getPembelianYgBelumLunas($id)
+    public function getPembelianYgBelumLunas($id)
     {
         abort_if(!request()->ajax(), 404);
 
@@ -200,19 +200,19 @@ class PelunasanHutangController extends Controller
         return response()->json($pembelianBelumLunas, 200);
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = PelunasanHutang::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'APPAY-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'APPAY-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "APPAY-" dan ambil angka buat ditambahin
             $onlyNumberKode = Str::after($checkLatestKode->kode, 'APPAY-');
 
-            $kode =  'APPAY-' . intval($onlyNumberKode) + 1;
+            $kode =  'APPAY-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

@@ -201,25 +201,25 @@ class CekGiroTolakController extends Controller
         return back();
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = CekGiroTolak::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'CHRJC-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'CHRJC-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "CHRJC-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'CHRJC-');
 
-            $kode =  'CHRJC-' . intval($onlyNumberKode) + 1;
+            $kode =  'CHRJC-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);
     }
 
-    protected function getCekGiroById($id)
+    public function getCekGiroById($id)
     {
         abort_if(!request()->ajax(), 404);
 

@@ -8,6 +8,11 @@ use Barryvdh\DomPDF\Facade as PDF;
 
 class AdjustmentPlusReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:laporan adjustment plus');
+    }
+
     public function index()
     {
         $laporan = [];

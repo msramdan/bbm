@@ -66,7 +66,7 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="penjualan">Kode penjualan</label>
+                                    <label for="penjualan">Kode Penjualan</label>
                                     <select name="penjualan" id="penjualan" class="form-control">
                                         <option value="{{ $pelunasanPiutang->penjualan_id }}">
                                             {{ $pelunasanPiutang->penjualan->kode }}</option>

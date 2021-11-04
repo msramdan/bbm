@@ -257,6 +257,8 @@
 
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
+            $('#btn_update_brg').prop('disabled', false)
+            $('#btn_clear_form_brg').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -274,6 +276,19 @@
             let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
             let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
+
+            if (ppn > 0) {
+                $('#checkbox_ppn').prop('checked', true)
+            } else {
+                $('#checkbox_ppn').prop('checked', false)
+                $('#checkbox_pph').prop('checked', false)
+            }
+
+            if (pph > 0) {
+                $('#checkbox_pph').prop('checked', true)
+            } else {
+                $('#checkbox_pph').prop('checked', false)
+            }
 
             $('#harga_input').val(harga)
             $('#qty_beli_input').val(qty_beli)

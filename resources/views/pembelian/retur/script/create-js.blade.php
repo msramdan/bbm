@@ -388,6 +388,8 @@
 
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
+            $('#btn_update_brg').prop('disabled', false)
+            $('#btn_clear_form_brg').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -405,6 +407,21 @@
             let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
             let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
+
+            if (ppn > 0) {
+                $('#checkbox_ppn').prop('checked', true)
+                alert('ppn ada')
+            } else {
+                alert('ppn ga ada')
+                $('#checkbox_ppn').prop('checked', false)
+                $('#checkbox_pph').prop('checked', false)
+            }
+
+            if (pph > 0) {
+                $('#checkbox_pph').prop('checked', true)
+            } else {
+                $('#checkbox_pph').prop('checked', false)
+            }
 
             $('#harga_input').val(harga)
             $('#qty_beli_input').val(qty_beli)
@@ -711,6 +728,39 @@
                 $('#btn_update').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
             }
+        }
+
+        function cek_stok(id, harga_edit = null) {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    if (harga_edit) {
+                        harga.val(harga_edit)
+                    } else {
+                        harga.val(data.harga_beli)
+                    }
+
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+
+                    $('#qty_input').focus()
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

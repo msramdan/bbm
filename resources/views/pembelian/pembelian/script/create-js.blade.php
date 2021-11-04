@@ -35,6 +35,10 @@
             get_kode()
         })
 
+        $('#kode_barang_input').change(function() {
+            cek_stok($(this).val())
+        })
+
         $('#bank_input').change(function() {
             get_rekening()
         })
@@ -230,12 +234,12 @@
                 $('#tbl_trx').append(data_trx)
 
                 cek_table_length()
-
                 clear_form_entry_brg()
-
                 hitung_semua_total_brg()
 
                 $('#kode_barang_input').focus()
+                $('#checkbox_ppn').prop('checked', true)
+                $('#checkbox_pph').prop('checked', true)
             }
         })
 
@@ -504,6 +508,8 @@
 
         $(document).on('click', '.btn_edit_brg', function(e) {
             e.preventDefault()
+            $('#btn_update_brg').prop('disabled', false)
+            $('#btn_clear_form_brg').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -521,6 +527,19 @@
             let netto = $('.netto_hidden:eq(' + index + ')').val()
 
             $('#kode_barang_input option[value="' + kode_barang + '"]').attr('selected', 'selected')
+
+            if (ppn > 0) {
+                $('#checkbox_ppn').prop('checked', true)
+            } else {
+                $('#checkbox_ppn').prop('checked', false)
+                $('#checkbox_pph').prop('checked', false)
+            }
+
+            if (pph > 0) {
+                $('#checkbox_pph').prop('checked', true)
+            } else {
+                $('#checkbox_pph').prop('checked', false)
+            }
 
             $('#harga_input').val(harga)
             $('#qty_input').val(qty)
@@ -634,6 +653,14 @@
 
             let gross = harga * qty
 
+            // cek duplikasi pas update
+            $('input[name="barang[]"]').each(function(i) {
+                // i = index each
+                if ($(this).val() == kode_barang.val() && i != index) {
+                    $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                }
+            })
+
             let no = parseInt(parseInt(index) + 1)
 
             let data_trx = `<td>${no}</td>
@@ -694,8 +721,11 @@
             $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
 
             clear_form_entry_brg()
-
             hitung_semua_total_brg()
+            generate_nomer_brg()
+
+            $('#checkbox_ppn').prop('checked', false)
+            $('#checkbox_pph').prop('checked', false)
         }
 
         function update_list_payment(index) {
@@ -918,12 +948,15 @@
             if (
                 !$('#kode_barang_input').val() ||
                 !$('#harga_input').val() ||
-                !$('#qty_input').val()
+                !$('#qty_input').val() ||
+                $('#qty_input').val() < 1
             ) {
                 $('#btn_add_brg').prop('disabled', true)
+                $('#btn_update_brg').prop('disabled', true)
                 $('#btn_clear_form_brg').prop('disabled', true)
             } else {
                 $('#btn_add_brg').prop('disabled', false)
+                $('#btn_update_brg').prop('disabled', false)
                 $('#btn_clear_form_brg').prop('disabled', false)
             }
         }
@@ -996,6 +1029,39 @@
 
         function format_ribuan(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        }
+
+        function cek_stok(id, harga_edit = null) {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    if (harga_edit) {
+                        harga.val(harga_edit)
+                    } else {
+                        harga.val(data.harga_beli)
+                    }
+
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+
+                    $('#qty_input').focus()
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

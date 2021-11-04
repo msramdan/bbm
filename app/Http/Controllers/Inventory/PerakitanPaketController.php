@@ -88,7 +88,7 @@ class PerakitanPaketController extends Controller
                 // Update stok barang
                 $barangQuery = Barang::whereId($value);
                 $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             $paket->perakitan_paket_detail()->saveMany($paketDetail);
@@ -181,19 +181,19 @@ class PerakitanPaketController extends Controller
         return redirect()->route('perakitan-paket.index');
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = PerakitanPaket::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'PCKASM-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'PCKASM-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "PCKASM-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PCKASM-');
 
-            $kode =  'PCKASM-' . intval($onlyNumberKode) + 1;
+            $kode =  'PCKASM-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

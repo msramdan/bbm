@@ -10,13 +10,17 @@
             hitung_semua_total()
         })
 
+        $('input[name="tanggal"]').change(function() {
+            get_kode()
+        })
+
+        $('#kode_barang_input').change(function() {
+            cek_stok($(this).val())
+        })
+
         $('#qty_input, #harga_input, #kode_input, #diskon_input, #diskon_persen_input, #ppn_input,#pph_input, #gross_input, #biaya_masuk_input, #clr_fee_input, #checkbox_ppn, #checkbox_pph')
             .on('keyup keydown change',
                 function() {
-                    gross = $('#qty_input').val() * $('#harga_input').val()
-
-                    $('#gross_input').val(gross)
-
                     hitung_netto()
 
                     cek_form_entry()
@@ -25,10 +29,11 @@
         $('#form_trx').submit(function(e) {
             e.preventDefault()
 
+            // !$('select[name="supplier"]').val() ||
+
             if (
                 !$('input[name="tanggal"]').val() ||
                 !$('input[name="rate"]').val() ||
-                !$('select[name="supplier"]').val() ||
                 !$('select[name="bentuk_kepemilikan"]').val() ||
                 !$('select[name="matauang"]').val()
             ) {
@@ -137,6 +142,9 @@
                 hitung_semua_total()
 
                 $('#kode_barang_input').focus()
+
+                $('#checkbox_ppn').prop('checked', true)
+                $('#checkbox_pph').prop('checked', true)
             }
         })
 
@@ -262,6 +270,8 @@
 
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
+            $('#btn_update').prop('disabled', false)
+            $('#btn_clear_form').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -277,6 +287,19 @@
             let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
             let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
+
+            if (ppn > 0) {
+                $('#checkbox_ppn').prop('checked', true)
+            } else {
+                $('#checkbox_ppn').prop('checked', false)
+                $('#checkbox_pph').prop('checked', false)
+            }
+
+            if (pph > 0) {
+                $('#checkbox_pph').prop('checked', true)
+            } else {
+                $('#checkbox_pph').prop('checked', false)
+            }
 
             $('#kode_barang_input option[value="' + kode_barang + '"]').attr('selected', 'selected')
 
@@ -324,6 +347,14 @@
             let netto = $('#netto_input').val()
 
             let gross = harga * qty
+
+            // cek duplikasi pas update
+            $('input[name="barang[]"]').each(function(i) {
+                // i = index each
+                if ($(this).val() == kode_barang.val() && i != index) {
+                    $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                }
+            })
 
             let no = parseInt(parseInt(index) + 1)
 
@@ -385,8 +416,11 @@
             $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
 
             clear_form_entry()
-
             hitung_semua_total()
+            generate_nomer()
+
+            $('#checkbox_ppn').prop('checked', true)
+            $('#checkbox_pph').prop('checked', true)
         }
 
         function clear_form_entry() {
@@ -404,6 +438,21 @@
 
             $('#btn_update').hide()
             $('#btn_add').show()
+        }
+
+        // ajax get kode
+        function get_kode() {
+            $.ajax({
+                url: "/beli/pesanan-pembelian/generate-kode/" + $('input[name="tanggal"]').val(),
+                type: 'GET',
+                success: function(data) {
+                    // setTimeout(() => {
+                    //     $('input[name="kode"]').val('Loading...')
+                    // }, 500)
+
+                    $('input[name="kode"]').val(data)
+                }
+            })
         }
 
         function hitung_semua_total() {
@@ -490,6 +539,10 @@
 
             let netto = gross + ppn + pph + biaya_masuk + clr_fee
 
+            if (ppn == 0) {
+                $('#checkbox_pph').prop('checked', false)
+            }
+
             $('#diskon_input').val(diskon)
             $('#ppn_input').val(ppn)
             $('#pph_input').val(pph)
@@ -498,7 +551,7 @@
         }
 
         function format_ribuan(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         }
 
         // auto generate no pada table
@@ -516,14 +569,52 @@
             if (
                 !$('#kode_barang_input').val() ||
                 !$('#harga_input').val() ||
-                !$('#qty_input').val()
+                !$('#qty_input').val() ||
+                $('#qty_input').val() < 1
             ) {
                 $('#btn_add').prop('disabled', true)
+                $('#btn_update').prop('disabled', true)
                 $('#btn_clear_form').prop('disabled', true)
             } else {
                 $('#btn_add').prop('disabled', false)
+                $('#btn_update').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
             }
+        }
+
+        function cek_stok(id, harga_edit = null) {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    if (harga_edit) {
+                        harga.val(harga_edit)
+                    } else {
+                        harga.val(data.harga_beli)
+                    }
+
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+
+                    $('#qty_input').focus()
+
+                    console.log(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

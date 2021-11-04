@@ -6,6 +6,11 @@
         get_kode()
         cek_form_entry()
 
+        // Cek stok
+        $('#kode_barang_input').change(function() {
+            cek_stok($(this).val())
+        })
+
         $('#matauang').change(function() {
             hitung_grand_total()
         })
@@ -238,6 +243,8 @@
             $('#btn_update').show()
 
             $('#index_tr').val(index)
+
+            cek_stok(kode_barang, harga)
         })
 
         // hitung jumlan <tr> pada table#tbl_trx
@@ -254,7 +261,7 @@
         }
 
         function update_list(index) {
-            let kode_nama_barang = $('#kode_barang_input option:selected')
+            let kode_barang = $('#kode_barang_input option:selected')
             let supplier = $('#supplier_input option:selected')
             let harga = $('#harga_input').val()
             let bentuk_kepemilikan = $('#bentuk_kepemilikan_input option:selected')
@@ -262,12 +269,21 @@
 
             let subtotal = harga * qty
 
+            // cek duplikasi pas update
+            let cek = 0
+            $('input[name="barang[]"]').each(function(i) {
+                // i = index each
+                if ($(this).val() == kode_barang.val() && i != index) {
+                    $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                }
+            })
+
             let no = parseInt(parseInt(index) + 1)
 
             let data_trx = `<td>${no}</td>
                 <td>
-                    ${kode_nama_barang.html()}
-                    <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_nama_barang.val()}">
+                    ${kode_barang.html()}
+                    <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
                 </td>
                 <td>
                     ${supplier.html()}
@@ -304,6 +320,8 @@
             clear_form_entry()
 
             hitung_grand_total()
+
+            generate_nomer()
         }
 
         function clear_form_entry() {
@@ -382,6 +400,42 @@
                 $('#btn_add').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
             }
+        }
+
+        function cek_stok(id, harga_edit = null) {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    $('#stok').val(data.stok)
+                    $('#min_stok').val(data.min_stok)
+
+                    if (harga_edit) {
+                        harga.val(harga_edit)
+                    } else {
+                        harga.val(data.harga_jual)
+                    }
+
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+
+                    $('#qty_input').focus()
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

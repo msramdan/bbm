@@ -6,38 +6,6 @@
         get_kode()
         cek_form_entry_brg()
 
-        function cek_stok(id) {
-            let harga = $('#harga_input')
-            harga.prop('disabled', true)
-            harga.val('')
-            harga.prop('placeholder', 'Loading...')
-
-            $.ajax({
-                url: '/masterdata/barang/cek-stok/' + id,
-                type: 'GET',
-                success: function(data) {
-                    $('#stok').val(data.stok)
-                    $('#min_stok').val(data.min_stok)
-
-                    harga.val(data.harga_jual)
-                    harga.prop('disabled', false)
-                    harga.prop('placeholder', 'Harga')
-
-                    $('#qty_input').focus()
-                    console.log(`stok: ${stok}, min: ${min_stok}`);
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!'
-                    })
-                }
-            })
-        }
-
         $('#matauang').change(function() {
             hitung_semua_total_brg()
         })
@@ -79,10 +47,6 @@
             } else {
                 $('#total_penjualan').val(parseFloat(total_netto))
             }
-        })
-
-        $('#btn_update_brg').on('mouseenter', function() {
-            cek_form_entry_brg()
         })
 
         $('#qty_input, #harga_input, #kode_input, #diskon_input, #diskon_persen_input, #ppn_input,#gross_input, #checkbox_ppn')
@@ -145,7 +109,7 @@
                 // if (stok == min_stok || qty > stok || min_stok_qty < min_stok)
 
                 if (stok == min_stok || qty > stok) {
-                    $('#qty_input').val(stok)
+                    $('#qty_input').val('')
                     $('#qty_input').focus()
 
                     Swal.fire({
@@ -226,6 +190,8 @@
                     $('#kode_barang_input').focus()
                     $('#stok').val('')
                     $('min_stok').val()
+
+                    $('#checkbox_ppn').prop('checked', true)
                 }
             }
         })
@@ -479,7 +445,6 @@
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
-
             let kode_barang = $('.kode_barang_hidden:eq(' + index + ')').val()
             let harga = $('.harga_hidden:eq(' + index + ')').val()
             let qty = $('.qty_hidden:eq(' + index + ')').val()
@@ -489,24 +454,29 @@
             let ppn = $('.ppn_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
 
-            $('#kode_barang_input option[value="' + kode_barang + '"]').attr('selected', 'selected')
+            if (ppn > 0) {
+                $('#checkbox_ppn').prop('checked', true)
+            } else {
+                $('#checkbox_ppn').prop('checked', false)
+            }
 
-            $('#harga_input').val(harga)
+            $('#kode_barang_input option[value="' + kode_barang + '"]').attr('selected', 'selected')
             $('#qty_input').val(qty)
             $('#gross_input').val(gross)
             $('#diskon_input').val(diskon)
             $('#diskon_persen_input').val(diskon_persen)
             $('#ppn_input').val(ppn)
             $('#netto_input').val(netto)
+            $('#harga_input').val(harga)
 
             $('#btn_add_brg').hide()
             $('#btn_update_brg').show()
 
             $('#index_tr_brg').val(index)
 
-            cek_stok(kode_barang)
 
-            console.log($('#stok').val());
+            // parameter kedua buat ngasih tau kalo functionnya dipanggil ketika edit, dan agar harga ngisi dari input harga_hidden bukan dari API
+            cek_stok(kode_barang, harga)
         })
 
         $(document).on('click', '.btn_edit_payment', function(e) {
@@ -604,13 +574,11 @@
 
             let gross = harga * qty
 
-            let no = parseInt(parseInt(index) + 1)
-
             let stok = parseInt($('#stok').val())
             let min_stok = parseInt($('#min_stok').val())
 
             if (stok == min_stok || qty > stok) {
-                $('#qty_input').val(stok)
+                $('#qty_input').val('')
                 $('#qty_input').focus()
 
                 Swal.fire({
@@ -619,6 +587,16 @@
                     text: `Stok: ${stok}, Stok Minim: ${min_stok}`
                 })
             } else {
+                // cek duplikasi pas update
+                $('input[name="barang[]"]').each(function(i) {
+                    // i = index each
+                    if ($(this).val() == kode_barang.val() && i != index) {
+                        $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                    }
+                })
+
+                let no = parseInt(parseInt(index) + 1)
+
                 let data_trx = `<td>${no}</td>
                     <td>
                         ${kode_barang.html()}
@@ -664,18 +642,11 @@
 
                 $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
 
-                // cek duplikasi pas update
-                let cek = 0
-                $('input[name="barang[]"]').each(function(i) {
-                    // i = index each
-                    if ($(this).val() == kode_barang.val() && i != index) {
-                        $('#tbl_trx tbody tr:eq(' + i + ')').remove()
-                    }
-                })
-
                 clear_form_entry_brg()
-
                 hitung_semua_total_brg()
+                generate_nomer_brg()
+
+                $('#checkbox_ppn').prop('checked', true)
             }
         }
 
@@ -870,7 +841,8 @@
             if (
                 !$('#kode_barang_input').val() ||
                 !$('#harga_input').val() ||
-                !$('#qty_input').val()
+                !$('#qty_input').val() ||
+                $('#qty_input').val() < 1
             ) {
                 $('#btn_add_brg').prop('disabled', true)
                 $('#btn_update_brg').prop('disabled', true)
@@ -950,6 +922,43 @@
 
         function format_ribuan(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        }
+
+        function cek_stok(id, harga_edit = null) {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    $('#stok').val(data.stok)
+                    $('#min_stok').val(data.min_stok)
+
+                    if (harga_edit) {
+                        harga.val(harga_edit)
+                    } else {
+                        harga.val(data.harga_jual)
+                    }
+
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+
+                    $('#qty_input').focus()
+                    console.log(`stok: ${stok}, min: ${min_stok}`);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

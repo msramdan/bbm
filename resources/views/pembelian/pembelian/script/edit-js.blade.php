@@ -1,5 +1,5 @@
 @push('custom-js')
-       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"
         integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
 
     <script>
@@ -15,17 +15,15 @@
             get_rekening()
         })
 
+        $('#kode_barang_input').change(function() {
+            cek_stok($(this).val())
+        })
+
         $('#qty_input, #harga_input, #kode_input, #diskon_input, #diskon_persen_input, #ppn_input,#pph_input, #gross_input, #biaya_masuk_input, #clr_fee_input, #checkbox_ppn, #checkbox_pph')
             .on('keyup keydown change',
                 function() {
-                    gross = $('#qty_input').val() * $('#harga_input').val()
-
-                    $('#gross_input').val(gross)
-
                     hitung_netto()
-
                     cek_form_entry_brg()
-
                     cek_table_length()
                 })
 
@@ -147,12 +145,12 @@
                 $('#tbl_trx').append(data_trx)
 
                 cek_table_length()
-
                 clear_form_entry_brg()
-
                 hitung_semua_total_brg()
 
                 $('#kode_barang_input').focus()
+                $('#checkbox_ppn').prop('checked', true)
+                $('#checkbox_pph').prop('checked', true)
             }
         })
 
@@ -223,9 +221,7 @@
             $('#tbl_payment').append(data_payment)
 
             cek_table_length()
-
             clear_form_entry_payment()
-
             hitung_total_payment()
 
             $('#jenis_pembayaran_input').focus()
@@ -408,6 +404,8 @@
 
         $(document).on('click', '.btn_edit_brg', function(e) {
             e.preventDefault()
+            $('#btn_update_brg').prop('disabled', false)
+            $('#btn_clear_form_brg').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -423,6 +421,19 @@
             let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
             let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
+
+            if (ppn > 0) {
+                $('#checkbox_ppn').prop('checked', true)
+            } else {
+                $('#checkbox_ppn').prop('checked', false)
+                $('#checkbox_pph').prop('checked', false)
+            }
+
+            if (pph > 0) {
+                $('#checkbox_pph').prop('checked', true)
+            } else {
+                $('#checkbox_pph').prop('checked', false)
+            }
 
             $('#kode_barang_input option[value="' + kode_barang + '"]').attr('selected', 'selected')
 
@@ -538,9 +549,8 @@
         // hitung jumlan <tr> pada table#tbl_trx dan table#tbl_payemnt
         function cek_table_length() {
             let table_trx = $('#tbl_trx tbody tr').length
-            let table_payment = $('#tbl_payment tbody tr').length
 
-            if (table_trx > 0 && table_payment > 0) {
+            if (table_trx) {
                 $('#btn_simpan').prop('disabled', false)
                 $('#btn_clear_table').prop('disabled', false)
             } else {
@@ -563,6 +573,14 @@
             let netto = $('#netto_input').val()
 
             let gross = harga * qty
+
+            // cek duplikasi pas update
+            $('input[name="barang[]"]').each(function(i) {
+                // i = index each
+                if ($(this).val() == kode_barang.val() && i != index) {
+                    $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                }
+            })
 
             let no = parseInt(parseInt(index) + 1)
 
@@ -624,8 +642,11 @@
             $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
 
             clear_form_entry_brg()
-
             hitung_semua_total_brg()
+            generate_nomer_brg()
+
+            $('#checkbox_ppn').prop('checked', false)
+            $('#checkbox_pph').prop('checked', false)
         }
 
         function update_list_payment(index) {
@@ -841,12 +862,15 @@
             if (
                 !$('#kode_barang_input').val() ||
                 !$('#harga_input').val() ||
-                !$('#qty_input').val()
+                !$('#qty_input').val() ||
+                $('#qty_input').val() < 1
             ) {
                 $('#btn_add_brg').prop('disabled', true)
+                $('#btn_update_brg').prop('disabled', true)
                 $('#btn_clear_form_brg').prop('disabled', true)
             } else {
                 $('#btn_add_brg').prop('disabled', false)
+                $('#btn_update_brg').prop('disabled', false)
                 $('#btn_clear_form_brg').prop('disabled', false)
             }
         }
@@ -917,9 +941,41 @@
             }
         }
 
-
         function format_ribuan(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        }
+
+        function cek_stok(id, harga_edit = null) {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    if (harga_edit) {
+                        harga.val(harga_edit)
+                    } else {
+                        harga.val(data.harga_beli)
+                    }
+
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+
+                    $('#qty_input').focus()
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

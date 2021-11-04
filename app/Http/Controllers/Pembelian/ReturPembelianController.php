@@ -122,7 +122,7 @@ class ReturPembelianController extends Controller
                 // Update stok barang
                 $barangQuery = Barang::whereId($value);
                 $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
 
             $retur->retur_pembelian_detail()->saveMany($returDetail);
@@ -201,7 +201,7 @@ class ReturPembelianController extends Controller
                 // Update stok barang
                 $barangQuery = Barang::whereId($value);
                 $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
 
             $returPembelian->retur_pembelian_detail()->delete();
@@ -227,7 +227,7 @@ class ReturPembelianController extends Controller
         return back();
     }
 
-    protected function getPembelianById($id)
+    public function getPembelianById($id)
     {
         abort_if(!request()->ajax(), 404);
 
@@ -236,19 +236,19 @@ class ReturPembelianController extends Controller
         return response()->json($pembelian, 200);
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = ReturPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "PURRT-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PURRT-');
 
-            $kode =  'PURRT-' . intval($onlyNumberKode) + 1;
+            $kode =  'PURRT-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

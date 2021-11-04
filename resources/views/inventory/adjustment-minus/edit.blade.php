@@ -229,6 +229,8 @@
         <!-- end row -->
     </div>
     <!-- end #content -->
+    <input type="hidden" id="stok">
+    <input type="hidden" id="min_stok">
 @endsection
 
 @include('inventory.adjustment-minus.script.edit-js')

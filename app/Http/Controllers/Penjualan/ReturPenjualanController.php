@@ -218,12 +218,12 @@ class ReturPenjualanController extends Controller
         $checkLatestKode = ReturPenjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "SLSRT-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'SLSRT-');
 
-            $kode =  'SLSRT-' . intval($onlyNumberKode) + 1;
+            $kode =  'SLSRT-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

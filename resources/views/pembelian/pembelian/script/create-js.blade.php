@@ -48,6 +48,9 @@
             let matauang = $('select[name="matauang"]')
             let bentuk_kepemilikan = $('select[name="bentuk_kepemilikan"]')
             let rate = $('input[name="rate"]')
+            let tbl_trx = $('#tbl_trx tbody')
+            let data_trx = []
+            let no = 1
 
             if ($(this).val() == '') {
                 supplier.html(list_supplier)
@@ -65,6 +68,7 @@
                     url: "/beli/pembelian/get-data-po/" + $(this).val(),
                     type: 'GET',
                     success: function(data) {
+                        console.log(data)
                         supplier.html('<option value="" disabled selected>Loading...</option>')
                         matauang.html('<option value="" disabled selected>Loading...</option>')
                         bentuk_kepemilikan.html(
@@ -72,6 +76,12 @@
 
                         rate.prop('type', 'text')
                         rate.val('Loading...')
+                        tbl_trx.html(`
+                        <tr>
+                            <td colspan="14" class="text-center">
+                                Loading...
+                            </td>
+                        </tr>`)
 
                         supplier.prop('disabled', true)
                         matauang.prop('disabled', true)
@@ -96,6 +106,70 @@
                                 `<option value="${data.bentuk_kepemilikan_stok}" selected>${data.bentuk_kepemilikan_stok}</option>`
                             )
                             rate.val(data.rate)
+
+                            $.each(data.pesanan_pembelian_detail, function(index, item) {
+                                data_trx.push(`<tr>
+                                <td>${no++}</td>
+                                <td>
+                                    ${item.barang.kode} - ${item.barang.nama}
+                                    <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${item.barang.id}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.harga)}
+                                    <input type="hidden"  class="harga_hidden" name="harga[]" value="${item.harga}">
+                                </td>
+                                <td>
+                                    ${item.qty}
+                                    <input type="hidden"  class="qty_hidden" name="qty[]" value="${item.qty}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.diskon_persen)}%
+                                    <input type="hidden"  class="diskon_persen_hidden" name="diskon_persen[]" value="${item.diskon_persen}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.diskon)}
+                                    <input type="hidden"  class="diskon_hidden" name="diskon[]" value="${item.diskon}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.gross)}
+                                    <input type="hidden" name="gross[]" class="gross_hidden" value="${item.gross}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.ppn)}
+                                    <input type="hidden"  class="ppn_hidden" name="ppn[]" value="${item.ppn}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.pph)}
+                                    <input type="hidden"  class="pph_hidden" name="pph[]" value="${item.pph}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.biaya_masuk)}
+                                    <input type="hidden"  class="biaya_masuk_hidden" name="biaya_masuk[]" value="${item.biaya_masuk}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.clr_fee)}
+                                    <input type="hidden"  class="clr_fee_hidden" name="clr_fee[]" value="${item.clr_fee}">
+                                </td>
+                                <td>
+                                    ${format_ribuan(item.netto)}
+                                    <input type="hidden"  class="netto_hidden" name="netto[]" value="${item.netto}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-xs btn_edit_brg">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>`)
+                            })
+
+                            tbl_trx.html(data_trx)
+
+                            hitung_semua_total_brg()
+                            cek_table_length()
                         }, 1000)
                     }
                 })
@@ -135,7 +209,7 @@
                 !$('select[name="matauang"]').val() ||
                 !$('select[name="gudang"]').val()
             ) {
-                $('select[name="rate"]').focus()
+                $('select[name="gudang"]').focus()
 
                 Swal.fire({
                     icon: 'error',
@@ -303,21 +377,19 @@
             $('#tbl_payment').append(data_payment)
 
             cek_table_length()
-
             clear_form_entry_payment()
-
             hitung_total_payment()
 
             $('#jenis_pembayaran_input').focus()
-
             $('#btn_add_payment').prop('disabled', true)
             $('#btn_clear_form_payment').prop('disabled', true)
         })
 
         $('#btn_clear_form_brg').click(function() {
             clear_form_entry_brg()
-
             cek_table_length()
+
+            $(this).prop('disabled', 'true')
         })
 
         $('#btn_update_brg').click(function() {
@@ -338,152 +410,182 @@
         })
 
         $('#btn_simpan').click(function() {
-            $(this).prop('disabled', true)
-            $(this).text('Loading...')
+            if (
+                !$('input[name="tanggal"]').val() ||
+                !$('input[name="rate"]').val() ||
+                !$('select[name="bentuk_kepemilikan"]').val() ||
+                !$('select[name="matauang"]').val() ||
+                !$('select[name="gudang"]').val()
+            ) {
+                $('select[name="gudang"]').focus()
 
-            let data = {
-                // header
-                kode: $('input[name="kode"]').val(),
-                tanggal: $('input[name="tanggal"]').val(),
-                matauang: $('select[name="matauang"]').val(),
-                supplier: $('select[name="supplier"]').val(),
-                rate: $('input[name="rate"]').val(),
-                kode_po: $('select[name="kode_po"]').val(),
-                gudang: $('select[name="gudang"]').val(),
-                keterangan: $('#keterangan').val(),
-                bentuk_kepemilikan: $('#bentuk_kepemilikan').val(),
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Mohon isi data Pembelian - Header terlebih dahulu!'
+                })
+            } else {
+                $(this).prop('disabled', true)
+                $(this).text('Loading...')
 
-                // total  barang
-                subtotal: $('#subtotal').val(),
-                total_ppn: $('#total_ppn').val(),
-                total_pph: $('#total_pph').val(),
-                total_diskon: $('#total_diskon').val(),
-                total_biaya_masuk: $('#total_biaya_masuk').val(),
-                total_gross: $('#total_gross').val(),
-                total_clr_fee: $('#total_clr_fee').val(),
-                total_netto: $('#total_netto').val(),
-                total_payment: $('#total_payment').val(),
+                let data = {
+                    // header
+                    kode: $('input[name="kode"]').val(),
+                    tanggal: $('input[name="tanggal"]').val(),
+                    matauang: $('select[name="matauang"]').val(),
+                    supplier: $('select[name="supplier"]').val(),
+                    rate: $('input[name="rate"]').val(),
+                    kode_po: $('select[name="kode_po"]').val(),
+                    gudang: $('select[name="gudang"]').val(),
+                    keterangan: $('#keterangan').val(),
+                    bentuk_kepemilikan: $('#bentuk_kepemilikan').val(),
 
-                // detail barang
-                barang: $('input[name="barang[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                harga: $('input[name="harga[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                qty: $('input[name="qty[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                diskon: $('input[name="diskon[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                gross: $('input[name="gross[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                diskon_persen: $('input[name="diskon_persen[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                ppn: $('input[name="ppn[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                pph: $('input[name="pph[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                biaya_masuk: $('input[name="biaya_masuk[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                netto: $('input[name="netto[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                clr_fee: $('input[name="clr_fee[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
+                    // total  barang
+                    subtotal: $('#subtotal').val(),
+                    total_ppn: $('#total_ppn').val(),
+                    total_pph: $('#total_pph').val(),
+                    total_diskon: $('#total_diskon').val(),
+                    total_biaya_masuk: $('#total_biaya_masuk').val(),
+                    total_gross: $('#total_gross').val(),
+                    total_clr_fee: $('#total_clr_fee').val(),
+                    total_netto: $('#total_netto').val(),
+                    total_payment: $('#total_payment').val(),
 
-                // total payment
-                jenis_pembayaran: $('input[name="jenis_pembayaran[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                bank: $('input[name="bank[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                rekening: $('input[name="rekening[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                no_cek_giro: $('input[name="no_cek_giro[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                tgl_cek_giro: $('input[name="tgl_cek_giro[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-                bayar: $('input[name="bayar[]"]').map(function() {
-                    return $(this).val()
-                }).get(),
-            }
+                    // detail barang
+                    barang: $('input[name="barang[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    harga: $('input[name="harga[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    qty: $('input[name="qty[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    diskon: $('input[name="diskon[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    gross: $('input[name="gross[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    diskon_persen: $('input[name="diskon_persen[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    ppn: $('input[name="ppn[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    pph: $('input[name="pph[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    biaya_masuk: $('input[name="biaya_masuk[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    netto: $('input[name="netto[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    clr_fee: $('input[name="clr_fee[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
 
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('pembelian.store') }}',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: data,
-                success: function(data) {
-                    get_kode()
-
-                    $('#tbl_trx tbody tr').remove()
-                    $('#tbl_payment tbody tr').remove()
-
-                    $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                    $('input[name="rate"]').val('')
-                    $('textarea[name="keterangan"]').val('')
-
-                    $('select[name="supplier"]').html(list_supplier)
-                    $('select[name="kode_po"]').html(list_kode_po)
-                    $('select[name="matauang"]').html(list_matauang)
-                    $('select[name="bentuk_kepemilikan"]').html(list_bentuk_kepemilikan)
-                    $('input[name="rate"]').prop('type', 'number')
-                    $('input[name="rate"]').val('')
-
-                    $('select[name="supplier"]').prop('disabled', false)
-                    $('select[name="matauang"]').prop('disabled', false)
-                    $('select[name="bentuk_kepemilikan"]').prop('disabled', false)
-                    $('input[name="rate"]').prop('disabled', false)
-
-                    $('select[name="supplier"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="bentuk_kepemilikan"] option[value="1"]').attr('selected',
-                        'selected')
-                    $('select[name="kode_po"] option[value=""]').attr('selected',
-                        'selected')
-
-                    clear_form_entry_brg()
-                    hitung_semua_total_brg()
-
-                    clear_form_entry_payment()
-                    hitung_total_payment()
-
-                    cek_table_length()
-
-                    $('select[name="gudang"]').focus()
-                    $('#btn_simpan').text('simpan')
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Tambah data',
-                        text: 'Berhasil'
-                    })
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!'
-                    })
+                    // total payment
+                    jenis_pembayaran: $('input[name="jenis_pembayaran[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    bank: $('input[name="bank[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    rekening: $('input[name="rekening[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    no_cek_giro: $('input[name="no_cek_giro[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    tgl_cek_giro: $('input[name="tgl_cek_giro[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
+                    bayar: $('input[name="bayar[]"]').map(function() {
+                        return $(this).val()
+                    }).get(),
                 }
-            })
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('pembelian.store') }}',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: data,
+                    success: function(data) {
+                        // $('#btn_simpan').text('simpan')
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Simpan data',
+                            text: 'Berhasil'
+                        }).then(function() {
+                            setTimeout(() => {
+                                window.location = '{{ route('pembelian.create') }}'
+                            }, 500)
+                        })
+
+                        // get_kode()
+
+                        // $('#tbl_trx tbody tr').remove()
+                        // $('#tbl_payment tbody tr').remove()
+
+                        // $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
+                        // $('input[name="rate"]').val('')
+                        // $('textarea[name="keterangan"]').val('')
+
+                        // $('select[name="supplier"]').html(list_supplier)
+                        // $('select[name="kode_po"]').html(list_kode_po)
+                        // $('select[name="matauang"]').html(list_matauang)
+                        // $('select[name="bentuk_kepemilikan"]').html(list_bentuk_kepemilikan)
+                        // $('input[name="rate"]').prop('type', 'number')
+                        // $('input[name="rate"]').val('')
+
+                        // $('select[name="supplier"]').prop('disabled', false)
+                        // $('select[name="matauang"]').prop('disabled', false)
+                        // $('select[name="bentuk_kepemilikan"]').prop('disabled', false)
+                        // $('input[name="rate"]').prop('disabled', false)
+
+                        // $('select[name="supplier"] option[value=""]').attr('selected', 'selected')
+                        // $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
+                        // $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
+                        // $('select[name="bentuk_kepemilikan"] option[value="1"]').attr('selected',
+                        //     'selected')
+                        // $('select[name="kode_po"] option[value=""]').attr('selected',
+                        //     'selected')
+
+                        // $("#kode_po option[value=" + data.kode_po + "]").remove()
+
+                        // clear_form_entry_brg()
+                        // hitung_semua_total_brg()
+
+                        // clear_form_entry_payment()
+                        // hitung_total_payment()
+
+                        // cek_table_length()
+
+                        // $('select[name="gudang"]').focus()
+                        // $('#btn_simpan').text('simpan')
+
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: 'Tambah data',
+                        //     text: 'Berhasil'
+                        // })
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText)
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!'
+                        })
+                    }
+                })
+            }
         })
 
         $(document).on('click', '.btn_hapus_brg', function(e) {
@@ -508,54 +610,71 @@
 
         $(document).on('click', '.btn_edit_brg', function(e) {
             e.preventDefault()
-            $('#btn_update_brg').prop('disabled', false)
-            $('#btn_clear_form_brg').prop('disabled', false)
 
-            // ambil <tr> index
-            let index = $(this).parent().parent().index()
+            if (
+                !$('input[name="tanggal"]').val() ||
+                !$('input[name="rate"]').val() ||
+                !$('select[name="bentuk_kepemilikan"]').val() ||
+                !$('select[name="matauang"]').val() ||
+                !$('select[name="gudang"]').val()
+            ) {
+                $('select[name="gudang"]').focus()
 
-            let kode_barang = $('.kode_barang_hidden:eq(' + index + ')').val()
-            let harga = $('.harga_hidden:eq(' + index + ')').val()
-            let qty = $('.qty_hidden:eq(' + index + ')').val()
-            let gross = $('.gross_hidden:eq(' + index + ')').val()
-            let diskon = $('.diskon_hidden:eq(' + index + ')').val()
-            let diskon_persen = $('.diskon_persen_hidden:eq(' + index + ')').val()
-            let ppn = $('.ppn_hidden:eq(' + index + ')').val()
-            let pph = $('.pph_hidden:eq(' + index + ')').val()
-            let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
-            let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
-            let netto = $('.netto_hidden:eq(' + index + ')').val()
-
-            $('#kode_barang_input option[value="' + kode_barang + '"]').attr('selected', 'selected')
-
-            if (ppn > 0) {
-                $('#checkbox_ppn').prop('checked', true)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Mohon isi data Pembelian - Header terlebih dahulu!'
+                })
             } else {
-                $('#checkbox_ppn').prop('checked', false)
-                $('#checkbox_pph').prop('checked', false)
+                $('#btn_update_brg').prop('disabled', false)
+                $('#btn_clear_form_brg').prop('disabled', false)
+
+                // ambil <tr> index
+                let index = $(this).parent().parent().index()
+
+                let kode_barang = $('.kode_barang_hidden:eq(' + index + ')').val()
+                let harga = $('.harga_hidden:eq(' + index + ')').val()
+                let qty = $('.qty_hidden:eq(' + index + ')').val()
+                let gross = $('.gross_hidden:eq(' + index + ')').val()
+                let diskon = $('.diskon_hidden:eq(' + index + ')').val()
+                let diskon_persen = $('.diskon_persen_hidden:eq(' + index + ')').val()
+                let ppn = $('.ppn_hidden:eq(' + index + ')').val()
+                let pph = $('.pph_hidden:eq(' + index + ')').val()
+                let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
+                let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
+                let netto = $('.netto_hidden:eq(' + index + ')').val()
+
+                $('#kode_barang_input option[value="' + kode_barang + '"]').attr('selected', 'selected')
+
+                if (ppn > 0) {
+                    $('#checkbox_ppn').prop('checked', true)
+                } else {
+                    $('#checkbox_ppn').prop('checked', false)
+                    $('#checkbox_pph').prop('checked', false)
+                }
+
+                if (pph > 0) {
+                    $('#checkbox_pph').prop('checked', true)
+                } else {
+                    $('#checkbox_pph').prop('checked', false)
+                }
+
+                $('#harga_input').val(harga)
+                $('#qty_input').val(qty)
+                $('#gross_input').val(gross)
+                $('#diskon_input').val(diskon)
+                $('#diskon_persen_input').val(diskon_persen)
+                $('#ppn_input').val(ppn)
+                $('#pph_input').val(pph)
+                $('#biaya_masuk_input').val(biaya_masuk)
+                $('#clr_fee_input').val(clr_fee)
+                $('#netto_input').val(netto)
+
+                $('#btn_add_brg').hide()
+                $('#btn_update_brg').show()
+
+                $('#index_tr_brg').val(index)
             }
-
-            if (pph > 0) {
-                $('#checkbox_pph').prop('checked', true)
-            } else {
-                $('#checkbox_pph').prop('checked', false)
-            }
-
-            $('#harga_input').val(harga)
-            $('#qty_input').val(qty)
-            $('#gross_input').val(gross)
-            $('#diskon_input').val(diskon)
-            $('#diskon_persen_input').val(diskon_persen)
-            $('#ppn_input').val(ppn)
-            $('#pph_input').val(pph)
-            $('#biaya_masuk_input').val(biaya_masuk)
-            $('#clr_fee_input').val(clr_fee)
-            $('#netto_input').val(netto)
-
-            $('#btn_add_brg').hide()
-            $('#btn_update_brg').show()
-
-            $('#index_tr_brg').val(index)
         })
 
         $(document).on('click', '.btn_edit_payment', function(e) {
@@ -620,7 +739,7 @@
                                 '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
                             )
                         }
-                    }, 1000);
+                    }, 1000)
                 }
             })
         }

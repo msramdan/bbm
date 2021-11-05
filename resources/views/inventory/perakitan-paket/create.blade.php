@@ -64,12 +64,12 @@
 
                                 {{-- paket --}}
                                 <div class="col-md-4" style="margin-bottom: 1em">
-                                    <label for="paket_input">Paket</label>
+                                    <label for=" ">Paket</label>
                                     <select id="paket_input" class="form-control" name="paket" required>
                                         <option value="" selected disabled>-- Pilih --</option>
                                         @forelse ($paket as $item)
                                             <option value="{{ $item->id }}">
-                                                {{ $item->kode . ' - ' . $item->nama }}
+                                                {{ $item->kode . ' - ' . $item->nama . ' ' . $item->stok }}
                                             </option>
                                         @empty
                                             <option value="" disabled>Data tidak ditemukan</option>

@@ -29,6 +29,7 @@ class PesananPembelian extends Model
         'total_clr_fee',
         'total_biaya_masuk',
         'total_netto',
+        'status_po'
     ];
 
     public function pesanan_pembelian_detail()

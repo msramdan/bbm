@@ -155,6 +155,8 @@ class PembelianController extends Controller
             }
 
             $pembelian->pembelian_detail()->saveMany($pembelianDetail);
+
+            $pembelian->pesanan_pembelian()->update(['status_po' => 'USED']);
         });
 
         return response()->json(['success'], 200);
@@ -235,6 +237,7 @@ class PembelianController extends Controller
             // hapus list lama
             $pembelian->pembelian_pembayaran()->delete();
             $pembelian->cek_giro()->delete();
+            // $pembelian->pesanan_pembelian()->update(['status_po' => 'OPEN']);
 
             if ($request->jenis_pembayaran && $request->bayar) {
                 $pembelian->update(['status' => 'Lunas']);
@@ -263,8 +266,8 @@ class PembelianController extends Controller
             }
 
             $pembelian->pembelian_detail()->delete();
-
             $pembelian->pembelian_detail()->saveMany($pembelianDetail);
+            $pembelian->pesanan_pembelian()->update(['status_po' => 'USED']);
         });
 
         return response()->json(['success'], 200);
@@ -278,6 +281,7 @@ class PembelianController extends Controller
      */
     public function destroy(Pembelian $pembelian)
     {
+        $pembelian->pesanan_pembelian()->update(['status_po' => 'OPEN']);
         $pembelian->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
@@ -316,7 +320,7 @@ class PembelianController extends Controller
     {
         abort_if(!request()->ajax(), 404);
 
-        $pesananPembelian = PesananPembelian::with('supplier', 'matauang')->findOrFail($id);
+        $pesananPembelian = PesananPembelian::with('supplier', 'matauang', 'pesanan_pembelian_detail', 'pesanan_pembelian_detail.barang')->findOrFail($id);
 
         return response()->json($pesananPembelian, 200);
     }

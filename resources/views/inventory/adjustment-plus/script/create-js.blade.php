@@ -424,7 +424,7 @@
                     harga.prop('disabled', false)
                     harga.prop('placeholder', 'Harga')
 
-                    $('#qty_input').focus()
+                    $('#supplier_input').focus()
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText)

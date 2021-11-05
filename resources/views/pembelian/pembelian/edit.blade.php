@@ -364,7 +364,7 @@
                                                         <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
                                                             <i class="fa fa-times"></i>
                                                         </button>
-                                                    </td>>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

@@ -69,7 +69,7 @@ class PerakitanPaketController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $paket = PerakitanPaket::create([
+            $perakitan = PerakitanPaket::create([
                 'kode' => $request->kode,
                 'tanggal' => $request->tanggal,
                 'gudang_id' => $request->gudang,
@@ -78,8 +78,13 @@ class PerakitanPaketController extends Controller
                 'keterangan' => $request->keterangan
             ]);
 
+            $perakitan->paket()->update(['stok' => ($perakitan->paket->stok - 1)]);
+            // kurangi stok paket(barang yg jenisnya paket)
+            // $paket =  Barang::find($request->paket);
+            // $paket->update(['stok' => ($paket->stok - 1)]);
+
             foreach ($request->barang as $i => $value) {
-                $paketDetail[] = new PerakitanPaketDetail([
+                $perakitanDetail[] = new PerakitanPaketDetail([
                     'barang_id' => $value,
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
                     'qty' => $request->qty[$i]
@@ -91,7 +96,7 @@ class PerakitanPaketController extends Controller
                 $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
-            $paket->perakitan_paket_detail()->saveMany($paketDetail);
+            $perakitan->perakitan_paket_detail()->saveMany($perakitanDetail);
         });
 
         return response()->json(['success'], 200);
@@ -133,6 +138,7 @@ class PerakitanPaketController extends Controller
     public function update(Request $request, $id)
     {
         $perakitan = PerakitanPaket::findOrFail($id);
+        $perakitan->paket()->update(['stok' => ($perakitan->paket->stok + 1)]);
 
         DB::transaction(function () use ($request, $perakitan) {
             $perakitan->update([
@@ -156,6 +162,10 @@ class PerakitanPaketController extends Controller
                 $getBarang = $barangQuery->first();
                 $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
+
+            // kurangi stok paket(barang yg jenisnya paket)
+            $paket =  Barang::find($request->paket);
+            $paket->update(['stok' => ($paket->stok - 1)]);
 
             // hapus list barang lama
             $perakitan->perakitan_paket_detail()->delete();

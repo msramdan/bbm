@@ -20,8 +20,8 @@ class CreateAdjustmentPlusDetailTable extends Migration
             $table->foreignId('supplier_id')->constrained('supplier');
             $table->string('bentuk_kepemilikan_stok', 20);
             $table->integer('qty');
-            $table->float('harga');
-            $table->float('subtotal');
+            $table->double('harga', 20, 2);
+            $table->double('subtotal', 20, 2);
             $table->timestamps();
         });
     }

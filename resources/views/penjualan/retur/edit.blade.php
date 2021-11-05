@@ -186,7 +186,7 @@
                                 <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="qty_retur">Qty Retur</label>
                                     <input type="number" step="any" name="qty_retur" id="qty_retur_input"
-                                        class="form-control" required placeholder="Qty Retur" />
+                                        class="form-control" required placeholder="Qty Retur" disabled />
                                 </div>
 
                                 {{-- Diskon% --}}
@@ -346,7 +346,7 @@
                                     </div>
 
                                     {{-- Total Diskon --}}
-                                    <div class="col-md-4" style="margin-top: 1em;">
+                                    <div class="col-md-4">
                                         <label for="total_diskon">Total Diskon</label>
                                         <input type="text" step="any" name="total_diskon" id="total_diskon"
                                             class="form-control" placeholder="0" readonly />

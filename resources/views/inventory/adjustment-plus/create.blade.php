@@ -133,7 +133,7 @@
                                             <th>No.</th>
                                             <th>Kode - Nama Barang</th>
                                             <th>Supplier</th>
-                                            <th>Bentuk Kep.</th>
+                                            <th>Bentuk Kep. Stok</th>
                                             <th>Harga</th>
                                             <th>Qty</th>
                                             <th>Subtotal</th>

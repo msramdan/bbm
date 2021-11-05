@@ -141,7 +141,7 @@
                 kode: $('input[name="kode"]').val(),
                 tanggal: $('input[name="tanggal"]').val(),
                 gudang: $('select[name="gudang"]').val(),
-                paket: $('select[name="gudang"]').val(),
+                paket: $('select[name="paket"]').val(),
                 kuantitas: $('input[name="kuantitas"]').val(),
                 keterangan: $('textarea[name="keterangan"]').val(),
                 barang: $('input[name="barang[]"]').map(function() {
@@ -163,6 +163,7 @@
                 },
                 data: data,
                 success: function(data) {
+                    // alert(JSON.stringify(data))
                     Swal.fire({
                         icon: 'success',
                         title: 'Update data',

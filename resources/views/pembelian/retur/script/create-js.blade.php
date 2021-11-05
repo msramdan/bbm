@@ -230,6 +230,8 @@
             hitung_semua_total()
 
             $('#kode_barang_input').focus()
+            // $('#checkbox_ppn').prop('checked', true)
+            // $('#checkbox_pph').prop('checked', true)
 
         })
 
@@ -349,29 +351,40 @@
                     },
                     data: data,
                     success: function(data) {
-                        $('#tbl_trx tbody tr').remove()
-
-                        $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-                        $('select[name="pembelian_id"] option[value=""]').attr('selected', 'selected')
-                        $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                        $('input[name="rate"]').val('')
-                        $('textarea[name="keterangan"]').val('')
-                        $('input[name="bentuk_kepemilikan"]').val('')
-                        $('#rate').val('')
-                        $('#supplier').val('')
-                        $('#matauang').val('')
-                        $('#bentuk_kepemilikan').val('')
-
-                        clear_form_entry()
-                        hitung_semua_total()
-                        cek_table_length()
-                        get_kode()
-
                         Swal.fire({
                             icon: 'success',
-                            title: 'Tambah data',
+                            title: 'Simpan data',
                             text: 'Berhasil'
+                        }).then(function() {
+                            setTimeout(() => {
+                                window.location =
+                                    '{{ route('retur-pembelian.create') }}'
+                            }, 500)
                         })
+
+                        // $('#tbl_trx tbody tr').remove()
+
+                        // $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
+                        // $('select[name="pembelian_id"] option[value=""]').attr('selected', 'selected')
+                        // $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
+                        // $('input[name="rate"]').val('')
+                        // $('textarea[name="keterangan"]').val('')
+                        // $('input[name="bentuk_kepemilikan"]').val('')
+                        // $('#rate').val('')
+                        // $('#supplier').val('')
+                        // $('#matauang').val('')
+                        // $('#bentuk_kepemilikan').val('')
+
+                        // clear_form_entry()
+                        // hitung_semua_total()
+                        // cek_table_length()
+                        // get_kode()
+
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: 'Tambah data',
+                        //     text: 'Berhasil'
+                        // })
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText)
@@ -410,9 +423,7 @@
 
             if (ppn > 0) {
                 $('#checkbox_ppn').prop('checked', true)
-                alert('ppn ada')
             } else {
-                alert('ppn ga ada')
                 $('#checkbox_ppn').prop('checked', false)
                 $('#checkbox_pph').prop('checked', false)
             }
@@ -442,6 +453,7 @@
 
             $('#index_tr').val(index)
 
+            $('#qty_retur_input').prop('disabled', false)
             $('#qty_retur_input').focus()
             $('#qty_retur_input').attr({
                 "max": qty_beli,
@@ -466,8 +478,8 @@
         }
 
         function update_list(index) {
-            let barang_id = $('#barang_hidden')
-            let barang_text = $('#barang_input')
+            let barang_id = $('#barang_hidden').val()
+            let barang_text = $('#barang_input').val()
 
             let harga = $('#harga_input').val()
             let qty_beli = $('#qty_beli_input').val()
@@ -493,8 +505,8 @@
             let no = parseInt(parseInt(index) + 1)
 
             let data_trx = `<td>${no++}</td>
-            <td> ${barang_text.val()}
-                <input type="hidden" class="barang_id_hidden" name="barang_id[]" value="${barang_id.val()}">
+            <td> ${barang_text}
+                <input type="hidden" class="barang_id_hidden" name="barang_id[]" value="${barang_id}">
                 <input type="hidden" class="barang_text_hidden" name="barang_text[]" value="${barang_text}">
             </td>
             <td> ${format_ribuan(harga)}
@@ -539,8 +551,11 @@
             $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
 
             clear_form_entry()
-
             hitung_semua_total()
+
+            $('#qty_retur_input').prop('disabled', true)
+            // $('#checkbox_ppn').prop('checked', true)
+            // $('#checkbox_pph').prop('checked', true)
         }
 
         function clear_form_entry() {
@@ -563,6 +578,9 @@
 
             $('#btn_clear_form').prop('disabled', true)
             $('#btn_add').prop('disabled', true)
+            $('#qty_retur_input').prop('disabled', true)
+            // $('#checkbox_ppn').prop('checked', true)
+            // $('#checkbox_pph').prop('checked', true)
         }
 
         // ajax get kode

@@ -147,7 +147,10 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.pembelian.create',
             // 'pembelian.pembelian.edit',
         ], function ($view) {
-            return $view->with('pesananPembelian', PesananPembelian::all());
+            return $view->with(
+                'pesananPembelian',
+                PesananPembelian::where('status_po', 'OPEN')->get()
+            );
         });
 
 
@@ -155,7 +158,7 @@ class ViewServiceProvider extends ServiceProvider
         View::composer([
             'penjualan.retur.create'
         ], function ($view) {
-            return $view->with('penjualan', Penjualan::all());
+            return $view->with('penjualan', Penjualan::where('retur', 'NO')->get());
         });
 
         // list pembelian belum lunas
@@ -210,7 +213,7 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.retur.create',
             'pembelian.retur.edit'
         ], function ($view) {
-            return $view->with('pembelian', Pembelian::all());
+            return $view->with('pembelian', Pembelian::where('retur', 'NO')->get());
         });
 
         // list roles

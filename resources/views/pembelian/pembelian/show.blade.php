@@ -117,107 +117,110 @@
                                 {{-- table barang --}}
                                 <div class="col-md-12">
                                     <h4>{{ trans('pembelian.title.item_list') }}</h4>
-                                    <table class="table table-striped table-hover table-condensed" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Kode Barang</th>
-                                                <th>Nama Barang</th>
-                                                <th>Harga</th>
-                                                <th>Qty</th>
-                                                <th>Disc%</th>
-                                                <th>Disc</th>
-                                                <th>Gross</th>
-                                                <th>PPN</th>
-                                                <th>PPH</th>
-                                                <th>Biaya Masuk</th>
-                                                <th>Clr. Fee</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                $total_qty = 0;
-                                                $total_diskon_persen = 0;
-                                            @endphp
-                                            @foreach ($pembelian->pembelian_detail as $detail)
-                                                @php
-                                                    $total_qty += $detail->qty;
-                                                    $total_diskon_persen += $detail->diskon_persen;
-                                                @endphp
+                                    <div class="table-responsive" style="margin-bottom: 1em;">
+                                        <table class="table table-striped table-condensed table-responsive" id="tbl_trx"
+                                            width="100%">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $detail->barang->kode }}</td>
-                                                    <td>{{ $detail->barang->nama }}</td>
-                                                    <td>
-                                                        {{ $pembelian->matauang->kode . ' ' . $detail->harga }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $detail->qty }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $detail->diskon_persen . '%' }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $pembelian->matauang->kode . ' ' . $detail->diskon }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $pembelian->matauang->kode . ' ' . $detail->gross }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $pembelian->matauang->kode . ' ' . $detail->ppn }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $pembelian->matauang->kode . ' ' . $detail->pph }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $pembelian->matauang->kode . ' ' . $detail->biaya_masuk }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $pembelian->matauang->kode . ' ' . $detail->clr_fee }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $pembelian->matauang->kode . ' ' . $detail->netto }}
-                                                    </td>
+                                                    <th>No.</th>
+                                                    <th>Kode Barang</th>
+                                                    <th>Nama Barang</th>
+                                                    <th>Harga</th>
+                                                    <th>Qty</th>
+                                                    <th>Disc%</th>
+                                                    <th>Disc</th>
+                                                    <th>Gross</th>
+                                                    <th>PPN</th>
+                                                    <th>PPH</th>
+                                                    <th>Biaya Masuk</th>
+                                                    <th>Clr. Fee</th>
+                                                    <th>Total</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th colspan="3">
-                                                    Total
-                                                </th>
-                                                <th>
-                                                    {{ $pembelian->matauang->kode . ' ' . $pembelian->subtotal }}
-                                                </th>
-                                                <th>{{ $total_qty }}</th>
-                                                <th>
-                                                    {{ $total_diskon_persen . '%' }}
-                                                </th>
-                                                <th>
-                                                    {{ $pembelian->matauang->kode . ' ' . $pembelian->total_diskon }}
-                                                </th>
-                                                <th>
-                                                    {{ $pembelian->matauang->kode . ' ' . $pembelian->total_gross }}
-                                                </th>
-                                                <th>
-                                                    {{ $pembelian->matauang->kode . ' ' . $pembelian->total_ppn }}
-                                                </th>
-                                                <th>
-                                                    {{ $pembelian->matauang->kode . ' ' . $pembelian->total_pph }}
-                                                </th>
-                                                <th>
-                                                    {{ $pembelian->matauang->kode . ' ' . $pembelian->total_biaya_masuk }}
-                                                </th>
-                                                <th>
-                                                    {{ $pembelian->matauang->kode . ' ' . $pembelian->total_clr_fee }}
-                                                </th>
-                                                <th>
-                                                    {{ $pembelian->matauang->kode . ' ' . $pembelian->total_netto }}
-                                                </th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $total_qty = 0;
+                                                    $total_diskon_persen = 0;
+                                                @endphp
+                                                @foreach ($pembelian->pembelian_detail as $detail)
+                                                    @php
+                                                        $total_qty += $detail->qty;
+                                                        $total_diskon_persen += $detail->diskon_persen;
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $detail->barang->kode }}</td>
+                                                        <td>{{ $detail->barang->nama }}</td>
+                                                        <td>
+                                                            {{ $pembelian->matauang->kode . ' ' . $detail->harga }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $detail->qty }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $detail->diskon_persen . '%' }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $pembelian->matauang->kode . ' ' . $detail->diskon }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $pembelian->matauang->kode . ' ' . $detail->gross }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $pembelian->matauang->kode . ' ' . $detail->ppn }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $pembelian->matauang->kode . ' ' . $detail->pph }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $pembelian->matauang->kode . ' ' . $detail->biaya_masuk }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $pembelian->matauang->kode . ' ' . $detail->clr_fee }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $pembelian->matauang->kode . ' ' . $detail->netto }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan="3">
+                                                        Total
+                                                    </th>
+                                                    <th>
+                                                        {{ $pembelian->matauang->kode . ' ' . $pembelian->subtotal }}
+                                                    </th>
+                                                    <th>{{ $total_qty }}</th>
+                                                    <th>
+                                                        {{ $total_diskon_persen . '%' }}
+                                                    </th>
+                                                    <th>
+                                                        {{ $pembelian->matauang->kode . ' ' . $pembelian->total_diskon }}
+                                                    </th>
+                                                    <th>
+                                                        {{ $pembelian->matauang->kode . ' ' . $pembelian->total_gross }}
+                                                    </th>
+                                                    <th>
+                                                        {{ $pembelian->matauang->kode . ' ' . $pembelian->total_ppn }}
+                                                    </th>
+                                                    <th>
+                                                        {{ $pembelian->matauang->kode . ' ' . $pembelian->total_pph }}
+                                                    </th>
+                                                    <th>
+                                                        {{ $pembelian->matauang->kode . ' ' . $pembelian->total_biaya_masuk }}
+                                                    </th>
+                                                    <th>
+                                                        {{ $pembelian->matauang->kode . ' ' . $pembelian->total_clr_fee }}
+                                                    </th>
+                                                    <th>
+                                                        {{ $pembelian->matauang->kode . ' ' . $pembelian->total_netto }}
+                                                    </th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
 
                                 {{-- hr --}}

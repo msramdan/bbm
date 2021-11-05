@@ -103,8 +103,10 @@ class ReturPenjualanController extends Controller
                 // Update stok barang
                 $barangQuery = Barang::whereId($value);
                 $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
+
+            $retur->penjualan()->update(['retur' => 'YA']);
 
             $retur->retur_penjualan_detail()->saveMany($returDetail);
         });
@@ -159,6 +161,10 @@ class ReturPenjualanController extends Controller
                 'total_netto' => floatval($request->total_netto),
             ]);
 
+            // hapus retur lama
+            $returPenjualan->penjualan()->update(['retur' => 'NO']);
+            $returPenjualan->retur_penjualan_detail()->delete();
+
             foreach ($request->barang as $i => $value) {
                 $returDetail[] = new ReturPenjualanDetail([
                     'barang_id' => $value,
@@ -175,12 +181,12 @@ class ReturPenjualanController extends Controller
                 // Update stok barang
                 $barangQuery = Barang::whereId($value);
                 $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
 
-            $returPenjualan->retur_penjualan_detail()->delete();
-
+            // insert retur baru
             $returPenjualan->retur_penjualan_detail()->saveMany($returDetail);
+            $returPenjualan->penjualan()->update(['retur' => 'YA']);
         });
 
         return response()->json(['success'], 200);
@@ -194,6 +200,7 @@ class ReturPenjualanController extends Controller
      */
     public function destroy(ReturPenjualan $returPenjualan)
     {
+        $returPenjualan->penjualan()->update(['retur' => 'NO']);
         $returPenjualan->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
@@ -201,17 +208,17 @@ class ReturPenjualanController extends Controller
         return back();
     }
 
-    protected function getPenjualanById($id)
+    public function getPenjualanById($id)
     {
-        // kalo ngakses dari browse
+        // kalo ngakses dari browser
         abort_if(!request()->ajax(), 404);
 
-        $penjualan = Penjualan::with('pelanggan', 'SLSRTman', 'matauang', 'penjualan_detail')->findOrFail($id);
+        $penjualan = Penjualan::with('pelanggan', 'salesman', 'matauang', 'penjualan_detail')->findOrFail($id);
 
         return response()->json($penjualan, 200);
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 

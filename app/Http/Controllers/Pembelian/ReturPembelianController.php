@@ -125,6 +125,7 @@ class ReturPembelianController extends Controller
                 $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
 
+            $retur->pembelian()->update(['retur' => 'YA']);
             $retur->retur_pembelian_detail()->saveMany($returDetail);
         });
 
@@ -182,6 +183,10 @@ class ReturPembelianController extends Controller
                 'total_netto' => floatval($request->total_netto),
             ]);
 
+            // hapus retur lama
+            $returPembelian->retur_pembelian_detail()->delete();
+            $returPembelian->pembelian()->update(['retur' => 'NO']);
+
             foreach ($request->barang as $i => $value) {
                 $returDetail[] = new ReturPembelianDetail([
                     'barang_id' => $value,
@@ -204,8 +209,8 @@ class ReturPembelianController extends Controller
                 $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
 
-            $returPembelian->retur_pembelian_detail()->delete();
-
+            // insert retur baru
+            $returPembelian->pembelian()->update(['retur' => 'YA']);
             $returPembelian->retur_pembelian_detail()->saveMany($returDetail);
         });
 
@@ -220,6 +225,7 @@ class ReturPembelianController extends Controller
      */
     public function destroy(ReturPembelian $returPembelian)
     {
+        $returPembelian->pembelian()->update(['retur' => 'NO']);
         $returPembelian->delete();
 
         Alert::success('Hapus Data', 'Berhasil');

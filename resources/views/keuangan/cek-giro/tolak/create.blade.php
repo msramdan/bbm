@@ -256,7 +256,7 @@
                     nilai_cek_giro.val('Loading...')
 
                     setTimeout(() => {
-                        jenis_cek_giro.val(data.jenis_cek.toUppperCase())
+                        jenis_cek_giro.val(data.jenis_cek.toString().toUpperCase())
 
                         let format_date = new Date(tipe_cek_giro[0].tgl_cek_giro)
 
@@ -280,8 +280,6 @@
 
                         nilai_cek_giro.val(tipe_cek_giro[0].bayar)
                     }, 1500);
-
-                    console.log(data);
                 }
             })
         })

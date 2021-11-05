@@ -115,7 +115,7 @@
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning"
                                 data-click="panel-collapse">
-                                <i class="fa fa-minus"></i>
+                                <i class="fa fa-plus"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger"
                                 data-click="panel-remove">

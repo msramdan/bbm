@@ -152,6 +152,8 @@
             clear_form_entry()
 
             cek_table_length()
+
+            $(this).prop('disabled', 'true')
         })
 
         $('#btn_update').click(function() {

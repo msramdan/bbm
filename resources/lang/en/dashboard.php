@@ -57,6 +57,12 @@ return [
         'retur_pembelian' => 'Purchase Return Report',
         'penjualan' => 'Sales Report',
         'retur_penjualan' => 'Sales Return Report',
+        'pelunasan_hutang' => 'A/P Payment Report',
+        'pelunasan_piutang' => 'A/R Payment Report',
+        'cek_giro_cair' => 'Cheque Withdraw Report',
+        'cek_giro_tolak' => 'Cheque Rejected Report',
+        'biaya' => 'Expense Report',
+        'perakitan_paket' => 'Package Assembly Report',
     ]
 
 ];

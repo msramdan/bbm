@@ -57,5 +57,12 @@ return [
         'retur_pembelian' => 'Laporan Retur Pembelian',
         'penjualan' => 'Laporan Penjualan',
         'retur_penjualan' => 'Laporan Retur Penjualan',
+        'keuangan' => 'Laporan Keuangan',
+        'pelunasan_hutang' => 'Laporan Pelunasan Hutang',
+        'pelunasan_piutang' => 'Laporan Pelunasan Piutang',
+        'cek_giro_cair' => 'Laporan Cek/Giro Cair',
+        'cek_giro_tolak' => 'Laporan Cek/Giro Tolak',
+        'biaya' => 'Laporan Biaya',
+        'perakitan_paket' => 'Laporan Perakitan Paket',
     ]
 ];

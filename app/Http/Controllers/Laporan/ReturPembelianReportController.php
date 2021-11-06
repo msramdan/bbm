@@ -66,10 +66,8 @@ class ReturPembelianReportController extends Controller
                     $q->where('id',  request()->query('supplier'));
                 });
             })
-            ->whereHas('gudang', function ($q) {
-                $q->when(request()->query('gudang'), function ($q) {
-                    $q->where('id',  request()->query('gudang'));
-                });
+            ->when(request()->query('gudang'), function ($q) {
+                $q->where('gudang_id',  request()->query('gudang'));
             })
             ->whereBetween('tanggal', [
                 request()->query('dari_tanggal'),

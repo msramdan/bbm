@@ -62,11 +62,6 @@ class PelunasanPiutangReportController extends Controller
                     $q->where('id',  request()->query('matauang'));
                 });
             })
-            ->whereHas('penjualan.matauang', function ($q) {
-                $q->when(request()->query('matauang'), function ($q) {
-                    $q->where('id',  request()->query('matauang'));
-                });
-            })
             ->whereBetween('tanggal', [
                 request()->query('dari_tanggal'),
                 request()->query('sampai_tanggal')

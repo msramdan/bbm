@@ -43,13 +43,13 @@ class PembelianReportController extends Controller
 
     protected function getLaporan()
     {
-        return Pembelian::with(
-            'pembelian_detail',
-            'pembelian_detail.barang',
-            'supplier',
-            'matauang',
-            'gudang'
-        )
+        return Pembelian::with('pembelian_detail', 'pembelian_detail.barang', 'supplier', 'matauang', 'gudang')
+            ->when(request()->query('supplier'), function ($q) {
+                $q->where('supplier_id',  request()->query('supplier'));
+            })
+            ->when(request()->query('gudang'), function ($q) {
+                $q->where('gudang_id',  request()->query('gudang'));
+            })
             ->whereHas('pembelian_detail', function ($q) {
                 $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
                     $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
@@ -58,16 +58,6 @@ class PembelianReportController extends Controller
             ->whereHas('pembelian_detail.barang', function ($q) {
                 $q->when(request()->query('barang'), function ($q) {
                     $q->where('barang_id',  request()->query('barang'));
-                });
-            })
-            ->whereHas('supplier', function ($q) {
-                $q->when(request()->query('supplier'), function ($q) {
-                    $q->where('id',  request()->query('supplier'));
-                });
-            })
-            ->whereHas('gudang', function ($q) {
-                $q->when(request()->query('gudang'), function ($q) {
-                    $q->where('id',  request()->query('gudang'));
                 });
             })
             ->whereBetween('tanggal', [

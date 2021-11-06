@@ -43,12 +43,7 @@ class PesananPembelianReportController extends Controller
 
     protected function getLaporan()
     {
-        return PesananPembelian::with(
-            'pesanan_pembelian_detail',
-            'pesanan_pembelian_detail.barang',
-            'supplier',
-            'matauang'
-        )
+        return PesananPembelian::with('pesanan_pembelian_detail', 'pesanan_pembelian_detail.barang', 'supplier', 'matauang')
             ->whereHas('pesanan_pembelian_detail', function ($q) {
                 $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
                     $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
@@ -59,10 +54,11 @@ class PesananPembelianReportController extends Controller
                     $q->where('barang_id',  request()->query('barang'));
                 });
             })
-            ->whereHas('supplier', function ($q) {
-                $q->when(request()->query('supplier'), function ($q) {
-                    $q->where('id',  request()->query('supplier'));
-                });
+            ->when(request()->query('supplier'), function ($q) {
+                $q->where('supplier_id',  request()->query('supplier'));
+            })
+            ->when(request()->query('status'), function ($q) {
+                $q->where('status_po',  request()->query('status'));
             })
             ->whereBetween('tanggal', [
                 request()->query('dari_tanggal'),

@@ -194,7 +194,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="18" class="text-center">Data tidak ditemukan</td>
+                        <td colspan="20" style="text-align: center">Data tidak ditemukan</td>
                     </tr>
                 @endforelse
             </tbody>

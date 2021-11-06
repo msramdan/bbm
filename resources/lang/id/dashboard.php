@@ -50,12 +50,12 @@ return [
         'logout' => 'Keluar',
     ],
     'laporan' => [
-        'adjustment_plus' => 'Laporan Adjustment Plus',
-        'adjustment_minus' => 'Laporan Adjustment Minus',
-        'pesanan_pembelian' => 'Laporan Pesanan Pembelian',
-        'pembelian' => 'Laporan Pembelian',
-        'retur_pembelian' => 'Laporan Retur Pembelian',
-        'penjualan' => 'Laporan Penjualan',
-        'retur_penjualan' => 'Laporan Retur Penjualan',
+        'adjustment_plus' => 'Histori Adjustment Plus',
+        'adjustment_minus' => 'Histori Adjustment Minus',
+        'pesanan_pembelian' => 'Histori Pesanan Pembelian',
+        'pembelian' => 'Histori Pembelian',
+        'retur_pembelian' => 'Histori Retur Pembelian',
+        'penjualan' => 'Histori Penjualan',
+        'retur_penjualan' => 'Histori Retur Penjualan',
     ]
 ];

@@ -294,8 +294,20 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('retur-pembelian.laporan') }}">
+                            {{ trans('dashboard.laporan.retur_pembelian') }}
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('penjualan.laporan') }}">
                             {{ trans('dashboard.laporan.penjualan') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('retur-penjualan.laporan') }}">
+                            {{ trans('dashboard.laporan.retur_penjualan') }}
                         </a>
                     </li>
                 </ul>

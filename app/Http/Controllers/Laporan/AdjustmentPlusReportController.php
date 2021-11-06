@@ -26,6 +26,8 @@ class AdjustmentPlusReportController extends Controller
 
     public function pdf()
     {
+        $laporan = [];
+
         if (request()->query()) {
             $laporan = $this->getLaporan();
         }

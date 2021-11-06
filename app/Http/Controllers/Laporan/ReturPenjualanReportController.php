@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
-use App\Models\Penjualan;
+use App\Models\ReturPenjualan;
 use Barryvdh\DomPDF\Facade as PDF;
 
-class PenjualanReportController extends Controller
+class ReturPenjualanReportController extends Controller
 {
     public function __construct()
     {
@@ -21,7 +21,7 @@ class PenjualanReportController extends Controller
             $laporan = $this->getLaporan();
         }
 
-        return view('laporan.penjualan.penjualan.index', compact('laporan'));
+        return view('laporan.penjualan.retur.index', compact('laporan'));
     }
 
     public function pdf()
@@ -34,7 +34,7 @@ class PenjualanReportController extends Controller
 
         $toko = $this->getToko();
 
-        $pdf = PDF::loadView('laporan.penjualan.penjualan.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadView('laporan.penjualan.retur.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
 
         $namaFile = trans('dashboard.laporan.penjualan') . ' - ' . date('d F Y') . '.pdf';
 
@@ -43,23 +43,23 @@ class PenjualanReportController extends Controller
 
     protected function getLaporan()
     {
-        return Penjualan::with('penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang')
-            ->whereHas('penjualan_detail', function ($q) {
-                $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
-                    $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
-                });
-            })
-            ->whereHas('penjualan_detail.barang', function ($q) {
+        return ReturPenjualan::with('retur_penjualan_detail', 'gudang', 'penjualan.pelanggan', 'penjualan.salesman', 'penjualan.matauang')
+            // ->whereHas('retur_penjualan_detail', function ($q) {
+            //     $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
+            //         $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
+            //     });
+            // })
+            ->whereHas('retur_penjualan_detail.barang', function ($q) {
                 $q->when(request()->query('barang'), function ($q) {
                     $q->where('id',  request()->query('barang'));
                 });
             })
-            ->whereHas('pelanggan', function ($q) {
+            ->whereHas('penjualan.pelanggan', function ($q) {
                 $q->when(request()->query('pelanggan'), function ($q) {
                     $q->where('id',  request()->query('pelanggan'));
                 });
             })
-            ->whereHas('salesman', function ($q) {
+            ->whereHas('penjualan.salesman', function ($q) {
                 $q->when(request()->query('salesman'), function ($q) {
                     $q->where('id',  request()->query('salesman'));
                 });

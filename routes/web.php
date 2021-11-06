@@ -15,6 +15,8 @@ use App\Http\Controllers\Laporan\AdjustmentPlusReportController;
 use App\Http\Controllers\Laporan\PembelianReportController;
 use App\Http\Controllers\Laporan\PenjualanReportController;
 use App\Http\Controllers\Laporan\PesananPembelianReportController;
+use App\Http\Controllers\Laporan\ReturPembelianReportController;
+use App\Http\Controllers\Laporan\ReturPenjualanReportController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -170,7 +172,15 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     Route::get('/pembelian/pdf', [PembelianReportController::class, 'pdf'])->name('pembelian.pdf');
     Route::get('/pembelian', [PembelianReportController::class, 'index'])->name('pembelian.laporan');
 
+    // Pembelian Retur
+    Route::get('/retur-pembelian/pdf', [ReturPembelianReportController::class, 'pdf'])->name('retur-pembelian.pdf');
+    Route::get('/retur-pembelian', [ReturPembelianReportController::class, 'index'])->name('retur-pembelian.laporan');
+
     // Penjualan
     Route::get('/penjualan/pdf', [PenjualanReportController::class, 'pdf'])->name('penjualan.pdf');
     Route::get('/penjualan', [PenjualanReportController::class, 'index'])->name('penjualan.laporan');
+
+    // Penjualan Retur
+    Route::get('/retur-penjualan/pdf', [ReturPenjualanReportController::class, 'pdf'])->name('retur-penjualan.pdf');
+    Route::get('/retur-penjualan', [ReturPenjualanReportController::class, 'index'])->name('retur-penjualan.laporan');
 });

@@ -45,6 +45,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.adjustment.minus.index',
             'laporan.pembelian.pesanan.index',
             'laporan.pembelian.pembelian.index',
+            'laporan.pembelian.retur.index',
         ], function ($view) {
             return $view->with('barang', Barang::where('jenis', 1)->get());
         });
@@ -73,6 +74,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.adjustment.minus.index',
             'laporan.pembelian.pesanan.index',
             'laporan.pembelian.pembelian.index',
+            'laporan.pembelian.retur.index',
         ], function ($view) {
             return $view->with('supplier', Supplier::all());
         });
@@ -97,7 +99,9 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.adjustment.plus.index',
             'laporan.adjustment.minus.index',
             'laporan.pembelian.pembelian.index',
+            'laporan.pembelian.retur.index',
             'laporan.penjualan.penjualan.index',
+            'laporan.penjualan.retur.index',
         ], function ($view) {
             return $view->with('gudang', Gudang::all());
         });
@@ -185,6 +189,7 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.edit',
             'penjualan.retur.create',
             'laporan.penjualan.penjualan.index',
+            'laporan.penjualan.retur.index',
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::all());
         });
@@ -248,6 +253,7 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.edit',
             'penjualan.penjualan.create',
             'laporan.penjualan.penjualan.index',
+            'laporan.penjualan.retur.index',
         ], function ($view) {
             return $view->with('salesman', Salesman::all());
         });
@@ -345,6 +351,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.adjustment.minus.index',
             'laporan.pembelian.pesanan.index',
             'laporan.pembelian.pembelian.index',
+            'laporan.pembelian.retur.index',
         ], function ($view) {
             return $view->with(
                 'bentukKepemilikanStok',

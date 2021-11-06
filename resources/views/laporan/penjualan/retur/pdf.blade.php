@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ trans('dashboard.laporan.pesanan_pembelian') }}</title>
+    <title>{{ trans('dashboard.laporan.retur_penjualan') }}</title>
 
     <style>
         body {
@@ -74,7 +74,7 @@
         <div class="garis"></div>
 
         <center>
-            <h4>{{ trans('dashboard.laporan.pesanan_pembelian') }}</h4>
+            <h4>{{ trans('dashboard.laporan.retur_penjualan') }}</h4>
             <p><small>{{ date('d F Y') }}</small></p>
         </center>
 
@@ -82,9 +82,12 @@
             <thead>
                 <tr>
                     <th width="15">No.</th>
-                    <th colspan="6">Kode</th>
-                    <th colspan="3">Tanggal</th>
-                    <th colspan="3">Supplier</th>
+                    <th colspan="4">Kode</th>
+                    <th>Kode Penjualan</th>
+                    <th colspan="4">Tanggal</th>
+                    <th colspan="3">Gudang</th>
+                    <th colspan="2">Pelanggan</th>
+                    <th colspan="4">Salesman</th>
                     <th>Rate</th>
                 </tr>
             </thead>
@@ -94,94 +97,104 @@
             <tbody>
                 @forelse ($laporan as $item)
                     @php
-                        $total_qty = 0;
+                        $total_qty_beli = 0;
+                        $total_qty_retur = 0;
                         $total = 0;
                     @endphp
                     <tr>
                         <th>{{ $loop->iteration }}</th>
-                        <th colspan="6">{{ $item->kode }}</th>
-                        <th colspan="3">{{ $item->tanggal->format('d F Y') }}</th>
-                        <th colspan="3">
-                            {{ $item->supplier ? $item->supplier->nama_supplier : 'Tanpa Supplier' }}
+                        <th colspan="4">{{ $item->kode }}</th>
+                        <th>{{ $item->penjualan->kode }}</th>
+                        <th colspan="4">{{ $item->tanggal->format('d F Y') }}</th>
+                        <th colspan="3">{{ $item->gudang->nama }}</th>
+                        <th colspan="2">
+                            {{ $item->penjualan->pelanggan->nama_pelanggan }}
+                        </th>
+                        <th colspan="4">
+                            {{ $item->penjualan->salesman->nama }}
                         </th>
                         <th>{{ $item->rate }}</th>
                     </tr>
                     <tr>
                         <th></th>
-                        <th colspan="5">Barang</th>
-                        <th>Qty</th>
-                        <th>Harga</th>
+                        <th colspan="4">Barang</th>
+                        <th>Qty Beli</th>
+                        <th>Qty Retur</th>
+                        <th colspan="4">Harga</th>
                         <th>Disc</th>
                         <th>PPN</th>
                         <th>PPH</th>
                         <th>B.Msk</th>
                         <th>Clr.Fee</th>
-                        <th>Subtotal</th>
+                        <th colspan="4">Subtotal</th>
                     </tr>
-                    @foreach ($item->pesanan_pembelian_detail as $detail)
+                    @foreach ($item->retur_penjualan_detail as $detail)
                         <tr>
                             <td></td>
-                            <td colspan="5">
+                            <td colspan="4">
                                 {{ $detail->barang->kode . ' - ' . $detail->barang->nama }}
                             </td>
-                            <td>{{ $detail->qty }}</td>
-                            <td>
-                                {{ $item->matauang->kode . ' ' . number_format($detail->harga) }}
+                            <td>{{ $detail->qty_beli }}</td>
+                            <td>{{ $detail->qty_retur }}</td>
+                            <td colspan="4">
+                                {{ $item->penjualan->matauang->kode . ' ' . number_format($detail->harga) }}
                             </td>
                             <td>
-                                {{ $item->matauang->kode . ' ' . number_format($detail->diskon) }}
+                                {{ $item->penjualan->matauang->kode . ' ' . number_format($detail->diskon) }}
                             </td>
                             <td>
-                                {{ $item->matauang->kode . ' ' . number_format($detail->ppn) }}
+                                {{ $item->penjualan->matauang->kode . ' ' . number_format($detail->ppn) }}
                             </td>
                             <td>
-                                {{ $item->matauang->kode . ' ' . number_format($detail->pph) }}
+                                {{ $item->penjualan->matauang->kode . ' ' . number_format($detail->pph) }}
                             </td>
                             <td>
-                                {{ $item->matauang->kode . ' ' . number_format($detail->biaya_masuk) }}
+                                {{ $item->penjualan->matauang->kode . ' ' . number_format($detail->biaya_masuk) }}
                             </td>
                             <td>
-                                {{ $item->matauang->kode . ' ' . number_format($detail->clr_fee) }}
+                                {{ $item->penjualan->matauang->kode . ' ' . number_format($detail->clr_fee) }}
                             </td>
-                            <td>
-                                {{ $item->matauang->kode . ' ' . number_format($detail->netto) }}
+                            <td colspan="4">
+                                {{ $item->penjualan->matauang->kode . ' ' . number_format($detail->netto) }}
                             </td>
                         </tr>
                         @php
-                            $total_qty += $detail->qty;
+                            $total_qty_beli += $detail->qty_beli;
+                            $total_qty_retur += $detail->qty_retur;
                             $total += $detail->subtotal;
                             $grandtotal += $detail->subtotal;
                         @endphp
                     @endforeach
                     <tr>
                         <th></th>
-                        <th colspan="5">Total</th>
-                        <th>{{ $total_qty }}</th>
-                        <th>
-                            {{ $item->matauang->kode . ' ' . number_format($item->total_gross) }}
+                        <th colspan="4">Total</th>
+                        <th>{{ $total_qty_beli }}</th>
+                        <th>{{ $total_qty_retur }}</th>
+                        <th colspan="4">
+                            {{ $item->penjualan->matauang->kode . ' ' . number_format($item->total_gross) }}
                         </th>
                         <th>
-                            {{ $item->matauang->kode . ' ' . number_format($item->total_diskon) }}
+                            {{ $item->penjualan->matauang->kode . ' ' . number_format($item->total_diskon) }}
                         </th>
                         <th>
-                            {{ $item->matauang->kode . ' ' . number_format($item->total_ppn) }}
+                            {{ $item->penjualan->matauang->kode . ' ' . number_format($item->total_ppn) }}
                         </th>
                         <th>
-                            {{ $item->matauang->kode . ' ' . number_format($item->total_pph) }}
+                            {{ $item->penjualan->matauang->kode . ' ' . number_format($item->total_pph) }}
                         </th>
                         <th>
-                            {{ $item->matauang->kode . ' ' . number_format($item->total_biaya_masuk) }}
+                            {{ $item->penjualan->matauang->kode . ' ' . number_format($item->total_biaya_masuk) }}
                         </th>
                         <th>
-                            {{ $item->matauang->kode . ' ' . number_format($item->total_clr_fee) }}
+                            {{ $item->penjualan->matauang->kode . ' ' . number_format($item->total_clr_fee) }}
                         </th>
-                        <th>
-                            {{ $item->matauang->kode . ' ' . number_format($item->total_netto) }}
+                        <th colspan="4">
+                            {{ $item->penjualan->matauang->kode . ' ' . number_format($item->total_netto) }}
                         </th>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="14" style="text-align: center">Data tidak ditemukan</td>
+                        <td colspan="18" class="text-center">Data tidak ditemukan</td>
                     </tr>
                 @endforelse
             </tbody>

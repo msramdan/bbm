@@ -81,9 +81,9 @@
         <table style="margin-top: 1em;">
             <thead>
                 <tr>
-                    <th width="30">No.</th>
+                    <th width="15">No.</th>
                     <th colspan="4">Kode</th>
-                    <th colspan="3">Tanggal</th>
+                    <th colspan="4">Tanggal</th>
                     <th colspan="4">Gudang</th>
                     <th colspan="3">Pelanggan</th>
                     <th colspan="3">Salesman</th>
@@ -102,7 +102,7 @@
                     <tr>
                         <th>{{ $loop->iteration }}</th>
                         <th colspan="4">{{ $item->kode }}</th>
-                        <th colspan="3">{{ $item->tanggal->format('d F Y') }}</th>
+                        <th colspan="4">{{ $item->tanggal->format('d F Y') }}</th>
                         <th colspan="4">{{ $item->gudang->nama }}</th>
                         <th colspan="3">
                             {{ $item->pelanggan->nama_pelanggan }}
@@ -122,7 +122,7 @@
                         <th>PPH</th>
                         <th>B.Msk</th>
                         <th>Clr.Fee</th>
-                        <th colspan="2">Subtotal</th>
+                        <th colspan="3">Subtotal</th>
                     </tr>
                     @foreach ($item->penjualan_detail as $detail)
                         <tr>
@@ -149,7 +149,7 @@
                             <td>
                                 {{ $item->matauang->kode . ' ' . number_format($detail->clr_fee) }}
                             </td>
-                            <td colspan="2">
+                            <td colspan="3">
                                 {{ $item->matauang->kode . ' ' . number_format($detail->netto) }}
                             </td>
                         </tr>
@@ -181,13 +181,13 @@
                         <th>
                             {{ $item->matauang->kode . ' ' . number_format($item->total_clr_fee) }}
                         </th>
-                        <th colspan="2">
+                        <th colspan="3">
                             {{ $item->matauang->kode . ' ' . number_format($item->total_netto) }}
                         </th>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="15" class="text-center">Data tidak ditemukan</td>
+                        <td colspan="20" style="text-align: center">Data tidak ditemukan</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -195,8 +195,10 @@
 
         <small>
             <strong>
-                Dari:
-                {{ date('d F Y', strtotime(request()->query('dari_tanggal'))) . ' - ' . date('d F Y', strtotime(request()->query('sampai_tanggal'))) }}
+                @if (request()->query('dari_tanggal') && request()->query('sampai_tanggal'))
+                    Dari:
+                    {{ date('d F Y', strtotime(request()->query('dari_tanggal'))) . ' s/d ' . date('d F Y', strtotime(request()->query('sampai_tanggal'))) }}
+                @endif
             </strong>
         </small>
     </div>

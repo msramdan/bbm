@@ -15,14 +15,15 @@
         table {
             border-collapse: collapse;
             width: 100%;
-            font-size: 12px;
+            font-size: 11px;
             border-left: 0;
+            margin-bottom: 1em;
         }
 
         table td,
         table th,
         table tfoot {
-            border: 1px solid #dddd;
+            border: 1px solid black;
             padding: 3px;
             border-left: 0px solid;
             border-right: 0px solid;
@@ -44,6 +45,10 @@
         p,
         h4 {
             line-height: 8px;
+        }
+
+        small {
+            font-size: 12px;
         }
 
         .garis {
@@ -73,76 +78,83 @@
             <p><small>{{ date('d F Y') }}</small></p>
         </center>
 
-        <table class="table table-striped table-sm">
+        <table style="margin-bottom: 1em;">
             <thead>
                 <tr>
-                    <th width="30">No.</th>
+                    <th width="15">No.</th>
                     <th colspan="2">Kode</th>
                     <th colspan="2">Tanggal</th>
                     <th>Gudang</th>
                 </tr>
             </thead>
-            @if ($laporan)
-                @php
-                    $grandtotal = 0;
-                @endphp
-                <tbody>
-                    @forelse ($laporan as $item)
+            @php
+                $grandtotal = 0;
+            @endphp
+            <tbody>
+                @forelse ($laporan as $item)
+                    @php
+                        $total_qty = 0;
+                        $total = 0;
+                    @endphp
+                    <tr>
+                        <th>{{ $loop->iteration }}</th>
+                        <th colspan="2">{{ $item->kode }}</th>
+                        <th colspan="2">{{ $item->tanggal->format('d F Y') }}</th>
+                        <th>{{ $item->gudang->nama }}</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Barang</th>
+                        <th>Supplier</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    @foreach ($item->adjustment_plus_detail as $detail)
+                        <tr>
+                            <td></td>
+                            <td colspan="2">
+                                {{ $detail->barang->kode . ' - ' . $detail->barang->nama }}
+                            </td>
+                            <td>{{ $detail->supplier->nama_supplier }}</td>
+                            <td>{{ $detail->qty }}</td>
+                            <td>{{ $item->matauang->kode . '  ' . number_format($detail->subtotal) }}
+                            </td>
+                        </tr>
                         @php
-                            $total_qty = 0;
-                            $total = 0;
+                            $total_qty += $detail->qty;
+                            $total += $detail->subtotal;
+                            $grandtotal += $detail->subtotal;
                         @endphp
-                        <tr>
-                            <th>{{ $loop->iteration }}</th>
-                            <th colspan="2">{{ $item->kode }}</th>
-                            <th colspan="2">{{ $item->tanggal->format('d F Y') }}</th>
-                            <th>{{ $item->gudang->nama }}</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Barang</th>
-                            <th>Supplier</th>
-                            <th>Qty</th>
-                            <th>Subtotal</th>
-                        </tr>
-                        @foreach ($item->adjustment_plus_detail as $detail)
-                            <tr>
-                                <td></td>
-                                <td colspan="2">
-                                    {{ $detail->barang->kode . ' - ' . $detail->barang->nama }}
-                                </td>
-                                <td>{{ $detail->supplier->nama_supplier }}</td>
-                                <td>{{ $detail->qty }}</td>
-                                <td>{{ $item->matauang->kode . '  ' . number_format($detail->subtotal) }}
-                                </td>
-                            </tr>
-                            @php
-                                $total_qty += $detail->qty;
-                                $total += $detail->subtotal;
-                                $grandtotal += $detail->subtotal;
-                            @endphp
-                        @endforeach
-                        <tr>
-                            <th></th>
-                            <th colspan="3">Total</th>
-                            <th>{{ $total_qty }}</th>
-                            <th>{{ $item->matauang->kode . '  ' . number_format($total) }}</th>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">Data tidak ditemukan</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-                {{-- <tfoot>
+                    @endforeach
+                    <tr>
+                        <th></th>
+                        <th colspan="3">Total</th>
+                        <th>{{ $total_qty }}</th>
+                        <th>{{ $item->matauang->kode . '  ' . number_format($total) }}</th>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" style="text-align: center">Data tidak ditemukan</td>
+                    </tr>
+                @endforelse
+            </tbody>
+            {{-- <tfoot>
                     <tr>
                         <th></th>
                         <th colspan="4">GRANDTOTAL</th>
                         <th>{{ $item->matauang->kode . '  ' . number_format($grandtotal) }}</th>
                     </tr>
                 </tfoot> --}}
-            @endif
         </table>
+
+        <small>
+            <strong>
+                @if (request()->query('dari_tanggal') && request()->query('sampai_tanggal'))
+                    Dari:
+                    {{ date('d F Y', strtotime(request()->query('dari_tanggal'))) . ' s/d ' . date('d F Y', strtotime(request()->query('sampai_tanggal'))) }}
+                @endif
+            </strong>
+        </small>
     </div>
 
 </body>

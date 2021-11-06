@@ -50,13 +50,13 @@ return [
         'logout' => 'Logout',
     ],
     'laporan' => [
-        'adjustment_plus' => 'Adjustment Plus Report',
-        'adjustment_minus' => 'Adjustment Minus Report',
-        'pesanan_pembelian' => 'Purchase Order Report',
-        'pembelian' => 'Purchase Report',
-        'retur_pembelian' => 'Purchase Return Report',
-        'penjualan' => 'Sales Report',
-        'retur_penjualan' => 'Sales Return Report',
+        'adjustment_plus' => 'Adjustment Plus History',
+        'adjustment_minus' => 'Adjustment Minus History',
+        'pesanan_pembelian' => 'Purchase Order History',
+        'pembelian' => 'Purchase History',
+        'retur_pembelian' => 'Purchase Return History',
+        'penjualan' => 'Sales History',
+        'retur_penjualan' => 'Sales Return History',
     ]
 
 ];

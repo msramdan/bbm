@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('dashboard.laporan.pesanan_pembelian'))
+@section('title', trans('dashboard.laporan.retur_pembelian'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('laporan_pesanan_pembelian') }}
+        {{ Breadcrumbs::render('laporan_retur_pembelian') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -30,10 +30,10 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('dashboard.laporan.pesanan_pembelian') }}</h4>
+                        <h4 class="panel-title">{{ trans('dashboard.laporan.retur_pembelian') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form action="{{ route('pesanan-pembelian.laporan') }}" method="GET" style="margin-bottom: 1em;">
+                        <form action="{{ route('retur-pembelian.laporan') }}" method="GET" style="margin-bottom: 1em;">
                             <div class="form-group row" style="margin-bottom: 1em;">
                                 <div class="col-md-6">
                                     <label for="dari_tanggal" class="control-label">Dari Tanggal</label>
@@ -52,12 +52,12 @@
 
                             <div class="form-group row" style="margin-bottom: 1em;">
                                 <div class="col-md-6">
-                                    <label for="status" class="control-label">Status</label>
-                                    <select name="status" class="form-control" id="status">
+                                    <label for="gudang" class="control-label">Gudang</label>
+                                    <select name="gudang" class="form-control" id="gudang">
                                         <option value="" selected>All</option>
-                                        @forelse ($statusPo as $item)
+                                        @forelse ($gudang as $item)
                                             <option value="{{ $item->id }}"
-                                                {{ request()->query('status') && request()->query('status') == $item->id ? 'selected' : '' }}>
+                                                {{ request()->query('gudang') && request()->query('gudang') == $item->id ? 'selected' : '' }}>
                                                 {{ $item->nama }}
                                             </option>
                                         @empty
@@ -82,7 +82,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row" style="margin-bottom: 1em;">
+                            {{-- <div class="form-group row" style="margin-bottom: 1em;">
                                 <div class="col-md-6">
                                     <label for="barang" class="control-label">Barang</label>
                                     <select name="barang" class="form-control" id="barang">
@@ -111,30 +111,32 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <button type="submit" class="btn btn-sm btn-success">
                                 <i class="fa fa-eye"></i> Cek
                             </button>
-                            <a href="{{ route('pesanan-pembelian.laporan') }}"
+                            <a href="{{ route('retur-pembelian.laporan') }}"
                                 class="btn btn-sm btn-default{{ request()->query() ? '' : ' disabled' }}">
                                 <i class="fa fa-trash"></i> Reset
                             </a>
                             @if (count($laporan) > 0)
-                                <a href="{{ route('pesanan-pembelian.pdf', request()->query()) }}" target="_blank"
+                                <a href="{{ route('retur-pembelian.pdf', request()->query()) }}" target="_blank"
                                     class="btn btn-sm btn-info">
                                     <i class="fa fa-print"></i> Print
                                 </a>
                             @endif
                         </form>
 
-                        <table class="table table-striped table-condensed data-table" style="margin-top: 1em;">
+                        <table class="table table-striped table-condensed" style="margin-top: 1em;">
                             <thead>
                                 <tr>
                                     <th width="30">No.</th>
-                                    <th colspan="3">Kode</th>
-                                    <th colspan="3">Tanggal</th>
-                                    <th colspan="3">Supplier</th>
+                                    <th colspan="2">Kode</th>
+                                    <th colspan="2">Kode Pembelian</th>
+                                    <th>Tanggal</th>
+                                    <th colspan="2">Gudang</th>
+                                    <th colspan="2">Supplier</th>
                                     <th>Rate</th>
                                 </tr>
                             </thead>
@@ -144,22 +146,26 @@
                             <tbody>
                                 @forelse ($laporan as $item)
                                     @php
-                                        $total_qty = 0;
+                                        $total_qty_beli = 0;
+                                        $total_qty_retur = 0;
                                         $total = 0;
                                     @endphp
                                     <tr>
                                         <th>{{ $loop->iteration }}</th>
-                                        <th colspan="3">{{ $item->kode }}</th>
-                                        <th colspan="3">{{ $item->tanggal->format('d F Y') }}</th>
-                                        <th colspan="3">
-                                            {{ $item->supplier ? $item->supplier->nama_supplier : 'Tanpa Supplier' }}
+                                        <th colspan="2">{{ $item->kode }}</th>
+                                        <th colspan="2">{{ $item->pembelian->kode }}</th>
+                                        <th>{{ $item->tanggal->format('d F Y') }}</th>
+                                        <th colspan="2">{{ $item->gudang->nama }}</th>
+                                        <th colspan="2">
+                                            {{ $item->pembelian->supplier ? $item->pembelian->supplier->nama_supplier : 'Tanpa Supplier' }}
                                         </th>
                                         <th>{{ $item->rate }}</th>
                                     </tr>
                                     <tr>
                                         <th></th>
-                                        <th colspan="2">Barang</th>
-                                        <th>Qty</th>
+                                        <th>Barang</th>
+                                        <th>Qty Beli</th>
+                                        <th>Qty Retur</th>
                                         <th>Harga</th>
                                         <th>Disc</th>
                                         <th>PPN</th>
@@ -168,65 +174,68 @@
                                         <th>Clr.Fee</th>
                                         <th>Subtotal</th>
                                     </tr>
-                                    @foreach ($item->pesanan_pembelian_detail as $detail)
+                                    @foreach ($item->retur_pembelian_detail as $detail)
                                         <tr>
                                             <td></td>
-                                            <td colspan="2">
+                                            <td>
                                                 {{ $detail->barang->kode . ' - ' . $detail->barang->nama }}
                                             </td>
-                                            <td>{{ $detail->qty }}</td>
+                                            <td>{{ $detail->qty_beli }}</td>
+                                            <td>{{ $detail->qty_retur }}</td>
                                             <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->harga) }}
+                                                {{ $item->pembelian->matauang->kode . ' ' . number_format($detail->harga) }}
                                             </td>
                                             <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->diskon) }}
+                                                {{ $item->pembelian->matauang->kode . ' ' . number_format($detail->diskon) }}
                                             </td>
                                             <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->ppn) }}
+                                                {{ $item->pembelian->matauang->kode . ' ' . number_format($detail->ppn) }}
                                             </td>
                                             <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->pph) }}
+                                                {{ $item->pembelian->matauang->kode . ' ' . number_format($detail->pph) }}
                                             </td>
                                             <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->biaya_masuk) }}
+                                                {{ $item->pembelian->matauang->kode . ' ' . number_format($detail->biaya_masuk) }}
                                             </td>
                                             <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->clr_fee) }}
+                                                {{ $item->pembelian->matauang->kode . ' ' . number_format($detail->clr_fee) }}
                                             </td>
                                             <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->netto) }}
+                                                {{ $item->pembelian->matauang->kode . ' ' . number_format($detail->netto) }}
                                             </td>
                                         </tr>
                                         @php
-                                            $total_qty += $detail->qty;
+                                            $total_qty_beli += $detail->qty_beli;
+                                            $total_qty_retur += $detail->qty_retur;
                                             $total += $detail->subtotal;
                                             $grandtotal += $detail->subtotal;
                                         @endphp
                                     @endforeach
                                     <tr>
                                         <th></th>
-                                        <th colspan="2">Total</th>
-                                        <th>{{ $total_qty }}</th>
+                                        <th>Total</th>
+                                        <th>{{ $total_qty_beli }}</th>
+                                        <th>{{ $total_qty_retur }}</th>
                                         <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_gross) }}
+                                            {{ $item->pembelian->matauang->kode . ' ' . number_format($item->total_gross) }}
                                         </th>
                                         <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_diskon) }}
+                                            {{ $item->pembelian->matauang->kode . ' ' . number_format($item->total_diskon) }}
                                         </th>
                                         <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_ppn) }}
+                                            {{ $item->pembelian->matauang->kode . ' ' . number_format($item->total_ppn) }}
                                         </th>
                                         <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_pph) }}
+                                            {{ $item->pembelian->matauang->kode . ' ' . number_format($item->total_pph) }}
                                         </th>
                                         <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_biaya_masuk) }}
+                                            {{ $item->pembelian->matauang->kode . ' ' . number_format($item->total_biaya_masuk) }}
                                         </th>
                                         <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_clr_fee) }}
+                                            {{ $item->pembelian->matauang->kode . ' ' . number_format($item->total_clr_fee) }}
                                         </th>
                                         <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_netto) }}
+                                            {{ $item->pembelian->matauang->kode . ' ' . number_format($item->total_netto) }}
                                         </th>
                                     </tr>
                                 @empty
@@ -235,13 +244,6 @@
                                     </tr>
                                 @endforelse
                             </tbody>
-                            {{-- <tfoot>
-                                    <tr>
-                                        <th></th>
-                                        <th colspan="4">GRANDTOTAL</th>
-                                        <th>{{ $item->matauang->kode . '  ' . number_format($grandtotal) }}</th>
-                                    </tr>
-                                </tfoot> --}}
                         </table>
                     </div>
                 </div>

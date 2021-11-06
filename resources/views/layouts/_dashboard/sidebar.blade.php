@@ -310,6 +310,18 @@
                             {{ trans('dashboard.laporan.retur_penjualan') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('pelunasan-hutang.laporan') }}">
+                            {{ trans('dashboard.laporan.pelunasan_hutang') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('pelunasan-piutang.laporan') }}">
+                            {{ trans('dashboard.laporan.pelunasan_piutang') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
 

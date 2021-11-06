@@ -576,3 +576,15 @@ Breadcrumbs::for('laporan_retur_penjualan', function (BreadcrumbTrail $trail) {
     $trail->parent('laporan');
     $trail->push('Retur Penjualan', route('retur-penjualan.laporan'));
 });
+
+// Laporan > Pelunasan Hutang
+Breadcrumbs::for('laporan_pelunasan_hutang', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Pelunasan Hutang', route('pelunasan-hutang.laporan'));
+});
+
+// Laporan > Pelunasan Piutang
+Breadcrumbs::for('laporan_pelunasan_piutang', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Pelunasan Piutang', route('pelunasan-piutang.laporan'));
+});

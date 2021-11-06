@@ -11,7 +11,7 @@ class ReturPembelianReportController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:laporan pembelian');
+        $this->middleware('permission:laporan retur pembelian');
     }
 
     public function index()

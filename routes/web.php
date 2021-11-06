@@ -12,6 +12,8 @@ use App\Http\Controllers\Setting\{TokoController, UserController};
 use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
 use App\Http\Controllers\Laporan\AdjustmentMinusReportController;
 use App\Http\Controllers\Laporan\AdjustmentPlusReportController;
+use App\Http\Controllers\Laporan\PelunasanHutangReportController;
+use App\Http\Controllers\Laporan\PelunasanPiutangReportController;
 use App\Http\Controllers\Laporan\PembelianReportController;
 use App\Http\Controllers\Laporan\PenjualanReportController;
 use App\Http\Controllers\Laporan\PesananPembelianReportController;
@@ -183,4 +185,12 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     // Penjualan Retur
     Route::get('/retur-penjualan/pdf', [ReturPenjualanReportController::class, 'pdf'])->name('retur-penjualan.pdf');
     Route::get('/retur-penjualan', [ReturPenjualanReportController::class, 'index'])->name('retur-penjualan.laporan');
+
+    // Pelunasan Hutang
+    Route::get('/pelunasan-hutang/pdf', [PelunasanHutangReportController::class, 'pdf'])->name('pelunasan-hutang.pdf');
+    Route::get('/pelunasan-hutang', [PelunasanHutangReportController::class, 'index'])->name('pelunasan-hutang.laporan');
+
+    // Pelunasan Piutang
+    Route::get('/pelunasan-piutang/pdf', [PelunasanPiutangReportController::class, 'pdf'])->name('pelunasan-piutang.pdf');
+    Route::get('/pelunasan-piutang', [PelunasanPiutangReportController::class, 'index'])->name('pelunasan-piutang.laporan');
 });

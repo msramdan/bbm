@@ -75,6 +75,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.pesanan.index',
             'laporan.pembelian.pembelian.index',
             'laporan.pembelian.retur.index',
+            'laporan.pelunasan.hutang.index'
         ], function ($view) {
             return $view->with('supplier', Supplier::all());
         });
@@ -119,7 +120,9 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.edit',
             'penjualan.penjualan.create',
             'keuangan.biaya.create',
-            'keuangan.biaya.edit'
+            'keuangan.biaya.edit',
+            'laporan.pelunasan.hutang.index',
+            'laporan.pelunasan.piutang.index'
         ], function ($view) {
             return $view->with('matauang', Matauang::all());
         });
@@ -157,7 +160,6 @@ class ViewServiceProvider extends ServiceProvider
             );
         });
 
-
         // list penjualan
         View::composer([
             'penjualan.retur.create'
@@ -165,10 +167,19 @@ class ViewServiceProvider extends ServiceProvider
             return $view->with('penjualan', Penjualan::where('retur', 'NO')->get());
         });
 
+        // list semua  penjualan
+        View::composer([
+            'laporan.pelunasan.piutang.index',
+        ], function ($view) {
+            return $view->with('semuaPenjualan', Penjualan::all());
+        });
+
+
         // list pembelian belum lunas
         View::composer([
             'keuangan.pelunasan.hutang.edit',
-            'keuangan.pelunasan.hutang.create'
+            'keuangan.pelunasan.hutang.create',
+            // 'laporan.pelunasan.hutang.index'
         ], function ($view) {
             $pembelianBelumLunas = Pembelian::select(['kode', 'id'])->whereStatus('Belum Lunas')->get();
             return $view->with('pembelianBelumLunas', $pembelianBelumLunas);
@@ -190,6 +201,7 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.retur.create',
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
+            'laporan.pelunasan.piutang.index',
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::all());
         });
@@ -213,12 +225,19 @@ class ViewServiceProvider extends ServiceProvider
         });
 
 
-        // list pembelian
+        // list pembelian yg ga diretur
         View::composer([
             'pembelian.retur.create',
-            'pembelian.retur.edit'
+            'pembelian.retur.edit',
         ], function ($view) {
             return $view->with('pembelian', Pembelian::where('retur', 'NO')->get());
+        });
+
+        // list semua pembelian
+        View::composer([
+            'laporan.pelunasan.hutang.index'
+        ], function ($view) {
+            return $view->with('semuaPembelian', Pembelian::all());
         });
 
         // list roles
@@ -377,7 +396,9 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.pelunasan.hutang.edit',
             'keuangan.pelunasan.hutang.create',
             'keuangan.pelunasan.piutang.edit',
-            'keuangan.pelunasan.piutang.create'
+            'keuangan.pelunasan.piutang.create',
+            'laporan.pelunasan.hutang.index',
+            'laporan.pelunasan.piutang.index'
         ], function ($view) {
             $jenisPembayaran = Cache::rememberForever('jenisPembayaran', function () {
                 return collect([

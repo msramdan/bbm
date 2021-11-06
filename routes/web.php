@@ -12,6 +12,7 @@ use App\Http\Controllers\Setting\{TokoController, UserController};
 use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
 use App\Http\Controllers\Laporan\AdjustmentMinusReportController;
 use App\Http\Controllers\Laporan\AdjustmentPlusReportController;
+use App\Http\Controllers\Laporan\BiayaReportController;
 use App\Http\Controllers\Laporan\PelunasanHutangReportController;
 use App\Http\Controllers\Laporan\PelunasanPiutangReportController;
 use App\Http\Controllers\Laporan\PembelianReportController;
@@ -193,4 +194,8 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     // Pelunasan Piutang
     Route::get('/pelunasan-piutang/pdf', [PelunasanPiutangReportController::class, 'pdf'])->name('pelunasan-piutang.pdf');
     Route::get('/pelunasan-piutang', [PelunasanPiutangReportController::class, 'index'])->name('pelunasan-piutang.laporan');
+
+    // Biaya
+    Route::get('/biaya/pdf', [BiayaReportController::class, 'pdf'])->name('biaya.pdf');
+    Route::get('/biaya', [BiayaReportController::class, 'index'])->name('biaya.laporan');
 });

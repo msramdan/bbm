@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdjustmentMinus;
-use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 

@@ -588,3 +588,9 @@ Breadcrumbs::for('laporan_pelunasan_piutang', function (BreadcrumbTrail $trail) 
     $trail->parent('laporan');
     $trail->push('Pelunasan Piutang', route('pelunasan-piutang.laporan'));
 });
+
+// Laporan > Biaya
+Breadcrumbs::for('laporan_biaya', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Biaya', route('biaya.laporan'));
+});

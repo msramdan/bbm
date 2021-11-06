@@ -322,6 +322,12 @@
                             {{ trans('dashboard.laporan.pelunasan_piutang') }}
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('biaya.laporan') }}">
+                            {{ trans('dashboard.laporan.biaya') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
 

@@ -143,7 +143,8 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.cek-giro.cair.create',
             'keuangan.cek-giro.cair.edit',
             'keuangan.biaya.create',
-            'keuangan.biaya.edit'
+            'keuangan.biaya.edit',
+            'laporan.biaya.index',
         ], function ($view) {
             return $view->with('bank', Bank::all());
         });

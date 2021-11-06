@@ -60,5 +60,12 @@ return [
         'pelunasan_hutang' => 'Histori Pelunasan Hutang',
         'pelunasan_piutang' => 'Histori Pelunasan Piutang',
         'biaya' => 'Histori Biaya',
+        'saldo_hutang' => 'Saldo Hutang',
+        'saldo_piutang' => 'Saldo Piutang',
+        'stok_barnag' => 'Stok Barang',
+        'komisi_salesman' => 'Komisi Salesman',
+        'cek_giro' => 'Cek/Giro',
+        'gross_profit' => 'Gross Profit',
+        'nett_profit' => 'Nett Profit',
     ]
 ];

@@ -210,8 +210,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'laporan saldo hutang']);
         Permission::create(['name' => 'laporan saldo piutang']);
         Permission::create(['name' => 'laporan biaya']);
-        Permission::create(['name' => 'laporan barang']);
-        Permission::create(['name' => 'laporan salesman']);
+        Permission::create(['name' => 'laporan stok barang']);
+        Permission::create(['name' => 'laporan komisi salesman']);
         Permission::create(['name' => 'laporan cek/giro']);
         Permission::create(['name' => 'laporan gross profit']);
         Permission::create(['name' => 'laporan nett profit']);
@@ -219,7 +219,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         // Setting
         Permission::create(['name' => 'toko']);
-        
+
         Permission::create(['name' => 'create user']);
         Permission::create(['name' => 'read user']);
         Permission::create(['name' => 'edit user']);

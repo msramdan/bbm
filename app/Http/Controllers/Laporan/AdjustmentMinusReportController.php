@@ -13,6 +13,7 @@ class AdjustmentMinusReportController extends Controller
     {
         $this->middleware('permission:laporan adjustment minus');
     }
+
     public function index()
     {
         $laporan = [];

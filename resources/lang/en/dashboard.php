@@ -60,6 +60,13 @@ return [
         'pelunasan_hutang' => 'A/P Payment History',
         'pelunasan_piutang' => 'A/R Payment History',
         'biaya' => 'Expense History',
+        'saldo_hutang' => 'Balance A/P',
+        'saldo_piutang' => 'Balance A/R',
+        'stok_barnag' => 'Item Stock',
+        'komisi_salesman' => 'Salesman Commission',
+        'cek_giro' => 'Cheque',
+        'gross_profit' => 'Gross Profit',
+        'nett_profit' => 'Nett Profit',
     ]
 
 ];

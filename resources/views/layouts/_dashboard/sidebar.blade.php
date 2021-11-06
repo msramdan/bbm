@@ -237,6 +237,120 @@
                 </li>
             @endrole
 
+            @role('admin')
+                {{-- menu Laporan --}}
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-book"></i>
+                        <span>{{ trans('dashboard.menu.laporan') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('adjustment-plus.laporan') }}">
+                                {{ trans('dashboard.laporan.adjustment_plus') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('adjustment-minus.laporan') }}">
+                                {{ trans('dashboard.laporan.adjustment_minus') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pesanan-pembelian.laporan') }}">
+                                {{ trans('dashboard.laporan.pesanan_pembelian') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pembelian.laporan') }}">
+                                {{ trans('dashboard.laporan.pembelian') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('retur-pembelian.laporan') }}">
+                                {{ trans('dashboard.laporan.retur_pembelian') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('penjualan.laporan') }}">
+                                {{ trans('dashboard.laporan.penjualan') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('retur-penjualan.laporan') }}">
+                                {{ trans('dashboard.laporan.retur_penjualan') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pelunasan-hutang.laporan') }}">
+                                {{ trans('dashboard.laporan.pelunasan_hutang') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pelunasan-piutang.laporan') }}">
+                                {{ trans('dashboard.laporan.pelunasan_piutang') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('biaya.laporan') }}">
+                                {{ trans('dashboard.laporan.biaya') }}
+                            </a>
+                        </li>
+
+                        {{-- <li>
+                        <a href="{{ route('biaya.saldo-hutang') }}">
+                            {{ trans('dashboard.saldo_hutang.biaya') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('biaya.saldo-piutang') }}">
+                            {{ trans('dashboard.saldo_piutang.biaya') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('biaya.stok-barang') }}">
+                            {{ trans('dashboard.stok_barang.biaya') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('biaya.komisi-salesman') }}">
+                            {{ trans('dashboard.komisi_salesman.biaya') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('biaya.cek-giro') }}">
+                            {{ trans('dashboard.cek_giro.biaya') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('biaya.gross-profit') }}">
+                            {{ trans('dashboard.gross_profit.biaya') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('biaya.nett-profit') }}">
+                            {{ trans('dashboard.nett_profit.biaya') }}
+                        </a>
+                    </li> --}}
+                    </ul>
+                </li>
+            @endrole
+
             {{-- menu Setting --}}
             @role('admin')
                 <li class="has-sub">
@@ -260,77 +374,6 @@
                     </ul>
                 </li>
             @endrole
-
-            {{-- menu Laporan --}}
-            <li class="has-sub">
-                <a href="javascript:;">
-                    <b class="caret pull-right"></b>
-                    <i class="fa fa-book"></i>
-                    <span>{{ trans('dashboard.menu.laporan') }}</span>
-                </a>
-                <ul class="sub-menu" style="display: none;">
-                    <li>
-                        <a href="{{ route('adjustment-plus.laporan') }}">
-                            {{ trans('dashboard.laporan.adjustment_plus') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('adjustment-minus.laporan') }}">
-                            {{ trans('dashboard.laporan.adjustment_minus') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('pesanan-pembelian.laporan') }}">
-                            {{ trans('dashboard.laporan.pesanan_pembelian') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('pembelian.laporan') }}">
-                            {{ trans('dashboard.laporan.pembelian') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('retur-pembelian.laporan') }}">
-                            {{ trans('dashboard.laporan.retur_pembelian') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('penjualan.laporan') }}">
-                            {{ trans('dashboard.laporan.penjualan') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('retur-penjualan.laporan') }}">
-                            {{ trans('dashboard.laporan.retur_penjualan') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('pelunasan-hutang.laporan') }}">
-                            {{ trans('dashboard.laporan.pelunasan_hutang') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('pelunasan-piutang.laporan') }}">
-                            {{ trans('dashboard.laporan.pelunasan_piutang') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('biaya.laporan') }}">
-                            {{ trans('dashboard.laporan.biaya') }}
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
 
             {{-- menu Akun --}}
             <li class="has-sub">

@@ -7,7 +7,7 @@ use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\MasterData\{AreaController, BankController, BarangController, GudangController, KategoriController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
 use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController, PerakitanPaketController};
 use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
-use App\Http\Controllers\Penjualan\{PenjualanController, ReturPenjualanController};
+use App\Http\Controllers\Penjualan\{PenjualanController, PesananPenjualanController, ReturPenjualanController};
 use App\Http\Controllers\Setting\{TokoController, UserController};
 use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
 use App\Http\Controllers\Laporan\{AdjustmentMinusReportController, AdjustmentPlusReportController, BiayaReportController, CekGiroReportController, GrossProfitReportController, KomisiReportController, NettProfitReportController, PelunasanHutangReportController, PelunasanPiutangReportController, PembelianReportController, PenjualanReportController, PesananPembelianReportController, ReturPembelianReportController, ReturPenjualanReportController, SaldoHutangReportController, SaldoPiutangReportController, StokBarangReportController};
@@ -120,6 +120,15 @@ Route::group(['prefix' => 'jual', 'middleware' => ['web', 'auth']], function () 
     Route::get('/retur-penjualan/generate-kode/{tanggal}', [ReturPenjualanController::class, 'generateKode']);
     Route::get('/retur-penjualan/get-penjualan/{penjualan:id}', [ReturPenjualanController::class, 'getPenjualanById']);
     Route::resource('/retur-penjualan', ReturPenjualanController::class)->except('store', 'update');
+
+    // Penjualan
+    Route::get('/penjualan/get-data-so/{id}', [PenjualanController::class, 'getDataSO'])->name('penjualan.getDataSO');
+    Route::post('/pesanan-penjualan/store', [PesananPenjualanController::class, 'store'])->name('pesanan-penjualan.store');
+    Route::put('/pesanan-penjualan/update/{id}', [PesananPenjualanController::class, 'update'])->name('pesanan-penjualan.update');
+    Route::get('/pesanan-penjualan/generate-kode/{tanggal}', [PesananPenjualanController::class, 'generateKode'])->name('pesanan-penjualan.generateKode');
+    Route::get('/pesanan-penjualan/get-rekening/{id}', [PesananPenjualanController::class, 'getRekeningByBankId'])->name('pesanan-penjualan.getRekeningByBankId');
+    Route::get('/pesanan-penjualan/get-alamat/{tanggal}', [PesananPenjualanController::class, 'getAlamatPelanggan'])->name('pesanan-penjualan.getAlamatPelanggan');
+    Route::resource('/pesanan-penjualan', PesananPenjualanController::class)->except('store', 'update');
 });
 
 // Keuangan

@@ -34,6 +34,7 @@ return [
         'akun' => 'Account',
         'profile' => 'Profile',
         'penjualan' => 'Sales',
+        'pesanan_penjualan' => 'Sales Order',
         'retur_penjualan' => 'Sales Return',
         'keuangan' => 'Finance',
         'pelunasan_hutang' => 'A/P Payment',

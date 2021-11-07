@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('penjualan.title.tambah'))
+@section('title', trans('pesanan_penjualan.title.tambah'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('penjualan_add') }}
+        {{ Breadcrumbs::render('pesanan_penjualan_add') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -30,27 +30,28 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('penjualan.title.tambah') }} - Header</h4>
+                        <h4 class="panel-title">{{ trans('pesanan_penjualan.title.tambah') }} - Header</h4>
                     </div>
 
                     <div class="panel-body">
                         <form>
                             <div class="form-group row" style="margin-bottom: 10px">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label class="control-label">Kode</label>
 
                                     <input type="text" name="kode" class="form-control" placeholder="Kode" id="kode"
                                         required readonly />
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label class="control-label">Tanggal</label>
 
                                     <input type="date" name="tanggal" class="form-control" required
                                         value="{{ date('Y-m-d') }}" />
                                 </div>
 
-                                <div class="col-md-3">
+                                {{-- Gudang dan salesman --}}
+                                {{-- <div class="col-md-4">
                                     <label class="control-label">Gudang</label>
 
                                     <select name="gudang" id="gudang" class="form-control" required>
@@ -63,7 +64,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label class="control-label">Salesman</label>
 
                                     <select id="salesman" name="salesman" class="form-control" required>
@@ -74,25 +75,25 @@
                                             <option value="" disabled>Data tidak ditemukan</option>
                                         @endforelse
                                     </select>
-                                </div>
-                            </div>
+                                </div> --}}
 
-                            <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label class="control-label">Kode SO</label>
+                                <div class="col-md-4">
+                                    <label class="control-label">Mata Uang</label>
 
-                                    <select name="pesanan_penjualan_id" id="pesanan_penjualan_id" class="form-control"
-                                        required>
-                                        <option value="" selected>Tanpa SO</option>
-                                        @forelse ($pesananPenjualan as $item)
+                                    <select name="matauang" id="matauang" class="form-control" required>
+                                        <option value="" disabled selected>-- Pilih --</option>
+                                        @forelse ($matauang as $item)
                                             <option value="{{ $item->id }}">{{ $item->kode }}</option>
                                         @empty
                                             <option value="" disabled>Data tidak ditemukan</option>
                                         @endforelse
                                     </select>
                                 </div>
+                                {{-- end col-md-4 --}}
+                            </div>
 
-                                <div class="col-md-3">
+                            <div class="form-group row">
+                                <div class="col-md-4">
                                     <label class="control-label">Pelanggan</label>
 
                                     <select name="pelanggan" id="pelanggan" class="form-control" required>
@@ -105,23 +106,9 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-2">
-                                    <label class="control-label">Mata Uang</label>
-
-                                    <select name="matauang" id="matauang" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @forelse ($matauang as $item)
-                                            <option value="{{ $item->id }}">{{ $item->kode }}</option>
-                                        @empty
-                                            <option value="" disabled>Data tidak ditemukan</option>
-                                        @endforelse
-                                    </select>
-                                </div>
-                                {{-- end col-md-3 --}}
-
                                 {{-- Bentuk stok --}}
-                                <div class="col-md-2">
-                                    <label for="bentuk_kepemilikan">Bentuk K.Stok</label>
+                                <div class="col-md-4">
+                                    <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
                                     <select name="bentuk_kepemilikan" id="bentuk_kepemilikan" class="form-control"
                                         required>
                                         <option value="" disabled selected>-- Pilih --</option>
@@ -130,7 +117,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <label class="control-label">Rate</label>
                                     <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
                                         required />
@@ -177,7 +164,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('penjualan.title.tambah') }} - List</h4>
+                        <h4 class="panel-title">{{ trans('pesanan_penjualan.title.tambah') }} - List</h4>
                     </div>
 
                     <div class="panel-body">
@@ -316,8 +303,8 @@
                                     {{-- Total PPN --}}
                                     <div class="col-md-3" style="margin-top: 1em;">
                                         <label for="total_ppn">Total PPN</label>
-                                        <input type="text" step="any" name="total_ppn" id="total_ppn"
-                                            class="form-control" placeholder="0" readonly />
+                                        <input type="text" step="any" name="total_ppn" id="total_ppn" class="form-control"
+                                            placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total Gross --}}
@@ -341,11 +328,21 @@
                                             class="form-control" placeholder="0" />
                                     </div>
 
-                                    {{-- Total penjualan --}}
+                                    {{-- Total Pesanan Penjualan --}}
                                     <div class="col-md-3" style="margin-top: 1em;">
-                                        <label for="total_penjualan">Total Penjualan</label>
+                                        <label for="total_penjualan">Total Pesanan Penjualan</label>
                                         <input type="text" step="any" name="total_penjualan" id="total_penjualan"
                                             class="form-control" placeholder="0" readonly />
+                                    </div>
+
+                                    {{-- button --}}
+                                    <div class="col-md-3" style="margin-top: 1em;">
+                                        <label>Button</label>
+                                        <div class="form-control" style="border: none; padding:0">
+                                            <button class="btn btn-success" id="btn_simpan" disabled>Simpan</button>
+
+                                            <button class="btn btn-danger" id="btn_clear_table" disabled>Batal</button>
+                                        </div>
                                     </div>
                                 </div>
                                 {{-- end row form-group --}}
@@ -359,173 +356,6 @@
                 <!-- end panel -->
             </div>
             {{-- end col-md-12 --}}
-
-            <div class="col-md-12">
-                <!-- begin panel -->
-                <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
-                    <div class="panel-heading">
-                        <div class="panel-heading-btn">
-                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default"
-                                data-click="panel-expand">
-                                <i class="fa fa-expand"></i>
-                            </a>
-                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success"
-                                data-click="panel-reload"><i class="fa fa-repeat"></i>
-                            </a>
-                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning"
-                                data-click="panel-collapse">
-                                <i class="fa fa-minus"></i>
-                            </a>
-                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger"
-                                data-click="panel-remove">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                        <h4 class="panel-title">{{ trans('penjualan.title.payment_list') }}</h4>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="form-group row" style="margin-bottom: 10px">
-                            <form id="form_payment">
-                                {{-- Jenis Pembayaran --}}
-                                <div class="col-md-4">
-                                    <label class="control-label">Jenis Pembayaran</label>
-
-                                    <select name="jenis_pembayaran" id="jenis_pembayaran_input" class="form-control"
-                                        required>
-                                        @forelse ($jenisPembayaran as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @empty
-                                            <option value="" disabled>Data tidak ditemukan</option>
-                                        @endforelse
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="control-label">Bank</label>
-
-                                    <select name="bank" id="bank_input" class="form-control" disabled>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @forelse ($bank as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @empty
-                                            <option value="" disabled>Data tidak ditemukan</option>
-                                        @endforelse
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="control-label">Rekening</label>
-
-                                    <select name="rekening" id="rekening_input" class="form-control" disabled>
-                                        <option value="" disabled selected>-- Pilih Bank Terlebih Dahulu --</option>
-                                    </select>
-                                </div>
-
-                                {{-- No. Cek/Giro --}}
-                                <div class="col-md-3" style="margin-top: 1em;">
-                                    <label for="no_cek_giro">No. Cek/Giro </label>
-                                    <input type="number" step="any" name="no_cek_giro" id="no_cek_giro_input"
-                                        class="form-control" placeholder="No. Cek/Giro " disabled />
-                                </div>
-
-                                {{-- Tgl. Cek/Giro --}}
-                                <div class="col-md-3" style="margin-top: 1em;">
-                                    <label for="tgl_cek_giro">Tgl. Cek/Giro</label>
-                                    <input type="date" step="any" name="tgl_cek_giro" id="tgl_cek_giro_input"
-                                        class="form-control" placeholder="Tgl. Cek/Giro" disabled />
-                                </div>
-
-                                {{-- Bayar --}}
-                                <div class="col-md-3" style="margin-top: 1em;">
-                                    <label for="bayar">Bayar</label>
-                                    <input type="number" step="any" name="bayar" id="bayar_input" class="form-control"
-                                        required placeholder="Bayar" />
-                                </div>
-
-                                {{-- button --}}
-                                <div class="col-md-3" style="margin-top: 1em;">
-                                    <label>Button</label>
-                                    <div class="form-control" style="border: none; padding:0">
-                                        <input type="hidden" id="index_tr_payment">
-
-                                        <button type="submit" class="btn btn-primary" id="btn_add_payment" disabled>
-                                            <i class="fa fa-plus"></i> Add
-                                        </button>
-
-                                        <button type="button" class="btn btn-info" id="btn_update_payment"
-                                            style="display: none" data-index="">
-                                            <i class="fa fa-save"></i> Update
-                                        </button>
-
-                                        <button type="button" class="btn btn-warning" id="btn_clear_form_payment" disabled>
-                                            <i class="fa fa-times"></i> Clear Form
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <hr>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-condensed table-responsive" id="tbl_payment"
-                                        width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Jenis Pembayaran</th>
-                                                <th>Bank</th>
-                                                <th>Rekening</th>
-                                                <th>No. Cek/Giro</th>
-                                                <th>Tgl. Cek/Giro</th>
-                                                <th>Bayar</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-
-                                {{-- Total --}}
-                                <div class="row form-group">
-                                    <div class="col-md-3"></div>
-                                    <div class="col-md-3"></div>
-
-                                    <div class="col-md-3" style="margin-top: 1em;">
-                                        <label for="total_payment">Total </label>
-                                        <input type="text" step="any" name="total_payment" id="total_payment_input"
-                                            class="form-control" readonly placeholder="0 " />
-                                    </div>
-
-                                    {{-- button --}}
-                                    <div class="col-md-3" style="margin-top: 1em;">
-                                        <label>Button</label>
-                                        <div class="form-control" style="border: none; padding:0">
-                                            <button class="btn btn-success" id="btn_simpan" disabled>Simpan</button>
-
-                                            <button class="btn btn-danger" id="btn_clear_table" disabled>Batal</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- end col-md-12 --}}
-
-                            {{-- <div class="col-md-12">
-
-                            </div> --}}
-                        </div>
-
-                    </div>
-                    {{-- end panel-body --}}
-                </div>
-                {{-- panel-inverse --}}
-            </div>
-            {{-- end col-md-12 --}}
         </div>
         <!-- end row -->
     </div>
@@ -535,4 +365,4 @@
     <input type="hidden" id="min_stok">
 @endsection
 
-@include('penjualan.penjualan.script.create-js')
+@include('penjualan.pesanan.script.create-js')

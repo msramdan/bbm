@@ -63,6 +63,8 @@
                 matauang.prop('disabled', false)
                 bentuk_kepemilikan.prop('disabled', false)
                 rate.prop('disabled', false)
+
+                cek_table_length()
             } else {
                 $.ajax({
                     url: "/beli/pembelian/get-data-po/" + $(this).val(),

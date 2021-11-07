@@ -14,6 +14,16 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ReturPenjualanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create retur penjualan')->only('create');
+        $this->middleware('permission:read retur penjualan')->only('index');
+        $this->middleware('permission:edit retur penjualan')->only('edit');
+        $this->middleware('permission:detail retur penjualan')->only('show');
+        $this->middleware('permission:update retur penjualan')->only('update');
+        $this->middleware('permission:delete retur penjualan')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *

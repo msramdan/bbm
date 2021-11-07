@@ -79,30 +79,37 @@
 
                             <div class="form-group row">
                                 <div class="col-md-3">
+                                    <label class="control-label">Kode SO</label>
+
+                                    <select name="pesanan_penjualan_id" id="pesanan_penjualan_id" class="form-control"
+                                        readonly>
+                                        <option
+                                            value="{{ $penjualan->pesanan_penjualan ? $penjualan->pesanan_penjualan->id : '' }}">
+                                            {{ $penjualan->pesanan_penjualan ? $penjualan->pesanan_penjualan->kode : 'Tanpa S.O' }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
                                     <label class="control-label">Pelanggan</label>
 
-                                    <select name="pelanggan" id="pelanggan" class="form-control" required>
-                                        @forelse ($pelanggan as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $penjualan->pelanggan_id == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama_pelanggan }}</option>
-                                        @empty
-                                            <option value="" disabled>Data tidak ditemukan</option>
-                                        @endforelse
+                                    <select name="pelanggan" id="pelanggan" class="form-control" disabled>
+                                        <option value="{{ $penjualan->pelanggan->id }}">
+                                            {{ $penjualan->pelanggan->nama_pelanggan }}</option>
                                     </select>
                                 </div>
 
                                 {{-- Bentuk stok --}}
-                                <div class="col-md-3">
-                                    <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
+                                <div class="col-md-2">
+                                    <label for="bentuk_kepemilikan">Bentuk K.Stok</label>
                                     <select name="bentuk_kepemilikan" id="bentuk_kepemilikan" class="form-control"
-                                        required>
+                                        disabled>
                                         <option value="Stok Sendiri">Stok Sendiri</option>
                                         <option value="Konsinyasi">Konsinyasi</option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="control-label">Mata Uang</label>
 
                                     <select name="matauang" id="matauang" class="form-control" readonly>
@@ -110,9 +117,9 @@
                                         </option>
                                     </select>
                                 </div>
-                                {{-- end col-md-3 --}}
+                                {{-- end col-md-2 --}}
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="control-label">Rate</label>
                                     <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
                                         value="{{ $penjualan->rate }}" readonly />
@@ -122,8 +129,8 @@
                             <div class="form-group row" style="margin-top: 1em;">
                                 <div class="col-md-6">
                                     <label class="control-label">Alamat Penerima</label>
-                                    <textarea name="alamat" id="alamat" rows="5"
-                                        class="form-control">{{ $penjualan->alamat }}</textarea>
+                                    <textarea name="alamat" id="alamat" rows="5" class="form-control"
+                                        disabled>{{ $penjualan->alamat }}</textarea>
                                 </div>
 
                                 <div class="col-md-6">
@@ -528,7 +535,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($penjualan->penjualan_pembayaran as $detail)
+                                            @foreach ($penjualan->penjualan_pembayaran as $detail)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>
@@ -575,11 +582,7 @@
                                                         </button>
                                                     </td>
                                                 </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="8" class="text-center">Belum bayar</td>
-                                                </tr>
-                                            @endforelse
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>

@@ -181,6 +181,12 @@
                     </a>
                     <ul class="sub-menu" style="display: none;">
                         <li>
+                            <a href="{{ route('pesanan-penjualan.index') }}">
+                                {{ trans('dashboard.menu.pesanan_penjualan') }}
+                            </a>
+                        </li>
+
+                        <li>
                             <a href="{{ route('penjualan.index') }}">
                                 {{ trans('dashboard.menu.penjualan') }}
                             </a>

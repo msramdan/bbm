@@ -145,6 +145,13 @@ class RoleAndPermissionSeeder extends Seeder
 
 
         // Penjualan
+        Permission::create(['name' => 'create pesanan penjualan']);
+        Permission::create(['name' => 'read pesanan penjualan']);
+        Permission::create(['name' => 'detail pesanan penjualan']);
+        Permission::create(['name' => 'edit pesanan penjualan']);
+        Permission::create(['name' => 'update pesanan penjualan']);
+        Permission::create(['name' => 'delete pesanan penjualan']);
+
         Permission::create(['name' => 'create penjualan']);
         Permission::create(['name' => 'read penjualan']);
         Permission::create(['name' => 'detail penjualan']);

@@ -6,6 +6,27 @@
         get_kode()
         cek_form_entry_brg()
 
+        let list_matauang = []
+        let list_pelanggan = []
+        let list_bentuk_kepemilikan = []
+        let list_pesanan_penjualan_id = []
+
+        $('#matauang').find('option').map(function() {
+            list_matauang.push(`<option value="${$(this).val()}">${$(this).html()}</option>`)
+        }).get()
+
+        $('#pelanggan').find('option').map(function() {
+            list_pelanggan.push(`<option value="${$(this).val()}">${$(this).html()}</option>`)
+        }).get()
+
+        $('#bentuk_kepemilikan').find('option').map(function() {
+            list_bentuk_kepemilikan.push(`<option value="${$(this).val()}">${$(this).html()}</option>`)
+        }).get()
+
+        $('#pesanan_penjualan_id').find('option').map(function() {
+            list_pesanan_penjualan_id.push(`<option value="${$(this).val()}">${$(this).html()}</option>`)
+        }).get()
+
         $('#matauang').change(function() {
             hitung_semua_total_brg()
         })
@@ -21,6 +42,139 @@
         // Cek stok
         $('#kode_barang_input').change(function() {
             cek_stok($(this).val())
+        })
+
+        $('select[name="pesanan_penjualan_id"]').change(function() {
+            let pelanggan = $('select[name="pelanggan"]')
+            let matauang = $('select[name="matauang"]')
+            let bentuk_kepemilikan = $('select[name="bentuk_kepemilikan"]')
+            let rate = $('input[name="rate"]')
+            let total_biaya_kirim = $('input[name="total_biaya_kirim"]')
+            let alamat = $('#alamat')
+            let tbl_trx = $('#tbl_trx tbody')
+            let data_trx = []
+            let no = 1
+
+            if ($(this).val() == '') {
+                pelanggan.html(list_pelanggan)
+                matauang.html(list_matauang)
+                bentuk_kepemilikan.html(list_bentuk_kepemilikan)
+                rate.prop('type', 'number')
+                rate.val('')
+                alamat.val('')
+                total_biaya_kirim.val('')
+
+                pelanggan.prop('disabled', false)
+                matauang.prop('disabled', false)
+                bentuk_kepemilikan.prop('disabled', false)
+                rate.prop('disabled', false)
+
+                tbl_trx.find('tr').remove()
+
+                cek_table_length()
+            } else {
+                $.ajax({
+                    url: "/jual/penjualan/get-data-so/" + $(this).val(),
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data)
+                        pelanggan.html('<option value="" disabled selected>Loading...</option>')
+                        matauang.html('<option value="" disabled selected>Loading...</option>')
+                        bentuk_kepemilikan.html(
+                            '<option value="" disabled selected>Loading...</option>')
+
+                        rate.prop('type', 'text')
+                        rate.val('Loading...')
+                        tbl_trx.html(`
+                        <tr>
+                            <td colspan="14" class="text-center">
+                                Loading...
+                            </td>
+                        </tr>`)
+
+                        pelanggan.prop('disabled', true)
+                        alamat.prop('disabled', true)
+                        matauang.prop('disabled', true)
+                        bentuk_kepemilikan.prop('disabled', true)
+                        rate.prop('disabled', true)
+
+                        setTimeout(() => {
+                            if (data.pelanggan != null) {
+                                pelanggan.html(
+                                    `<option value="${data.pelanggan.id}" selected>${data.pelanggan.nama_pelanggan}</option>`
+                                )
+                            } else {
+                                pelanggan.html(
+                                    `<option value="" selected>Tanpa pelanggan</option>`
+                                )
+                            }
+
+                            matauang.html(
+                                `<option value="${data.matauang.id}" selected>${data.matauang.kode}</option>`
+                            )
+                            bentuk_kepemilikan.html(
+                                `<option value="${data.bentuk_kepemilikan_stok}" selected>${data.bentuk_kepemilikan_stok}</option>`
+                            )
+                            rate.val(data.rate)
+                            alamat.val(data.alamat)
+
+                            $.each(data.pesanan_penjualan_detail, function(index, item) {
+                                data_trx.push(`<tr>
+                                    <td>${no}</td>
+                                    <td>
+                                        ${item.barang.kode} - ${item.barang.nama}
+                                        <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${item.barang.id}">
+                                    </td>
+                                    <td>
+                                        ${format_ribuan(item.harga)}
+                                        <input type="hidden"  class="harga_hidden" name="harga[]" value="${item.harga}">
+                                    </td>
+                                    <td>
+                                        ${format_ribuan(item.qty)}
+                                        <input type="hidden"  class="qty_hidden" name="qty[]" value="${item.qty}">
+                                    </td>
+                                    <td>
+                                        ${format_ribuan(item.diskon_persen)}%
+                                        <input type="hidden"  class="diskon_persen_hidden" name="diskon_persen[]" value="${item.diskon_persen}">
+                                    </td>
+                                    <td>
+                                        ${format_ribuan(item.diskon)}
+                                        <input type="hidden"  class="diskon_hidden" name="diskon[]" value="${item.diskon}">
+                                    </td>
+                                    <td>
+                                        ${format_ribuan(item.gross)}
+                                        <input type="hidden" name="gross[]" class="gross_hidden" value="${item.gross}">
+                                    </td>
+                                    <td>
+                                        ${format_ribuan(item.ppn)}
+                                        <input type="hidden"  class="ppn_hidden" name="ppn[]" value="${item.ppn}">
+                                    </td>
+                                    <td>
+                                        ${format_ribuan(item.netto)}
+                                        <input type="hidden"  class="netto_hidden" name="netto[]" value="${item.netto}">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-xs btn_edit_brg">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>`)
+                            })
+
+                            tbl_trx.html(data_trx)
+
+                            hitung_semua_total_brg()
+                            cek_table_length()
+
+                            total_biaya_kirim.val(data.total_biaya_kirim)
+                        }, 1000)
+                    }
+                })
+            }
         })
 
         $('#pelanggan').change(function() {
@@ -268,6 +422,9 @@
         })
 
         $('#btn_clear_form_brg').click(function() {
+            $('#btn_add_brg').prop('disabled', true)
+            $('#btn_clear_form_brg').prop('disabled', true)
+
             clear_form_entry_brg()
 
             cek_table_length()
@@ -297,6 +454,7 @@
             let data = {
                 // header
                 kode: $('input[name="kode"]').val(),
+                pesanan_penjualan_id: $('select[name="pesanan_penjualan_id"]').val(),
                 tanggal: $('input[name="tanggal"]').val(),
                 matauang: $('select[name="matauang"]').val(),
                 salesman: $('select[name="salesman"]').val(),
@@ -373,39 +531,48 @@
                 },
                 data: data,
                 success: function(data) {
-                    get_kode()
-
-                    $('#tbl_trx tbody tr').remove()
-                    $('#tbl_payment tbody tr').remove()
-
-                    $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                    $('input[name="rate"]').val('')
-                    $('textarea[name="keterangan"]').val('')
-                    $('textarea[name="alamat"]').val('')
-
-                    $('select[name="pelanggan"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="salesman"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="bentuk_kepemilikan"] option[value="1"]').attr('selected',
-                        'selected')
-
-                    clear_form_entry_brg()
-                    hitung_semua_total_brg()
-
-                    clear_form_entry_payment()
-                    hitung_total_payment()
-
-                    cek_table_length()
-
-                    $('select[name="gudang"]').focus()
-                    $('#btn_simpan').text('simpan')
-
                     Swal.fire({
                         icon: 'success',
-                        title: 'Tambah data',
+                        title: 'Simpan data',
                         text: 'Berhasil'
+                    }).then(function() {
+                        setTimeout(() => {
+                            window.location = '{{ route('penjualan.create') }}'
+                        })
                     })
+                    // get_kode()
+
+                    // $('#tbl_trx tbody tr').remove()
+                    // $('#tbl_payment tbody tr').remove()
+
+                    // $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
+                    // $('input[name="rate"]').val('')
+                    // $('textarea[name="keterangan"]').val('')
+                    // $('textarea[name="alamat"]').val('')
+
+                    // $('select[name="pelanggan"] option[value=""]').attr('selected', 'selected')
+                    // $('select[name="salesman"] option[value=""]').attr('selected', 'selected')
+                    // $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
+                    // $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
+                    // $('select[name="bentuk_kepemilikan"] option[value="1"]').attr('selected',
+                    //     'selected')
+
+                    // clear_form_entry_brg()
+                    // hitung_semua_total_brg()
+
+                    // clear_form_entry_payment()
+                    // hitung_total_payment()
+
+                    // cek_table_length()
+
+                    // $('select[name="gudang"]').focus()
+                    // $('#btn_simpan').text('simpan')
+
+                    // Swal.fire({
+                    //     icon: 'success',
+                    //     title: 'Tambah data',
+                    //     text: 'Berhasil'
+                    // })
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText)
@@ -718,6 +885,7 @@
             $('#qty_input').val('')
             $('#ppn_input').val('')
             $('#netto_input').val('')
+            $('#gross_input').val('')
             $('#diskon_input').val('')
             $('#diskon_persen_input').val('')
 

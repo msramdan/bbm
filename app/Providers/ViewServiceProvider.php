@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\{Area, Bank, Barang, CekGiro, Gudang, Kategori, Matauang, Pelanggan, Pembelian, Penjualan, PesananPembelian, Salesman, SatuanBarang, Supplier};
+use App\Models\{Area, Bank, Barang, CekGiro, Gudang, Kategori, Matauang, Pelanggan, Pembelian, Penjualan, PesananPembelian, PesananPenjualan, Salesman, SatuanBarang, Supplier};
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\{Role, Permission};
 use Illuminate\Support\Facades\View;
@@ -46,6 +46,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.pesanan.index',
             'laporan.pembelian.pembelian.index',
             'laporan.pembelian.retur.index',
+            'penjualan.pesanan.create',
+            'penjualan.pesanan.edit',
         ], function ($view) {
             return $view->with('barang', Barang::where('jenis', 1)->get());
         });
@@ -117,12 +119,13 @@ class ViewServiceProvider extends ServiceProvider
             'master-data.rate-matauang.edit',
             'master-data.barang.create',
             'master-data.barang.edit',
-            'penjualan.penjualan.edit',
+            // 'penjualan.penjualan.edit',
             'penjualan.penjualan.create',
             'keuangan.biaya.create',
             'keuangan.biaya.edit',
             'laporan.pelunasan.hutang.index',
-            'laporan.pelunasan.piutang.index'
+            'laporan.pelunasan.piutang.index',
+            'penjualan.pesanan.create'
         ], function ($view) {
             return $view->with('matauang', Matauang::all());
         });
@@ -161,6 +164,17 @@ class ViewServiceProvider extends ServiceProvider
             );
         });
 
+        // list pesananPenjualan
+        View::composer([
+            'penjualan.penjualan.create',
+        ], function ($view) {
+            return $view->with(
+                'pesananPenjualan',
+                PesananPenjualan::where('status', 'OPEN')->get()
+            );
+        });
+
+
         // list penjualan
         View::composer([
             'penjualan.retur.create'
@@ -198,11 +212,13 @@ class ViewServiceProvider extends ServiceProvider
         // list Pelanggan
         View::composer([
             'penjualan.penjualan.create',
-            'penjualan.penjualan.edit',
+            // 'penjualan.penjualan.edit',
             'penjualan.retur.create',
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
             'laporan.pelunasan.piutang.index',
+            'penjualan.pesanan.create',
+            'penjualan.pesanan.edit',
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::all());
         });
@@ -372,6 +388,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.pesanan.index',
             'laporan.pembelian.pembelian.index',
             'laporan.pembelian.retur.index',
+            'penjualan.pesanan.create',
+            'penjualan.pesanan.edit',
         ], function ($view) {
             return $view->with(
                 'bentukKepemilikanStok',
@@ -399,7 +417,9 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.pelunasan.piutang.edit',
             'keuangan.pelunasan.piutang.create',
             'laporan.pelunasan.hutang.index',
-            'laporan.pelunasan.piutang.index'
+            'laporan.pelunasan.piutang.index',
+            'penjualan.pesanan.create',
+            'penjualan.pesanan.edit',
         ], function ($view) {
             $jenisPembayaran = Cache::rememberForever('jenisPembayaran', function () {
                 return collect([

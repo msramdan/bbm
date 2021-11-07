@@ -29,7 +29,7 @@ class PembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pembelian = Pembelian::with('gudang', 'supplier', 'matauang')->withCount('pembelian_detail');
+            $pembelian = Pembelian::with('gudang', 'supplier', 'matauang', 'pesanan_pembelian')->withCount('pembelian_detail');
 
             return Datatables::of($pembelian)
                 ->addIndexColumn()
@@ -200,6 +200,11 @@ class PembelianController extends Controller
         $pembelian = Pembelian::findOrFail($id);
 
         DB::transaction(function () use ($request, $pembelian) {
+            // hapus list lama
+            $pembelian->pembelian_pembayaran()->delete();
+            $pembelian->cek_giro()->delete();
+            $pembelian->pesanan_pembelian()->update(['status_po' => 'OPEN']);
+
             $pembelian->update([
                 'gudang_id' => $request->gudang,
                 'keterangan' => $request->keterangan,
@@ -233,11 +238,6 @@ class PembelianController extends Controller
                 $getBarang = $barangQuery->first();
                 $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
-
-            // hapus list lama
-            $pembelian->pembelian_pembayaran()->delete();
-            $pembelian->cek_giro()->delete();
-            // $pembelian->pesanan_pembelian()->update(['status_po' => 'OPEN']);
 
             if ($request->jenis_pembayaran && $request->bayar) {
                 $pembelian->update(['status' => 'Lunas']);

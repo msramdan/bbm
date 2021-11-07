@@ -34,6 +34,7 @@ return [
         'akun' => 'Akun',
         'profile' => 'Profil',
         'penjualan' => 'Penjualan',
+        'pesanan_penjualan' => 'Pesanan Penjualan',
         'retur_penjualan' => 'Retur Penjualan',
         'keuangan' => 'Keuangan',
         'pelunasan_hutang' => 'Pelunasan Hutang',

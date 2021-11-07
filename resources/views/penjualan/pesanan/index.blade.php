@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('penjualan.title.index'))
+@section('title', trans('pesanan_penjualan.title.index'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('penjualan') }}
+        {{ Breadcrumbs::render('pesanan_penjualan') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -31,11 +31,11 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('penjualan.create') }}"
-                            class="btn btn-success{{ !auth()->user()->can('create penjualan')
+                        <a href="{{ route('pesanan-penjualan.create') }}"
+                            class="btn btn-success{{ !auth()->user()->can('create pesanan penjualan')
                                 ? ' disabled'
                                 : '' }}">
-                            <i class="fa fa-plus-square-o"></i> {{ trans('penjualan.button.tambah') }}
+                            <i class="fa fa-plus-square-o"></i> {{ trans('pesanan_penjualan.button.tambah') }}
                         </a>
                     </div>
                     <div class="panel-body">
@@ -45,19 +45,18 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode</th>
-                                        <th>Kode S.O</th>
                                         <th>Tanggal</th>
                                         <th>Mata Uang</th>
-                                        <th>Gudang</th>
                                         <th>Pelanggan</th>
-                                        <th>Salesman</th>
+                                        {{-- <th>Gudang</th>
+                                        <th>Salesman</th> --}}
                                         <th>Rate</th>
                                         <th>Total Item</th>
                                         <th>Grandtotal</th>
                                         <th>Created At</th>
                                         <th>Updated At</th>
-                                        @if (auth()->user()->can('edit penjualan') ||
-        auth()->user()->can('delete penjualan'))
+                                        @if (auth()->user()->can('edit pesanan penjualan') ||
+        auth()->user()->can('delete pesanan penjualan'))
                                             <th>Action</th>
                                         @endif
                                     </tr>
@@ -78,8 +77,8 @@
 @push('custom-js')
     <script>
         const action =
-            '{{ auth()->user()->can('edit penjualan') ||
-            auth()->user()->can('delete penjualan')
+            '{{ auth()->user()->can('edit pesanan penjualan') ||
+            auth()->user()->can('delete pesanan penjualan')
                 ? 'yes yes yes'
                 : '' }}'
 
@@ -94,10 +93,6 @@
                 name: 'kode'
             },
             {
-                data: 'kode_so',
-                name: 'kode_so'
-            },
-            {
                 data: 'tanggal',
                 name: 'tanggal'
             },
@@ -106,16 +101,8 @@
                 name: 'matauang'
             },
             {
-                data: 'gudang',
-                name: 'gudang'
-            },
-            {
                 data: 'pelanggan',
                 name: 'pelanggan'
-            },
-            {
-                data: 'salesman',
-                name: 'salesman'
             },
             {
                 data: 'rate',
@@ -151,7 +138,7 @@
         $('.data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('penjualan.index') }}",
+            ajax: "{{ route('pesanan-penjualan.index') }}",
             columns: columns,
         });
     </script>

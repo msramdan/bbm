@@ -111,10 +111,10 @@ class PesananPenjualanController extends Controller
                     'netto' => $request->netto[$i],
                 ]);
 
-                // Update stok barang
-                $barangQuery = Barang::whereId($value);
-                $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
+                // // Update stok barang
+                // $barangQuery = Barang::whereId($value);
+                // $getBarang = $barangQuery->first();
+                // $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             $penjualan->pesanan_penjualan_detail()->saveMany($penjualanDetail);
@@ -193,10 +193,10 @@ class PesananPenjualanController extends Controller
                     'netto' => $request->netto[$i],
                 ]);
 
-                // Update stok barang
-                $barangQuery = Barang::whereId($value);
-                $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
+                // // Update stok barang
+                // $barangQuery = Barang::whereId($value);
+                // $getBarang = $barangQuery->first();
+                // $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             $penjualan->pesanan_penjualan_detail()->saveMany($penjualanDetail);

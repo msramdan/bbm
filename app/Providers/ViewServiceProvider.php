@@ -381,6 +381,49 @@ class ViewServiceProvider extends ServiceProvider
             );
         });
 
+        // list jenis Cek/giro
+        View::composer([
+            'laporan.cek-giro.index'
+        ], function ($view) {
+            return $view->with(
+                'jenisCekGiro',
+                collect([
+                    (object)[
+                        'id' => 'In',
+                        'nama' => 'In'
+                    ],
+                    (object)[
+                        'id' => 'Out',
+                        'nama' => 'Out'
+                    ],
+                ])
+            );
+        });
+
+        // list status Cek/giro
+        View::composer([
+            'laporan.cek-giro.index'
+        ], function ($view) {
+            return $view->with(
+                'statusCekGiro',
+                collect([
+                    (object)[
+                        'id' => 'Belum Lunas',
+                        'nama' => 'Belum Lunas'
+                    ],
+                    (object)[
+                        'id' => 'Cair',
+                        'nama' => 'Cair'
+                    ],
+                    (object)[
+                        'id' => 'Tolak',
+                        'nama' => 'Tolak'
+                    ],
+                ])
+            );
+        });
+
+
         // list bentuk kepemilikan stok
         View::composer([
             'laporan.adjustment.plus.index',

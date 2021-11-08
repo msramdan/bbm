@@ -641,11 +641,11 @@ Breadcrumbs::for('laporan_biaya', function (BreadcrumbTrail $trail) {
 //     $trail->push('Komisi Salesman', route('komisi-salesman.laporan'));
 // });
 
-// // Laporan > Cek-Giro
-// Breadcrumbs::for('laporan_cek_giro', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Cek-Giro', route('cek-giro.laporan'));
-// });
+// Laporan > Cek-Giro
+Breadcrumbs::for('laporan_cek_giro', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Cek-Giro', route('cek-giro.laporan'));
+});
 
 // // Laporan > Gross Profit
 // Breadcrumbs::for('laporan_gross_profit', function (BreadcrumbTrail $trail) {

@@ -313,46 +313,46 @@
                         </li>
 
                         {{-- <li>
-                        <a href="{{ route('biaya.saldo-hutang') }}">
-                            {{ trans('dashboard.saldo_hutang.biaya') }}
+                        <a href="{{ route('saldo-hutang.laporan') }}">
+                            {{ trans('dashboard.laporan.saldo_hutang') }}
                         </a>
-                    </li>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('biaya.saldo-piutang') }}">
-                            {{ trans('dashboard.saldo_piutang.biaya') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('saldo-piutang.laporan') }}">
+                                {{ trans('dashboard.laporan.saldo_piutang') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('biaya.stok-barang') }}">
-                            {{ trans('dashboard.stok_barang.biaya') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('stok-barang.laporan') }}">
+                                {{ trans('dashboard.laporan.stok_barang') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('biaya.komisi-salesman') }}">
-                            {{ trans('dashboard.komisi_salesman.biaya') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('komisi-salesman.laporan') }}">
+                                {{ trans('dashboard.laporan.komisi_salesman') }}
+                            </a>
+                        </li> --}}
 
-                    <li>
-                        <a href="{{ route('biaya.cek-giro') }}">
-                            {{ trans('dashboard.cek_giro.biaya') }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('cek-giro.laporan') }}">
+                                {{ trans('dashboard.laporan.cek_giro') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('biaya.gross-profit') }}">
-                            {{ trans('dashboard.gross_profit.biaya') }}
-                        </a>
-                    </li>
+                        {{-- <li>
+                            <a href="{{ route('gross-profit.laporan') }}">
+                                {{ trans('dashboard.laporan.gross_profit') }}
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('biaya.nett-profit') }}">
-                            {{ trans('dashboard.nett_profit.biaya') }}
-                        </a>
-                    </li> --}}
+                        <li>
+                            <a href="{{ route('nett-profit.laporan') }}">
+                                {{ trans('dashboard.laporan.nett_profit') }}
+                            </a>
+                        </li> --}}
                     </ul>
                 </li>
             @endrole

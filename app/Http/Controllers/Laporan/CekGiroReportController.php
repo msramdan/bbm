@@ -56,8 +56,8 @@ class CekGiroReportController extends Controller
             'penjualan.penjualan_pembayaran',
             'pencairan_cek.rekening',
             'pencairan_cek.bank',
-            'tolak_cek.rekening',
-            'tolak_cek.bank',
+            // 'tolak_cek.rekening',
+            // 'tolak_cek.bank',
         )
             ->when(request()->query('jenis_cek'), function ($q) {
                 $q->where('jenis_cek',  request()->query('jenis_cek'));

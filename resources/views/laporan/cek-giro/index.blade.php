@@ -87,7 +87,7 @@
                                         <th>Status</th>
                                         <th>No Ref</th>
                                         <th>Nama Ref</th>
-                                        {{-- <th>Bank</th> --}}
+                                        <th>Bank</th>
                                         <th>Jumlah</th>
                                     </tr>
                                 </thead>
@@ -126,6 +126,13 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                @if ($item->pembelian)
+                                                    {{ $item->pembelian->pembelian_pembayaran[0]->bank ? $item->pembelian->pembelian_pembayaran[0]->bank->nama : '-' }}
+                                                @else
+                                                    {{ $item->penjualan->penjualan_pembayaran[0]->bank ? $item->penjualan->penjualan_pembayaran[0]->bank->nama : '-' }}
+                                                @endif
+                                            </td>
+                                            <td>
                                                 {{ $item->pembelian ? $item->pembelian->matauang->kode : $item->penjualan->matauang->kode }}
 
                                                 @if ($item->pembelian)
@@ -137,7 +144,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center">Data tidak ditemukan</td>
+                                            <td colspan="9" class="text-center">Data tidak ditemukan</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

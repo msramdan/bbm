@@ -12,7 +12,9 @@
         })
 
         $('#bank_input').change(function() {
-            get_rekening()
+            if ($('#jenis_pembayaran_input').val() == 'Transfer') {
+                get_rekening()
+            }
         })
 
         $('#kode_barang_input').change(function() {
@@ -518,6 +520,7 @@
                 success: function(data) {
                     let rekening = []
 
+                    $('#rekening_input').prop('disabled', true)
                     $('#rekening_input').html(
                         '<option value="" disabled selected>Loading...</option>')
 
@@ -530,6 +533,7 @@
                             })
 
                             $('#rekening_input').html(rekening)
+                            $('#rekening_input').prop('disabled', false)
 
                             // kalo dipanggil dari .btn_edit_payment
                             if (selected) {
@@ -906,7 +910,8 @@
 
             if (jenis_pembayaran_input.val() == 'Transfer') {
                 bank_input.prop('disabled', false)
-                rekening_input.prop('disabled', false)
+                rekening_input.prop('disabled', true)
+                // bank_input.val('')
 
                 no_cek_giro_input.prop('disabled', true)
                 no_cek_giro_input.val('')
@@ -923,15 +928,15 @@
             }
 
             if (jenis_pembayaran_input.val() == 'Giro') {
-                bank_input.prop('disabled', true)
-                bank_input.val('')
+                bank_input.prop('disabled', false)
+                // bank_input.val('')
                 rekening_input.prop('disabled', true)
                 rekening_input.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
 
                 no_cek_giro_input.prop('disabled', false)
                 tgl_cek_giro_input.prop('disabled', false)
 
-                if (bayar_input.val() && no_cek_giro_input.val() && tgl_cek_giro_input.val()) {
+                if (bayar_input.val() && bayar_input.val() && no_cek_giro_input.val() && tgl_cek_giro_input.val()) {
                     $('#btn_add_payment').prop('disabled', false)
                     $('#btn_clear_form_payment').prop('disabled', false)
                 } else {

@@ -264,6 +264,21 @@
     <script>
         let selected_rekening = '{{ $pelunasanPiutang->rekening_bank ? $pelunasanPiutang->rekening_bank->id : '' }}'
 
+        if ($('#bank :selected').val()) {
+            $('#bank').prop('disabled', false)
+            if ($('#jenis_pembayaran').val() == 'Transfer') {
+                get_rekening()
+            }
+        }
+
+        if ($('#tgl_cek_giro').val()) {
+            $('#tgl_cek_giro').prop('disabled', false)
+        }
+
+        if ($('#no_cek_giro').val()) {
+            $('#no_cek_giro').prop('disabled', false)
+        }
+
         $('#jenis_pembayaran').change(function() {
             let jenis_pembayaran = $(this)
             let bank = $('#bank')
@@ -299,8 +314,9 @@
             }
 
             if (jenis_pembayaran.val() == 'Transfer') {
+                bank.val('')
                 bank.prop('disabled', false)
-                rekening.prop('disabled', false)
+                rekening.prop('disabled', true)
 
                 no_cek_giro.prop('disabled', true)
                 no_cek_giro.val('')
@@ -320,7 +336,7 @@
             }
 
             if (jenis_pembayaran.val() == 'Giro') {
-                bank.prop('disabled', true)
+                bank.prop('disabled', false)
                 bank.val('')
                 rekening.prop('disabled', true)
                 rekening.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
@@ -379,22 +395,10 @@
         })
 
         $('#bank').change(function() {
-            get_rekening()
+            if ($('#jenis_pembayaran').val() == 'Transfer') {
+                get_rekening()
+            }
         })
-
-        if ($('#bank :selected').val()) {
-            $('#bank').prop('disabled', false)
-
-            get_rekening()
-        }
-
-        if ($('#tgl_cek_giro').val()) {
-            $('#tgl_cek_giro').prop('disabled', false)
-        }
-
-        if ($('#no_cek_giro').val()) {
-            $('#no_cek_giro').prop('disabled', false)
-        }
 
         function get_rekening() {
             $.ajax({

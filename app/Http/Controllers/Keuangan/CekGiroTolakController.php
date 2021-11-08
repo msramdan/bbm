@@ -28,7 +28,13 @@ class CekGiroTolakController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $cekGiroTolak =  CekGiroTolak::with('cek_giro', 'cek_giro.pembelian', 'cek_giro.pembelian.pembelian_pembayaran', 'cek_giro.penjualan', 'cek_giro.penjualan.penjualan_pembayaran');
+            $cekGiroTolak =  CekGiroTolak::with(
+                'cek_giro',
+                'cek_giro.pembelian:id,kode',
+                'cek_giro.pembelian.pembelian_pembayaran',
+                'cek_giro.penjualan:id,kode',
+                'cek_giro.penjualan.penjualan_pembayaran'
+            )->orderByDesc('updated_at');
 
             return DataTables::of($cekGiroTolak)
                 ->addIndexColumn()

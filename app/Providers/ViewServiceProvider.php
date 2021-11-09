@@ -49,7 +49,7 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
         ], function ($view) {
-            return $view->with('barang', Barang::where('jenis', 1)->get());
+            return $view->with('barang', Barang::where('status', 'Y')->where('jenis', 1)->get());
         });
 
         // 1 =  barang, 2 = paket
@@ -59,9 +59,8 @@ class ViewServiceProvider extends ServiceProvider
             'inventory.perakitan-paket.create',
             'inventory.perakitan-paket.edit'
         ], function ($view) {
-            return $view->with('paket', Barang::where('jenis', 2)->get());
+            return $view->with('paket', Barang::where('status', 'Y')->where('jenis', 2)->get());
         });
-
 
         // list supplier
         View::composer([
@@ -79,7 +78,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.retur.index',
             'laporan.pelunasan.hutang.index'
         ], function ($view) {
-            return $view->with('supplier', Supplier::all());
+            return $view->with('supplier', Supplier::where('status', 'Y')->get());
         });
 
 
@@ -220,7 +219,7 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
         ], function ($view) {
-            return $view->with('pelanggan', Pelanggan::all());
+            return $view->with('pelanggan', Pelanggan::select('id', 'nama_pelanggan', 'alamat', 'kode')->where('status', 'Y')->get());
         });
 
 
@@ -290,8 +289,9 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.penjualan.create',
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
+            'laporan.komisi-salesman.index',
         ], function ($view) {
-            return $view->with('salesman', Salesman::all());
+            return $view->with('salesman', Salesman::select('id', 'nama')->where('status', 'Y')->get());
         });
 
         // list area
@@ -299,7 +299,7 @@ class ViewServiceProvider extends ServiceProvider
             'master-data.pelanggan.create',
             'master-data.pelanggan.edit'
         ], function ($view) {
-            return $view->with('area', Area::all());
+            return $view->with('area', Area::where('status', 'Y')->get());
         });
 
         // Cek/Giro yang belum dilunas/dibayar

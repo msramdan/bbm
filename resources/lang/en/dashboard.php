@@ -65,7 +65,7 @@ return [
         'saldo_piutang' => 'Balance A Report/R',
         'stok_barnag' => 'Item Stock Report',
         'komisi_salesman' => 'Salesman Commission Report',
-        'cek_giro' => 'Cheque', Report
+        'cek_giro' => 'Cheque Report',
         'gross_profit' => 'Gross Profit Report',
         'nett_profit' => 'Nett Profit Report',
     ]

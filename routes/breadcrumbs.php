@@ -635,11 +635,11 @@ Breadcrumbs::for('laporan_biaya', function (BreadcrumbTrail $trail) {
 //     $trail->push('Stok Barang', route('stok-barang.laporan'));
 // });
 
-// // Laporan > Komisi Salesman
-// Breadcrumbs::for('laporan_komisi_salesman', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Komisi Salesman', route('komisi-salesman.laporan'));
-// });
+// Laporan > Komisi Salesman
+Breadcrumbs::for('laporan_komisi_salesman', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Komisi Salesman', route('komisi-salesman.laporan'));
+});
 
 // Laporan > Cek-Giro
 Breadcrumbs::for('laporan_cek_giro', function (BreadcrumbTrail $trail) {

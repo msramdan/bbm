@@ -223,7 +223,6 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'laporan gross profit']);
         Permission::create(['name' => 'laporan nett profit']);
 
-
         // Setting
         Permission::create(['name' => 'toko']);
 

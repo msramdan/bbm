@@ -206,12 +206,12 @@ class PelunasanPiutangController extends Controller
         $checkLatestKode = PelunasanPiutang::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'ARPAY-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'ARPAY-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "ARPAY-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'ARPAY-');
 
-            $kode =  'ARPAY-' . intval($onlyNumberKode) + 1;
+            $kode =  'ARPAY-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

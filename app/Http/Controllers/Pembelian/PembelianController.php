@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Pembelian, PembelianDetail, PembelianPembayaran, PesananPembelian, RekeningBank};
+use App\Models\{Barang, Pembelian, PembelianDetail, PembelianPembayaran, PesananPembelian, RekeningBank};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -29,7 +29,7 @@ class PembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pembelian = Pembelian::with('gudang', 'supplier', 'matauang')->withCount('pembelian_detail');
+            $pembelian = Pembelian::with('gudang', 'supplier', 'matauang', 'pesanan_pembelian')->withCount('pembelian_detail');
 
             return Datatables::of($pembelian)
                 ->addIndexColumn()
@@ -120,6 +120,11 @@ class PembelianController extends Controller
                     'pph' => $request->pph[$i],
                     'netto' => $request->netto[$i],
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
 
             if ($request->jenis_pembayaran && $request->bayar) {
@@ -150,6 +155,8 @@ class PembelianController extends Controller
             }
 
             $pembelian->pembelian_detail()->saveMany($pembelianDetail);
+
+            $pembelian->pesanan_pembelian()->update(['status_po' => 'USED']);
         });
 
         return response()->json(['success'], 200);
@@ -193,6 +200,11 @@ class PembelianController extends Controller
         $pembelian = Pembelian::findOrFail($id);
 
         DB::transaction(function () use ($request, $pembelian) {
+            // hapus list lama
+            $pembelian->pembelian_pembayaran()->delete();
+            $pembelian->cek_giro()->delete();
+            $pembelian->pesanan_pembelian()->update(['status_po' => 'OPEN']);
+
             $pembelian->update([
                 'gudang_id' => $request->gudang,
                 'keterangan' => $request->keterangan,
@@ -220,11 +232,12 @@ class PembelianController extends Controller
                     'pph' => $request->pph[$i],
                     'netto' => $request->netto[$i],
                 ]);
-            }
 
-            // hapus list lama
-            $pembelian->pembelian_pembayaran()->delete();
-            $pembelian->cek_giro()->delete();
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
+            }
 
             if ($request->jenis_pembayaran && $request->bayar) {
                 $pembelian->update(['status' => 'Lunas']);
@@ -253,8 +266,8 @@ class PembelianController extends Controller
             }
 
             $pembelian->pembelian_detail()->delete();
-
             $pembelian->pembelian_detail()->saveMany($pembelianDetail);
+            $pembelian->pesanan_pembelian()->update(['status_po' => 'USED']);
         });
 
         return response()->json(['success'], 200);
@@ -268,6 +281,7 @@ class PembelianController extends Controller
      */
     public function destroy(Pembelian $pembelian)
     {
+        $pembelian->pesanan_pembelian()->update(['status_po' => 'OPEN']);
         $pembelian->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
@@ -275,25 +289,25 @@ class PembelianController extends Controller
         return back();
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = Pembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'PURCH-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'PURCH-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "PURCH-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PURCH-');
 
-            $kode =  'PURCH-' . intval($onlyNumberKode) + 1;
+            $kode =  'PURCH-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);
     }
 
-    protected function getRekeningByBankId($id)
+    public function getRekeningByBankId($id)
     {
         abort_if(!request()->ajax(), 404);
 
@@ -302,11 +316,11 @@ class PembelianController extends Controller
         return response()->json($rekening, 200);
     }
 
-    protected function getDataPO($id)
+    public function getDataPO($id)
     {
         abort_if(!request()->ajax(), 404);
 
-        $pesananPembelian = PesananPembelian::with('supplier', 'matauang')->findOrFail($id);
+        $pesananPembelian = PesananPembelian::with('supplier', 'matauang', 'pesanan_pembelian_detail', 'pesanan_pembelian_detail.barang')->findOrFail($id);
 
         return response()->json($pesananPembelian, 200);
     }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Penjualan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\Pelanggan;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use App\Models\PenjualanPembayaran;
+use App\Models\PesananPenjualan;
 use App\Models\RekeningBank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +17,16 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PenjualanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create penjualan')->only('create');
+        $this->middleware('permission:read penjualan')->only('index');
+        $this->middleware('permission:edit penjualan')->only('edit');
+        $this->middleware('permission:detail penjualan')->only('show');
+        $this->middleware('permission:update penjualan')->only('update');
+        $this->middleware('permission:delete penjualan')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,11 +35,14 @@ class PenjualanController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $penjualan = Penjualan::with('gudang', 'pelanggan', 'salesman', 'matauang')->withCount('penjualan_detail');
+            $penjualan = Penjualan::with('gudang', 'pelanggan', 'salesman', 'matauang', 'pesanan_penjualan')->withCount('penjualan_detail');
 
             return Datatables::of($penjualan)
                 ->addIndexColumn()
                 ->addColumn('action', 'penjualan.penjualan.data-table.action')
+                ->addColumn('kode_so', function ($row) {
+                    return $row->pesanan_penjualan ? $row->pesanan_penjualan->kode : 'Tanpa S.O';
+                })
                 ->addColumn('tanggal', function ($row) {
                     return $row->tanggal->format('d F Y');
                 })
@@ -83,6 +98,7 @@ class PenjualanController extends Controller
             $penjualan = Penjualan::create([
                 'kode' => $request->kode,
                 'tanggal' => $request->tanggal,
+                'pesanan_penjualan_id' => $request->pesanan_penjualan_id,
                 'matauang_id' => $request->matauang,
                 'gudang_id' => $request->gudang,
                 'pelanggan_id' => $request->pelanggan,
@@ -111,6 +127,11 @@ class PenjualanController extends Controller
                     'ppn' => $request->ppn[$i],
                     'netto' => $request->netto[$i],
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
             // kalo user isi jenis pembayaran dan bayar berarti di ga ngutag
@@ -140,6 +161,8 @@ class PenjualanController extends Controller
             }
 
             $penjualan->penjualan_detail()->saveMany($penjualanDetail);
+
+            $penjualan->pesanan_penjualan()->update(['status' => 'USED']);
         });
 
         return response()->json(['success'], 200);
@@ -153,7 +176,7 @@ class PenjualanController extends Controller
      */
     public function show(Penjualan $penjualan)
     {
-        $penjualan->load('penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang');
+        $penjualan->load('pesanan_penjualan', 'penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang');
 
         return view('penjualan.penjualan.show', compact('penjualan'));
     }
@@ -166,7 +189,7 @@ class PenjualanController extends Controller
      */
     public function edit(Penjualan $penjualan)
     {
-        $penjualan->load('penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang');
+        $penjualan->load('pesanan_penjualan', 'penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang');
 
         return view('penjualan.penjualan.edit', compact('penjualan'));
     }
@@ -181,14 +204,15 @@ class PenjualanController extends Controller
     public function update(Request $request, Penjualan $penjualan)
     {
         DB::transaction(function () use ($request, $penjualan) {
+            // hapus list lama
+            $penjualan->penjualan_pembayaran()->delete();
+            $penjualan->cek_giro()->delete();
+            $penjualan->pesanan_penjualan()->update(['status' => 'OPEN']);
+
             $penjualan->update([
                 'kode' => $request->kode,
                 'gudang_id' => $request->gudang,
-                'pelanggan_id' => $request->pelanggan,
-                'salesman_id' => $request->salesman,
                 'keterangan' => $request->keterangan,
-                'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan,
-                'alamat' => $request->alamat,
                 'subtotal' => $request->subtotal,
                 'total_ppn' => $request->total_ppn,
                 'total_gross' => $request->total_gross,
@@ -196,6 +220,10 @@ class PenjualanController extends Controller
                 'total_penjualan' => $request->total_penjualan,
                 'total_biaya_kirim' => $request->total_biaya_kirim,
                 'total_netto' => $request->total_netto,
+                'salesman_id' => $request->salesman,
+                // 'pelanggan_id' => $request->pelanggan,
+                // 'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan,
+                // 'alamat' => $request->alamat,
             ]);
 
             foreach ($request->barang as $i => $value) {
@@ -209,11 +237,12 @@ class PenjualanController extends Controller
                     'ppn' => $request->ppn[$i],
                     'netto' => $request->netto[$i],
                 ]);
-            }
 
-            // hapus list lama
-            $penjualan->penjualan_pembayaran()->delete();
-            $penjualan->cek_giro()->delete();
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
+            }
 
             // kalo user isi jenis pembayaran dan bayar berarti di ga ngutag
             if ($request->jenis_pembayaran && $request->bayar) {
@@ -244,6 +273,8 @@ class PenjualanController extends Controller
             $penjualan->penjualan_detail()->delete();
 
             $penjualan->penjualan_detail()->saveMany($penjualanDetail);
+
+            $penjualan->pesanan_penjualan()->update(['status' => 'USED']);
         });
 
         return response()->json(['success'], 200);
@@ -264,25 +295,25 @@ class PenjualanController extends Controller
         return back();
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = Penjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'SALES-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "SALES-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'SALES-');
 
-            $kode =  'SALES-' . intval($onlyNumberKode) + 1;
+            $kode =  'SALES-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);
     }
 
-    protected function getRekeningByBankId($id)
+    public function getRekeningByBankId($id)
     {
         abort_if(!request()->ajax(), 404);
 
@@ -291,10 +322,19 @@ class PenjualanController extends Controller
         return response()->json($rekening, 200);
     }
 
-    protected function getAlamatPelanggan($id)
+    public function getAlamatPelanggan($id)
     {
         abort_if(!request()->ajax(), 404);
 
         return response()->json(Pelanggan::select('alamat')->findOrFail($id), 200);
+    }
+
+    public function getDataSO($id)
+    {
+        abort_if(!request()->ajax(), 404);
+
+        $pesananPenjualan = PesananPenjualan::with('pelanggan', 'matauang', 'pesanan_penjualan_detail', 'pesanan_penjualan_detail.barang')->findOrFail($id);
+
+        return response()->json($pesananPenjualan, 200);
     }
 }

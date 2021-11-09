@@ -17,10 +17,11 @@ class CreatePenjualanTable extends Migration
             $table->id();
             $table->string('kode', 20);
             $table->date('tanggal');
-            $table->foreignId('gudang_id')->constrained('gudang');
-            $table->foreignId('matauang_id')->constrained('matauang');
-            $table->foreignId('pelanggan_id')->constrained('pelanggan');
-            $table->foreignId('salesman_id')->constrained('salesman');
+            $table->foreignId('pesanan_penjualan_id')->nullable()->constrained('pesanan_penjualan');
+            $table->foreignId('gudang_id')->nullable()->constrained('gudang');
+            $table->foreignId('matauang_id')->nullable()->constrained('matauang');
+            $table->foreignId('pelanggan_id')->nullable()->constrained('pelanggan');
+            $table->foreignId('salesman_id')->nullable()->constrained('salesman');
             $table->double('rate', 20, 2);
             $table->string('bentuk_kepemilikan_stok', 20);
             $table->text('keterangan')->nullable();

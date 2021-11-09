@@ -6,7 +6,11 @@
         cek_table_length()
         cek_form_entry()
 
-        $('#kode_input, #supplier_input, #bentuk_kepemilikan_input').on('keyup keydown change',
+        $('#kode_barang_input').change(function() {
+            cek_stok($(this).val())
+        })
+
+        $('#kode_input, #bentuk_kepemilikan_input, #qty_input').on('keyup keydown change',
             function() {
                 cek_form_entry()
             })
@@ -30,60 +34,73 @@
                 let supplier = $('#supplier_input option:selected')
                 let bentuk_kepemilikan = $('#bentuk_kepemilikan_input option:selected')
                 let qty = $('#qty_input').val()
+                let stok = parseInt($('#stok').val())
+                let min_stok = parseInt($('#min_stok').val())
 
-                // cek duplikasi barang
-                $('input[name="barang[]"]').each(function() {
-                    // cari index tr ke berapa
-                    let index = $(this).parent().parent().index()
+                if (stok == min_stok || qty > stok) {
+                    $('#qty_input').val(stok)
+                    $('#qty_input').focus()
 
-                    // kalo id barang di cart dan form input(barang) sama
-                    //  kalo id supplier di cart dan form input(barang) sama
-                    if ($(this).val() == kode_barang.val()) {
-                        // hapus tr berdasarkan index
-                        $('#tbl_trx tbody tr:eq(' + index + ')').remove()
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Stok tidak mencukupi untuk dikeluarkan',
+                        text: `Stok: ${stok}, Stok Minim: ${min_stok}`
+                    })
+                } else {
+                    // cek duplikasi barang
+                    $('input[name="barang[]"]').each(function() {
+                        // cari index tr ke berapa
+                        let index = $(this).parent().parent().index()
 
-                        generate_nomer()
-                    }
-                })
+                        // kalo id barang di cart dan form input(barang) sama
+                        //  kalo id supplier di cart dan form input(barang) sama
+                        if ($(this).val() == kode_barang.val()) {
+                            // hapus tr berdasarkan index
+                            $('#tbl_trx tbody tr:eq(' + index + ')').remove()
 
-                let no = $('#tbl_trx tbody tr').length + 1
+                            generate_nomer()
+                        }
+                    })
 
-                let data_trx = `<tr>
-                    <td>${no}</td>
-                    <td>
-                        ${kode_barang.html()}
-                        <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
-                    </td>
-                    <td>
-                        ${supplier.html()}
-                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier.val()}">
-                    </td>
-                    <td>
-                        ${bentuk_kepemilikan.html()}
-                        <input type="hidden" class="bentuk_kepemilikan_hidden" name="bentuk_kepemilikan[]" value="${bentuk_kepemilikan.val()}">
-                    </td>
-                    <td>
-                        ${format_ribuan(qty)}
-                        <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs btn_edit">
-                            <i class="fa fa-edit"></i>
-                        </button>
+                    let no = $('#tbl_trx tbody tr').length + 1
 
-                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </td>
-                </tr>`
+                    let data_trx = `<tr>
+                        <td>${no}</td>
+                        <td>
+                            ${kode_barang.html()}
+                            <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
+                        </td>
+                        <td>
+                            ${supplier.html()}
+                            <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier.val()}">
+                        </td>
+                        <td>
+                            ${bentuk_kepemilikan.html()}
+                            <input type="hidden" class="bentuk_kepemilikan_hidden" name="bentuk_kepemilikan[]" value="${bentuk_kepemilikan.val()}">
+                        </td>
+                        <td>
+                            ${format_ribuan(qty)}
+                            <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-xs btn_edit">
+                                <i class="fa fa-edit"></i>
+                            </button>
 
-                $('#tbl_trx').append(data_trx)
+                            <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`
 
-                cek_table_length()
+                    $('#tbl_trx').append(data_trx)
 
-                clear_form_entry()
+                    cek_table_length()
 
-                cek_form_entry()
+                    clear_form_entry()
+
+                    cek_form_entry()
+                }
             }
         })
 
@@ -191,6 +208,8 @@
             $('#btn_update').show()
 
             $('#index_tr').val(index)
+
+            cek_stok(kode_barang)
         })
 
         // hitung jumlan <tr> pada table#tbl_trx
@@ -207,45 +226,66 @@
         }
 
         function update_list(index) {
-            let kode_nama_barang = $('#kode_barang_input option:selected')
+            let kode_barang = $('#kode_barang_input option:selected')
             let supplier = $('#supplier_input option:selected')
             let bentuk_kepemilikan = $('#bentuk_kepemilikan_input option:selected')
             let qty = $('#qty_input').val()
+            let stok = parseInt($('#stok').val())
+            let min_stok = parseInt($('#min_stok').val())
 
-            let no = parseInt(parseInt(index) + 1)
+            if (stok == min_stok || qty > stok) {
+                $('#qty_input').val(stok)
+                $('#qty_input').focus()
 
-            let data_trx = `<td>${no}</td>
-                <td>
-                    ${kode_nama_barang.html()}
-                    <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_nama_barang.val()}">
-                </td>
-                <td>
-                    ${supplier.html()}
-                    <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier.val()}">
-                </td>
-                <td>
-                    ${bentuk_kepemilikan.html()}
-                    <input type="hidden" class="bentuk_kepemilikan_hidden" name="bentuk_kepemilikan[]" value="${bentuk_kepemilikan.val()}">
-                </td>
-                <td>
-                    ${format_ribuan(qty)}
-                    <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info btn-xs btn_edit">
-                        <i class="fa fa-edit"></i>
-                    </button>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Stok tidak mencukupi untuk dikeluarkan',
+                    text: `Stok: ${stok}, Stok Minim: ${min_stok}`
+                })
+            } else {
+                // cek duplikasi pas update
+                $('input[name="barang[]"]').each(function(i) {
+                    // i = index each
+                    if ($(this).val() == kode_barang.val() && i != index) {
+                        $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                    }
+                })
 
-                    <button type="button" class="btn btn-danger btn-xs btn_hapus">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </td>`
+                let no = parseInt(parseInt(index) + 1)
 
-            $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
+                let data_trx = `<td>${no}</td>
+                    <td>
+                        ${kode_barang.html()}
+                        <input type="hidden" class="kode_barang_hidden" name="barang[]" value="${kode_barang.val()}">
+                    </td>
+                    <td>
+                        ${supplier.html()}
+                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier.val()}">
+                    </td>
+                    <td>
+                        ${bentuk_kepemilikan.html()}
+                        <input type="hidden" class="bentuk_kepemilikan_hidden" name="bentuk_kepemilikan[]" value="${bentuk_kepemilikan.val()}">
+                    </td>
+                    <td>
+                        ${format_ribuan(qty)}
+                        <input type="hidden"  class="qty_hidden" name="qty[]" value="${qty}">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs btn_edit">
+                            <i class="fa fa-edit"></i>
+                        </button>
 
-            clear_form_entry()
+                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>`
 
-            cek_form_entry()
+                $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
+
+                clear_form_entry()
+
+                cek_form_entry()
+            }
         }
 
         function clear_form_entry() {
@@ -258,7 +298,6 @@
             $('#btn_update').hide()
             $('#btn_add').show()
         }
-
 
         function format_ribuan(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -288,6 +327,28 @@
                 $('#btn_add').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
             }
+        }
+
+        function cek_stok(id) {
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    $('#stok').val(data.stok)
+                    $('#min_stok').val(data.min_stok)
+
+                    $('#supplier_input').focus()
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

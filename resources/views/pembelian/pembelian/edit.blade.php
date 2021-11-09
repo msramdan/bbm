@@ -252,7 +252,7 @@
                                 {{-- button --}}
                                 <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label>Button</label>
-                                    <div class="form-control" style="border: none; pediting:0">
+                                    <div class="form-control" style="border: none; padding: 0;">
                                         <input type="hidden" id="index_tr_brg">
 
                                         <button type="submit" class="btn btn-primary" id="btn_add_brg" disabled>
@@ -364,7 +364,7 @@
                                                         <button type="button" class="btn btn-danger btn-xs btn_hapus_brg">
                                                             <i class="fa fa-times"></i>
                                                         </button>
-                                                    </td>>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

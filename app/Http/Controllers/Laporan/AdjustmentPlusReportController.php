@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdjustmentPlus;
-use App\Models\Toko;
 use Barryvdh\DomPDF\Facade as PDF;
-use Illuminate\Http\Request;
 
 class AdjustmentPlusReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:laporan adjustment plus');
+    }
+
     public function index()
     {
         $laporan = [];
@@ -23,11 +26,13 @@ class AdjustmentPlusReportController extends Controller
 
     public function pdf()
     {
+        $laporan = [];
+
         if (request()->query()) {
             $laporan = $this->getLaporan();
         }
 
-        $toko = Toko::first();
+        $toko = $this->getToko();
 
         $pdf = PDF::loadView('laporan.adjustment.plus.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
 

@@ -34,6 +34,7 @@ return [
         'akun' => 'Akun',
         'profile' => 'Profil',
         'penjualan' => 'Penjualan',
+        'pesanan_penjualan' => 'Pesanan Penjualan',
         'retur_penjualan' => 'Retur Penjualan',
         'keuangan' => 'Keuangan',
         'pelunasan_hutang' => 'Pelunasan Hutang',
@@ -50,10 +51,22 @@ return [
         'logout' => 'Keluar',
     ],
     'laporan' => [
-        'adjustment_plus' => 'Adjusment Plus Laporan',
-        'adjustment_minus' => 'Adjusment Minus Laporan'
-
+        'adjustment_plus' => 'Histori Adjustment Plus',
+        'adjustment_minus' => 'Histori Adjustment Minus',
+        'pesanan_pembelian' => 'Histori Pesanan Pembelian',
+        'pembelian' => 'Histori Pembelian',
+        'retur_pembelian' => 'Histori Retur Pembelian',
+        'penjualan' => 'Histori Penjualan',
+        'retur_penjualan' => 'Histori Retur Penjualan',
+        'pelunasan_hutang' => 'Histori Pelunasan Hutang',
+        'pelunasan_piutang' => 'Histori Pelunasan Piutang',
+        'biaya' => 'Histori Biaya',
+        'saldo_hutang' => 'Laporan Saldo Hutang',
+        'saldo_piutang' => 'Laporan Saldo Piutang',
+        'stok_barnag' => 'Laporan Stok Barang',
+        'komisi_salesman' => 'Laporan Komisi Salesman',
+        'cek_giro' => 'Laporan Cek/Giro',
+        'gross_profit' => 'Laporan Gross Profit',
+        'nett_profit' => 'Laporan Nett Profit',
     ]
-
-
 ];

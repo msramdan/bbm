@@ -68,7 +68,6 @@
                                 <div class="col-md-4" style="margin-bottom: 1em">
                                     <label for="paket_input">Paket</label>
                                     <select id="paket_input" class="form-control" name="paket" required>
-                                        <option value="" selected disabled>-- Pilih --</option>
                                         @forelse ($paket as $item)
                                             <option value="{{ $item->id }}"
                                                 {{ $perakitanPaket->paket_id == $item->id ? 'selected' : '' }}>
@@ -116,7 +115,7 @@
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning"
                                 data-click="panel-collapse">
-                                <i class="fa fa-minus"></i>
+                                <i class="fa fa-plus"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger"
                                 data-click="panel-remove">
@@ -238,6 +237,8 @@
         <!-- end row -->
     </div>
     <!-- end #content -->
+    <input type="hidden" id="stok">
+    <input type="hidden" id="min_stok">
 @endsection
 
 @include('inventory.perakitan-paket.script.edit-js')

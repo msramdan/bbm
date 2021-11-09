@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\Pembelian;
 use App\Models\ReturPembelian;
 use App\Models\ReturPembelianDetail;
@@ -117,8 +118,14 @@ class ReturPembelianController extends Controller
                     'pph' => floatval($request->pph[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
 
+            $retur->pembelian()->update(['retur' => 'YA']);
             $retur->retur_pembelian_detail()->saveMany($returDetail);
         });
 
@@ -176,6 +183,10 @@ class ReturPembelianController extends Controller
                 'total_netto' => floatval($request->total_netto),
             ]);
 
+            // hapus retur lama
+            $returPembelian->retur_pembelian_detail()->delete();
+            $returPembelian->pembelian()->update(['retur' => 'NO']);
+
             foreach ($request->barang as $i => $value) {
                 $returDetail[] = new ReturPembelianDetail([
                     'barang_id' => $value,
@@ -191,10 +202,15 @@ class ReturPembelianController extends Controller
                     'pph' => floatval($request->pph[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
 
-            $returPembelian->retur_pembelian_detail()->delete();
-
+            // insert retur baru
+            $returPembelian->pembelian()->update(['retur' => 'YA']);
             $returPembelian->retur_pembelian_detail()->saveMany($returDetail);
         });
 
@@ -209,6 +225,7 @@ class ReturPembelianController extends Controller
      */
     public function destroy(ReturPembelian $returPembelian)
     {
+        $returPembelian->pembelian()->update(['retur' => 'NO']);
         $returPembelian->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
@@ -216,7 +233,7 @@ class ReturPembelianController extends Controller
         return back();
     }
 
-    protected function getPembelianById($id)
+    public function getPembelianById($id)
     {
         abort_if(!request()->ajax(), 404);
 
@@ -225,19 +242,19 @@ class ReturPembelianController extends Controller
         return response()->json($pembelian, 200);
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = ReturPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'PURRT-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "PURRT-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PURRT-');
 
-            $kode =  'PURRT-' . intval($onlyNumberKode) + 1;
+            $kode =  'PURRT-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

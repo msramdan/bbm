@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\PerakitanPaket;
 use App\Models\PerakitanPaketDetail;
 use Illuminate\Http\Request;
@@ -68,7 +69,7 @@ class PerakitanPaketController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $paket = PerakitanPaket::create([
+            $perakitan = PerakitanPaket::create([
                 'kode' => $request->kode,
                 'tanggal' => $request->tanggal,
                 'gudang_id' => $request->gudang,
@@ -77,15 +78,25 @@ class PerakitanPaketController extends Controller
                 'keterangan' => $request->keterangan
             ]);
 
+            $perakitan->paket()->update(['stok' => ($perakitan->paket->stok - 1)]);
+            // kurangi stok paket(barang yg jenisnya paket)
+            // $paket =  Barang::find($request->paket);
+            // $paket->update(['stok' => ($paket->stok - 1)]);
+
             foreach ($request->barang as $i => $value) {
-                $paketDetail[] = new PerakitanPaketDetail([
+                $perakitanDetail[] = new PerakitanPaketDetail([
                     'barang_id' => $value,
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
                     'qty' => $request->qty[$i]
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
 
-            $paket->perakitan_paket_detail()->saveMany($paketDetail);
+            $perakitan->perakitan_paket_detail()->saveMany($perakitanDetail);
         });
 
         return response()->json(['success'], 200);
@@ -127,6 +138,7 @@ class PerakitanPaketController extends Controller
     public function update(Request $request, $id)
     {
         $perakitan = PerakitanPaket::findOrFail($id);
+        $perakitan->paket()->update(['stok' => ($perakitan->paket->stok + 1)]);
 
         DB::transaction(function () use ($request, $perakitan) {
             $perakitan->update([
@@ -144,7 +156,16 @@ class PerakitanPaketController extends Controller
                     'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan[$i],
                     'qty' => $request->qty[$i]
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty[$i])]);
             }
+
+            // kurangi stok paket(barang yg jenisnya paket)
+            $paket =  Barang::find($request->paket);
+            $paket->update(['stok' => ($paket->stok - 1)]);
 
             // hapus list barang lama
             $perakitan->perakitan_paket_detail()->delete();
@@ -170,19 +191,19 @@ class PerakitanPaketController extends Controller
         return redirect()->route('perakitan-paket.index');
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = PerakitanPaket::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'PCKASM-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'PCKASM-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "PCKASM-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PCKASM-');
 
-            $kode =  'PCKASM-' . intval($onlyNumberKode) + 1;
+            $kode =  'PCKASM-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

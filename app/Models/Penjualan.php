@@ -16,6 +16,7 @@ class Penjualan extends Model
     protected $fillable = [
         'kode',
         'tanggal',
+        'pesanan_penjualan_id',
         'matauang_id',
         'pelanggan_id',
         'salesman_id',
@@ -34,6 +35,11 @@ class Penjualan extends Model
         'total_penjualan',
         'status'
     ];
+
+    public function pesanan_penjualan()
+    {
+        return $this->belongsTo(PesananPenjualan::class);
+    }
 
     public function penjualan_detail()
     {

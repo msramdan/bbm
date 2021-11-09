@@ -34,6 +34,7 @@ return [
         'akun' => 'Account',
         'profile' => 'Profile',
         'penjualan' => 'Sales',
+        'pesanan_penjualan' => 'Sales Order',
         'retur_penjualan' => 'Sales Return',
         'keuangan' => 'Finance',
         'pelunasan_hutang' => 'A/P Payment',
@@ -50,9 +51,23 @@ return [
         'logout' => 'Logout',
     ],
     'laporan' => [
-        'adjustment_plus' => 'Adjusment Plus Report',
-        'adjustment_minus' => 'Adjusment Minus Report'
-
+        'adjustment_plus' => 'Adjustment Plus History',
+        'adjustment_minus' => 'Adjustment Minus History',
+        'pesanan_pembelian' => 'Purchase Order History',
+        'pembelian' => 'Purchase History',
+        'retur_pembelian' => 'Purchase Return History',
+        'penjualan' => 'Sales History',
+        'retur_penjualan' => 'Sales Return History',
+        'pelunasan_hutang' => 'A/P Payment History',
+        'pelunasan_piutang' => 'A/R Payment History',
+        'biaya' => 'Expense History',
+        'saldo_hutang' => 'Balance A Report/P',
+        'saldo_piutang' => 'Balance A Report/R',
+        'stok_barnag' => 'Item Stock Report',
+        'komisi_salesman' => 'Salesman Commission Report',
+        'cek_giro' => 'Cheque Report',
+        'gross_profit' => 'Gross Profit Report',
+        'nett_profit' => 'Nett Profit Report',
     ]
 
 ];

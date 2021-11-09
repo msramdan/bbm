@@ -76,6 +76,18 @@
 
                             <div class="form-group row">
                                 <div class="col-md-3">
+                                    <label class="control-label">Kode SO</label>
+
+                                    <select name="pesanan_penjualan_id" id="pesanan_penjualan_id" class="form-control"
+                                        readonly>
+                                        <option
+                                            value="{{ $penjualan->pesanan_penjualan ? $penjualan->pesanan_penjualan->id : '' }}">
+                                            {{ $penjualan->pesanan_penjualan ? $penjualan->pesanan_penjualan->kode : 'Tanpa S.O' }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
                                     <label class="control-label">Pelanggan</label>
 
                                     <select name="pelanggan" id="pelanggan" class="form-control" readonly>
@@ -85,7 +97,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="control-label">Mata Uang</label>
 
                                     <select name="matauang" id="matauang" class="form-control" readonly>
@@ -94,11 +106,11 @@
                                         </option>
                                     </select>
                                 </div>
-                                {{-- end col-md-3 --}}
+                                {{-- end col-md-2 --}}
 
                                 {{-- Bentuk stok --}}
-                                <div class="col-md-3">
-                                    <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
+                                <div class="col-md-2">
+                                    <label for="bentuk_kepemilikan">Bentuk K.Stok</label>
                                     <select name="bentuk_kepemilikan" id="bentuk_kepemilikan" class="form-control"
                                         readonly>
                                         <option value="{{ $penjualan->bentuk_kepemilikan_stok }}">
@@ -107,7 +119,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="control-label">Rate</label>
                                     <input type="number" step="any" name="rate" class="form-control"
                                         value="{{ $penjualan->rate }}" placeholder="Rate" readonly />
@@ -167,7 +179,7 @@
                                                 <td>{{ $detail->barang->kode }}</td>
                                                 <td>{{ $detail->barang->nama }}</td>
                                                 <td>
-                                                    {{ $matauang . ' ' . $detail->harga }}
+                                                    {{ $matauang . ' ' . number_format($detail->harga) }}
                                                 </td>
                                                 <td>
                                                     {{ $detail->qty }}
@@ -176,16 +188,16 @@
                                                     {{ $detail->diskon_persen . '%' }}
                                                 </td>
                                                 <td>
-                                                    {{ $matauang . ' ' . $detail->diskon }}
+                                                    {{ $matauang . ' ' . number_format($detail->diskon) }}
                                                 </td>
                                                 <td>
-                                                    {{ $matauang . ' ' . $detail->gross }}
+                                                    {{ $matauang . ' ' . number_format($detail->gross) }}
                                                 </td>
                                                 <td>
-                                                    {{ $matauang . ' ' . $detail->ppn }}
+                                                    {{ $matauang . ' ' . number_format($detail->ppn) }}
                                                 </td>
                                                 <td>
-                                                    {{ $matauang . ' ' . $detail->netto }}
+                                                    {{ $matauang . ' ' . number_format($detail->netto) }}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -194,7 +206,7 @@
                                         <tr>
                                             <th colspan="9">Biaya Kirim</th>
                                             <th>
-                                                {{ $matauang . ' ' . $penjualan->total_biaya_kirim }}
+                                                {{ $matauang . ' ' . number_format($penjualan->total_biaya_kirim) }}
                                             </th>
                                         </tr>
                                         <tr>
@@ -202,23 +214,23 @@
                                                 Total
                                             </th>
                                             <th>
-                                                {{ $matauang . ' ' . $penjualan->subtotal }}
+                                                {{ $matauang . ' ' . number_format($penjualan->subtotal) }}
                                             </th>
                                             <th>{{ $total_qty }}</th>
                                             <th>
                                                 {{ $total_diskon_persen . '%' }}
                                             </th>
                                             <th>
-                                                {{ $matauang . ' ' . $penjualan->total_diskon }}
+                                                {{ $matauang . ' ' . number_format($penjualan->total_diskon) }}
                                             </th>
                                             <th>
-                                                {{ $matauang . ' ' . $penjualan->total_gross }}
+                                                {{ $matauang . ' ' . number_format($penjualan->total_gross) }}
                                             </th>
                                             <th>
-                                                {{ $matauang . ' ' . $penjualan->total_ppn }}
+                                                {{ $matauang . ' ' . number_format($penjualan->total_ppn) }}
                                             </th>
                                             <th>
-                                                {{ $matauang . ' ' . $penjualan->total_penjualan }}
+                                                {{ $matauang . ' ' . number_format($penjualan->total_penjualan) }}
                                             </th>
                                         </tr>
                                     </tfoot>
@@ -262,7 +274,7 @@
                                                 <td>{{ $detail->no_cek_giro ?? '-' }}</td>
                                                 <td>{{ $detail->tgl_cek_giro ? $detail->tgl_cek_giro->format('d F Y') : '-' }}
                                                 </td>
-                                                <td>{{ $matauang . '  ' . $detail->bayar }}</td>
+                                                <td>{{ $matauang . '  ' . number_format($detail->bayar) }}</td>
                                             </tr>
                                         @empty
                                             <tr>
@@ -273,7 +285,7 @@
                                     <tfoot>
                                         <tr>
                                             <th colspan="6">Total</th>
-                                            <th>{{ $matauang . '  ' . $total }}</th>
+                                            <th>{{ $matauang . '  ' . number_format($total) }}</th>
                                         </tr>
                                     </tfoot>
                                 </table>

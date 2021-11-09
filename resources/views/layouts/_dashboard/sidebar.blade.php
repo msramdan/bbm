@@ -181,6 +181,12 @@
                     </a>
                     <ul class="sub-menu" style="display: none;">
                         <li>
+                            <a href="{{ route('pesanan-penjualan.index') }}">
+                                {{ trans('dashboard.menu.pesanan_penjualan') }}
+                            </a>
+                        </li>
+
+                        <li>
                             <a href="{{ route('penjualan.index') }}">
                                 {{ trans('dashboard.menu.penjualan') }}
                             </a>
@@ -237,6 +243,120 @@
                 </li>
             @endrole
 
+            @role('admin')
+                {{-- menu Laporan --}}
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-book"></i>
+                        <span>{{ trans('dashboard.menu.laporan') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('adjustment-plus.laporan') }}">
+                                {{ trans('dashboard.laporan.adjustment_plus') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('adjustment-minus.laporan') }}">
+                                {{ trans('dashboard.laporan.adjustment_minus') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pesanan-pembelian.laporan') }}">
+                                {{ trans('dashboard.laporan.pesanan_pembelian') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pembelian.laporan') }}">
+                                {{ trans('dashboard.laporan.pembelian') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('retur-pembelian.laporan') }}">
+                                {{ trans('dashboard.laporan.retur_pembelian') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('penjualan.laporan') }}">
+                                {{ trans('dashboard.laporan.penjualan') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('retur-penjualan.laporan') }}">
+                                {{ trans('dashboard.laporan.retur_penjualan') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pelunasan-hutang.laporan') }}">
+                                {{ trans('dashboard.laporan.pelunasan_hutang') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('pelunasan-piutang.laporan') }}">
+                                {{ trans('dashboard.laporan.pelunasan_piutang') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('biaya.laporan') }}">
+                                {{ trans('dashboard.laporan.biaya') }}
+                            </a>
+                        </li>
+
+                        {{-- <li>
+                        <a href="{{ route('saldo-hutang.laporan') }}">
+                            {{ trans('dashboard.laporan.saldo_hutang') }}
+                        </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('saldo-piutang.laporan') }}">
+                                {{ trans('dashboard.laporan.saldo_piutang') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('stok-barang.laporan') }}">
+                                {{ trans('dashboard.laporan.stok_barang') }}
+                            </a>
+                        </li> --}}
+
+                        <li>
+                            <a href="{{ route('komisi-salesman.laporan') }}">
+                                {{ trans('dashboard.laporan.komisi_salesman') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('cek-giro.laporan') }}">
+                                {{ trans('dashboard.laporan.cek_giro') }}
+                            </a>
+                        </li>
+
+                        {{-- <li>
+                            <a href="{{ route('gross-profit.laporan') }}">
+                                {{ trans('dashboard.laporan.gross_profit') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('nett-profit.laporan') }}">
+                                {{ trans('dashboard.laporan.nett_profit') }}
+                            </a>
+                        </li> --}}
+                    </ul>
+                </li>
+            @endrole
+
             {{-- menu Setting --}}
             @role('admin')
                 <li class="has-sub">
@@ -260,23 +380,6 @@
                     </ul>
                 </li>
             @endrole
-
-            {{-- menu Laporan --}}
-            <li class="has-sub">
-                <a href="javascript:;">
-                    <b class="caret pull-right"></b>
-                    <i class="fa fa-book"></i>
-                    <span>{{ trans('dashboard.menu.laporan') }}</span>
-                </a>
-                <ul class="sub-menu" style="display: none;">
-                    <li>
-                        <a href="{{ route('adjustment-plus.laporan') }}">
-                            {{ trans('dashboard.laporan.adjustment_plus') }}
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
 
             {{-- menu Akun --}}
             <li class="has-sub">

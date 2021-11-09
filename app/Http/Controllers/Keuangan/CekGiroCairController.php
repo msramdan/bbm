@@ -28,7 +28,13 @@ class CekGiroCairController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $cekGiroCair = CekGiroCair::with('cek_giro', 'cek_giro.pembelian', 'cek_giro.pembelian.pembelian_pembayaran', 'cek_giro.penjualan', 'cek_giro.penjualan.penjualan_pembayaran');
+            $cekGiroCair = CekGiroCair::with(
+                'cek_giro',
+                'cek_giro.pembelian:id,kode',
+                'cek_giro.pembelian.pembelian_pembayaran',
+                'cek_giro.penjualan:id,kode',
+                'cek_giro.penjualan.penjualan_pembayaran'
+            )->orderByDesc('updated_at');
 
             return DataTables::of($cekGiroCair)
                 ->addIndexColumn()
@@ -229,25 +235,25 @@ class CekGiroCairController extends Controller
         return back();
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = CekGiroCair::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'CHWDL-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'CHWDL-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "CHWDL-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'CHWDL-');
 
-            $kode =  'CHWDL-' . intval($onlyNumberKode) + 1;
+            $kode =  'CHWDL-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);
     }
 
-    protected function getCekGiroById($id)
+    public function getCekGiroById($id)
     {
         abort_if(!request()->ajax(), 404);
 

@@ -62,7 +62,6 @@
                                         @endforelse
                                     </select>
                                 </div>
-                                {{-- end col-md-3 --}}
 
                                 <div class="col-md-3">
                                     <label class="control-label">Salesman</label>
@@ -80,6 +79,20 @@
 
                             <div class="form-group row">
                                 <div class="col-md-3">
+                                    <label class="control-label">Kode SO</label>
+
+                                    <select name="pesanan_penjualan_id" id="pesanan_penjualan_id" class="form-control"
+                                        required>
+                                        <option value="" selected>Tanpa SO</option>
+                                        @forelse ($pesananPenjualan as $item)
+                                            <option value="{{ $item->id }}">{{ $item->kode }}</option>
+                                        @empty
+                                            <option value="" disabled>Data tidak ditemukan</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
                                     <label class="control-label">Pelanggan</label>
 
                                     <select name="pelanggan" id="pelanggan" class="form-control" required>
@@ -92,7 +105,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="control-label">Mata Uang</label>
 
                                     <select name="matauang" id="matauang" class="form-control" required>
@@ -107,8 +120,8 @@
                                 {{-- end col-md-3 --}}
 
                                 {{-- Bentuk stok --}}
-                                <div class="col-md-3">
-                                    <label for="bentuk_kepemilikan">Bentuk Kepemilikan Stok</label>
+                                <div class="col-md-2">
+                                    <label for="bentuk_kepemilikan">Bentuk K.Stok</label>
                                     <select name="bentuk_kepemilikan" id="bentuk_kepemilikan" class="form-control"
                                         required>
                                         <option value="" disabled selected>-- Pilih --</option>
@@ -117,7 +130,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="control-label">Rate</label>
                                     <input type="number" step="any" name="rate" class="form-control" placeholder="Rate"
                                         required />
@@ -303,8 +316,8 @@
                                     {{-- Total PPN --}}
                                     <div class="col-md-3" style="margin-top: 1em;">
                                         <label for="total_ppn">Total PPN</label>
-                                        <input type="text" step="any" name="total_ppn" id="total_ppn" class="form-control"
-                                            placeholder="0" readonly />
+                                        <input type="text" step="any" name="total_ppn" id="total_ppn"
+                                            class="form-control" placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total Gross --}}
@@ -517,6 +530,9 @@
         <!-- end row -->
     </div>
     <!-- end #content -->
+    {{-- buat cek stok --}}
+    <input type="hidden" id="stok">
+    <input type="hidden" id="min_stok">
 @endsection
 
 @include('penjualan.penjualan.script.create-js')

@@ -171,7 +171,7 @@
                                 <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="qty_retur">Qty Retur</label>
                                     <input type="number" step="any" name="qty_retur" id="qty_retur_input"
-                                        class="form-control" required placeholder="Qty Retur" />
+                                        class="form-control" required placeholder="Qty Retur" disabled />
                                 </div>
 
                                 {{-- Diskon% --}}

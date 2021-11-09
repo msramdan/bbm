@@ -133,7 +133,7 @@
                                             <th>No.</th>
                                             <th>Kode - Nama Barang</th>
                                             <th>Supplier</th>
-                                            <th>Bentuk Kep.</th>
+                                            <th>Bentuk Kep. Stok</th>
                                             <th>Harga</th>
                                             <th>Qty</th>
                                             <th>Subtotal</th>
@@ -242,6 +242,8 @@
         <!-- end row -->
     </div>
     <!-- end #content -->
+    <input type="hidden" id="stok">
+    <input type="hidden" id="min_stok">
 @endsection
 
 @include('inventory.adjustment-plus.script.create-js')

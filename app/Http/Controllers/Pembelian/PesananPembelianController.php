@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pembelian;
 
 use App\Http\Controllers\Controller;
-use App\Models\{PesananPembelian, PesananPembelianDetail};
+use App\Models\{Barang, PesananPembelian, PesananPembelianDetail};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -210,19 +210,19 @@ class PesananPembelianController extends Controller
         return back();
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = PesananPembelian::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'PUROR-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "PUROR-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'PUROR-');
 
-            $kode =  'PUROR-' . intval($onlyNumberKode) + 1;
+            $kode =  'PUROR-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

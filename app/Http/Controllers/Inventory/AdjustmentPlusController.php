@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
-use App\Models\{AdjustmentPlus, AdjustmentPlusDetail};
+use App\Models\{AdjustmentPlus, AdjustmentPlusDetail, Barang};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -97,6 +97,11 @@ class AdjustmentPlusController extends Controller
                     'qty' => $request->qty[$i],
                     'subtotal' => $request->subtotal[$i],
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
 
             $adjusment->adjustment_plus_detail()->saveMany($adjusmentDetail);
@@ -161,7 +166,13 @@ class AdjustmentPlusController extends Controller
                     'qty' => $request->qty[$i],
                     'subtotal' => $request->subtotal[$i],
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty[$i])]);
             }
+
 
             // hapus list barang lama
             $adjusment->adjustment_plus_detail()->delete();

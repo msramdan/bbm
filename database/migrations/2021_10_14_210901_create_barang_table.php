@@ -22,9 +22,9 @@ class CreateBarangTable extends Migration
             $table->foreignId('satuan_id')->constrained('satuan_barang');
             $table->foreignId('harga_beli_matauang')->constrained('matauang');
             $table->foreignId('harga_jual_matauang')->constrained('matauang');
-            $table->integer('harga_beli');
-            $table->integer('harga_jual');
-            $table->integer('harga_jual_min');
+            $table->double('harga_beli', 20, 2);
+            $table->double('harga_jual', 20, 2);
+            $table->double('harga_jual_min', 20, 2);
             $table->integer('stok');
             $table->integer('min_stok');
             $table->string('gambar')->nullable();

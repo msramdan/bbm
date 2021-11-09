@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Penjualan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\Penjualan;
 use App\Models\ReturPenjualan;
 use App\Models\ReturPenjualanDetail;
@@ -13,6 +14,16 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ReturPenjualanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create retur penjualan')->only('create');
+        $this->middleware('permission:read retur penjualan')->only('index');
+        $this->middleware('permission:edit retur penjualan')->only('edit');
+        $this->middleware('permission:detail retur penjualan')->only('show');
+        $this->middleware('permission:update retur penjualan')->only('update');
+        $this->middleware('permission:delete retur penjualan')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -98,7 +109,14 @@ class ReturPenjualanController extends Controller
                     'ppn' => floatval($request->ppn[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
+
+            $retur->penjualan()->update(['retur' => 'YA']);
 
             $retur->retur_penjualan_detail()->saveMany($returDetail);
         });
@@ -153,6 +171,10 @@ class ReturPenjualanController extends Controller
                 'total_netto' => floatval($request->total_netto),
             ]);
 
+            // hapus retur lama
+            $returPenjualan->penjualan()->update(['retur' => 'NO']);
+            $returPenjualan->retur_penjualan_detail()->delete();
+
             foreach ($request->barang as $i => $value) {
                 $returDetail[] = new ReturPenjualanDetail([
                     'barang_id' => $value,
@@ -165,11 +187,16 @@ class ReturPenjualanController extends Controller
                     'ppn' => floatval($request->ppn[$i]),
                     'netto' => floatval($request->netto[$i]),
                 ]);
+
+                // Update stok barang
+                $barangQuery = Barang::whereId($value);
+                $getBarang = $barangQuery->first();
+                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
             }
 
-            $returPenjualan->retur_penjualan_detail()->delete();
-
+            // insert retur baru
             $returPenjualan->retur_penjualan_detail()->saveMany($returDetail);
+            $returPenjualan->penjualan()->update(['retur' => 'YA']);
         });
 
         return response()->json(['success'], 200);
@@ -183,6 +210,7 @@ class ReturPenjualanController extends Controller
      */
     public function destroy(ReturPenjualan $returPenjualan)
     {
+        $returPenjualan->penjualan()->update(['retur' => 'NO']);
         $returPenjualan->delete();
 
         Alert::success('Hapus Data', 'Berhasil');
@@ -190,29 +218,29 @@ class ReturPenjualanController extends Controller
         return back();
     }
 
-    protected function getPenjualanById($id)
+    public function getPenjualanById($id)
     {
-        // kalo ngakses dari browse
+        // kalo ngakses dari browser
         abort_if(!request()->ajax(), 404);
 
-        $penjualan = Penjualan::with('pelanggan', 'SLSRTman', 'matauang', 'penjualan_detail')->findOrFail($id);
+        $penjualan = Penjualan::with('pelanggan', 'salesman', 'matauang', 'penjualan_detail')->findOrFail($id);
 
         return response()->json($penjualan, 200);
     }
 
-    protected function generateKode($tanggal)
+    public function generateKode($tanggal)
     {
         abort_if(!request()->ajax(), 404);
 
         $checkLatestKode = ReturPenjualan::whereMonth('tanggal', date('m', strtotime($tanggal)))->whereYear('tanggal', date('Y', strtotime($tanggal)))->latest()->first();
 
         if ($checkLatestKode == null) {
-            $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '0000' . 1;
+            $kode = 'SLSRT-' . date('Ym', strtotime($tanggal)) . '00001';
         } else {
             // hapus "SLSRT-" dan ambil angka buat ditambahin
             $onlyNumberKode = \Str::after($checkLatestKode->kode, 'SLSRT-');
 
-            $kode =  'SLSRT-' . intval($onlyNumberKode) + 1;
+            $kode =  'SLSRT-' . (intval($onlyNumberKode) + 1);
         }
 
         return response()->json($kode, 200);

@@ -31,7 +31,10 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('pelunasan-hutang.create') }}" class="btn btn-success{{ !auth()->user()->can('create pelunasan hutang') ? ' disabled' : '' }}">
+                        <a href="{{ route('pelunasan-hutang.create') }}"
+                            class="btn btn-success{{ !auth()->user()->can('create pelunasan hutang')
+                                ? ' disabled'
+                                : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('pelunasan_hutang.button.tambah') }}
                         </a>
                     </div>
@@ -46,10 +49,10 @@
                                         <th>Tanggal</th>
                                         <th>Supplier</th>
                                         <th>Mata Uang</th>
-                                        <th>Rate</th>
                                         <th>Jenis Pembayaran</th>
                                         <th>Saldo Hutang</th>
                                         <th>Bayar</th>
+                                        <th>Rate</th>
                                         <th>Created At</th>
                                         <th>Updated At</th>
                                         @if (auth()->user()->can('edit pelunasan hutang') ||
@@ -75,9 +78,9 @@
     <script>
         const action =
             '{{ auth()->user()->can('edit pelunasan hutang') ||
-auth()->user()->can('delete pelunasan hutang')
-    ? 'yes yes yes'
-    : '' }}'
+            auth()->user()->can('delete pelunasan hutang')
+                ? 'yes yes yes'
+                : '' }}'
 
         let columns = [{
                 data: 'DT_RowIndex',
@@ -106,10 +109,6 @@ auth()->user()->can('delete pelunasan hutang')
                 name: 'matauang'
             },
             {
-                data: 'rate',
-                name: 'rate'
-            },
-            {
                 data: 'jenis_pembayaran',
                 name: 'jenis_pembayaran'
             },
@@ -120,6 +119,10 @@ auth()->user()->can('delete pelunasan hutang')
             {
                 data: 'bayar',
                 name: 'bayar'
+            },
+            {
+                data: 'rate',
+                name: 'rate'
             },
             {
                 data: 'created_at',

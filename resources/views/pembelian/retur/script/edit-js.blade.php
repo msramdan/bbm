@@ -104,13 +104,10 @@
             $('#tbl_trx').append(data_trx)
 
             cek_table_length()
-
             clear_form_entry()
-
             hitung_semua_total()
 
             $('#kode_barang_input').focus()
-
         })
 
         $('#btn_clear_form').click(function() {
@@ -257,6 +254,8 @@
 
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
+            $('#btn_update_brg').prop('disabled', false)
+            $('#btn_clear_form_brg').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -274,6 +273,19 @@
             let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
             let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
+
+            if (ppn > 0) {
+                $('#checkbox_ppn').prop('checked', true)
+            } else {
+                $('#checkbox_ppn').prop('checked', false)
+                $('#checkbox_pph').prop('checked', false)
+            }
+
+            if (pph > 0) {
+                $('#checkbox_pph').prop('checked', true)
+            } else {
+                $('#checkbox_pph').prop('checked', false)
+            }
 
             $('#harga_input').val(harga)
             $('#qty_beli_input').val(qty_beli)
@@ -294,6 +306,7 @@
 
             $('#index_tr').val(index)
 
+            $('#qty_retur_input').prop('disabled', false)
             $('#qty_retur_input').focus()
             $('#qty_retur_input').attr({
                 "max": qty_beli,
@@ -318,8 +331,8 @@
         }
 
         function update_list(index) {
-            let barang_id = $('#barang_hidden')
-            let barang_text = $('#barang_input')
+            let barang_id = $('#barang_hidden').val()
+            let barang_text = $('#barang_input').val()
 
             let harga = $('#harga_input').val()
             let qty_beli = $('#qty_beli_input').val()
@@ -345,8 +358,8 @@
             let no = parseInt(parseInt(index) + 1)
 
             let data_trx = `<td>${no++}</td>
-            <td> ${barang_text.val()}
-                <input type="hidden" class="barang_id_hidden" name="barang_id[]" value="${barang_id.val()}">
+            <td> ${barang_text}
+                <input type="hidden" class="barang_id_hidden" name="barang_id[]" value="${barang_id}">
                 <input type="hidden" class="barang_text_hidden" name="barang_text[]" value="${barang_text}">
             </td>
             <td> ${format_ribuan(harga)}
@@ -391,8 +404,9 @@
             $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
 
             clear_form_entry()
-
             hitung_semua_total()
+
+            $('#qty_retur_input').prop('disabled', true)
         }
 
         function clear_form_entry() {
@@ -415,6 +429,7 @@
 
             $('#btn_clear_form').prop('disabled', true)
             $('#btn_add').prop('disabled', true)
+            $('#qty_retur_input').prop('disabled', true)
         }
 
         function hitung_semua_total() {

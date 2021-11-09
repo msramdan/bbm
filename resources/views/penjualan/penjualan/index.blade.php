@@ -31,7 +31,10 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('penjualan.create') }}" class="btn btn-success{{ !auth()->user()->can('create penjualan') ? ' disabled' : '' }}">
+                        <a href="{{ route('penjualan.create') }}"
+                            class="btn btn-success{{ !auth()->user()->can('create penjualan')
+                                ? ' disabled'
+                                : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('penjualan.button.tambah') }}
                         </a>
                     </div>
@@ -42,6 +45,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode</th>
+                                        <th>Kode S.O</th>
                                         <th>Tanggal</th>
                                         <th>Mata Uang</th>
                                         <th>Gudang</th>
@@ -75,9 +79,9 @@
     <script>
         const action =
             '{{ auth()->user()->can('edit penjualan') ||
-auth()->user()->can('delete penjualan')
-    ? 'yes yes yes'
-    : '' }}'
+            auth()->user()->can('delete penjualan')
+                ? 'yes yes yes'
+                : '' }}'
 
         let columns = [{
                 data: 'DT_RowIndex',
@@ -88,6 +92,10 @@ auth()->user()->can('delete penjualan')
             {
                 data: 'kode',
                 name: 'kode'
+            },
+            {
+                data: 'kode_so',
+                name: 'kode_so'
             },
             {
                 data: 'tanggal',

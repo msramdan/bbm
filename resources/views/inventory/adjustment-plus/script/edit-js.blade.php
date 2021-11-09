@@ -7,6 +7,11 @@
         hitung_grand_total()
         cek_table_length()
 
+        // Cek stok
+        $('#kode_barang_input').change(function() {
+            cek_stok($(this).val())
+        })
+
         $('#matauang').change(function() {
             hitung_grand_total()
         })
@@ -29,13 +34,14 @@
                 !$('select[name="gudang"]').val() ||
                 !$('select[name="matauang"]').val()
             ) {
+                $('select[name="gudang"]').focus()
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Mohon isi data Adjusment Plus - Header terlebih dahulu!'
                 })
             } else {
-
                 let kode_barang = $('#kode_barang_input option:selected')
                 let supplier = $('#supplier_input option:selected')
                 let harga = $('#harga_input').val()
@@ -105,10 +111,6 @@
                 clear_form_entry()
 
                 hitung_grand_total()
-
-                e.preventDefault()
-                e.stopImmediatePropagation()
-
             }
         })
 
@@ -191,7 +193,6 @@
                     })
                 }
             })
-
         })
 
         $(document).on('click', '.btn_hapus', function(e) {
@@ -229,18 +230,20 @@
             $('#btn_update').show()
 
             $('#index_tr').val(index)
+
+            cek_stok(kode_barang, harga)
         })
 
         // hitung jumlan <tr> pada table#tbl_trx
         function cek_table_length() {
-            let total = $('#tbl_trx tbody tr').length;
+            let total = $('#tbl_trx tbody tr').length
 
             if (total > 0) {
-                $('#btn_simpan').prop('disabled', false);
-                $('#btn_clear_table').prop('disabled', false);
+                $('#btn_simpan').prop('disabled', false)
+                $('#btn_clear_table').prop('disabled', false)
             } else {
-                $('#btn_simpan').prop('disabled', true);
-                $('#btn_clear_table').prop('disabled', true);
+                $('#btn_simpan').prop('disabled', true)
+                $('#btn_clear_table').prop('disabled', true)
             }
         }
 
@@ -252,6 +255,15 @@
             let qty = $('#qty_input').val()
 
             let subtotal = harga * qty
+
+            // cek duplikasi pas update
+            let cek = 0
+            $('input[name="barang[]"]').each(function(i) {
+                // i = index each
+                if ($(this).val() == kode_barang.val() && i != index) {
+                    $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                }
+            })
 
             let no = parseInt(parseInt(index) + 1)
 
@@ -295,6 +307,8 @@
             clear_form_entry()
 
             hitung_grand_total()
+
+            generate_nomer()
         }
 
         function clear_form_entry() {
@@ -311,13 +325,13 @@
         }
 
         function hitung_grand_total() {
-            let total = 0;
+            let total = 0
 
             $('.subtotal_hidden').each(function() {
-                total += parseInt($(this).val());
-            });
+                total += parseInt($(this).val())
+            })
 
-            let matauang_type = $('#matauang option:selected').val()
+            let matauang_type = $('#matauang option:selected').html()
 
             $('#grand_total').text(`GRAND TOTAL: ${matauang_type} ${format_ribuan(total)},- `)
 
@@ -329,7 +343,7 @@
         }
 
         function format_ribuan(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }
 
         // auto generate no pada table
@@ -357,8 +371,43 @@
             } else {
                 $('#btn_add').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
-
             }
+        }
+
+        function cek_stok(id, harga_edit = null) {
+            let harga = $('#harga_input')
+            harga.prop('disabled', true)
+            harga.val('')
+            harga.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    $('#stok').val(data.stok)
+                    $('#min_stok').val(data.min_stok)
+
+                    if (harga_edit) {
+                        harga.val(harga_edit)
+                    } else {
+                        harga.val(data.harga_jual)
+                    }
+
+                    harga.prop('disabled', false)
+                    harga.prop('placeholder', 'Harga')
+
+                    $('#qty_input').focus()
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

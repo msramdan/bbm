@@ -66,7 +66,7 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="penjualan">Kode penjualan</label>
+                                    <label for="penjualan">Kode Penjualan</label>
                                     <select name="penjualan" id="penjualan" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($penjualanBelumLunas as $item)
@@ -296,8 +296,9 @@
             }
 
             if (jenis_pembayaran.val() == 'Transfer') {
+                bank.val('')
                 bank.prop('disabled', false)
-                rekening.prop('disabled', false)
+                rekening.prop('disabled', true)
 
                 no_cek_giro.prop('disabled', true)
                 no_cek_giro.val('')
@@ -317,7 +318,7 @@
             }
 
             if (jenis_pembayaran.val() == 'Giro') {
-                bank.prop('disabled', true)
+                bank.prop('disabled', false)
                 bank.val('')
                 rekening.prop('disabled', true)
                 rekening.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
@@ -362,35 +363,37 @@
         })
 
         $('#bank').change(function() {
-            $.ajax({
-                url: "/beli/pembelian/get-rekening/" + $('#bank').val(),
-                type: 'GET',
-                success: function(data) {
-                    let rekening = []
+            if ($('#jenis_pembayaran').val() == 'Transfer') {
+                $.ajax({
+                    url: "/beli/pembelian/get-rekening/" + $('#bank').val(),
+                    type: 'GET',
+                    success: function(data) {
+                        let rekening = []
 
-                    $('#rekening').prop('disabled', true)
-                    $('#rekening').html(
-                        '<option value="" disabled selected>Loading...</option>')
+                        $('#rekening').prop('disabled', true)
+                        $('#rekening').html(
+                            '<option value="" disabled selected>Loading...</option>')
 
-                    setTimeout(() => {
-                        if (data.length > 0) {
-                            data.forEach(elm => {
-                                rekening.push(
-                                    `<option value="${elm.id}">${elm.nomor_rekening} - ${elm.nama_rekening}</option>`
+                        setTimeout(() => {
+                            if (data.length > 0) {
+                                data.forEach(elm => {
+                                    rekening.push(
+                                        `<option value="${elm.id}">${elm.nomor_rekening} - ${elm.nama_rekening}</option>`
+                                    )
+                                })
+
+                                $('#rekening').html(rekening)
+
+                                $('#rekening').prop('disabled', false)
+                            } else {
+                                $('#rekening').html(
+                                    '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
                                 )
-                            })
-
-                            $('#rekening').html(rekening)
-
-                            $('#rekening').prop('disabled', false)
-                        } else {
-                            $('#rekening').html(
-                                '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
-                            )
-                        }
-                    }, 1000);
-                }
-            })
+                            }
+                        }, 1000);
+                    }
+                })
+            }
         })
 
         $('#tanggal').change(function() {

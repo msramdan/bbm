@@ -86,7 +86,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label for="pelanggan" class="control-label">pelanggan</label>
+                                <label for="pelanggan" class="control-label">Pelanggan</label>
                                 <input type="text" name="pelanggan" class="form-control" placeholder="pelanggan"
                                     id="pelanggan"
                                     value="{{ $pelunasanPiutang->penjualan->pelanggan ? $pelunasanPiutang->penjualan->pelanggan->nama_pelanggan : 'Tanpa pelanggan' }}"

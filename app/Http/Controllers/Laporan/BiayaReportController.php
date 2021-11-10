@@ -12,6 +12,7 @@ class BiayaReportController extends Controller
     {
         $this->middleware('permission:laporan biaya');
     }
+
     public function index()
     {
         $laporan = [];

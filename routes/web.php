@@ -223,7 +223,7 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     Route::get('/gross-profit/pdf', [GrossProfitReportController::class, 'pdf'])->name('gross-profit.pdf');
     Route::get('/gross-profit', [GrossProfitReportController::class, 'index'])->name('gross-profit.laporan');
 
-    // // nett Profit
-    // Route::get('/nett-profit/pdf', [NettProfitReportController::class, 'pdf'])->name('nett-profit.pdf');
-    // Route::get('/nett-profit', [NettProfitReportController::class, 'index'])->name('nett-profit.laporan');
+    // nett Profit
+    Route::get('/nett-profit/pdf', [NettProfitReportController::class, 'pdf'])->name('nett-profit.pdf');
+    Route::get('/nett-profit', [NettProfitReportController::class, 'index'])->name('nett-profit.laporan');
 });

@@ -659,8 +659,8 @@ Breadcrumbs::for('laporan_gross_profit', function (BreadcrumbTrail $trail) {
 //     $trail->push('Stok Barang', route('stok-barang.laporan'));
 // });
 
-// // Laporan > Nett Profit
-// Breadcrumbs::for('laporan_nett_profit', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Nett Profit', route('nett-profit.laporan'));
-// });
+// Laporan > Nett Profit
+Breadcrumbs::for('laporan_nett_profit', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Nett Profit', route('nett-profit.laporan'));
+});

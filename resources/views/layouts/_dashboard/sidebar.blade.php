@@ -348,11 +348,11 @@
                             </a>
                         </li>
 
-                        {{-- <li>
+                        <li>
                             <a href="{{ route('nett-profit.laporan') }}">
                                 {{ trans('dashboard.laporan.nett_profit') }}
                             </a>
-                        </li> --}}
+                        </li>
                     </ul>
                 </li>
             @endrole

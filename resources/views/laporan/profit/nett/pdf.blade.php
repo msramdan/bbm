@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ trans('dashboard.laporan.saldo_hutang') }}</title>
+    <title>{{ trans('dashboard.laporan.nett_profit') }}</title>
 
     <style>
         body {
@@ -74,72 +74,37 @@
         <div class="garis"></div>
 
         <center>
-            <h4>{{ trans('dashboard.laporan.saldo_hutang') }}</h4>
+            <h4>{{ trans('dashboard.laporan.nett_profit') }}</h4>
             <p><small>{{ date('d F Y') }}</small></p>
         </center>
 
         <table style="margin-top: 1em;">
-            <thead>
-                <tr>
-                    <th width="15">No.</th>
-                    <th>Kode</th>
-                    <th>Tanggal</th>
-                    <th>Suplier</th>
-                    <th>Status</th>
-                    <th>Umur</th>
-                    <th>Nilai Beli</th>
-                    <th>Saldo</th>
-                </tr>
-            </thead>
             <tbody>
-                @php
-                    $total_nilai_beli = 0;
-                    $total_saldo_hutang = 0;
-                @endphp
-                @forelse ($laporan as $item)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->kode }}</td>
-                        <td>{{ $item->tanggal->format('d F Y') }}</td>
-                        <td>{{ $item->supplier ? $item->supplier->nama_supplier : 'Tanpa Supplier' }}
-                        </td>
-                        <td>{{ $item->status }}</td>
-                        <td>
-                            {{ $item->tanggal->diffForHumans() }}
-                        </td>
-                        <td>{{ $item->matauang->kode . ' ' . number_format($item->total_netto, 2, '.', ',') }}
-                        </td>
-                        <td>{{ $item->matauang->kode }}
-                            {{ $item->pembelian_pembayaran ? number_format($item->pembelian_pembayaran[0]->bayar, 2, '.', ',') : 0 }}
-                        </td>
-                    </tr>
-                    @php
-                        $total_nilai_beli += $item->total_netto;
-                        $total_saldo_hutang += $item->pembelian_pembayaran[0]->bayar;
-                    @endphp
-                @empty
-                    <tr>
-                        <td colspan="8" style="text-align: center">Data tidak ditemukan</td>
-                    </tr>
-                @endforelse
-            </tbody>
-            <tfoot>
                 <tr>
-                    <th colspan="6">Total</th>
-                    <th>{{ number_format($total_nilai_beli, 2, '.', ',') }}</th>
-                    <th>{{ number_format($total_saldo_hutang, 2, '.', ',') }}</th>
+                    <th>Gross Profit</th>
+                    <td>{{ $laporan ? number_format($laporan['total_gross'], 2, '.', ',') : 0 }}
+                    </td>
                 </tr>
-            </tfoot>
+                {{-- <tr>
+                    <th>Total biaya</th>
+                    <td>{{ number_format($laporan['total_netto'], 2, '.', ',') }}</td>
+                </tr> --}}
+                <tr>
+                    <th>Nett Profit</th>
+                    <td>{{ $laporan ? number_format($laporan['total_netto'], 2, '.', ',') : 0 }}
+                    </td>
+                </tr>
+            </tbody>
         </table>
 
-        {{-- <small>
+        <small>
             <strong>
                 @if (request()->query('dari_tanggal') && request()->query('sampai_tanggal'))
                     Dari:
                     {{ date('d F Y', strtotime(request()->query('dari_tanggal'))) . ' s/d ' . date('d F Y', strtotime(request()->query('sampai_tanggal'))) }}
                 @endif
             </strong>
-        </small> --}}
+        </small>
     </div>
 
 </body>

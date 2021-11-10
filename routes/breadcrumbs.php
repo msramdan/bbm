@@ -617,11 +617,11 @@ Breadcrumbs::for('laporan_biaya', function (BreadcrumbTrail $trail) {
     $trail->push('Biaya', route('biaya.laporan'));
 });
 
-// // Laporan > Saldo Hutang
-// Breadcrumbs::for('laporan_saldo_hutang', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Saldo Hutang', route('saldo-hutang.laporan'));
-// });
+// Laporan > Saldo Hutang
+Breadcrumbs::for('laporan_saldo_hutang', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Saldo Hutang', route('saldo-hutang.laporan'));
+});
 
 // // Laporan > Saldo Piutang
 // Breadcrumbs::for('laporan_saldo_piutang', function (BreadcrumbTrail $trail) {

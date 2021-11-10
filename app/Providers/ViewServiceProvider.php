@@ -76,7 +76,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.pesanan.index',
             'laporan.pembelian.pembelian.index',
             'laporan.pembelian.retur.index',
-            'laporan.pelunasan.hutang.index'
+            'laporan.pelunasan.hutang.index',
+            'laporan.saldo.hutang.index',
         ], function ($view) {
             return $view->with('supplier', Supplier::where('status', 'Y')->get());
         });
@@ -124,7 +125,8 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.biaya.edit',
             'laporan.pelunasan.hutang.index',
             'laporan.pelunasan.piutang.index',
-            'penjualan.pesanan.create'
+            'penjualan.pesanan.create',
+            'laporan.saldo.hutang.index',
         ], function ($view) {
             return $view->with('matauang', Matauang::all());
         });
@@ -422,6 +424,30 @@ class ViewServiceProvider extends ServiceProvider
                 ])
             );
         });
+
+        // list status Hutang/Piutang
+        View::composer([
+            'laporan.saldo.hutang.index',
+        ], function ($view) {
+            return $view->with(
+                'statusHutangPiutang',
+                collect([
+                    (object)[
+                        'id' => 'Belum Lunas',
+                        'nama' => 'Belum Lunas'
+                    ],
+                    (object)[
+                        'id' => 'Lunas',
+                        'nama' => 'Lunas'
+                    ],
+                    // (object)[
+                    //     'id' => 'Over Due',
+                    //     'nama' => 'Over Due'
+                    // ],
+                ])
+            );
+        });
+
 
 
         // list bentuk kepemilikan stok

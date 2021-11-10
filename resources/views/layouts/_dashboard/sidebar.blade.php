@@ -318,13 +318,13 @@
                             </a>
                         </li>
 
-                        {{-- <li>
+                        <li>
                             <a href="{{ route('saldo-piutang.laporan') }}">
                                 {{ trans('dashboard.laporan.saldo_piutang') }}
                             </a>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a href="{{ route('stok-barang.laporan') }}">
                                 {{ trans('dashboard.laporan.stok_barang') }}
                             </a>

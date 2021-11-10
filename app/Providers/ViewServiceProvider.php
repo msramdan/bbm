@@ -127,6 +127,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pelunasan.piutang.index',
             'penjualan.pesanan.create',
             'laporan.saldo.hutang.index',
+            'laporan.saldo.piutang.index'
         ], function ($view) {
             return $view->with('matauang', Matauang::all());
         });
@@ -220,6 +221,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pelunasan.piutang.index',
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
+            'laporan.saldo.piutang.index',
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::select('id', 'nama_pelanggan', 'alamat', 'kode')->where('status', 'Y')->get());
         });
@@ -292,6 +294,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
             'laporan.komisi-salesman.index',
+            'laporan.saldo.piutang.index'
         ], function ($view) {
             return $view->with('salesman', Salesman::select('id', 'nama')->where('status', 'Y')->get());
         });
@@ -428,6 +431,7 @@ class ViewServiceProvider extends ServiceProvider
         // list status Hutang/Piutang
         View::composer([
             'laporan.saldo.hutang.index',
+            'laporan.saldo.piutang.index'
         ], function ($view) {
             return $view->with(
                 'statusHutangPiutang',

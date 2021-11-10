@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('dashboard.laporan.saldo_hutang'))
+@section('title', trans('dashboard.laporan.saldo_piutang'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('laporan_saldo_hutang') }}
+        {{ Breadcrumbs::render('laporan_saldo_piutang') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -30,19 +30,19 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('dashboard.laporan.saldo_hutang') }}</h4>
+                        <h4 class="panel-title">{{ trans('dashboard.laporan.saldo_piutang') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form action="{{ route('saldo-hutang.laporan') }}" method="GET" style="margin-bottom: 1em;">
+                        <form action="{{ route('saldo-piutang.laporan') }}" method="GET" style="margin-bottom: 1em;">
                             <div class="form-group row" style="margin-bottom: 1em;">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="per_tanggal" class="control-label">Per Tanggal</label>
                                     <input type="date" name="per_tanggal" class="form-control" id="per_tanggal"
                                         value="{{ request()->query('per_tanggal') ? request()->query('per_tanggal') : date('Y-m-d') }}"
                                         required />
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="matauang" class="control-label">Mata Uang</label>
                                     <select name="matauang" class="form-control" id="matauang">
                                         <option value="" selected>All</option>
@@ -57,14 +57,31 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <label for="supplier" class="control-label">Supplier</label>
-                                    <select name="supplier" class="form-control" id="supplier">
+                                <div class="col-md-4">
+                                    <label for="pelanggan" class="control-label">Pelanggan</label>
+                                    <select name="pelanggan" class="form-control" id="pelanggan">
                                         <option value="" selected>All</option>
-                                        @forelse ($supplier as $item)
+                                        @forelse ($pelanggan as $item)
                                             <option value="{{ $item->id }}"
-                                                {{ request()->query('supplier') && request()->query('supplier') == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama_supplier }}
+                                                {{ request()->query('pelanggan') && request()->query('pelanggan') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->nama_pelanggan }}
+                                            </option>
+                                        @empty
+                                            <option value="" selected disabled>Data tidak ditemukan</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row" style="margin-bottom: 1em;">
+                                <div class="col-md-4">
+                                    <label for="salesman" class="control-label">Salesman</label>
+                                    <select name="salesman" class="form-control" id="salesman">
+                                        <option value="" selected>All</option>
+                                        @forelse ($salesman as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ request()->query('salesman') && request()->query('salesman') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->nama }}
                                             </option>
                                         @empty
                                             <option value="" selected disabled>Data tidak ditemukan</option>
@@ -72,7 +89,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="status" class="control-label">Status</label>
                                     <select name="status" class="form-control" id="status">
                                         <option value="" selected>All</option>
@@ -86,18 +103,17 @@
                                         @endforelse
                                     </select>
                                 </div>
-
                             </div>
 
                             <button type="submit" class="btn btn-sm btn-success">
                                 <i class="fa fa-eye"></i> Cek
                             </button>
-                            <a href="{{ route('saldo-hutang.laporan') }}"
+                            <a href="{{ route('saldo-piutang.laporan') }}"
                                 class="btn btn-sm btn-default{{ request()->query() ? '' : ' disabled' }}">
                                 <i class="fa fa-trash"></i> Reset
                             </a>
                             @if (count($laporan) > 0)
-                                <a href="{{ route('saldo-hutang.pdf', request()->query()) }}" target="_blank"
+                                <a href="{{ route('saldo-piutang.pdf', request()->query()) }}" target="_blank"
                                     class="btn btn-sm btn-info">
                                     <i class="fa fa-print"></i> Print
                                 </a>
@@ -110,24 +126,27 @@
                                     <th width="15">No.</th>
                                     <th>Kode</th>
                                     <th>Tanggal</th>
-                                    <th>Suplier</th>
+                                    <th>Pelanggan</th>
+                                    <th>Salesman</th>
                                     <th>Status</th>
                                     <th>Umur</th>
-                                    <th>Nilai Beli</th>
+                                    <th>Nilai Jual</th>
                                     <th>Saldo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
-                                    $total_nilai_beli = 0;
-                                    $total_saldo_hutang = 0;
+                                    $total_nilai_jual = 0;
+                                    $total_saldo_piutang = 0;
                                 @endphp
                                 @forelse ($laporan as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->kode }}</td>
                                         <td>{{ $item->tanggal->format('d F Y') }}</td>
-                                        <td>{{ $item->supplier ? $item->supplier->nama_supplier : 'Tanpa Supplier' }}
+                                        <td>{{ $item->pelanggan ? $item->pelanggan->nama_pelanggan : 'Umum' }}
+                                        </td>
+                                        <td>{{ $item->salesman->nama }}
                                         </td>
                                         <td>{{ $item->status }}</td>
                                         <td>
@@ -136,24 +155,24 @@
                                         <td>{{ $item->matauang->kode . ' ' . number_format($item->total_netto, 2, '.', ',') }}
                                         </td>
                                         <td>{{ $item->matauang->kode }}
-                                            {{ $item->pembelian_pembayaran ? number_format($item->pembelian_pembayaran[0]->bayar, 2, '.', ',') : 0 }}
+                                            {{ $item->penjualan_pembayaran ? number_format($item->penjualan_pembayaran[0]->bayar, 2, '.', ',') : 0 }}
                                         </td>
                                     </tr>
                                     @php
-                                        $total_nilai_beli += $item->total_netto;
-                                        $total_saldo_hutang += $item->pembelian_pembayaran[0]->bayar;
+                                        $total_nilai_jual += $item->total_netto;
+                                        $total_saldo_piutang += $item->penjualan_pembayaran[0]->bayar;
                                     @endphp
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center">Data tidak ditemukan</td>
+                                        <td colspan="9" class="text-center">Data tidak ditemukan</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="6">Total</th>
-                                    <th>{{ number_format($total_nilai_beli, 2, '.', ',') }}</th>
-                                    <th>{{ number_format($total_saldo_hutang, 2, '.', ',') }}</th>
+                                    <th colspan="7">Total</th>
+                                    <th>{{ number_format($total_nilai_jual, 2, '.', ',') }}</th>
+                                    <th>{{ number_format($total_saldo_piutang, 2, '.', ',') }}</th>
                                 </tr>
                             </tfoot>
                         </table>

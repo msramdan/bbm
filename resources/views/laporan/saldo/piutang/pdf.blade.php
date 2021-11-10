@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ trans('dashboard.laporan.saldo_hutang') }}</title>
+    <title>{{ trans('dashboard.laporan.saldo_piutang') }}</title>
 
     <style>
         body {
@@ -74,7 +74,7 @@
         <div class="garis"></div>
 
         <center>
-            <h4>{{ trans('dashboard.laporan.saldo_hutang') }}</h4>
+            <h4>{{ trans('dashboard.laporan.saldo_piutang') }}</h4>
             <p><small>{{ date('d F Y') }}</small></p>
         </center>
 
@@ -84,24 +84,27 @@
                     <th width="15">No.</th>
                     <th>Kode</th>
                     <th>Tanggal</th>
-                    <th>Suplier</th>
+                    <th>Pelanggan</th>
+                    <th>Salesman</th>
                     <th>Status</th>
                     <th>Umur</th>
-                    <th>Nilai Beli</th>
+                    <th>Nilai Jual</th>
                     <th>Saldo</th>
                 </tr>
             </thead>
             <tbody>
                 @php
-                    $total_nilai_beli = 0;
-                    $total_saldo_hutang = 0;
+                    $total_nilai_jual = 0;
+                    $total_saldo_piutang = 0;
                 @endphp
                 @forelse ($laporan as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->kode }}</td>
                         <td>{{ $item->tanggal->format('d F Y') }}</td>
-                        <td>{{ $item->supplier ? $item->supplier->nama_supplier : 'Tanpa Supplier' }}
+                        <td>{{ $item->pelanggan ? $item->pelanggan->nama_pelanggan : 'Umum' }}
+                        </td>
+                        <td>{{ $item->salesman->nama }}
                         </td>
                         <td>{{ $item->status }}</td>
                         <td>
@@ -110,24 +113,24 @@
                         <td>{{ $item->matauang->kode . ' ' . number_format($item->total_netto, 2, '.', ',') }}
                         </td>
                         <td>{{ $item->matauang->kode }}
-                            {{ $item->pembelian_pembayaran ? number_format($item->pembelian_pembayaran[0]->bayar, 2, '.', ',') : 0 }}
+                            {{ $item->penjualan_pembayaran ? number_format($item->penjualan_pembayaran[0]->bayar, 2, '.', ',') : 0 }}
                         </td>
                     </tr>
                     @php
-                        $total_nilai_beli += $item->total_netto;
-                        $total_saldo_hutang += $item->pembelian_pembayaran[0]->bayar;
+                        $total_nilai_jual += $item->total_netto;
+                        $total_saldo_piutang += $item->penjualan_pembayaran[0]->bayar;
                     @endphp
                 @empty
                     <tr>
-                        <td colspan="8" style="text-align: center">Data tidak ditemukan</td>
+                        <td colspan="9" style="text-align: center">Data tidak ditemukan</td>
                     </tr>
                 @endforelse
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="6">Total</th>
-                    <th>{{ number_format($total_nilai_beli, 2, '.', ',') }}</th>
-                    <th>{{ number_format($total_saldo_hutang, 2, '.', ',') }}</th>
+                    <th colspan="7">Total</th>
+                    <th>{{ number_format($total_nilai_jual, 2, '.', ',') }}</th>
+                    <th>{{ number_format($total_saldo_piutang, 2, '.', ',') }}</th>
                 </tr>
             </tfoot>
         </table>

@@ -203,9 +203,9 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     Route::get('/saldo-hutang/pdf', [SaldoHutangReportController::class, 'pdf'])->name('saldo-hutang.pdf');
     Route::get('/saldo-hutang', [SaldoHutangReportController::class, 'index'])->name('saldo-hutang.laporan');
 
-    // // Saldo Piutang
-    // Route::get('/saldo-piutang/pdf', [SaldoPiutangReportController::class, 'pdf'])->name('saldo-piutang.pdf');
-    // Route::get('/saldo-piutang', [SaldoPiutangReportController::class, 'index'])->name('saldo-piutang.laporan');
+    // Saldo Piutang
+    Route::get('/saldo-piutang/pdf', [SaldoPiutangReportController::class, 'pdf'])->name('saldo-piutang.pdf');
+    Route::get('/saldo-piutang', [SaldoPiutangReportController::class, 'index'])->name('saldo-piutang.laporan');
 
     // // Stok Barang
     // Route::get('/stok-barang/pdf', [StokBarangReportController::class, 'pdf'])->name('stok-barang.pdf');

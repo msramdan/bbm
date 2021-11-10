@@ -63,7 +63,7 @@ return [
         'biaya' => 'Histori Biaya',
         'saldo_hutang' => 'Laporan Saldo Hutang',
         'saldo_piutang' => 'Laporan Saldo Piutang',
-        'stok_barnag' => 'Laporan Stok Barang',
+        'stok_barang' => 'Laporan Stok Barang',
         'komisi_salesman' => 'Laporan Komisi Salesman',
         'cek_giro' => 'Laporan Cek/Giro',
         'gross_profit' => 'Laporan Gross Profit',

@@ -63,7 +63,7 @@ return [
         'biaya' => 'Expense History',
         'saldo_hutang' => 'Balance A/P Report',
         'saldo_piutang' => 'Balance A/R Report',
-        'stok_barnag' => 'Item Stock Report',
+        'stok_barang' => 'Item Stock Report',
         'komisi_salesman' => 'Salesman Commission Report',
         'cek_giro' => 'Cheque Report',
         'gross_profit' => 'Gross Profit Report',

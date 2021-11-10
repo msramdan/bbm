@@ -48,7 +48,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.retur.index',
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
-            // 'laporan.profit.gross.index'
+            // 'laporan.profit.gross.index',
+            'laporan.stok.index'
         ], function ($view) {
             return $view->with('barang', Barang::where('status', 'Y')->where('jenis', 1)->get());
         });
@@ -106,9 +107,10 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.retur.index',
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
-            'laporan.profit.gross.index'
+            'laporan.profit.gross.index',
+            'laporan.stok.index'
         ], function ($view) {
-            return $view->with('gudang', Gudang::all());
+            return $view->with('gudang', Gudang::where('status', 'Y')->get());
         });
 
 
@@ -468,6 +470,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.retur.index',
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
+            'laporan.stok.index',
         ], function ($view) {
             return $view->with(
                 'bentukKepemilikanStok',

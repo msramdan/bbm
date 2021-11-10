@@ -219,9 +219,9 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     Route::get('/cek-giro/pdf', [CekGiroReportController::class, 'pdf'])->name('cek-giro.pdf');
     Route::get('/cek-giro', [CekGiroReportController::class, 'index'])->name('cek-giro.laporan');
 
-    // // Gross Profit
-    // Route::get('/gross-profit/pdf', [GrossProfitReportController::class, 'pdf'])->name('gross-profit.pdf');
-    // Route::get('/gross-profit', [GrossProfitReportController::class, 'index'])->name('gross-profit.laporan');
+    // Gross Profit
+    Route::get('/gross-profit/pdf', [GrossProfitReportController::class, 'pdf'])->name('gross-profit.pdf');
+    Route::get('/gross-profit', [GrossProfitReportController::class, 'index'])->name('gross-profit.laporan');
 
     // // nett Profit
     // Route::get('/nett-profit/pdf', [NettProfitReportController::class, 'pdf'])->name('nett-profit.pdf');

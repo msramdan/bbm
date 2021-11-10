@@ -48,6 +48,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.retur.index',
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
+            // 'laporan.profit.gross.index'
         ], function ($view) {
             return $view->with('barang', Barang::where('status', 'Y')->where('jenis', 1)->get());
         });
@@ -105,6 +106,7 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.retur.index',
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
+            'laporan.profit.gross.index'
         ], function ($view) {
             return $view->with('gudang', Gudang::all());
         });
@@ -127,7 +129,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pelunasan.piutang.index',
             'penjualan.pesanan.create',
             'laporan.saldo.hutang.index',
-            'laporan.saldo.piutang.index'
+            'laporan.saldo.piutang.index',
+            'laporan.profit.gross.index'
         ], function ($view) {
             return $view->with('matauang', Matauang::all());
         });
@@ -222,6 +225,7 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
             'laporan.saldo.piutang.index',
+            'laporan.profit.gross.index'
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::select('id', 'nama_pelanggan', 'alamat', 'kode')->where('status', 'Y')->get());
         });
@@ -294,7 +298,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
             'laporan.komisi-salesman.index',
-            'laporan.saldo.piutang.index'
+            'laporan.saldo.piutang.index',
+            'laporan.profit.gross.index'
         ], function ($view) {
             return $view->with('salesman', Salesman::select('id', 'nama')->where('status', 'Y')->get());
         });

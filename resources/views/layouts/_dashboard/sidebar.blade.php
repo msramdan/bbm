@@ -342,13 +342,13 @@
                             </a>
                         </li>
 
-                        {{-- <li>
+                        <li>
                             <a href="{{ route('gross-profit.laporan') }}">
                                 {{ trans('dashboard.laporan.gross_profit') }}
                             </a>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a href="{{ route('nett-profit.laporan') }}">
                                 {{ trans('dashboard.laporan.nett_profit') }}
                             </a>

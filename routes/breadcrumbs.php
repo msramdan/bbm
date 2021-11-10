@@ -647,11 +647,11 @@ Breadcrumbs::for('laporan_cek_giro', function (BreadcrumbTrail $trail) {
     $trail->push('Cek-Giro', route('cek-giro.laporan'));
 });
 
-// // Laporan > Gross Profit
-// Breadcrumbs::for('laporan_gross_profit', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Gross Profit', route('gross-profit.laporan'));
-// });
+// Laporan > Gross Profit
+Breadcrumbs::for('laporan_gross_profit', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Gross Profit', route('gross-profit.laporan'));
+});
 
 // // Laporan > Stok Barang
 // Breadcrumbs::for('laporan_stok_barang', function (BreadcrumbTrail $trail) {

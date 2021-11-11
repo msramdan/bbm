@@ -30,7 +30,7 @@ class BiayaController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $biaya = Biaya::with('matauang');
+            $biaya = Biaya::with('matauang:id,kode,nama');
 
             return DataTables::of($biaya)
                 ->addIndexColumn()
@@ -109,7 +109,12 @@ class BiayaController extends Controller
      */
     public function show(Biaya $biaya)
     {
-        $biaya->load('matauang', 'rekening', 'bank', 'biaya_detail');
+        $biaya->load(
+            'matauang:id,kode,nama',
+            'rekening:id,nomor_rekening,nama_rekening',
+            'bank:id,kode,nama',
+            'biaya_detail'
+        );
 
         return view('keuangan.biaya.show', compact('biaya'));
     }
@@ -122,7 +127,12 @@ class BiayaController extends Controller
      */
     public function edit(Biaya $biaya)
     {
-        $biaya->load('matauang', 'rekening', 'bank', 'biaya_detail');
+        $biaya->load(
+            'matauang:id,kode,nama',
+            'rekening:id,nomor_rekening,nama_rekening',
+            'bank:id,kode,nama',
+            'biaya_detail'
+        );
 
         return view('keuangan.biaya.edit', compact('biaya'));
     }

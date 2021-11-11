@@ -52,4 +52,9 @@ class Barang extends Model
     {
         return $this->hasMany(PembelianDetail::class);
     }
+
+    public function pesanan_pembelian_detail()
+    {
+        return $this->hasMany(PesananPembelianDetail::class);
+    }
 }

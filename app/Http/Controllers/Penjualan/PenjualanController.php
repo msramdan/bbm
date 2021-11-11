@@ -176,7 +176,19 @@ class PenjualanController extends Controller
      */
     public function show(Penjualan $penjualan)
     {
-        $penjualan->load('pesanan_penjualan', 'penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang');
+        $penjualan->load(
+            'pesanan_penjualan',
+            // 'pesanan_penjualan.pesanan_penjualan_detail.barang',
+            'penjualan_detail',
+            'penjualan_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'penjualan_pembayaran',
+            'penjualan_pembayaran.bank:id,kode,nama',
+            'penjualan_pembayaran.rekening:id,nomor_rekening,nama_rekening',
+            'gudang:id,kode,nama',
+            'salesman:id,kode,nama',
+            'pelanggan:id,kode,nama_pelanggan',
+            'matauang:id,kode,nama'
+        );
 
         return view('penjualan.penjualan.show', compact('penjualan'));
     }
@@ -189,7 +201,19 @@ class PenjualanController extends Controller
      */
     public function edit(Penjualan $penjualan)
     {
-        $penjualan->load('pesanan_penjualan', 'penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang');
+        $penjualan->load(
+            'pesanan_penjualan',
+            // 'pesanan_penjualan.pesanan_penjualan_detail.barang',
+            'penjualan_detail',
+            'penjualan_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'penjualan_pembayaran',
+            'penjualan_pembayaran.bank:id,kode,nama',
+            'penjualan_pembayaran.rekening:id,nomor_rekening,nama_rekening',
+            'gudang:id,kode,nama',
+            'salesman:id,kode,nama',
+            'pelanggan:id,kode,nama_pelanggan',
+            'matauang:id,kode,nama'
+        );
 
         return view('penjualan.penjualan.edit', compact('penjualan'));
     }
@@ -333,7 +357,12 @@ class PenjualanController extends Controller
     {
         abort_if(!request()->ajax(), 404);
 
-        $pesananPenjualan = PesananPenjualan::with('pelanggan', 'matauang', 'pesanan_penjualan_detail', 'pesanan_penjualan_detail.barang')->findOrFail($id);
+        $pesananPenjualan = PesananPenjualan::with(
+            'pelanggan:id,kode,nama_pelanggan,alamat',
+            'matauang:id,kode,nama',
+            'pesanan_penjualan_detail',
+            'pesanan_penjualan_detail.barang'
+        )->findOrFail($id);
 
         return response()->json($pesananPenjualan, 200);
     }

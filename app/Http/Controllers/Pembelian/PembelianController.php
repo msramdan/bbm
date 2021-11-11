@@ -29,7 +29,12 @@ class PembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pembelian = Pembelian::with('gudang', 'supplier', 'matauang', 'pesanan_pembelian')->withCount('pembelian_detail');
+            $pembelian = Pembelian::with(
+                'gudang:id,kode,nama',
+                'supplier:id,kode,nama_supplier',
+                'matauang:id,kode,nama',
+                'pesanan_pembelian'
+            )->withCount('pembelian_detail');
 
             return Datatables::of($pembelian)
                 ->addIndexColumn()
@@ -170,7 +175,15 @@ class PembelianController extends Controller
      */
     public function show(Pembelian $pembelian)
     {
-        $pembelian->load('pembelian_detail', 'gudang', 'supplier', 'matauang', 'pembelian_pembayaran', 'pesanan_pembelian')->withCount('pembelian_detail', 'pembelian_pembayaran');
+        $pembelian->load(
+            'pembelian_detail',
+            'pembelian_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'supplier:id,kode,nama_supplier',
+            'matauang:id,kode,nama',
+            'gudang:id,kode,nama',
+            'pembelian_pembayaran',
+            'pesanan_pembelian'
+        )->withCount('pembelian_detail', 'pembelian_pembayaran');
 
         return view('pembelian.pembelian.show', compact('pembelian'));
     }
@@ -183,7 +196,14 @@ class PembelianController extends Controller
      */
     public function edit(Pembelian $pembelian)
     {
-        $pembelian->load('pembelian_detail', 'gudang', 'supplier', 'matauang', 'pembelian_pembayaran');
+        $pembelian->load(
+            'pembelian_detail',
+            'pembelian_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'supplier:id,kode,nama_supplier',
+            'matauang:id,kode,nama',
+            'gudang:id,kode,nama',
+            'pembelian_pembayaran',
+        );
 
         return view('pembelian.pembelian.edit', compact('pembelian'));
     }

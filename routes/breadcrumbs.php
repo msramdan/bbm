@@ -593,6 +593,13 @@ Breadcrumbs::for('laporan_penjualan', function (BreadcrumbTrail $trail) {
     $trail->push('Penjualan', route('penjualan.laporan'));
 });
 
+// Laporan > Pesanan Penjualan
+Breadcrumbs::for('laporan_pesanan_penjualan', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Pesanan Penjualan', route('pesanan-penjualan.laporan'));
+});
+
+
 // Laporan > Retur Penjualan
 Breadcrumbs::for('laporan_retur_penjualan', function (BreadcrumbTrail $trail) {
     $trail->parent('laporan');
@@ -629,11 +636,7 @@ Breadcrumbs::for('laporan_saldo_piutang', function (BreadcrumbTrail $trail) {
     $trail->push('Saldo Piutang', route('saldo-piutang.laporan'));
 });
 
-// // Laporan > Stok Barang
-// Breadcrumbs::for('laporan_stok_barang', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Stok Barang', route('stok-barang.laporan'));
-// });
+
 
 // Laporan > Komisi Salesman
 Breadcrumbs::for('laporan_komisi_salesman', function (BreadcrumbTrail $trail) {

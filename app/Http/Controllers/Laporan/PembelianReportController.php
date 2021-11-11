@@ -43,7 +43,14 @@ class PembelianReportController extends Controller
 
     protected function getLaporan()
     {
-        return Pembelian::with('pembelian_detail', 'pembelian_detail.barang', 'supplier', 'matauang', 'gudang')
+
+        return Pembelian::with(
+            'pembelian_detail',
+            'pembelian_detail.barang',
+            'supplier:id,nama_supplier',
+            'matauang:id,kode',
+            'gudang:id,nama'
+        )
             ->when(request()->query('supplier'), function ($q) {
                 $q->where('supplier_id',  request()->query('supplier'));
             })

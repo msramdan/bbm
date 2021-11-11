@@ -32,7 +32,12 @@ class ReturPembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $retur = ReturPembelian::with('gudang', 'pembelian')->withCount('retur_pembelian_detail');
+            $retur = ReturPembelian::with(
+                'gudang:id,kode,nama',
+                'pembelian',
+                'pembelian.supplier:id,kode,nama_supplier',
+                'pembelian.matauang:id,kode,nama'
+            )->withCount('retur_pembelian_detail');
 
             return Datatables::of($retur)
                 ->addIndexColumn()
@@ -44,7 +49,7 @@ class ReturPembelianController extends Controller
                     return $row->pembelian->kode;
                 })
                 ->addColumn('supplier', function ($row) {
-                    return $row->supplier ? $row->supplier->nama_supplier : 'Tanpa Supplier';
+                    return $row->pembelian->supplier ? $row->pembelian->supplier->nama_supplier : 'Tanpa Supplier';
                 })
                 ->addColumn('gudang', function ($row) {
                     return $row->gudang->nama;
@@ -140,7 +145,14 @@ class ReturPembelianController extends Controller
      */
     public function show(ReturPembelian $returPembelian)
     {
-        $returPembelian->load('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail');
+        $returPembelian->load(
+            'retur_pembelian_detail',
+            'retur_pembelian_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'gudang:id,kode,nama',
+            'pembelian',
+            'pembelian.supplier:id,kode,nama_supplier',
+            'pembelian.matauang:id,kode,nama'
+        )->withCount('retur_pembelian_detail');
 
         return view('pembelian.retur.show', compact('returPembelian'));
     }
@@ -153,7 +165,14 @@ class ReturPembelianController extends Controller
      */
     public function edit(ReturPembelian $returPembelian)
     {
-        $returPembelian->load('retur_pembelian_detail', 'gudang', 'pembelian')->withCount('retur_pembelian_detail');
+        $returPembelian->load(
+            'retur_pembelian_detail',
+            'retur_pembelian_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'gudang:id,kode,nama',
+            'pembelian',
+            'pembelian.supplier:id,kode,nama_supplier',
+            'pembelian.matauang:id,kode,nama'
+        )->withCount('retur_pembelian_detail');
 
         return view('pembelian.retur.edit', compact('returPembelian'));
     }
@@ -237,7 +256,11 @@ class ReturPembelianController extends Controller
     {
         abort_if(!request()->ajax(), 404);
 
-        $pembelian = Pembelian::with('supplier', 'matauang', 'pembelian_detail')->findOrFail($id);
+        $pembelian = Pembelian::with(
+            'supplier:id,kode,nama_supplier',
+            'matauang:id,kode,nama',
+            'pembelian_detail'
+        )->findOrFail($id);
 
         return response()->json($pembelian, 200);
     }

@@ -56,6 +56,7 @@ return [
         'pesanan_pembelian' => 'Histori Pesanan Pembelian',
         'pembelian' => 'Histori Pembelian',
         'retur_pembelian' => 'Histori Retur Pembelian',
+        'pesanan_penjualan' => 'Histori Pesanan Penjualan',
         'penjualan' => 'Histori Penjualan',
         'retur_penjualan' => 'Histori Retur Penjualan',
         'pelunasan_hutang' => 'Histori Pelunasan Hutang',

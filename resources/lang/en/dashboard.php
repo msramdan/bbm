@@ -57,6 +57,7 @@ return [
         'pembelian' => 'Purchase History',
         'retur_pembelian' => 'Purchase Return History',
         'penjualan' => 'Sales History',
+        'pesanan_penjualan' => 'Sales Order History',
         'retur_penjualan' => 'Sales Return History',
         'pelunasan_hutang' => 'A/P Payment History',
         'pelunasan_piutang' => 'A/R Payment History',

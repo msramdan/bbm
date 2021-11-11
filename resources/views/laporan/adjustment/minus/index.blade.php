@@ -82,7 +82,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row" style="margin-bottom: 1em;">
+                            {{-- <div class="form-group row" style="margin-bottom: 1em;">
                                 <div class="col-md-6">
                                     <label for="barang" class="control-label">Barang</label>
                                     <select name="barang" class="form-control" id="barang">
@@ -111,7 +111,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <button type="submit" class="btn btn-sm btn-success">
                                 <i class="fa fa-eye"></i> Cek

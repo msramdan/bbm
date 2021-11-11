@@ -28,7 +28,10 @@ class PesananPenjualanController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $penjualan = PesananPenjualan::with('pelanggan', 'matauang')->withCount('pesanan_penjualan_detail');
+            $penjualan = PesananPenjualan::with(
+                'pelanggan:id,kode,nama_pelanggan',
+                'matauang:id,kode,nama'
+            )->withCount('pesanan_penjualan_detail');
 
             return datatables()::of($penjualan)
                 ->addIndexColumn()
@@ -131,7 +134,12 @@ class PesananPenjualanController extends Controller
      */
     public function show(PesananPenjualan $pesananPenjualan)
     {
-        $pesananPenjualan->load('pesanan_penjualan_detail', 'pelanggan', 'matauang');
+        $pesananPenjualan->load(
+            'pesanan_penjualan_detail',
+            'pesanan_penjualan_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'pelanggan:id,kode,nama_pelanggan',
+            'matauang:id,kode,nama',
+        );
 
         return view('penjualan.pesanan.show', compact('pesananPenjualan'));
     }
@@ -144,7 +152,12 @@ class PesananPenjualanController extends Controller
      */
     public function edit(PesananPenjualan $pesananPenjualan)
     {
-        $pesananPenjualan->load('pesanan_penjualan_detail', 'pelanggan', 'matauang');
+        $pesananPenjualan->load(
+            'pesanan_penjualan_detail',
+            'pesanan_penjualan_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'pelanggan:id,kode,nama_pelanggan',
+            'matauang:id,kode,nama',
+        );
 
         return view('penjualan.pesanan.edit', compact('pesananPenjualan'));
     }

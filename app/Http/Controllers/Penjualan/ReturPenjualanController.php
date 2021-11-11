@@ -32,7 +32,10 @@ class ReturPenjualanController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $retur = ReturPenjualan::with('gudang', 'penjualan')->withCount('retur_penjualan_detail');
+            $retur = ReturPenjualan::with(
+                'gudang:id,kode,nama',
+                'penjualan'
+            )->withCount('retur_penjualan_detail');
 
             return Datatables::of($retur)
                 ->addIndexColumn()
@@ -132,7 +135,14 @@ class ReturPenjualanController extends Controller
      */
     public function show(ReturPenjualan $returPenjualan)
     {
-        $returPenjualan->load('retur_penjualan_detail', 'gudang', 'penjualan')->withCount('retur_penjualan_detail');
+        $returPenjualan->load(
+            'retur_penjualan_detail',
+            'retur_penjualan_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'penjualan.gudang:id,kode,nama',
+            'penjualan.salesman:id,kode,nama',
+            'penjualan.pelanggan:id,kode,nama_pelanggan',
+            'penjualan.matauang:id,kode,nama'
+        )->withCount('retur_penjualan_detail');
 
         return view('penjualan.retur.show', compact('returPenjualan'));
     }
@@ -145,7 +155,14 @@ class ReturPenjualanController extends Controller
      */
     public function edit(ReturPenjualan $returPenjualan)
     {
-        $returPenjualan->load('retur_penjualan_detail', 'gudang', 'penjualan')->withCount('retur_penjualan_detail');
+        $returPenjualan->load(
+            'retur_penjualan_detail',
+            'retur_penjualan_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'penjualan.gudang:id,kode,nama',
+            'penjualan.salesman:id,kode,nama',
+            'penjualan.pelanggan:id,kode,nama_pelanggan',
+            'penjualan.matauang:id,kode,nama'
+        )->withCount('retur_penjualan_detail');
 
         return view('penjualan.retur.edit', compact('returPenjualan'));
     }
@@ -223,7 +240,13 @@ class ReturPenjualanController extends Controller
         // kalo ngakses dari browser
         abort_if(!request()->ajax(), 404);
 
-        $penjualan = Penjualan::with('pelanggan', 'salesman', 'matauang', 'penjualan_detail')->findOrFail($id);
+        $penjualan = Penjualan::with(
+            'pelanggan:id,kode,nama_pelanggan,alamat',
+            'salesman:id,kode,nama',
+            'matauang:id,kode,nama',
+            'penjualan_detail',
+            'penjualan_detail.barang:id,kode,nama,harga_jual,harga_beli',
+        )->findOrFail($id);
 
         return response()->json($penjualan, 200);
     }

@@ -283,6 +283,12 @@
                         </li>
 
                         <li>
+                            <a href="{{ route('pesanan-penjualan.laporan') }}">
+                                {{ trans('dashboard.laporan.pesanan_penjualan') }}
+                            </a>
+                        </li>
+
+                        <li>
                             <a href="{{ route('penjualan.laporan') }}">
                                 {{ trans('dashboard.laporan.penjualan') }}
                             </a>

@@ -73,7 +73,7 @@
 
                                     <select name="matauang" id="matauang" class="form-control" disabled>
                                         <option value="{{ $adjustmentPlus->matauang->kode }}">
-                                            {{ $adjustmentPlus->matauang->kode . ' - ' . $adjustmentPlus->matauang->nama }}
+                                            {{ $adjustmentPlus->matauang->kode }}
                                         </option>
                                     </select>
                                 </div>

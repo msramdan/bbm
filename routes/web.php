@@ -10,7 +10,7 @@ use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianControlle
 use App\Http\Controllers\Penjualan\{PenjualanController, PesananPenjualanController, ReturPenjualanController};
 use App\Http\Controllers\Setting\{TokoController, UserController};
 use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
-use App\Http\Controllers\Laporan\{AdjustmentMinusReportController, AdjustmentPlusReportController, BiayaReportController, CekGiroReportController, GrossProfitReportController, KomisiReportController, NettProfitReportController, PelunasanHutangReportController, PelunasanPiutangReportController, PembelianReportController, PenjualanReportController, PesananPembelianReportController, ReturPembelianReportController, ReturPenjualanReportController, SaldoHutangReportController, SaldoPiutangReportController, StokBarangReportController};
+use App\Http\Controllers\Laporan\{AdjustmentMinusReportController, AdjustmentPlusReportController, BiayaReportController, CekGiroReportController, GrossProfitReportController, KomisiReportController, NettProfitReportController, PelunasanHutangReportController, PelunasanPiutangReportController, PembelianReportController, PenjualanReportController, PesananPembelianReportController, PesananPenjualanReportController, ReturPembelianReportController, ReturPenjualanReportController, SaldoHutangReportController, SaldoPiutangReportController, StokBarangReportController};
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -182,6 +182,10 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     // Penjualan
     Route::get('/penjualan/pdf', [PenjualanReportController::class, 'pdf'])->name('penjualan.pdf');
     Route::get('/penjualan', [PenjualanReportController::class, 'index'])->name('penjualan.laporan');
+
+    // Penjualan Retur
+    Route::get('/pesanan-penjualan/pdf', [PesananPenjualanReportController::class, 'pdf'])->name('pesanan-penjualan.pdf');
+    Route::get('/pesanan-penjualan', [PesananPenjualanReportController::class, 'index'])->name('pesanan-penjualan.laporan');
 
     // Penjualan Retur
     Route::get('/retur-penjualan/pdf', [ReturPenjualanReportController::class, 'pdf'])->name('retur-penjualan.pdf');

@@ -210,6 +210,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'laporan pesanan pembelian']);
         Permission::create(['name' => 'laporan pembelian']);
         Permission::create(['name' => 'laporan retur pembelian']);
+        Permission::create(['name' => 'laporan pesanan penjualan']);
         Permission::create(['name' => 'laporan penjualan']);
         Permission::create(['name' => 'laporan retur penjualan']);
         Permission::create(['name' => 'laporan pelunasan hutang']);

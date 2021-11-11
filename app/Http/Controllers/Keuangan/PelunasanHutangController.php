@@ -29,7 +29,12 @@ class PelunasanHutangController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pelunasan = PelunasanHutang::with('pembelian', 'pembelian.supplier', 'pembelian.matauang');
+            $pelunasan = PelunasanHutang::with(
+                'pembelian:id,kode,tanggal,total_netto,matauang_id,supplier_id',
+                'pembelian.matauang:id,kode,nama',
+                'pembelian.supplier:id,kode,nama_supplier',
+                'pembelian.matauang:id,kode,nama'
+            );
 
             return DataTables::of($pelunasan)
                 ->addIndexColumn()
@@ -112,7 +117,14 @@ class PelunasanHutangController extends Controller
      */
     public function show(PelunasanHutang $pelunasanHutang)
     {
-        $pelunasanHutang->load('pembelian', 'pembelian.supplier', 'pembelian.matauang');
+        $pelunasanHutang->load(
+            'pembelian:id,kode,tanggal,total_netto,matauang_id',
+            'pembelian.matauang:id,kode,nama',
+            'bank:id,kode,nama',
+            'rekening_bank:id,kode,nomor_rekening,nama_rekening',
+            'pembelian.supplier:id,kode,nama_supplier',
+            'pembelian.matauang:id,kode,nama'
+        );
 
         return view('keuangan.pelunasan.hutang.show', compact('pelunasanHutang'));
     }
@@ -125,7 +137,14 @@ class PelunasanHutangController extends Controller
      */
     public function edit(PelunasanHutang $pelunasanHutang)
     {
-        $pelunasanHutang->load('pembelian', 'pembelian.supplier', 'pembelian.matauang');
+        $pelunasanHutang->load(
+            'pembelian:id,kode,tanggal,total_netto,matauang_id',
+            'pembelian.matauang:id,kode,nama',
+            'bank:id,kode,nama',
+            'rekening_bank:id,kode,nomor_rekening,nama_rekening',
+            'pembelian.supplier:id,kode,nama_supplier',
+            'pembelian.matauang:id,kode,nama'
+        );
 
         return view('keuangan.pelunasan.hutang.edit', compact('pelunasanHutang'));
     }
@@ -195,7 +214,10 @@ class PelunasanHutangController extends Controller
     {
         abort_if(!request()->ajax(), 404);
 
-        $pembelianBelumLunas = Pembelian::with('supplier', 'matauang')->findOrFail($id);
+        $pembelianBelumLunas = Pembelian::with(
+            'supplier:id,kode,nama_supplier',
+            'matauang:id,kode,nama'
+        )->findOrFail($id);
 
         return response()->json($pembelianBelumLunas, 200);
     }

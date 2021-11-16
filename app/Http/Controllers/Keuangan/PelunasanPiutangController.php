@@ -28,7 +28,11 @@ class PelunasanPiutangController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pelunasan = PelunasanPiutang::with('penjualan', 'penjualan.pelanggan', 'penjualan.matauang');
+            $pelunasan = PelunasanPiutang::with(
+                'penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
+                'penjualan.matauang:id,kode,nama',
+                'penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
+            );
 
             return DataTables::of($pelunasan)
                 ->addIndexColumn()
@@ -111,7 +115,13 @@ class PelunasanPiutangController extends Controller
      */
     public function show(PelunasanPiutang $pelunasanPiutang)
     {
-        $pelunasanPiutang->load('penjualan', 'penjualan.pelanggan', 'penjualan.matauang');
+        $pelunasanPiutang->load(
+            'penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
+            'penjualan.matauang:id,kode,nama',
+            'penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
+            'bank:id,kode,nama',
+            'rekening_bank:id,nomor_rekening,nama_rekening'
+        );
 
         return view('keuangan.pelunasan.piutang.show', compact('pelunasanPiutang'));
     }
@@ -124,7 +134,13 @@ class PelunasanPiutangController extends Controller
      */
     public function edit(PelunasanPiutang $pelunasanPiutang)
     {
-        $pelunasanPiutang->load('penjualan', 'penjualan.pelanggan', 'penjualan.matauang');
+        $pelunasanPiutang->load(
+            'penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
+            'penjualan.matauang:id,kode,nama',
+            'penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
+            'bank:id,kode,nama',
+            'rekening_bank:id,nomor_rekening,nama_rekening'
+        );
 
         return view('keuangan.pelunasan.piutang.edit', compact('pelunasanPiutang'));
     }
@@ -194,7 +210,17 @@ class PelunasanPiutangController extends Controller
     {
         abort_if(!request()->ajax(), 404);
 
-        $penjualanBelumLunas = Penjualan::with('pelanggan', 'matauang')->findOrFail($id);
+        $penjualanBelumLunas = Penjualan::select(
+            'id',
+            'kode',
+            'total_netto',
+            'tanggal',
+            'matauang_id',
+            'pelanggan_id'
+        )->with(
+            'pelanggan:id,kode,nama_pelanggan,alamat',
+            'matauang:id,kode,nama'
+        )->findOrFail($id);
 
         return response()->json($penjualanBelumLunas, 200);
     }

@@ -10,7 +10,7 @@ use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianControlle
 use App\Http\Controllers\Penjualan\{PenjualanController, PesananPenjualanController, ReturPenjualanController};
 use App\Http\Controllers\Setting\{TokoController, UserController};
 use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
-use App\Http\Controllers\Laporan\{AdjustmentMinusReportController, AdjustmentPlusReportController, BiayaReportController, CekGiroReportController, GrossProfitReportController, KomisiReportController, NettProfitReportController, PelunasanHutangReportController, PelunasanPiutangReportController, PembelianReportController, PenjualanReportController, PesananPembelianReportController, ReturPembelianReportController, ReturPenjualanReportController, SaldoHutangReportController, SaldoPiutangReportController, StokBarangReportController};
+use App\Http\Controllers\Laporan\{AdjustmentMinusReportController, AdjustmentPlusReportController, BiayaReportController, CekGiroReportController, GrossProfitReportController, KomisiReportController, NettProfitReportController, PelunasanHutangReportController, PelunasanPiutangReportController, PembelianReportController, PenjualanReportController, PesananPembelianReportController, PesananPenjualanReportController, ReturPembelianReportController, ReturPenjualanReportController, SaldoHutangReportController, SaldoPiutangReportController, StokBarangReportController};
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -184,6 +184,10 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     Route::get('/penjualan', [PenjualanReportController::class, 'index'])->name('penjualan.laporan');
 
     // Penjualan Retur
+    Route::get('/pesanan-penjualan/pdf', [PesananPenjualanReportController::class, 'pdf'])->name('pesanan-penjualan.pdf');
+    Route::get('/pesanan-penjualan', [PesananPenjualanReportController::class, 'index'])->name('pesanan-penjualan.laporan');
+
+    // Penjualan Retur
     Route::get('/retur-penjualan/pdf', [ReturPenjualanReportController::class, 'pdf'])->name('retur-penjualan.pdf');
     Route::get('/retur-penjualan', [ReturPenjualanReportController::class, 'index'])->name('retur-penjualan.laporan');
 
@@ -199,17 +203,17 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     Route::get('/biaya/pdf', [BiayaReportController::class, 'pdf'])->name('biaya.pdf');
     Route::get('/biaya', [BiayaReportController::class, 'index'])->name('biaya.laporan');
 
-    // // Saldo Hutang
-    // Route::get('/saldo-hutang/pdf', [SaldoHutangReportController::class, 'pdf'])->name('saldo-hutang.pdf');
-    // Route::get('/saldo-hutang', [SaldoHutangReportController::class, 'index'])->name('saldo-hutang.laporan');
+    // Saldo Hutang
+    Route::get('/saldo-hutang/pdf', [SaldoHutangReportController::class, 'pdf'])->name('saldo-hutang.pdf');
+    Route::get('/saldo-hutang', [SaldoHutangReportController::class, 'index'])->name('saldo-hutang.laporan');
 
-    // // Saldo Piutang
-    // Route::get('/saldo-piutang/pdf', [SaldoPiutangReportController::class, 'pdf'])->name('saldo-piutang.pdf');
-    // Route::get('/saldo-piutang', [SaldoPiutangReportController::class, 'index'])->name('saldo-piutang.laporan');
+    // Saldo Piutang
+    Route::get('/saldo-piutang/pdf', [SaldoPiutangReportController::class, 'pdf'])->name('saldo-piutang.pdf');
+    Route::get('/saldo-piutang', [SaldoPiutangReportController::class, 'index'])->name('saldo-piutang.laporan');
 
-    // // Stok Barang
-    // Route::get('/stok-barang/pdf', [StokBarangReportController::class, 'pdf'])->name('stok-barang.pdf');
-    // Route::get('/stok-barang', [StokBarangReportController::class, 'index'])->name('stok-barang.laporan');
+    // Stok Barang
+    Route::get('/stok-barang/pdf', [StokBarangReportController::class, 'pdf'])->name('stok-barang.pdf');
+    Route::get('/stok-barang', [StokBarangReportController::class, 'index'])->name('stok-barang.laporan');
 
     // Komisi Salesman
     Route::get('/komisi-salesman/pdf', [KomisiReportController::class, 'pdf'])->name('komisi-salesman.pdf');
@@ -219,11 +223,11 @@ Route::group(['prefix' => 'laporan', 'middleware' => ['web', 'auth']], function 
     Route::get('/cek-giro/pdf', [CekGiroReportController::class, 'pdf'])->name('cek-giro.pdf');
     Route::get('/cek-giro', [CekGiroReportController::class, 'index'])->name('cek-giro.laporan');
 
-    // // Gross Profit
-    // Route::get('/gross-profit/pdf', [GrossProfitReportController::class, 'pdf'])->name('gross-profit.pdf');
-    // Route::get('/gross-profit', [GrossProfitReportController::class, 'index'])->name('gross-profit.laporan');
+    // Gross Profit
+    Route::get('/gross-profit/pdf', [GrossProfitReportController::class, 'pdf'])->name('gross-profit.pdf');
+    Route::get('/gross-profit', [GrossProfitReportController::class, 'index'])->name('gross-profit.laporan');
 
-    // // nett Profit
-    // Route::get('/nett-profit/pdf', [NettProfitReportController::class, 'pdf'])->name('nett-profit.pdf');
-    // Route::get('/nett-profit', [NettProfitReportController::class, 'index'])->name('nett-profit.laporan');
+    // nett Profit
+    Route::get('/nett-profit/pdf', [NettProfitReportController::class, 'pdf'])->name('nett-profit.pdf');
+    Route::get('/nett-profit', [NettProfitReportController::class, 'index'])->name('nett-profit.laporan');
 });

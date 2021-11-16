@@ -28,7 +28,13 @@ class AdjustmentPlusController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')->withCount('adjustment_plus_detail')->orderByDesc('updated_at');
+            $adjustmentPlus = AdjustmentPlus::with(
+                'adjustment_plus_detail',
+                'adjustment_plus_detail.barang:id,kode,nama,harga_jual,harga_beli',
+                'adjustment_plus_detail.supplier:id,kode,nama_supplier',
+                'matauang:id,kode,nama',
+                'gudang:id,kode,nama'
+            )->withCount('adjustment_plus_detail')->orderByDesc('updated_at');
 
             return Datatables::of($adjustmentPlus)
                 ->addIndexColumn()
@@ -118,7 +124,13 @@ class AdjustmentPlusController extends Controller
      */
     public function show($id)
     {
-        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')
+        $adjustmentPlus = AdjustmentPlus::with(
+            'adjustment_plus_detail',
+            'adjustment_plus_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'adjustment_plus_detail.supplier:id,kode,nama_supplier',
+            'matauang:id,kode,nama',
+            'gudang:id,kode,nama'
+        )
             ->withCount('adjustment_plus_detail')
             ->findOrFail($id);
 
@@ -133,7 +145,13 @@ class AdjustmentPlusController extends Controller
      */
     public function edit($id)
     {
-        $adjustmentPlus = AdjustmentPlus::with('adjustment_plus_detail', 'matauang', 'gudang')
+        $adjustmentPlus = AdjustmentPlus::with(
+            'adjustment_plus_detail',
+            'adjustment_plus_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'adjustment_plus_detail.supplier:id,kode,nama_supplier',
+            'matauang:id,kode,nama',
+            'gudang:id,kode,nama'
+        )
             ->withCount('adjustment_plus_detail')
             ->findOrFail($id);
 

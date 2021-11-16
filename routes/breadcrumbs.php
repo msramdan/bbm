@@ -593,6 +593,13 @@ Breadcrumbs::for('laporan_penjualan', function (BreadcrumbTrail $trail) {
     $trail->push('Penjualan', route('penjualan.laporan'));
 });
 
+// Laporan > Pesanan Penjualan
+Breadcrumbs::for('laporan_pesanan_penjualan', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Pesanan Penjualan', route('pesanan-penjualan.laporan'));
+});
+
+
 // Laporan > Retur Penjualan
 Breadcrumbs::for('laporan_retur_penjualan', function (BreadcrumbTrail $trail) {
     $trail->parent('laporan');
@@ -617,23 +624,19 @@ Breadcrumbs::for('laporan_biaya', function (BreadcrumbTrail $trail) {
     $trail->push('Biaya', route('biaya.laporan'));
 });
 
-// // Laporan > Saldo Hutang
-// Breadcrumbs::for('laporan_saldo_hutang', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Saldo Hutang', route('saldo-hutang.laporan'));
-// });
+// Laporan > Saldo Hutang
+Breadcrumbs::for('laporan_saldo_hutang', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Saldo Hutang', route('saldo-hutang.laporan'));
+});
 
-// // Laporan > Saldo Piutang
-// Breadcrumbs::for('laporan_saldo_piutang', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Saldo Piutang', route('saldo-piutang.laporan'));
-// });
+// Laporan > Saldo Piutang
+Breadcrumbs::for('laporan_saldo_piutang', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Saldo Piutang', route('saldo-piutang.laporan'));
+});
 
-// // Laporan > Stok Barang
-// Breadcrumbs::for('laporan_stok_barang', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Stok Barang', route('stok-barang.laporan'));
-// });
+
 
 // Laporan > Komisi Salesman
 Breadcrumbs::for('laporan_komisi_salesman', function (BreadcrumbTrail $trail) {
@@ -647,20 +650,20 @@ Breadcrumbs::for('laporan_cek_giro', function (BreadcrumbTrail $trail) {
     $trail->push('Cek-Giro', route('cek-giro.laporan'));
 });
 
-// // Laporan > Gross Profit
-// Breadcrumbs::for('laporan_gross_profit', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Gross Profit', route('gross-profit.laporan'));
-// });
+// Laporan > Gross Profit
+Breadcrumbs::for('laporan_gross_profit', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Gross Profit', route('gross-profit.laporan'));
+});
 
-// // Laporan > Stok Barang
-// Breadcrumbs::for('laporan_stok_barang', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Stok Barang', route('stok-barang.laporan'));
-// });
+// Laporan > Stok Barang
+Breadcrumbs::for('laporan_stok_barang', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Stok Barang', route('stok-barang.laporan'));
+});
 
-// // Laporan > Nett Profit
-// Breadcrumbs::for('laporan_nett_profit', function (BreadcrumbTrail $trail) {
-//     $trail->parent('laporan');
-//     $trail->push('Nett Profit', route('nett-profit.laporan'));
-// });
+// Laporan > Nett Profit
+Breadcrumbs::for('laporan_nett_profit', function (BreadcrumbTrail $trail) {
+    $trail->parent('laporan');
+    $trail->push('Nett Profit', route('nett-profit.laporan'));
+});

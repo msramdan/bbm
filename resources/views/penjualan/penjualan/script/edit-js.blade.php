@@ -703,6 +703,7 @@
             $('#qty_input').val('')
             $('#ppn_input').val('')
             $('#netto_input').val('')
+            $('#gross_input').val('')
             $('#diskon_input').val('')
             $('#diskon_persen_input').val('')
 

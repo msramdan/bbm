@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
-use App\Models\PesananPembelian;
+use App\Models\PesananPenjualan;
 use Barryvdh\DomPDF\Facade as PDF;
 
-class PesananPembelianReportController extends Controller
+class PesananPenjualanReportController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:laporan pesanan pembelian');
+        // $this->middleware('permission:laporan pesanan penjualan');
     }
 
     public function index()
@@ -21,7 +21,7 @@ class PesananPembelianReportController extends Controller
             $laporan = $this->getLaporan();
         }
 
-        return view('laporan.pembelian.pesanan.index', compact('laporan'));
+        return view('laporan.penjualan.pesanan.index', compact('laporan'));
     }
 
     public function pdf()
@@ -34,22 +34,22 @@ class PesananPembelianReportController extends Controller
 
         $toko = $this->getToko();
 
-        $pdf = PDF::loadView('laporan.pembelian.pesanan.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadView('laporan.penjualan.pesanan.pdf',  compact('laporan', 'toko'))->setPaper('a4', 'potrait');
 
-        $namaFile = trans('dashboard.laporan.pesanan_pembelian') . ' - ' . date('d F Y') . '.pdf';
+        $namaFile = trans('dashboard.laporan.pesanan_penjualan') . ' - ' . date('d F Y') . '.pdf';
 
         return $pdf->stream($namaFile);
     }
 
     protected function getLaporan()
     {
-        return PesananPembelian::with(
-            'pesanan_pembelian_detail',
-            'pesanan_pembelian_detail.barang',
-            'supplier:id,kode,nama_supplier',
+        return PesananPenjualan::with(
+            'pesanan_penjualan_detail',
+            'pesanan_penjualan_detail.barang',
+            'pelanggan:id,kode,nama_pelanggan',
             'matauang:id,kode,nama'
         )
-            ->whereHas('pesanan_pembelian_detail.barang', function ($q) {
+            ->whereHas('pesanan_penjualan_detail.barang', function ($q) {
                 $q->when(request()->query('barang'), function ($q) {
                     $q->where('barang_id',  request()->query('barang'));
                 });
@@ -57,8 +57,8 @@ class PesananPembelianReportController extends Controller
             ->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
                 $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
             })
-            ->when(request()->query('supplier'), function ($q) {
-                $q->where('supplier_id',  request()->query('supplier'));
+            ->when(request()->query('pelanggan'), function ($q) {
+                $q->where('pelanggan_id',  request()->query('pelanggan'));
             })
             ->when(request()->query('status'), function ($q) {
                 $q->where('status_po',  request()->query('status'));

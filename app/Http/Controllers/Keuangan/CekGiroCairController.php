@@ -123,15 +123,15 @@ class CekGiroCairController extends Controller
         $cekGiroCair->load(
             'cek_giro',
             'cek_giro.pembelian',
-            'cek_giro.pembelian.matauang',
-            'cek_giro.pembelian.supplier',
+            'cek_giro.pembelian.matauang:id,kode,nama',
+            'cek_giro.pembelian.supplier:id,kode,nama_supplier',
             'cek_giro.pembelian.pembelian_pembayaran',
             'cek_giro.penjualan',
-            'cek_giro.penjualan.matauang',
-            'cek_giro.penjualan.pelanggan',
+            'cek_giro.penjualan.matauang:id,kode,nama',
+            'cek_giro.penjualan.pelanggan:id,kode,nama_pelanggan',
             'cek_giro.penjualan.penjualan_pembayaran',
-            'rekening',
-            'bank'
+            'rekening:id,nomor_rekening,nama_rekening',
+            'bank:id,kode,nama'
         );
 
         return view('keuangan.cek-giro.cair.show', compact('cekGiroCair'));
@@ -148,15 +148,15 @@ class CekGiroCairController extends Controller
         $cekGiroCair->load(
             'cek_giro',
             'cek_giro.pembelian',
-            'cek_giro.pembelian.matauang',
-            'cek_giro.pembelian.supplier',
+            'cek_giro.pembelian.matauang:id,kode,nama',
+            'cek_giro.pembelian.supplier:id,kode,nama_supplier',
             'cek_giro.pembelian.pembelian_pembayaran',
             'cek_giro.penjualan',
-            'cek_giro.penjualan.matauang',
-            'cek_giro.penjualan.pelanggan',
+            'cek_giro.penjualan.matauang:id,kode,nama',
+            'cek_giro.penjualan.pelanggan:id,kode,nama_pelanggan',
             'cek_giro.penjualan.penjualan_pembayaran',
-            'rekening',
-            'bank'
+            'rekening:id,nomor_rekening,nama_rekening',
+            'bank:id,kode,nama'
         );
 
         return view('keuangan.cek-giro.cair.edit', compact('cekGiroCair'));

@@ -43,7 +43,13 @@ class PenjualanReportController extends Controller
 
     protected function getLaporan()
     {
-        return Penjualan::with('penjualan_detail', 'gudang', 'pelanggan', 'salesman', 'matauang')
+        return Penjualan::with(
+            'penjualan_detail',
+            'gudang:id,nama',
+            'pelanggan:id,nama_pelanggan',
+            'salesman:id,nama',
+            'matauang:id,kode'
+        )
             ->when(request()->query('pelanggan'), function ($q) {
                 $q->where('pelanggan_id',  request()->query('pelanggan'));
             })

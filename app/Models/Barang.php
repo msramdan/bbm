@@ -47,4 +47,14 @@ class Barang extends Model
     {
         return $this->belongsTo(Matauang::class, 'harga_jual_matauang');
     }
+
+    public function pembelian_detail()
+    {
+        return $this->hasMany(PembelianDetail::class);
+    }
+
+    public function pesanan_pembelian_detail()
+    {
+        return $this->hasMany(PesananPembelianDetail::class);
+    }
 }

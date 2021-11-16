@@ -28,7 +28,10 @@ class AdjustmentMinusController extends Controller
      */
     public function index()
     {
-        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail',  'gudang')->withCount('adjustment_minus_detail')->orderByDesc('updated_at');
+        $adjustmentMinus = AdjustmentMinus::with(
+            'adjustment_minus_detail',
+            'gudang:id,kode,nama'
+        )->withCount('adjustment_minus_detail')->orderByDesc('updated_at');
 
         if (request()->ajax()) {
             return Datatables::of($adjustmentMinus)
@@ -108,7 +111,12 @@ class AdjustmentMinusController extends Controller
      */
     public function show($id)
     {
-        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail', 'gudang')
+        $adjustmentMinus = AdjustmentMinus::with(
+            'adjustment_minus_detail',
+            'adjustment_minus_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'adjustment_minus_detail.supplier:id,kode,nama_supplier',
+            'gudang:id,kode,nama'
+        )
             ->withCount('adjustment_minus_detail')
             ->findOrFail($id);
 
@@ -123,7 +131,12 @@ class AdjustmentMinusController extends Controller
      */
     public function edit($id)
     {
-        $adjustmentMinus = AdjustmentMinus::with('adjustment_minus_detail', 'gudang')
+        $adjustmentMinus = AdjustmentMinus::with(
+            'adjustment_minus_detail',
+            'adjustment_minus_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'adjustment_minus_detail.supplier:id,kode,nama_supplier',
+            'gudang:id,kode,nama'
+        )
             ->withCount('adjustment_minus_detail')
             ->findOrFail($id);
 

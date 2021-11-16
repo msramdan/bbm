@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ trans('dashboard.laporan.pesanan_pembelian') }}</title>
+    <title>{{ trans('dashboard.laporan.pesanan_penjualan') }}</title>
 
     <style>
         body {
@@ -74,7 +74,7 @@
         <div class="garis"></div>
 
         <center>
-            <h4>{{ trans('dashboard.laporan.pesanan_pembelian') }}</h4>
+            <h4>{{ trans('dashboard.laporan.pesanan_penjualan') }}</h4>
             <p><small>{{ date('d F Y') }}</small></p>
         </center>
 
@@ -84,7 +84,7 @@
                     <th width="15">No.</th>
                     <th colspan="4">Kode</th>
                     <th colspan="3">Tanggal</th>
-                    <th colspan="3">Supplier</th>
+                    <th colspan="3">Pelanggan</th>
                     <th>Rate</th>
                     <th>Status</th>
                 </tr>
@@ -103,10 +103,10 @@
                         <th colspan="4">{{ $item->kode }}</th>
                         <th colspan="3">{{ $item->tanggal->format('d F Y') }}</th>
                         <th colspan="3">
-                            {{ $item->supplier ? $item->supplier->nama_supplier : 'Tanpa Supplier' }}
+                            {{ $item->pelanggan ? $item->pelanggan->nama_pelanggan : 'Tanpa pelanggan' }}
                         </th>
                         <th>{{ $item->rate }}</th>
-                        <th>{{ $item->status_po }}</th>
+                        <th>{{ $item->status }}</th>
                     </tr>
                     <tr>
                         <th></th>
@@ -120,7 +120,7 @@
                         <th>Clr.Fee</th>
                         <th>Subtotal</th>
                     </tr>
-                    @foreach ($item->pesanan_pembelian_detail as $detail)
+                    @foreach ($item->pesanan_penjualan_detail as $detail)
                         <tr>
                             <td></td>
                             <td colspan="4">

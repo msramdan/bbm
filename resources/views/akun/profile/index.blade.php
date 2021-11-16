@@ -32,8 +32,8 @@
                         </div>
                         <h4 class="panel-title">{{ trans('profile.title.edit') }}</h4>
                     </div>
-                    <div class="panel-body" style="padding-left: 30px; padding-right: 30px;">
-                        <form class="form-horizontal" action="{{ route('profile.store') }}" method="post"
+                    <div class="panel-body">
+                        <form  action="{{ route('profile.store') }}" method="post"
                             enctype="multipart/form-data" novalidate>
                             @csrf
 

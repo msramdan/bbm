@@ -44,12 +44,14 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.adjustment.plus.index',
             'laporan.adjustment.minus.index',
             'laporan.pembelian.pesanan.index',
-            'laporan.pembelian.pembelian.index',
+            // 'laporan.pembelian.pembelian.index',
             'laporan.pembelian.retur.index',
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
+            // 'laporan.profit.gross.index',
+            'laporan.stok.index'
         ], function ($view) {
-            return $view->with('barang', Barang::where('status', 'Y')->where('jenis', 1)->get());
+            return $view->with('barang', Barang::select('id', 'kode', 'nama', 'harga_jual', 'harga_beli', 'stok', 'min_stok')->where('status', 'Y')->where('jenis', 1)->get());
         });
 
         // 1 =  barang, 2 = paket
@@ -59,7 +61,7 @@ class ViewServiceProvider extends ServiceProvider
             'inventory.perakitan-paket.create',
             'inventory.perakitan-paket.edit'
         ], function ($view) {
-            return $view->with('paket', Barang::where('status', 'Y')->where('jenis', 2)->get());
+            return $view->with('paket', Barang::select('id', 'kode', 'nama', 'harga_jual', 'harga_beli', 'stok', 'min_stok')->where('status', 'Y')->where('jenis', 2)->get());
         });
 
         // list supplier
@@ -76,9 +78,10 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.pesanan.index',
             'laporan.pembelian.pembelian.index',
             'laporan.pembelian.retur.index',
-            'laporan.pelunasan.hutang.index'
+            'laporan.pelunasan.hutang.index',
+            'laporan.saldo.hutang.index',
         ], function ($view) {
-            return $view->with('supplier', Supplier::where('status', 'Y')->get());
+            return $view->with('supplier', Supplier::select('id', 'kode', 'alamat', 'status', 'nama_supplier')->where('status', 'Y')->get());
         });
 
 
@@ -104,8 +107,10 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.retur.index',
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
+            'laporan.profit.gross.index',
+            'laporan.stok.index'
         ], function ($view) {
-            return $view->with('gudang', Gudang::all());
+            return $view->with('gudang', Gudang::select('id', 'kode', 'nama')->where('status', 'Y')->get());
         });
 
 
@@ -124,9 +129,12 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.biaya.edit',
             'laporan.pelunasan.hutang.index',
             'laporan.pelunasan.piutang.index',
-            'penjualan.pesanan.create'
+            'penjualan.pesanan.create',
+            'laporan.saldo.hutang.index',
+            'laporan.saldo.piutang.index',
+            'laporan.profit.gross.index'
         ], function ($view) {
-            return $view->with('matauang', Matauang::all());
+            return $view->with('matauang', Matauang::select('id', 'kode', 'nama')->get());
         });
 
 
@@ -148,7 +156,7 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.biaya.edit',
             'laporan.biaya.index',
         ], function ($view) {
-            return $view->with('bank', Bank::all());
+            return $view->with('bank', Bank::select('id', 'kode', 'nama')->get());
         });
 
 
@@ -178,14 +186,14 @@ class ViewServiceProvider extends ServiceProvider
         View::composer([
             'penjualan.retur.create'
         ], function ($view) {
-            return $view->with('penjualan', Penjualan::where('retur', 'NO')->get());
+            return $view->with('penjualan', Penjualan::select('kode', 'id')->where('retur', 'NO')->get());
         });
 
         // list semua  penjualan
         View::composer([
             'laporan.pelunasan.piutang.index',
         ], function ($view) {
-            return $view->with('semuaPenjualan', Penjualan::all());
+            return $view->with('semuaPenjualan', Penjualan::select('kode', 'id')->get());
         });
 
 
@@ -195,7 +203,7 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.pelunasan.hutang.create',
             // 'laporan.pelunasan.hutang.index'
         ], function ($view) {
-            $pembelianBelumLunas = Pembelian::select(['kode', 'id'])->whereStatus('Belum Lunas')->get();
+            $pembelianBelumLunas = Pembelian::select('kode', 'id')->whereStatus('Belum Lunas')->get();
             return $view->with('pembelianBelumLunas', $pembelianBelumLunas);
         });
 
@@ -204,7 +212,7 @@ class ViewServiceProvider extends ServiceProvider
             'keuangan.pelunasan.piutang.edit',
             'keuangan.pelunasan.piutang.create'
         ], function ($view) {
-            $penjualanBelumLunas = Penjualan::select(['kode', 'id'])->whereStatus('Belum Lunas')->get();
+            $penjualanBelumLunas = Penjualan::select('kode', 'id')->whereStatus('Belum Lunas')->get();
             return $view->with('penjualanBelumLunas', $penjualanBelumLunas);
         });
 
@@ -218,6 +226,9 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pelunasan.piutang.index',
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
+            'laporan.saldo.piutang.index',
+            'laporan.profit.gross.index',
+            'laporan.penjualan.pesanan.index'
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::select('id', 'nama_pelanggan', 'alamat', 'kode')->where('status', 'Y')->get());
         });
@@ -246,14 +257,14 @@ class ViewServiceProvider extends ServiceProvider
             'pembelian.retur.create',
             'pembelian.retur.edit',
         ], function ($view) {
-            return $view->with('pembelian', Pembelian::where('retur', 'NO')->get());
+            return $view->with('pembelian', Pembelian::select('id', 'kode')->where('retur', 'NO')->get());
         });
 
         // list semua pembelian
         View::composer([
             'laporan.pelunasan.hutang.index'
         ], function ($view) {
-            return $view->with('semuaPembelian', Pembelian::all());
+            return $view->with('semuaPembelian', Pembelian::select('id', 'kode')->get());
         });
 
         // list roles
@@ -290,6 +301,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
             'laporan.komisi-salesman.index',
+            'laporan.saldo.piutang.index',
+            'laporan.profit.gross.index'
         ], function ($view) {
             return $view->with('salesman', Salesman::select('id', 'nama')->where('status', 'Y')->get());
         });
@@ -318,7 +331,8 @@ class ViewServiceProvider extends ServiceProvider
 
         // list Status PO
         View::composer([
-            'laporan.pembelian.pesanan.index'
+            'laporan.pembelian.pesanan.index',
+            'laporan.penjualan.pesanan.index'
         ], function ($view) {
             return $view->with(
                 'statusPo',
@@ -423,6 +437,31 @@ class ViewServiceProvider extends ServiceProvider
             );
         });
 
+        // list status Hutang/Piutang
+        View::composer([
+            'laporan.saldo.hutang.index',
+            'laporan.saldo.piutang.index'
+        ], function ($view) {
+            return $view->with(
+                'statusHutangPiutang',
+                collect([
+                    (object)[
+                        'id' => 'Belum Lunas',
+                        'nama' => 'Belum Lunas'
+                    ],
+                    (object)[
+                        'id' => 'Lunas',
+                        'nama' => 'Lunas'
+                    ],
+                    // (object)[
+                    //     'id' => 'Over Due',
+                    //     'nama' => 'Over Due'
+                    // ],
+                ])
+            );
+        });
+
+
 
         // list bentuk kepemilikan stok
         View::composer([
@@ -433,6 +472,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.pembelian.retur.index',
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
+            'laporan.stok.index',
+            'laporan.penjualan.pesanan.index'
         ], function ($view) {
             return $view->with(
                 'bentukKepemilikanStok',

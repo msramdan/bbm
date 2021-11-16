@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="form-group row" style="margin-bottom: 1em;">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="status" class="control-label">Status</label>
                                     <select name="status" class="form-control" id="status">
                                         <option value="" selected>All</option>
@@ -66,7 +66,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="supplier" class="control-label">Supplier</label>
                                     <select name="supplier" class="form-control" id="supplier">
                                         <option value="" selected>All</option>
@@ -78,6 +78,20 @@
                                         @empty
                                             <option value="" selected disabled>Data tidak ditemukan</option>
                                         @endforelse
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="bentuk_kepemilikan_stok">Bentuk Kepemilikan Stok</label>
+                                    <select name="bentuk_kepemilikan_stok" id="bentuk_kepemilikan_stok"
+                                        class="form-control">
+                                        <option value="" selected>All</option>
+                                        @foreach ($bentukKepemilikanStok as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ request()->query('bentuk_kepemilikan_stok') && request()->query('bentuk_kepemilikan_stok') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->nama }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -136,6 +150,7 @@
                                     <th colspan="3">Tanggal</th>
                                     <th colspan="3">Supplier</th>
                                     <th>Rate</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             @php
@@ -155,10 +170,11 @@
                                             {{ $item->supplier ? $item->supplier->nama_supplier : 'Tanpa Supplier' }}
                                         </th>
                                         <th>{{ $item->rate }}</th>
+                                        <th>{{ $item->status_po }}</th>
                                     </tr>
                                     <tr>
                                         <th></th>
-                                        <th colspan="2">Barang</th>
+                                        <th colspan="3">Barang</th>
                                         <th>Qty</th>
                                         <th>Harga</th>
                                         <th>Disc</th>
@@ -171,7 +187,7 @@
                                     @foreach ($item->pesanan_pembelian_detail as $detail)
                                         <tr>
                                             <td></td>
-                                            <td colspan="2">
+                                            <td colspan="3">
                                                 {{ $detail->barang->kode . ' - ' . $detail->barang->nama }}
                                             </td>
                                             <td>{{ $detail->qty }}</td>
@@ -205,7 +221,7 @@
                                     @endforeach
                                     <tr>
                                         <th></th>
-                                        <th colspan="2">Total</th>
+                                        <th colspan="3">Total</th>
                                         <th>{{ $total_qty }}</th>
                                         <th>
                                             {{ $item->matauang->kode . ' ' . number_format($item->total_gross) }}

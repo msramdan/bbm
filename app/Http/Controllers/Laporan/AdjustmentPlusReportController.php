@@ -48,11 +48,11 @@ class AdjustmentPlusReportController extends Controller
     {
         // Optional: ganti make query builder
         return AdjustmentPlus::with(
-            'gudang',
-            'matauang',
+            'gudang:id,kode,nama',
+            'matauang:id,kode,nama',
             'adjustment_plus_detail',
-            'adjustment_plus_detail.barang',
-            'adjustment_plus_detail.supplier',
+            'adjustment_plus_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'adjustment_plus_detail.supplier:id,kode,nama_supplier',
         )
             ->whereHas('adjustment_plus_detail', function ($q) {
                 $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {

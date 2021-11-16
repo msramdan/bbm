@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', trans('dashboard.laporan.adjustment_plus'))
+@section('title', trans('dashboard.laporan.stok_barang'))
 
 @section('content')
     <!-- begin #content -->
     <div id="content" class="content">
-        {{ Breadcrumbs::render('laporan_adjustment_plus') }}
+        {{ Breadcrumbs::render('laporan_stok_barang') }}
         <!-- begin row -->
         <div class="row">
             <!-- begin col-12 -->
@@ -30,27 +30,18 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <h4 class="panel-title">{{ trans('dashboard.laporan.adjustment_plus') }}</h4>
+                        <h4 class="panel-title">{{ trans('dashboard.laporan.stok_barang') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form action="{{ route('adjustment-plus.laporan') }}" method="GET" style="margin-bottom: 1em;">
+                        <form action="{{ route('stok-barang.laporan') }}" method="GET" style="margin-bottom: 1em;">
                             <div class="form-group row" style="margin-bottom: 1em;">
                                 <div class="col-md-6">
-                                    <label for="dari_tanggal" class="control-label">Dari Tanggal</label>
-                                    <input type="date" name="dari_tanggal" class="form-control" id="dari_tanggal"
-                                        value="{{ request()->query('dari_tanggal') ? request()->query('dari_tanggal') : date('Y-m-d') }}"
+                                    <label for="per_tanggal" class="control-label">Per Tanggal</label>
+                                    <input type="date" name="per_tanggal" class="form-control" id="per_tanggal"
+                                        value="{{ request()->query('per_tanggal') ? request()->query('per_tanggal') : date('Y-m-d') }}"
                                         required />
                                 </div>
 
-                                <div class="col-md-6">
-                                    <label for="sampai_tanggal" class="control-label">Sampai Tanggal</label>
-                                    <input type="date" name="sampai_tanggal" class="form-control" id="sampai_tanggal"
-                                        value="{{ request()->query('sampai_tanggal') ? request()->query('sampai_tanggal') : date('Y-m-d') }}"
-                                        required />
-                                </div>
-                            </div>
-
-                            <div class="form-group row" style="margin-bottom: 1em;">
                                 <div class="col-md-6">
                                     <label for="gudang" class="control-label">Gudang</label>
                                     <select name="gudang" class="form-control" id="gudang">
@@ -65,24 +56,9 @@
                                         @endforelse
                                     </select>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <label for="supplier" class="control-label">Supplier</label>
-                                    <select name="supplier" class="form-control" id="supplier">
-                                        <option value="" selected>All</option>
-                                        @forelse ($supplier as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ request()->query('supplier') && request()->query('supplier') == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama_supplier }}
-                                            </option>
-                                        @empty
-                                            <option value="" selected disabled>Data tidak ditemukan</option>
-                                        @endforelse
-                                    </select>
-                                </div>
                             </div>
 
-                            {{-- <div class="form-group row" style="margin-bottom: 1em;">
+                            <div class="form-group row" style="margin-bottom: 1em;">
                                 <div class="col-md-6">
                                     <label for="barang" class="control-label">Barang</label>
                                     <select name="barang" class="form-control" id="barang">
@@ -111,17 +87,17 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> --}}
+                            </div>
 
                             <button type="submit" class="btn btn-sm btn-success">
                                 <i class="fa fa-eye"></i> Cek
                             </button>
-                            <a href="{{ route('adjustment-plus.laporan') }}"
+                            <a href="{{ route('stok-barang.laporan') }}"
                                 class="btn btn-sm btn-default{{ request()->query() ? '' : ' disabled' }}">
                                 <i class="fa fa-trash"></i> Reset
                             </a>
                             @if (count($laporan) > 0)
-                                <a href="{{ route('adjustment-plus.pdf', request()->query()) }}" target="_blank"
+                                <a href="{{ route('stok-barang.pdf', request()->query()) }}" target="_blank"
                                     class="btn btn-sm btn-info">
                                     <i class="fa fa-print"></i> Print
                                 </a>
@@ -131,70 +107,66 @@
                         <table class="table table-striped table-condensed data-table" style="margin-top: 1em;">
                             <thead>
                                 <tr>
-                                    <th width="30">No.</th>
-                                    <th colspan="2">Kode</th>
-                                    <th colspan="2">Tanggal</th>
+                                    <th width="15">No.</th>
+                                    <th>Barang</th>
                                     <th>Gudang</th>
+                                    <th>Qty</th>
+                                    <th>Harga</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
-                            @php
-                                $grandtotal = 0;
-                            @endphp
                             <tbody>
+                                @php
+                                    $grandtotal = 0;
+                                    $total_qty = 0;
+                                    $total_harga = 0;
+                                @endphp
                                 @forelse ($laporan as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->barang->kode . ' - ' . $item->barang->nama }}</td>
+                                        <td>{{ $item->pembelian->gudang->nama }}</td>
+                                        <td>{{ $item->qty }}</td>
+                                        <td>
+                                            {{ $item->pembelian->matauang->kode }}
+                                            {{ number_format($item->harga, 2, '.', ',') }}
+                                        </td>
+                                        <td>
+                                            {{ $item->pembelian->matauang->kode }}
+                                            {{ number_format($item->gross, 2, '.', ',') }}
+                                        </td>
+                                    </tr>
                                     @php
-                                        $total_qty = 0;
-                                        $total = 0;
+                                        $grandtotal += $item->gross;
+                                        $total_qty += $item->qty;
+                                        $total_harga += $item->harga;
                                     @endphp
-                                    <tr>
-                                        <th>{{ $loop->iteration }}</th>
-                                        <th colspan="2">{{ $item->kode }}</th>
-                                        <th colspan="2">{{ $item->tanggal->format('d F Y') }}</th>
-                                        <th>{{ $item->gudang->nama }}</th>
-                                    </tr>
-                                    <tr>
-                                        <th></th>
-                                        <th colspan="2">Barang</th>
-                                        <th>Supplier</th>
-                                        <th>Qty</th>
-                                        <th>Subtotal</th>
-                                    </tr>
-                                    @foreach ($item->adjustment_plus_detail as $detail)
-                                        <tr>
-                                            <td></td>
-                                            <td colspan="2">
-                                                {{ $detail->barang->kode . ' - ' . $detail->barang->nama }}
-                                            </td>
-                                            <td>{{ $detail->supplier->nama_supplier }}</td>
-                                            <td>{{ $detail->qty }}</td>
-                                            <td>{{ $item->matauang->kode . '  ' . number_format($detail->subtotal) }}
-                                            </td>
-                                        </tr>
-                                        @php
-                                            $total_qty += $detail->qty;
-                                            $total += $detail->subtotal;
-                                            $grandtotal += $detail->subtotal;
-                                        @endphp
-                                    @endforeach
-                                    <tr>
-                                        <th></th>
-                                        <th colspan="3">Total</th>
-                                        <th>{{ $total_qty }}</th>
-                                        <th>{{ $item->matauang->kode . '  ' . number_format($total) }}</th>
-                                    </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">Data tidak ditemukan</td>
+                                        <td colspan="7" class="text-center">Data tidak ditemukan</td>
                                     </tr>
                                 @endforelse
                             </tbody>
-                            {{-- <tfoot>
-                                    <tr>
-                                        <th></th>
-                                        <th colspan="4">GRANDTOTAL</th>
-                                        <th>{{ $item->matauang->kode . '  ' . number_format($grandtotal) }}</th>
-                                    </tr>
-                                </tfoot> --}}
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3">Total</th>
+                                    <th>
+                                        {{ $total_qty }}
+                                    </th>
+                                    <th>
+                                        @if (count($laporan) > 0)
+                                            {{ $item->pembelian->matauang->kode }}
+                                        @endif
+                                        {{ number_format($total_harga, 2, '.', ',') }}
+                                    </th>
+                                    <th>
+                                        @if (count($laporan) > 0)
+                                            {{ $item->pembelian->matauang->kode }}
+                                        @endif
+                                        {{ number_format($grandtotal, 2, '.', ',') }}
+                                    </th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

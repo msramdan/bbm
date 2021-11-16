@@ -70,6 +70,7 @@
                 matauang.prop('disabled', false)
                 bentuk_kepemilikan.prop('disabled', false)
                 rate.prop('disabled', false)
+                alamat.prop('disabled', false)
 
                 tbl_trx.find('tr').remove()
 

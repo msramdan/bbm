@@ -95,7 +95,7 @@
 
                                 <div class="col-md-3">
                                     <label for="pelanggan" class="control-label">Pelanggan</label>
-                                    <input type="text" name="pelanggan" class="form-control" placeholder="pelanggan"
+                                    <input type="text" name="pelanggan" class="form-control" placeholder="Pelanggan"
                                         id="pelanggan" readonly />
                                     @error('pelanggan')
                                         <small class="text-danger">{{ $message }}</small>

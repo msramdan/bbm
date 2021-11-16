@@ -29,7 +29,10 @@ class PesananPembelianController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pesanan = PesananPembelian::with('supplier', 'matauang')->withCount('pesanan_pembelian_detail');
+            $pesanan = PesananPembelian::with(
+                'supplier:id,nama_supplier',
+                'matauang:id,kode,nama'
+            )->withCount('pesanan_pembelian_detail');
 
             return Datatables::of($pesanan)
                 ->addIndexColumn()
@@ -128,7 +131,12 @@ class PesananPembelianController extends Controller
      */
     public function show(PesananPembelian $pesananPembelian)
     {
-        $pesananPembelian->load('pesanan_pembelian_detail', 'supplier', 'matauang')->withCount('pesanan_pembelian_detail');
+        $pesananPembelian->load(
+            'pesanan_pembelian_detail',
+            'pesanan_pembelian_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'supplier:id,kode,nama_supplier',
+            'matauang:id,kode,nama',
+        )->withCount('pesanan_pembelian_detail');
 
         return view('pembelian.pesanan-pembelian.show', compact('pesananPembelian'));
     }
@@ -141,7 +149,12 @@ class PesananPembelianController extends Controller
      */
     public function edit(PesananPembelian $pesananPembelian)
     {
-        $pesananPembelian->load('pesanan_pembelian_detail', 'supplier', 'matauang')->withCount('pesanan_pembelian_detail');
+        $pesananPembelian->load(
+            'pesanan_pembelian_detail',
+            'pesanan_pembelian_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'supplier:id,kode,nama_supplier',
+            'matauang:id,kode,nama',
+        )->withCount('pesanan_pembelian_detail');
 
         return view('pembelian.pesanan-pembelian.edit', compact('pesananPembelian'));
     }

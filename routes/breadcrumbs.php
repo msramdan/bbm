@@ -446,6 +446,12 @@ Breadcrumbs::for('retur_penjualan_show', function (BreadcrumbTrail $trail) {
 });
 
 
+// Master Data > Retur Penjualan
+Breadcrumbs::for('direct_sales_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('master');
+    $trail->push('POS Terminal', route('direct-penjualan.create'));
+});
+
 
 // Master Data > Pelunasan Hutang
 Breadcrumbs::for('pelunasan_hutang', function (BreadcrumbTrail $trail) {

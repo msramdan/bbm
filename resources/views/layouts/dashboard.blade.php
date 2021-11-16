@@ -13,6 +13,8 @@
 
     {{-- style --}}
     @include('layouts._dashboard.style')
+
+    @stack('custom-css')
 </head>
 
 <body>

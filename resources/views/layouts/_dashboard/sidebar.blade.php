@@ -23,14 +23,15 @@
         <ul class="nav">
             <li class="nav-header">Navigation</li>
             {{-- menu dashboard --}}
-            <li class="{{ set_active('dashboard.index') }}">
-                <a href="{{ route('dashboard.index') }}">
-                    <i class="fa fa-laptop"></i>
-                    <span>{{ trans('dashboard.link.dashboard') }}</span>
-                </a>
-            </li>
-            {{-- menu master data --}}
             @role('admin')
+                <li class="{{ set_active('dashboard.index') }}">
+                    <a href="{{ route('dashboard.index') }}">
+                        <i class="fa fa-laptop"></i>
+                        <span>{{ trans('dashboard.link.dashboard') }}</span>
+                    </a>
+                </li>
+
+                {{-- menu master data --}}
                 <li class="has-sub">
                     <a href="javascript:;">
                         <b class="caret pull-right"></b>
@@ -109,10 +110,9 @@
                         </li>
                     </ul>
                 </li>
-            @endrole
 
-            {{-- menu inventory --}}
-            @role('admin')
+                {{-- menu inventory --}}
+
                 <li class="has-sub">
                     <a href="javascript:;">
                         <b class="caret pull-right"></b>
@@ -139,10 +139,9 @@
                         </li>
                     </ul>
                 </li>
-            @endrole
 
-            {{-- menu pembelian --}}
-            @hasanyrole('salesman|admin')
+
+                {{-- menu pembelian --}}
                 <li class="has-sub">
                     <a href="javascript:;">
                         <b class="caret pull-right"></b>
@@ -169,10 +168,10 @@
                         </li>
                     </ul>
                 </li>
-            @endhasanyrole
 
-            {{-- menu penjualan --}}
-            @hasanyrole('salesman|admin')
+
+                {{-- menu penjualan --}}
+
                 <li class="has-sub">
                     <a href="javascript:;">
                         <b class="caret pull-right"></b>
@@ -199,10 +198,10 @@
                         </li>
                     </ul>
                 </li>
-            @endhasanyrole
 
-            {{-- menu keuangan --}}
-            @role('admin')
+
+                {{-- menu keuangan --}}
+
                 <li class="has-sub">
                     <a href="javascript:;">
                         <b class="caret pull-right"></b>
@@ -241,9 +240,7 @@
                         </li>
                     </ul>
                 </li>
-            @endrole
 
-            @role('admin')
                 {{-- menu Laporan --}}
                 <li class="has-sub">
                     <a href="javascript:;">
@@ -361,10 +358,9 @@
                         </li>
                     </ul>
                 </li>
-            @endrole
 
-            {{-- menu Setting --}}
-            @role('admin')
+
+                {{-- menu Setting --}}
                 <li class="has-sub">
                     <a href="javascript:;">
                         <b class="caret pull-right"></b>
@@ -381,6 +377,23 @@
                         <li>
                             <a href="{{ route('user.index') }}">
                                 {{ trans('dashboard.menu.user') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endrole
+
+            @role('salesman')
+                <li class="has-sub">
+                    <a href="javascript:;">
+                        <b class="caret pull-right"></b>
+                        <i class="fa fa-cart-plus"></i>
+                        <span> {{ trans('dashboard.menu.penjualan') }}</span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li>
+                            <a href="{{ route('direct-penjualan.create') }}">
+                                {{ trans('dashboard.menu.direct_sales') }}
                             </a>
                         </li>
                     </ul>

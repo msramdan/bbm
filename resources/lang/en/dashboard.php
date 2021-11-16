@@ -44,6 +44,7 @@ return [
         'biaya' => 'Expense',
         'perakitan_paket' => 'Package Assembly',
         'laporan' => 'Report',
+        'direct_sales' => 'Direct Sales',
     ],
     'link' => [
         'dashboard' => 'Dashboard',
@@ -70,5 +71,4 @@ return [
         'gross_profit' => 'Gross Profit Report',
         'nett_profit' => 'Nett Profit Report',
     ]
-
 ];

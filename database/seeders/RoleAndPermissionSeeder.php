@@ -152,6 +152,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'update pesanan penjualan']);
         Permission::create(['name' => 'delete pesanan penjualan']);
 
+        Permission::create(['name' => 'create direct penjualan']);
+
         Permission::create(['name' => 'create penjualan']);
         Permission::create(['name' => 'read penjualan']);
         Permission::create(['name' => 'detail penjualan']);
@@ -242,40 +244,9 @@ class RoleAndPermissionSeeder extends Seeder
         $userSales = User::find(2);
         $userSales->assignRole('salesman');
         $userSales->givePermissionTo([
-            'create pesanan pembelian',
-            'read pesanan pembelian',
-            'detail pesanan pembelian',
-            'edit pesanan pembelian',
-            'update pesanan pembelian',
-            'delete pesanan pembelian',
-
-            'create pembelian',
-            'read pembelian',
-            'detail pembelian',
-            'edit pembelian',
-            'update pembelian',
-            'delete pembelian',
-
-            'create retur pembelian',
-            'read retur pembelian',
-            'detail retur pembelian',
-            'edit retur pembelian',
-            'update retur pembelian',
-            'delete retur pembelian',
-
-            'create penjualan',
-            'read penjualan',
-            'detail penjualan',
-            'edit penjualan',
-            'update penjualan',
-            'delete penjualan',
-
-            'create retur penjualan',
-            'read retur penjualan',
-            'detail retur penjualan',
-            'edit retur penjualan',
-            'update retur penjualan',
-            'delete retur penjualan',
+            'create direct penjualan',
+            'laporan komisi salesman',
+            'laporan penjualan'
         ]);
     }
 }

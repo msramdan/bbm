@@ -44,6 +44,7 @@ return [
         'biaya' => 'Biaya',
         'perakitan_paket' => 'Perakitan Paket',
         'laporan' => 'Laporan',
+        'direct_sales' => 'POS Terminal'
     ],
     'link' => [
         'dashboard' => 'Dasbor',
@@ -69,5 +70,6 @@ return [
         'cek_giro' => 'Laporan Cek/Giro',
         'gross_profit' => 'Laporan Gross Profit',
         'nett_profit' => 'Laporan Nett Profit',
+
     ]
 ];

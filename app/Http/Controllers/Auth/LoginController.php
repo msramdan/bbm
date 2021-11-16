@@ -22,7 +22,7 @@ class LoginController extends Controller
     */
 
 
-    use AuthenticatesUsers{
+    use AuthenticatesUsers {
         logout as preformlogout;
     }
 
@@ -33,15 +33,23 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::DASHBOARD;
 
-
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $this->preformlogout($request);
         return redirect()->route('login');
+    }
 
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->getRoleNames()[0] == 'salesman') {
+            return redirect()->route('direct-penjualan.create');
+        }
+
+        return redirect()->route('dashboard.index');
     }
 }

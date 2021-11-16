@@ -83,16 +83,26 @@
 
                                 <div class="col-md-4">
                                     <label for="salesman" class="control-label">Salesman</label>
-                                    <select name="salesman" class="form-control" id="salesman">
-                                        <option value="" selected>All</option>
-                                        @forelse ($salesman as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ request()->query('salesman') && request()->query('salesman') == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama }}
+                                    <select name="salesman" class="form-control" id="salesman"
+                                        {{ auth()->user()->hasRole('salesman')
+                                            ? 'readonly'
+                                            : '' }}>
+                                        @role('salesman')
+                                            <option value="{{ auth()->user()->salesman->id }}" selected>
+                                                {{ auth()->user()->salesman->nama }}
                                             </option>
-                                        @empty
-                                            <option value="" selected disabled>Data tidak ditemukan</option>
-                                        @endforelse
+                                        @else
+                                            <option value="" selected>All</option>
+                                            @forelse ($salesman as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ request()->query('salesman') && request()->query('salesman') == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->nama }}
+                                                </option>
+                                            @empty
+                                                <option value="" selected disabled>Data tidak ditemukan</option>
+                                            @endforelse
+                                        @endrole
+
                                     </select>
                                 </div>
                             </div>

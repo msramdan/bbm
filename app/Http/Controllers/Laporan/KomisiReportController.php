@@ -56,7 +56,9 @@ class KomisiReportController extends Controller
                 request()->query('dari_tanggal'),
                 request()->query('sampai_tanggal')
             ])
-            ->where('status', 'Lunas')
+            ->when(auth()->user()->hasRole('admin'), function ($q) {
+                $q->where('status', 'Lunas');
+            })
             ->get();
     }
 }

@@ -49,7 +49,8 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
             // 'laporan.profit.gross.index',
-            'laporan.stok.index'
+            'laporan.stok.index',
+            // 'penjualan.direct.create'
         ], function ($view) {
             return $view->with('barang', Barang::select('id', 'kode', 'nama', 'harga_jual', 'harga_beli', 'stok', 'min_stok')->where('status', 'Y')->where('jenis', 1)->get());
         });
@@ -108,7 +109,8 @@ class ViewServiceProvider extends ServiceProvider
             'laporan.penjualan.penjualan.index',
             'laporan.penjualan.retur.index',
             'laporan.profit.gross.index',
-            'laporan.stok.index'
+            'laporan.stok.index',
+            'penjualan.direct.create'
         ], function ($view) {
             return $view->with('gudang', Gudang::select('id', 'kode', 'nama')->where('status', 'Y')->get());
         });
@@ -132,7 +134,8 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.pesanan.create',
             'laporan.saldo.hutang.index',
             'laporan.saldo.piutang.index',
-            'laporan.profit.gross.index'
+            'laporan.profit.gross.index',
+            'penjualan.direct.create'
         ], function ($view) {
             return $view->with('matauang', Matauang::select('id', 'kode', 'nama')->get());
         });
@@ -228,7 +231,8 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.pesanan.edit',
             'laporan.saldo.piutang.index',
             'laporan.profit.gross.index',
-            'laporan.penjualan.pesanan.index'
+            'laporan.penjualan.pesanan.index',
+            'penjualan.direct.create'
         ], function ($view) {
             return $view->with('pelanggan', Pelanggan::select('id', 'nama_pelanggan', 'alamat', 'kode')->where('status', 'Y')->get());
         });
@@ -461,8 +465,6 @@ class ViewServiceProvider extends ServiceProvider
             );
         });
 
-
-
         // list bentuk kepemilikan stok
         View::composer([
             'laporan.adjustment.plus.index',
@@ -473,7 +475,8 @@ class ViewServiceProvider extends ServiceProvider
             'penjualan.pesanan.create',
             'penjualan.pesanan.edit',
             'laporan.stok.index',
-            'laporan.penjualan.pesanan.index'
+            'laporan.penjualan.pesanan.index',
+            'penjualan.direct.create'
         ], function ($view) {
             return $view->with(
                 'bentukKepemilikanStok',

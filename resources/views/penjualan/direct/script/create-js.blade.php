@@ -73,7 +73,9 @@
                     <td></td>
                     <td>
                         <p style="line-height: 10px;">${nama_barang}</p>
-                        <p style="line-height: 10px;">${format_ribuan(harga)}</p>
+                        <p style="line-height: 10px;">
+                            <span class="span_harga">${format_ribuan(harga)}</span>
+                        </p>
                         <p style="line-height: 10px;">
                             <span class="span_diskon">Disc: ${diskon}</span>,
                             <span class="span_ppn">PPN: ${ppn}</span>
@@ -125,7 +127,7 @@
                     <td>
                         <p style="line-height: 10px;">${nama_barang}</p>
                         <p style="line-height: 10px;">
-                            <span class="span_subtotal">${format_ribuan(harga)}</span>
+                            <span class="span_harga">${format_ribuan(harga)}</span>
                         </p>
                         <p style="line-height: 10px;">
                             <span class="span_diskon">Disc: ${diskon}</span>,
@@ -237,7 +239,7 @@
 
                 qty = 1
 
-                console.log('stok kurang');
+                // console.log('stok kurang');
             } else {
                 $('.id_barang_hidden').eq(index).val(id_barang)
                 $('.nama_barang_hidden').eq(index).val(nama_barang)
@@ -254,7 +256,8 @@
 
                 $('.span_ppn').eq(index).text('PPN: ' + format_ribuan(ppn))
                 $('.span_diskon').eq(index).text('Disc: ' + format_ribuan(diskon))
-                $('.span_subtotal').eq(index).text(format_ribuan(gross))
+                $('.span_subtotal').eq(index).text(format_ribuan(netto))
+                $('.span_harga').eq(index).text(format_ribuan(harga))
                 $('.span_qty').eq(index).text(qty)
 
                 hitung_grand_total()
@@ -291,7 +294,7 @@
                         if (data.length > 0) {
                             $.each(data, function(key, value) {
                                 barang += `<div class="col-md-3 text-center card">
-                                    <img src="${ value.gambar == 'noimage.png' ? '../../img/noimage.png' : '../storage/img/barang/'}" alt="gambar barang" class="img-fluid rounded" style="width: 100%; height: 120px; object-fit: cover; border-radius: 3px; margin-bottom: 4px;">
+                                    <img src="${ value.gambar == 'noimage.png' ? '../../img/' : '../../storage/img/barang/'}${value.gambar}" alt="gambar barang" class="img-fluid rounded" style="width: 100%; height: 120px; object-fit: cover; border-radius: 3px; margin-bottom: 4px;">
 
                                     <p>${value.kode} - ${value.nama}</p>
 

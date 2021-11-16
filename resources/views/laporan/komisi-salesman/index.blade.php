@@ -51,16 +51,26 @@
 
                                 <div class="col-md-4">
                                     <label for="salesman" class="control-label">Salesman</label>
-                                    <select name="salesman" class="form-control" id="salesman">
-                                        <option value="" selected>All</option>
-                                        @forelse ($salesman as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ request()->query('salesman') && request()->query('salesman') == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama }}
+                                    <select name="salesman" class="form-control" id="salesman"
+                                        {{ auth()->user()->hasRole('salesman')
+                                            ? 'readonly'
+                                            : '' }}>
+                                        @role('salesman')
+                                            <option value="{{ auth()->user()->salesman->id }}" selected>
+                                                {{ auth()->user()->salesman->nama }}
                                             </option>
-                                        @empty
-                                            <option value="" selected disabled>Data tidak ditemukan</option>
-                                        @endforelse
+                                        @else
+                                            <option value="" selected>All</option>
+                                            @forelse ($salesman as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ request()->query('salesman') && request()->query('salesman') == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->nama }}
+                                                </option>
+                                            @empty
+                                                <option value="" selected disabled>Data tidak ditemukan</option>
+                                            @endforelse
+                                        @endrole
+
                                     </select>
                                 </div>
                             </div>
@@ -85,7 +95,9 @@
                                 <tr>
                                     <th width="15">No.</th>
                                     <th>Kode Penjualan</th>
-                                    <th>Kode Pelunasan</th>
+                                    @role('admin')
+                                        <th>Kode Pelunasan</th>
+                                    @endrole
                                     <th>Tanggal</th>
                                     <th>Salesman</th>
                                     <th>Nilai</th>
@@ -100,9 +112,11 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->kode }}</td>
-                                        <td>{{ $item->pelunasan_piutang ? $item->pelunasan_piutang->kode : $item->kode }}
-                                        </td>
-                                        <td>{{ $item->pelunasan_piutang ? $item->pelunasan_piutang->tanggal->format('d m Y') : $item->tanggal->format('d m Y') }}
+                                        @role('admin')
+                                            <td>{{ $item->pelunasan_piutang ? $item->pelunasan_piutang->kode : $item->kode }}
+                                            </td>
+                                        @endrole
+                                        <td>{{ $item->pelunasan_piutang ? $item->pelunasan_piutang->tanggal->format('d F Y') : $item->tanggal->format('d F Y') }}
                                         </td>
                                         <td>{{ $item->salesman->nama }}</td>
                                         <td>

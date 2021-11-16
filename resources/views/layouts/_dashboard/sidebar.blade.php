@@ -396,6 +396,19 @@
                                 {{ trans('dashboard.menu.direct_sales') }}
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('komisi-salesman.laporan') }}">
+                                {{ trans('dashboard.laporan.komisi_salesman') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('penjualan.laporan') }}">
+                                {{ trans('dashboard.laporan.penjualan') }}
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
             @endrole

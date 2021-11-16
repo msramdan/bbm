@@ -47,7 +47,7 @@ class DirectPenjualanController extends Controller
                 'matauang_id' => $request->matauang,
                 'gudang_id' => $request->gudang,
                 'pelanggan_id' => $request->pelanggan,
-                'salesman_id' => auth()->id(),
+                'salesman_id' => auth()->user()->salesman->id,
                 'bentuk_kepemilikan_stok' => $request->bentuk_kepemilikan,
                 'subtotal' => $request->subtotal,
                 'total_ppn' => $request->total_ppn,
@@ -174,6 +174,8 @@ class DirectPenjualanController extends Controller
 
     public function getBarangByMatauang(Request $request)
     {
+        abort_if(!$request->ajax(), 404);
+
         $barang = Barang::select('id', 'kode', 'nama', 'harga_jual_matauang', 'harga_jual', 'stok', 'gambar')
             ->with('mata_uang_jual')
             ->where('status', 'Y')

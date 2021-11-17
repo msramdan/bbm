@@ -12,14 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 class DirectPenjualanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware('permission:create direct penjualan');
     }
 
     /**
@@ -111,51 +106,6 @@ class DirectPenjualanController extends Controller
         return response()->json(['success'], 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Penjualan  $penjualan
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Penjualan $penjualan)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Penjualan  $penjualan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Penjualan $penjualan)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Penjualan  $penjualan
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Penjualan $penjualan)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Penjualan  $penjualan
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Penjualan $penjualan)
-    {
-        //
-    }
-
     public function generateKode()
     {
         $checkLatestKode = Penjualan::whereMonth('tanggal', date('m'))->whereYear('tanggal', date('Y'))->latest()->first();
@@ -177,7 +127,7 @@ class DirectPenjualanController extends Controller
         abort_if(!$request->ajax(), 404);
 
         $barang = Barang::select('id', 'kode', 'nama', 'harga_jual_matauang', 'harga_jual', 'stok', 'gambar')
-            ->with('mata_uang_jual')
+            ->with('mata_uang_jual:id,kode')
             ->where('status', 'Y')
             ->where('jenis', 1)
             ->where('harga_jual_matauang', $request->id)

@@ -132,7 +132,7 @@ Route::group(['prefix' => 'jual', 'middleware' => ['web', 'auth']], function () 
 
     // Direct Sales
     Route::get('/direct-penjualan/get-barang-by-matauang', [DirectPenjualanController::class, 'getBarangByMatauang']);
-    Route::resource('/direct-penjualan', DirectPenjualanController::class);
+    Route::resource('/direct-penjualan', DirectPenjualanController::class)->only('create', 'store');
 });
 
 // Keuangan

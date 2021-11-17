@@ -240,6 +240,7 @@ class RoleAndPermissionSeeder extends Seeder
         $userAdmin = User::first();
         $userAdmin->assignRole('admin');
         $userAdmin->givePermissionTo(Permission::all());
+        $userAdmin->revokePermissionTo('create direct penjualan');
 
         $userSales = User::find(2);
         $userSales->assignRole('salesman');

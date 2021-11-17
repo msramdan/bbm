@@ -39,8 +39,8 @@
                             @csrf
                             @method('put')
 
-                            <div class="row form-group" style="margin-bottom: 1em;">
-                                <div class="col-md-3">
+                            <div class="row form-group">
+                                <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label class="control-label">Nama</label>
                                     <input type="text" name="name" class="form-control" placeholder="name"
                                         value="{{ old('name') ? old('name') : $user->name }}" required />
@@ -49,7 +49,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label class="control-label">Email</label>
                                     <input type="email" name="email" class="form-control" placeholder="email"
                                         value="{{ old('email') ? old('email') : $user->email }}" required />
@@ -58,7 +58,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="role" class="control-label">Role</label>
                                     <select name="role" class="form-control" id="role" required>
                                         @foreach ($roles as $role)
@@ -71,7 +71,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="salesman" class="control-label">Salesman</label>
                                     <select name="salesman" class="form-control" id="salesman">
                                         <option value="" selected disabled>-- Pilih --</option>
@@ -89,7 +89,7 @@
 
                             @include('setting.user._permissions')
 
-                            <div class="form-group">
+                            <div class="form-group" style="margin-top: 1.5em;">
                                 <div class="col-md-3">
                                     <button type="submit" class="btn btn-sm btn-success"> Simpan</button>
                                     <a href="{{ route('user.index') }}" class="btn btn-sm btn-default"> Cancel

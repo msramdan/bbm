@@ -36,7 +36,7 @@
                     <div class="panel-body">
                         <form>
                             <div class="form-group row">
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label class="control-label">Mata Uang</label>
                                     <select name="matauang" id="matauang" class="form-control" required>
                                         @forelse ($matauang as $item)
@@ -47,7 +47,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label class="control-label">Pelanggan</label>
                                     <select name="pelanggan" id="pelanggan" class="form-control" required>
                                         <option value="" selected disabled>-- Pilih --</option>
@@ -59,7 +59,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label class="control-label">Gudang</label>
                                     <select name="gudang" id="gudang" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
@@ -72,7 +72,7 @@
                                 </div>
 
                                 {{-- Bentuk stok --}}
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="bentuk_kepemilikan">Bentuk Stok</label>
                                     <select name="bentuk_kepemilikan" id="bentuk_kepemilikan" class="form-control"
                                         required>
@@ -84,7 +84,7 @@
                             </div>
                         </form>
 
-                        <hr style="margin-top: 2em; margin-bottom: 0;">
+                        <hr style="margin-top: 1em; margin-bottom: 0;">
 
                         <div class="row">
                             <div class="col-md-6">
@@ -220,17 +220,18 @@
 
 @push('custom-css')
     <style>
-        .col-md-3:nth-child(4n+1) {
+        .col-md-4:nth-child(3n+1) {
             clear: left;
         }
 
         #list-barang {
-            max-height: 580px;
+            max-height: 485px;
             overflow-y: auto;
         }
 
-        .info-barang {
-            /* line-height: 15px; */
+        .p_nama_barang {
+            margin-bottom: 0;
+            /* line-height: 10px; */
             /* font-weight: bold; */
         }
 

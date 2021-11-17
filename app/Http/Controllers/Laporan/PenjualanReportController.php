@@ -53,7 +53,10 @@ class PenjualanReportController extends Controller
             ->when(request()->query('pelanggan'), function ($q) {
                 $q->where('pelanggan_id',  request()->query('pelanggan'));
             })
-            ->when(request()->query('salesman'), function ($q) {
+            ->when(auth()->user()->hasRole('salesman'), function ($q) {
+                $q->where('salesman_id',  auth()->user()->salesman->id);
+            })
+            ->when(request()->query('salesman') && auth()->user()->hasRole('admin'), function ($q) {
                 $q->where('salesman_id',  request()->query('salesman'));
             })
             ->when(request()->query('gudang'), function ($q) {

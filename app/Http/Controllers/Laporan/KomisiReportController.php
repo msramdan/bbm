@@ -49,7 +49,10 @@ class KomisiReportController extends Controller
             'salesman:id,nama',
             'pelunasan_piutang',
         )
-            ->when(request()->query('salesman'), function ($q) {
+            ->when(auth()->user()->hasRole('salesman'), function ($q) {
+                $q->where('salesman_id',  auth()->user()->salesman->id);
+            })
+            ->when(request()->query('salesman') && auth()->user()->hasRole('admin'), function ($q) {
                 $q->where('salesman_id',  request()->query('salesman'));
             })
             ->whereBetween('tanggal', [

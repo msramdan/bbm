@@ -83,7 +83,9 @@
                 <tr>
                     <th width="15">No.</th>
                     <th>Kode Penjualan</th>
-                    <th>Kode Pelunasan</th>
+                    @role('admin')
+                        <th>Kode Pelunasan</th>
+                    @endrole
                     <th>Tanggal</th>
                     <th>Salesman</th>
                     <th>Nilai</th>
@@ -98,8 +100,9 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->kode }}</td>
-                        <td>{{ $item->pelunasan_piutang ? $item->pelunasan_piutang->kode : $item->kode }}
-                        </td>
+                        @role('admin')
+                            <td>{{ $item->pelunasan_piutang ? $item->pelunasan_piutang->kode : $item->kode }}
+                        </td> @endrole
                         <td>{{ $item->pelunasan_piutang ? $item->pelunasan_piutang->tanggal->format('d F Y') : $item->tanggal->format('d F Y') }}
                         </td>
                         <td>{{ $item->salesman->nama }}</td>

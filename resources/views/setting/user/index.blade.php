@@ -23,7 +23,10 @@
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger"
                                 data-click="panel-remove"><i class="fa fa-times"></i></a>
                         </div>
-                        <a href="{{ route('user.create') }}" class="btn btn-success{{ !auth()->user()->can('create user') ? ' disabled' : '' }}">
+                        <a href="{{ route('user.create') }}"
+                            class="btn btn-success{{ !auth()->user()->can('create user')
+                                ? ' disabled'
+                                : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('user.button.tambah') }}
                         </a>
                     </div>
@@ -37,6 +40,7 @@
                                         <th>Nama</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Status</th>
                                         <th>Created At</th>
                                         <th>Updated At</th>
                                         @if (auth()->user()->can('edit user') ||
@@ -62,9 +66,9 @@
     <script>
         const action =
             '{{ auth()->user()->can('edit user') ||
-auth()->user()->can('delete user')
-    ? 'yes yes yes'
-    : '' }}'
+            auth()->user()->can('delete user')
+                ? 'yes yes yes'
+                : '' }}'
 
         let columns = [{
                 data: 'DT_RowIndex',
@@ -83,6 +87,10 @@ auth()->user()->can('delete user')
             {
                 data: 'role',
                 name: 'role'
+            },
+            {
+                data: 'status',
+                name: 'status'
             },
             {
                 data: 'created_at',

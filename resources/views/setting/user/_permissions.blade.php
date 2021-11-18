@@ -9,7 +9,7 @@
     </div>
 
     {{-- Mata Uang --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Mata Uang</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'mata uang') && !Str::contains($permission->name, 'rate'))
@@ -25,7 +25,7 @@
     </div>
 
     {{-- rate matauang --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Rate Mata Uang</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'rate'))
@@ -41,7 +41,7 @@
     </div>
 
     {{-- bank --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Bank</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'bank'))
@@ -57,7 +57,7 @@
     </div>
 
     {{-- rekening --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Rekening</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'rekening'))
@@ -75,7 +75,7 @@
 
 <div class="row">
     {{-- supplier --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Supplier</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'supplier'))
@@ -91,7 +91,7 @@
     </div>
 
     {{-- area --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Area</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'area'))
@@ -107,7 +107,7 @@
     </div>
 
     {{-- pelanggan --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Pelanggan</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'pelanggan'))
@@ -123,7 +123,7 @@
     </div>
 
     {{-- salesman --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Salesman</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'salesman') && !Str::contains($permission->name, 'laporan'))
@@ -141,7 +141,7 @@
 
 <div class="row">
     {{-- gudang --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Gudang</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'gudang'))
@@ -157,7 +157,7 @@
     </div>
 
     {{-- satuan --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Satuan</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'satuan'))
@@ -173,7 +173,7 @@
     </div>
 
     {{-- kategori --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Kategori</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'kategori'))
@@ -189,7 +189,7 @@
     </div>
 
     {{-- barang --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Barang</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'barang') && !Str::contains($permission->name, 'laporan'))
@@ -212,7 +212,7 @@
     </div>
 
     {{-- adjustment plus --}}
-    <div class="col-md-4" style="margin-bottom: 1.5em;">
+    <div class="col-md-4" style="margin-bottom: 1em;">
         <strong>Adjustment Plus</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'adjustment plus') && !Str::contains($permission->name, 'laporan'))
@@ -228,7 +228,7 @@
     </div>
 
     {{-- adjustment minus --}}
-    <div class="col-md-4" style="margin-bottom: 1.5em;">
+    <div class="col-md-4" style="margin-bottom: 1em;">
         <strong>Adjustment Minus</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'adjustment minus') && !Str::contains($permission->name, 'laporan'))
@@ -244,7 +244,7 @@
     </div>
 
     {{-- perakitan paket --}}
-    <div class="col-md-4" style="margin-bottom: 1.5em;">
+    <div class="col-md-4" style="margin-bottom: 1em;">
         <strong>Perakitan Paket</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'perakitan paket'))
@@ -267,7 +267,7 @@
     </div>
 
     {{-- pesanan pembelian --}}
-    <div class="col-md-4" style="margin-bottom: 1.5em;">
+    <div class="col-md-4" style="margin-bottom: 1em;">
         <strong>Pesanan Pembelian</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'pesanan pembelian') && !Str::contains($permission->name, 'laporan'))
@@ -283,7 +283,7 @@
     </div>
 
     {{-- pembelian --}}
-    <div class="col-md-4" style="margin-bottom: 1.5em;">
+    <div class="col-md-4" style="margin-bottom: 1em;">
         <strong>Pembelian</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'pembelian') && !Str::contains($permission->name, 'retur') && !Str::contains($permission->name, 'pesanan') && !Str::contains($permission->name, 'laporan'))
@@ -299,7 +299,7 @@
     </div>
 
     {{-- retur --}}
-    <div class="col-md-4" style="margin-bottom: 1.5em;">
+    <div class="col-md-4" style="margin-bottom: 1em;">
         <strong>Retur Pembelian</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'retur pembelian') && !Str::contains($permission->name, 'laporan'))
@@ -318,11 +318,10 @@
 {{-- Penjualan & setting --}}
 <div class="row justify-conter-center">
     {{-- Pesanan penjualan --}}
-    <div class="col-md-9" style="margin-bottom: 1.5em;">
+    <div class="col-md-9" style="margin-bottom: 1em;">
         <h3>Penjualan</h3>
         <div class="row">
-
-            <div class="col-md-4" style="margin-bottom: 1.5em;">
+            <div class="col-md-4" style="margin-bottom: 1em;">
                 <strong>Pesanan Penjualan</strong>
                 @foreach ($permissions as $permission)
                     @if (Str::contains($permission->name, 'pesanan penjualan') && !Str::contains($permission->name, 'laporan') && !Str::contains($permission->name, 'retur'))
@@ -338,7 +337,7 @@
             </div>
 
             {{-- penjualan --}}
-            <div class="col-md-4" style="margin-bottom: 1.5em;">
+            <div class="col-md-4" style="margin-bottom: 1em;">
                 <strong>Penjualan</strong>
                 @foreach ($permissions as $permission)
                     @if (Str::contains($permission->name, 'penjualan') && !Str::contains($permission->name, 'laporan') && !Str::contains($permission->name, 'retur') && !Str::contains($permission->name, 'pesanan penjualan'))
@@ -354,7 +353,7 @@
             </div>
 
             {{-- retur penjualan --}}
-            <div class="col-md-4" style="margin-bottom: 1.5em;">
+            <div class="col-md-4" style="margin-bottom: 1em;">
                 <strong>Retur Penjualan</strong>
                 @foreach ($permissions as $permission)
                     @if (Str::contains($permission->name, 'retur penjualan') && !Str::contains($permission->name, 'laporan'))
@@ -372,7 +371,7 @@
     </div>
 
     {{-- toko --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <h3>Setting</h3>
 
         <strong>User dan Toko</strong>
@@ -397,7 +396,7 @@
     </div>
 
     {{-- pelunasan hutang --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Pelunasan Hutang</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'pelunasan hutang') && !Str::contains($permission->name, 'laporan'))
@@ -413,7 +412,7 @@
     </div>
 
     {{-- pelunasan piutang --}}
-    <div class="col-md-3" style="margin-bottom: 1.5em;">
+    <div class="col-md-3" style="margin-bottom: 1em;">
         <strong>Pelunasan Piutang</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'pelunasan piutang') && !Str::contains($permission->name, 'laporan'))
@@ -429,7 +428,7 @@
     </div>
 
     {{-- cek/giro cair --}}
-    <div class="col-md-2" style="margin-bottom: 1.5em;">
+    <div class="col-md-2" style="margin-bottom: 1em;">
         <strong>Cek/Giro Cair</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'cek/giro cair'))
@@ -445,7 +444,7 @@
     </div>
 
     {{-- cek/giro tolak --}}
-    <div class="col-md-2" style="margin-bottom: 1.5em;">
+    <div class="col-md-2" style="margin-bottom: 1em;">
         <strong>Cek/Giro Tolak</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'cek/giro tolak'))
@@ -461,7 +460,7 @@
     </div>
 
     {{-- biaya --}}
-    <div class="col-md-2" style="margin-bottom: 1.5em;">
+    <div class="col-md-2" style="margin-bottom: 1em;">
         <strong>Biaya</strong>
         @foreach ($permissions as $permission)
             @if (Str::contains($permission->name, 'biaya') && !Str::contains($permission->name, 'laporan'))

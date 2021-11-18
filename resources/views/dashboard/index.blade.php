@@ -104,7 +104,7 @@
             <div class="col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h5 class="text-center">Top 5 Barang Paling Laku</h5>
+                        <h5 class="text-center">Top 5 Barang Paling Laris</h5>
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
@@ -154,7 +154,7 @@
         const triwulan_chart = new Chart(ctx1, {
             type: 'pie',
             data: {
-                labels: ['Triwulan 1', 'Triwulan 2', 'Triwulan 3', 'Triwulan 4'],
+                labels: ['Triwulan I', 'Triwulan II', 'Triwulan III', 'Triwulan IV'],
                 datasets: [{
                     label: 'Penjualan Triwulan',
                     data: [triwulan1, triwulan2, triwulan3, triwulan4],

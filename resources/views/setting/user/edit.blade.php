@@ -40,7 +40,7 @@
                             @method('put')
 
                             <div class="row form-group">
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-6" style="margin-bottom: 1em;">
                                     <label class="control-label">Nama</label>
                                     <input type="text" name="name" class="form-control" placeholder="name"
                                         value="{{ old('name') ? old('name') : $user->name }}" required />
@@ -49,7 +49,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-6" style="margin-bottom: 1em;">
                                     <label class="control-label">Email</label>
                                     <input type="email" name="email" class="form-control" placeholder="email"
                                         value="{{ old('email') ? old('email') : $user->email }}" required />
@@ -58,9 +58,10 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-4" style="margin-bottom: 1em;">
                                     <label for="role" class="control-label">Role</label>
-                                    <select name="role" class="form-control" id="role" required>
+                                    <select name="role" class="form-control" id="role" required
+                                        {{ $user->id == 1 ? 'disabled' : '' }}>
                                         @foreach ($roles as $role)
                                             <option {{ $user->roles[0]->id == $role->id ? 'selected' : '' }}
                                                 value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
@@ -71,7 +72,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-4" style="margin-bottom: 1em;">
                                     <label for="salesman" class="control-label">Salesman</label>
                                     <select name="salesman" class="form-control" id="salesman">
                                         <option value="" selected disabled>-- Pilih --</option>
@@ -82,6 +83,36 @@
                                         @endforeach
                                     </select>
                                     @error('sales')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4" style="margin-bottom: 1em;">
+                                    <label for="status" class="control-label">Status</label>
+                                    <select name="status" class="form-control" required>
+                                        <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Aktif</option>
+                                        <option value="0" {{ $user->status != 1 ? 'selected' : '' }}>Nonaktif</option>
+                                    </select>
+                                    @error('status')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6" style="margin-bottom: 1em;">
+                                    <label class="control-label">Password</label>
+                                    <input type="password" name="password" class="form-control" placeholder="Password" />
+                                    @error('password')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @else
+                                        <small>Biarkan kosong jika tidak ingin diganti</small>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6" style="margin-bottom: 1em;">
+                                    <label class="control-label">Ulangi Password</label>
+                                    <input type="password" name="password_confirmation" class="form-control"
+                                        placeholder="Ulangi Password" />
+                                    @error('password_confirmation')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>

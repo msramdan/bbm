@@ -38,6 +38,7 @@ class StoreUserRequest extends FormRequest
                     ->uncompromised()
             ],
             'role' => 'required',
+            'status' => 'required|numeric|in:1,0',
             'permissions' => 'required|array'
         ];
     }

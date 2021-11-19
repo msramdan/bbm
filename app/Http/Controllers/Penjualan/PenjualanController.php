@@ -35,7 +35,7 @@ class PenjualanController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $penjualan = Penjualan::with('gudang', 'pelanggan', 'salesman', 'matauang', 'pesanan_penjualan')->withCount('penjualan_detail');
+            $penjualan = Penjualan::with('gudang', 'pelanggan', 'salesman', 'matauang', 'pesanan_penjualan')->withCount('penjualan_detail')->orderByDesc('id');
 
             return Datatables::of($penjualan)
                 ->addIndexColumn()
@@ -53,10 +53,10 @@ class PenjualanController extends Controller
                     return $row->pelanggan->nama_pelanggan;
                 })
                 ->addColumn('gudang', function ($row) {
-                    return $row->gudang->nama;
+                    return $row->gudang ?  $row->gudang->nama : '';
                 })
                 ->addColumn('salesman', function ($row) {
-                    return $row->salesman->nama;
+                    return $row->salesman ? $row->salesman->nama : 'Tanpa Salesman';
                 })
                 ->addColumn('total_barang', function ($row) {
                     return $row->penjualan_detail_count;

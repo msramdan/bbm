@@ -37,7 +37,8 @@ class ReturPembelianController extends Controller
                 'pembelian',
                 'pembelian.supplier:id,kode,nama_supplier',
                 'pembelian.matauang:id,kode,nama'
-            )->withCount('retur_pembelian_detail');
+            )->withCount('retur_pembelian_detail')
+                ->orderByDesc('id');
 
             return Datatables::of($retur)
                 ->addIndexColumn()

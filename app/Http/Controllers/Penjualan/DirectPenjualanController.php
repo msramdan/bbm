@@ -14,7 +14,7 @@ class DirectPenjualanController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:create direct penjualan');
+        $this->middleware('permission:create direct penjualan')->except('getBarangByMatauang');
     }
 
     /**
@@ -126,8 +126,9 @@ class DirectPenjualanController extends Controller
     {
         abort_if(!$request->ajax(), 404);
 
-        $barang = Barang::select('id', 'kode', 'nama', 'harga_jual_matauang', 'harga_jual', 'stok', 'gambar')
+        $barang = Barang::select('id', 'kode', 'nama', 'harga_jual_matauang', 'harga_beli_matauang', 'harga_jual', 'harga_beli', 'stok', 'gambar')
             ->with('mata_uang_jual:id,kode')
+            ->with('matauang_beli:id,kode')
             ->where('status', 'Y')
             ->where('jenis', 1)
             ->where('harga_jual_matauang', $request->id)

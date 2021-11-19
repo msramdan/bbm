@@ -8,6 +8,7 @@
 
         $('#matauang').change(function() {
             hitung_semua_total_brg()
+            get_barang_by_matauang_id()
         })
 
         $('input[name="tanggal"]').change(function() {
@@ -267,39 +268,50 @@
                 },
                 data: data,
                 success: function(data) {
-                    get_kode()
-
-                    $('#tbl_trx tbody tr').remove()
-
-                    $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                    $('input[name="rate"]').val('')
-                    $('textarea[name="keterangan"]').val('')
-                    $('textarea[name="alamat"]').val('')
-
-                    $('select[name="pelanggan"] option[value=""]').attr('selected', 'selected')
-
-                    // $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-
-                    $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
-                    // $('select[name="salesman"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="bentuk_kepemilikan"] option[value="0"]').attr('selected',
-                        'selected')
-
-                    clear_form_entry_brg()
-                    hitung_semua_total_brg()
-                    cek_table_length()
-
-                    $('select[name="matauang"]').focus()
-                    $('#btn_simpan').text('simpan')
-
                     Swal.fire({
                         icon: 'success',
-                        title: 'Tambah data',
+                        title: 'Simpan data',
                         text: 'Berhasil'
+                    }).then(function() {
+                        setTimeout(() => {
+                            window.location =
+                                '{{ route('pesanan-penjualan.create') }}'
+                        }, 500)
                     })
+
+                    // get_kode()
+
+                    // $('#tbl_trx tbody tr').remove()
+
+                    // $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
+                    // $('input[name="rate"]').val('')
+                    // $('textarea[name="keterangan"]').val('')
+                    // $('textarea[name="alamat"]').val('')
+
+                    // $('select[name="pelanggan"] option[value=""]').attr('selected', 'selected')
+
+                    // // $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
+
+                    // $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
+                    // // $('select[name="salesman"] option[value=""]').attr('selected', 'selected')
+                    // $('select[name="bentuk_kepemilikan"] option[value="0"]').attr('selected',
+                    //     'selected')
+
+                    // clear_form_entry_brg()
+                    // hitung_semua_total_brg()
+                    // cek_table_length()
+
+                    // $('select[name="matauang"]').focus()
+                    // $('#btn_simpan').text('simpan')
+
+                    // Swal.fire({
+                    //     icon: 'success',
+                    //     title: 'Tambah data',
+                    //     text: 'Berhasil'
+                    // })
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',
@@ -613,7 +625,51 @@
                     $('#qty_input').focus()
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
+        }
+
+        function get_barang_by_matauang_id() {
+            let select_barang = $('#kode_barang_input')
+            select_barang.prop('disabled', true)
+            select_barang.html(`<option value="" disabled selected>Loading...</option>`)
+
+            $.ajax({
+                url: "/jual/direct-penjualan/get-barang-by-matauang/",
+                data: {
+                    id: $('#matauang').val()
+                },
+                type: 'GET',
+                success: function(data) {
+                    barang = ''
+                    setTimeout(() => {
+                        if (data.length > 0) {
+                            barang += ` <option value="" disabled selected>-- Pilih --</option>`
+                            $.each(data, function(key, value) {
+                                barang +=
+                                    `<option value="${value.id}">${value.kode} - ${value.nama}</option>`
+                            })
+
+                            select_barang.html(barang)
+                            select_barang.prop('disabled', false)
+                        } else {
+                            barang =
+                                `<option value="" disabled selected>Barang tidak ditemukan</option>`
+
+                            select_barang.html(barang)
+                            select_barang.prop('disabled', false)
+                        }
+                    }, 1000)
+                },
+                error: function(xhr, status, error) {
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',

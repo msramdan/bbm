@@ -130,7 +130,7 @@
                                 <div class="col-md-6">
                                     <label class="control-label">Alamat Penerima</label>
                                     <textarea name="alamat" id="alamat" rows="5" class="form-control"
-                                        disabled>{{ $penjualan->alamat }}</textarea>
+                                        readonly>{{ $penjualan->alamat }}</textarea>
                                 </div>
 
                                 <div class="col-md-6">
@@ -179,14 +179,7 @@
                                 <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="kode_barang">Nama Barang</label>
                                     <select name="kode_barang" id="kode_barang_input" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @forelse ($barang as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->kode . ' - ' . $item->nama }}
-                                            </option>
-                                        @empty
-                                            <option value="" disabled>Data tidak ditemukan</option>
-                                        @endforelse
+                                        <option value="" disabled selected>-- Pilih Matauang Terlebih Dahulu --</option>
                                     </select>
                                 </div>
 

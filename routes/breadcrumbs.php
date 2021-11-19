@@ -11,6 +11,38 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('master', function (BreadcrumbTrail $trail) {
     $trail->push('Master Data');
 });
+
+// inventory
+Breadcrumbs::for('inventory', function (BreadcrumbTrail $trail) {
+    $trail->push('Inventory');
+});
+
+// beli
+Breadcrumbs::for('beli', function (BreadcrumbTrail $trail) {
+    $trail->push('Beli');
+});
+
+// jual
+Breadcrumbs::for('jual', function (BreadcrumbTrail $trail) {
+    $trail->push('Jual');
+});
+
+// keuangan
+Breadcrumbs::for('keuangan', function (BreadcrumbTrail $trail) {
+    $trail->push('Keuangan');
+});
+
+// // pengaturan
+// Breadcrumbs::for('pengaturan', function (BreadcrumbTrail $trail) {
+//     $trail->push('Pengaturan');
+// });
+
+// // akun
+// Breadcrumbs::for('akun', function (BreadcrumbTrail $trail) {
+//     $trail->push('Akun');
+// });
+
+
 // laporan
 Breadcrumbs::for('laporan', function (BreadcrumbTrail $trail) {
     $trail->push('Laporan');
@@ -211,56 +243,56 @@ Breadcrumbs::for('barang_edit', function (BreadcrumbTrail $trail) {
 });
 
 
-// Master Data > Adjustment Plus
+// Inventory > Adjustment Plus
 Breadcrumbs::for('adjustment_plus', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('inventory');
     $trail->push('Adjustment Plus', route('adjustment-plus.index'));
 });
-// Master Data > Adjustment Plus > Tambah
+// Inventory > Adjustment Plus > Tambah
 Breadcrumbs::for('adjustment_plus_add', function (BreadcrumbTrail $trail) {
     $trail->parent('adjustment_plus');
     $trail->push('Tambah', route('adjustment-plus.create'));
 });
-// Master Data > Adjustment Plus > Edit
+// Inventory > Adjustment Plus > Edit
 Breadcrumbs::for('adjustment_plus_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('adjustment_plus');
     $trail->push('Edit');
 });
 
 
-// Master Data > Adjustment Minus
+// Inventory > Adjustment Minus
 Breadcrumbs::for('adjustment_minus', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('inventory');
     $trail->push('Adjustment Minus', route('adjustment-minus.index'));
 });
-// Master Data > Adjustment Minus > Tambah
+// Inventory > Adjustment Minus > Tambah
 Breadcrumbs::for('adjustment_minus_add', function (BreadcrumbTrail $trail) {
     $trail->parent('adjustment_minus');
     $trail->push('Tambah', route('adjustment-minus.create'));
 });
-// Master Data > Adjustment Minus > Edit
+// Inventory > Adjustment Minus > Edit
 Breadcrumbs::for('adjustment_minus_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('adjustment_minus');
     $trail->push('Edit');
 });
 
 
-// Master Data > Perakitan Paket
+// Inventory > Perakitan Paket
 Breadcrumbs::for('perakitan_paket', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('inventory');
     $trail->push('Perakitan Paket', route('perakitan-paket.index'));
 });
-// Master Data > Perakitan Paket > Tambah
+// Inventory > Perakitan Paket > Tambah
 Breadcrumbs::for('perakitan_paket_add', function (BreadcrumbTrail $trail) {
     $trail->parent('perakitan_paket');
     $trail->push('Tambah', route('perakitan-paket.create'));
 });
-// Master Data > Perakitan Paket > Edit
+// Inventory > Perakitan Paket > Edit
 Breadcrumbs::for('perakitan_paket_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('perakitan_paket');
     $trail->push('Edit');
 });
-// Master Data > Pesanan Pembelian > Show
+// Inventory > Pesanan Pembelian > Show
 Breadcrumbs::for('perakitan_paket_show', function (BreadcrumbTrail $trail) {
     $trail->parent('perakitan_paket');
     $trail->push('Show');
@@ -268,71 +300,70 @@ Breadcrumbs::for('perakitan_paket_show', function (BreadcrumbTrail $trail) {
 
 
 
-// Master Data > Pesanan Pembelian
+// Beli > Pesanan Pembelian
 Breadcrumbs::for('pesanan_pembelian', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('beli');
     $trail->push('Pesanan Pembelian', route('pesanan-pembelian.index'));
 });
-// Master Data > Pesanan Pembelian > Tambah
+// Beli > Pesanan Pembelian > Tambah
 Breadcrumbs::for('pesanan_pembelian_add', function (BreadcrumbTrail $trail) {
     $trail->parent('pesanan_pembelian');
     $trail->push('Tambah', route('pesanan-pembelian.create'));
 });
-// Master Data > Pesanan Pembelian > Edit
+// Beli > Pesanan Pembelian > Edit
 Breadcrumbs::for('pesanan_pembelian_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('pesanan_pembelian');
     $trail->push('Edit');
 });
-// Master Data > Pesanan Pembelian > Show
+// Beli > Pesanan Pembelian > Show
 Breadcrumbs::for('pesanan_pembelian_show', function (BreadcrumbTrail $trail) {
     $trail->parent('pesanan_pembelian');
     $trail->push('Show');
 });
 
 
-// Master Data > Pembelian
+// Beli > Pembelian
 Breadcrumbs::for('pembelian', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('beli');
     $trail->push('Pembelian', route('pembelian.index'));
 });
-// Master Data > Pembelian > Tambah
+// Beli > Pembelian > Tambah
 Breadcrumbs::for('pembelian_add', function (BreadcrumbTrail $trail) {
     $trail->parent('pembelian');
     $trail->push('Tambah', route('pembelian.create'));
 });
-// Master Data > Pembelian > Edit
+// Beli > Pembelian > Edit
 Breadcrumbs::for('pembelian_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('pembelian');
     $trail->push('Edit');
 });
-// Master Data > Pembelian > Show
+// Beli > Pembelian > Show
 Breadcrumbs::for('pembelian_show', function (BreadcrumbTrail $trail) {
     $trail->parent('pembelian');
     $trail->push('Show');
 });
 
 
-// Master Data > Retur
+// Beli > Retur
 Breadcrumbs::for('retur_pembelian', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('beli');
     $trail->push('Retur', route('retur-pembelian.index'));
 });
-// Master Data > Retur > Tambah
+// Beli > Retur > Tambah
 Breadcrumbs::for('retur_pembelian_add', function (BreadcrumbTrail $trail) {
     $trail->parent('retur_pembelian');
     $trail->push('Tambah', route('retur-pembelian.create'));
 });
-// Master Data > Retur > Edit
+// Beli > Retur > Edit
 Breadcrumbs::for('retur_pembelian_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('retur_pembelian');
     $trail->push('Edit');
 });
-// Master Data > Retur > Show
+// Beli > Retur > Show
 Breadcrumbs::for('retur_pembelian_show', function (BreadcrumbTrail $trail) {
     $trail->parent('retur_pembelian');
     $trail->push('Show');
 });
-
 
 
 // Master Data > Setting
@@ -346,22 +377,22 @@ Breadcrumbs::for('toko', function (BreadcrumbTrail $trail) {
 });
 
 
-// Setting  > Retur
+// Setting > User
 Breadcrumbs::for('user', function (BreadcrumbTrail $trail) {
     $trail->parent('setting');
     $trail->push('User', route('user.index'));
 });
-// Setting  > Retur > Tambah
+// Setting > User > Tambah
 Breadcrumbs::for('user_add', function (BreadcrumbTrail $trail) {
     $trail->parent('user');
     $trail->push('Tambah', route('user.create'));
 });
-// Setting  > Retur > Edit
+// Setting > User > Edit
 Breadcrumbs::for('user_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('user');
     $trail->push('Edit');
 });
-// Setting  > Retur > Show
+// Setting > Retur > Show
 Breadcrumbs::for('user_show', function (BreadcrumbTrail $trail) {
     $trail->parent('user');
     $trail->push('Show');
@@ -380,43 +411,43 @@ Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
 });
 
 
-// Master Data > Penjualan
+// Jual > Penjualan
 Breadcrumbs::for('penjualan', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('jual');
     $trail->push('Penjualan', route('penjualan.index'));
 });
-// Master Data > Penjualan > Tambah
+// Jual > Penjualan > Tambah
 Breadcrumbs::for('penjualan_add', function (BreadcrumbTrail $trail) {
     $trail->parent('penjualan');
     $trail->push('Tambah', route('penjualan.create'));
 });
-// Master Data > Penjualan > Edit
+// Jual > Penjualan > Edit
 Breadcrumbs::for('penjualan_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('penjualan');
     $trail->push('Edit');
 });
-// Master Data > Penjualan > Show
+// Jual > Penjualan > Show
 Breadcrumbs::for('penjualan_show', function (BreadcrumbTrail $trail) {
     $trail->parent('penjualan');
     $trail->push('Show');
 });
 
-// Master Data > Pesanan Penjualan
+// Jual > Pesanan Penjualan
 Breadcrumbs::for('pesanan_penjualan', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('jual');
     $trail->push('Pesanan Penjualan', route('pesanan-penjualan.index'));
 });
-// Master Data > Pesanan Penjualan > Tambah
+// Jual > Pesanan Penjualan > Tambah
 Breadcrumbs::for('pesanan_penjualan_add', function (BreadcrumbTrail $trail) {
     $trail->parent('pesanan_penjualan');
     $trail->push('Tambah', route('pesanan-penjualan.create'));
 });
-// Master Data > Pesanan Penjualan > Edit
+// Jual > Pesanan Penjualan > Edit
 Breadcrumbs::for('pesanan_penjualan_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('pesanan_penjualan');
     $trail->push('Edit');
 });
-// Master Data > Pesanan Penjualan > Show
+// Jual > Pesanan Penjualan > Show
 Breadcrumbs::for('pesanan_penjualan_show', function (BreadcrumbTrail $trail) {
     $trail->parent('pesanan_penjualan');
     $trail->push('Show');
@@ -424,22 +455,22 @@ Breadcrumbs::for('pesanan_penjualan_show', function (BreadcrumbTrail $trail) {
 
 
 
-// Master Data > Retur Penjualan
+// Jual > Retur Penjualan
 Breadcrumbs::for('retur_penjualan', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('jual');
     $trail->push('Retur Penjualan', route('retur-penjualan.index'));
 });
-// Master Data > Retur Penjualan  > Tambah
+// Jual > Retur Penjualan > Tambah
 Breadcrumbs::for('retur_penjualan_add', function (BreadcrumbTrail $trail) {
     $trail->parent('retur_penjualan');
     $trail->push('Tambah', route('retur-penjualan.create'));
 });
-// Master Data > Retur Penjualan  > Edit
+// Jual > Retur Penjualan > Edit
 Breadcrumbs::for('retur_penjualan_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('retur_penjualan');
     $trail->push('Edit');
 });
-// Master Data > Retur Penjualan  > Show
+// Jual > Retur Penjualan > Show
 Breadcrumbs::for('retur_penjualan_show', function (BreadcrumbTrail $trail) {
     $trail->parent('retur_penjualan');
     $trail->push('Show');
@@ -453,110 +484,110 @@ Breadcrumbs::for('direct_sales_add', function (BreadcrumbTrail $trail) {
 });
 
 
-// Master Data > Pelunasan Hutang
+// Keuangan > Pelunasan Hutang
 Breadcrumbs::for('pelunasan_hutang', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('keuangan');
     $trail->push('Pelunasan Hutang', route('pelunasan-hutang.index'));
 });
-// Master Data > Pelunasan Hutang  > Tambah
+// Keuangan > Pelunasan Hutang > Tambah
 Breadcrumbs::for('pelunasan_hutang_add', function (BreadcrumbTrail $trail) {
     $trail->parent('pelunasan_hutang');
     $trail->push('Tambah', route('pelunasan-hutang.create'));
 });
-// Master Data > Pelunasan Hutang  > Edit
+// Keuangan > Pelunasan Hutang > Edit
 Breadcrumbs::for('pelunasan_hutang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('pelunasan_hutang');
     $trail->push('Edit');
 });
-// Master Data > Pelunasan Hutang  > Show
+// Keuangan > Pelunasan Hutang > Show
 Breadcrumbs::for('pelunasan_hutang_show', function (BreadcrumbTrail $trail) {
     $trail->parent('pelunasan_hutang');
     $trail->push('Show');
 });
 
 
-// Master Data > Pelunasan Piutang
+// Keuangan > Pelunasan Piutang
 Breadcrumbs::for('pelunasan_piutang', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('keuangan');
     $trail->push('Pelunasan Piutang', route('pelunasan-piutang.index'));
 });
-// Master Data > Pelunasan Piutang  > Tambah
+// Keuangan > Pelunasan Piutang > Tambah
 Breadcrumbs::for('pelunasan_piutang_add', function (BreadcrumbTrail $trail) {
     $trail->parent('pelunasan_piutang');
     $trail->push('Tambah', route('pelunasan-piutang.create'));
 });
-// Master Data > Pelunasan Piutang  > Edit
+// Keuangan > Pelunasan Piutang > Edit
 Breadcrumbs::for('pelunasan_piutang_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('pelunasan_piutang');
     $trail->push('Edit');
 });
-// Master Data > Pelunasan Piutang  > Show
+// Keuangan > Pelunasan Piutang > Show
 Breadcrumbs::for('pelunasan_piutang_show', function (BreadcrumbTrail $trail) {
     $trail->parent('pelunasan_piutang');
     $trail->push('Show');
 });
 
 
-// Master Data > Cek-Giro Cair
+// Keuangan > Cek-Giro Cair
 Breadcrumbs::for('cek_giro_cair', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('keuangan');
     $trail->push('Cek-Giro Cair', route('cek-giro-cair.index'));
 });
-// Master Data > Cek-Giro Cair  > Tambah
+// Keuangan > Cek-Giro Cair > Tambah
 Breadcrumbs::for('cek_giro_cair_add', function (BreadcrumbTrail $trail) {
     $trail->parent('cek_giro_cair');
     $trail->push('Tambah', route('cek-giro-cair.create'));
 });
-// Master Data > Cek-Giro Cair  > Edit
+// Keuangan > Cek-Giro Cair > Edit
 Breadcrumbs::for('cek_giro_cair_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('cek_giro_cair');
     $trail->push('Edit');
 });
-// Master Data > Cek-Giro Cair  > Show
+// Keuangan > Cek-Giro Cair > Show
 Breadcrumbs::for('cek_giro_cair_show', function (BreadcrumbTrail $trail) {
     $trail->parent('cek_giro_cair');
     $trail->push('Show');
 });
 
 
-// Master Data > Cek-Giro Tolak
+// Keuangan > Cek-Giro Tolak
 Breadcrumbs::for('cek_giro_tolak', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('keuangan');
     $trail->push('Cek-Giro Tolak', route('cek-giro-tolak.index'));
 });
-// Master Data > Cek-Giro Tolak  > Tambah
+// Keuangan > Cek-Giro Tolak > Tambah
 Breadcrumbs::for('cek_giro_tolak_add', function (BreadcrumbTrail $trail) {
     $trail->parent('cek_giro_tolak');
     $trail->push('Tambah', route('cek-giro-tolak.create'));
 });
-// Master Data > Cek-Giro Tolak  > Edit
+// Keuangan > Cek-Giro Tolak > Edit
 Breadcrumbs::for('cek_giro_tolak_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('cek_giro_tolak');
     $trail->push('Edit');
 });
-// Master Data > Cek-Giro Tolak  > Show
+// Keuangan > Cek-Giro Tolak > Show
 Breadcrumbs::for('cek_giro_tolak_show', function (BreadcrumbTrail $trail) {
     $trail->parent('cek_giro_tolak');
     $trail->push('Show');
 });
 
 
-// Master Data > Biaya
+// Keuangan > Biaya
 Breadcrumbs::for('biaya', function (BreadcrumbTrail $trail) {
-    $trail->parent('master');
+    $trail->parent('keuangan');
     $trail->push('Biaya', route('biaya.index'));
 });
-// Master Data > Biaya  > Tambah
+// Keuangan > Biaya > Tambah
 Breadcrumbs::for('biaya_add', function (BreadcrumbTrail $trail) {
     $trail->parent('biaya');
     $trail->push('Tambah', route('biaya.create'));
 });
-// Master Data > Biaya  > Edit
+// Keuangan > Biaya > Edit
 Breadcrumbs::for('biaya_edit', function (BreadcrumbTrail $trail) {
     $trail->parent('biaya');
     $trail->push('Edit');
 });
-// Master Data > Biaya  > Show
+// Keuangan > Biaya > Show
 Breadcrumbs::for('biaya_show', function (BreadcrumbTrail $trail) {
     $trail->parent('biaya');
     $trail->push('Show');

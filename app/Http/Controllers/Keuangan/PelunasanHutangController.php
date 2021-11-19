@@ -34,7 +34,7 @@ class PelunasanHutangController extends Controller
                 'pembelian.matauang:id,kode,nama',
                 'pembelian.supplier:id,kode,nama_supplier',
                 'pembelian.matauang:id,kode,nama'
-            );
+            )->orderByDesc('id');
 
             return DataTables::of($pelunasan)
                 ->addIndexColumn()

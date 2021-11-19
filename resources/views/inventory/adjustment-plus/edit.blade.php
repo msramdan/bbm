@@ -72,7 +72,7 @@
                                     <label class="control-label">Mata Uang</label>
 
                                     <select name="matauang" id="matauang" class="form-control" disabled>
-                                        <option value="{{ $adjustmentPlus->matauang->kode }}">
+                                        <option value="{{ $adjustmentPlus->matauang->id }}">
                                             {{ $adjustmentPlus->matauang->kode }}
                                         </option>
                                     </select>
@@ -197,14 +197,14 @@
                                     <div class="form-group">
                                         <label for="kode_barang">Nama Barang</label>
                                         <select name="kode_barang" id="kode_barang_input" class="form-control" required>
-                                            <option value="" disabled selected>-- Pilih --</option>
+                                            {{-- <option value="" disabled selected>-- Pilih --</option>
                                             @forelse ($barang as $item)
                                                 <option value="{{ $item->id }}">
                                                     {{ $item->kode . ' - ' . $item->nama }}
                                                 </option>
                                             @empty
                                                 <option value="" disabled>Data tidak ditemukan</option>
-                                            @endforelse
+                                            @endforelse --}}
                                         </select>
                                     </div>
 

@@ -168,28 +168,38 @@
                 },
                 data: data,
                 success: function(data) {
-                    // alert(data)
-                    $('#tbl_trx tbody tr').remove()
-
-                    $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                    $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="paket"] option[value=""]').attr('selected', 'selected')
-                    $('input[name="kuantitas"]').val('')
-                    $('textarea[name="keterangan"]').val('')
-
-                    clear_form_entry()
-                    cek_table_length()
-                    get_kode()
-                    cek_form_entry()
-
-                    $('select[name="gudang"]').focus()
-                    $('#btn_simpan').text('simpan')
-
                     Swal.fire({
                         icon: 'success',
-                        title: 'Tambah data',
+                        title: 'Simpan data',
                         text: 'Berhasil'
+                    }).then(function() {
+                        setTimeout(() => {
+                            window.location = '{{ route('perakitan-paket.create') }}'
+                        }, 500)
                     })
+
+                    // // alert(data)
+                    // $('#tbl_trx tbody tr').remove()
+
+                    // $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
+                    // $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
+                    // $('select[name="paket"] option[value=""]').attr('selected', 'selected')
+                    // $('input[name="kuantitas"]').val('')
+                    // $('textarea[name="keterangan"]').val('')
+
+                    // clear_form_entry()
+                    // cek_table_length()
+                    // get_kode()
+                    // cek_form_entry()
+
+                    // $('select[name="gudang"]').focus()
+                    // $('#btn_simpan').text('simpan')
+
+                    // Swal.fire({
+                    //     icon: 'success',
+                    //     title: 'Tambah data',
+                    //     text: 'Berhasil'
+                    // })
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText)

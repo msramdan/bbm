@@ -6,6 +6,7 @@
         cek_form_entry_brg()
         hitung_semua_total_brg()
         hitung_total_payment()
+        get_barang_by_matauang_id()
 
         $('#matauang').change(function() {
             hitung_semua_total_brg()
@@ -20,7 +21,6 @@
                 get_rekening()
             }
         })
-
 
         // Cek stok
         $('#kode_barang_input').change(function() {
@@ -377,7 +377,7 @@
                 },
                 data: data,
                 success: function(data) {
-                    $('#btn_simpan').text('simpan')
+                    // $('#btn_simpan').text('simpan')
 
                     Swal.fire({
                         icon: 'success',
@@ -391,7 +391,7 @@
                     })
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',
@@ -934,10 +934,54 @@
                     harga.prop('placeholder', 'Harga')
 
                     $('#qty_input').focus()
-                    console.log(`stok: ${stok}, min: ${min_stok}`);
+                    // console.log(`stok: ${stok}, min: ${min_stok}`);
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
+        }
+
+        function get_barang_by_matauang_id() {
+            let select_barang = $('#kode_barang_input')
+            select_barang.prop('disabled', true)
+            select_barang.html(`<option value="" disabled selected>Loading...</option>`)
+
+            $.ajax({
+                url: "/jual/direct-penjualan/get-barang-by-matauang/",
+                data: {
+                    id: $('#matauang').val()
+                },
+                type: 'GET',
+                success: function(data) {
+                    barang = ''
+                    setTimeout(() => {
+                        if (data.length > 0) {
+                            barang += ` <option value="" disabled selected>-- Pilih --</option>`
+                            $.each(data, function(key, value) {
+                                barang +=
+                                    `<option value="${value.id}">${value.kode} - ${value.nama}</option>`
+                            })
+
+                            select_barang.html(barang)
+                            select_barang.prop('disabled', false)
+                        } else {
+                            barang =
+                                `<option value="" disabled selected>Barang tidak ditemukan</option>`
+
+                            select_barang.html(barang)
+                            select_barang.prop('disabled', false)
+                        }
+                    }, 1000)
+                },
+                error: function(xhr, status, error) {
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',

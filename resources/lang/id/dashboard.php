@@ -3,7 +3,7 @@
 
 return [
     'title' => [
-        'index' => 'Dasbor',
+        'index' => 'Dashboard',
     ],
     'greeting' => [
         'welcome' => "Selamat Datang :a",
@@ -47,7 +47,7 @@ return [
         'direct_sales' => 'POS Terminal'
     ],
     'link' => [
-        'dashboard' => 'Dasbor',
+        'dashboard' => 'Dashboard',
         'profile' => 'Rubah Profil',
         'logout' => 'Keluar',
     ],

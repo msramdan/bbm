@@ -189,6 +189,8 @@
 
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
+            $('#btn_update').prop('disabled', false)
+            $('#btn_clear_form').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -319,11 +321,14 @@
                 !$('#kode_barang_input').val() ||
                 !$('#supplier_input').val() ||
                 !$('#bentuk_kepemilikan_input').val() ||
-                !$('#qty_input').val()
+                !$('#qty_input').val() ||
+                $('#qty_input').val() < 1
             ) {
+                $('#btn_update').prop('disabled', true)
                 $('#btn_add').prop('disabled', true)
                 $('#btn_clear_form').prop('disabled', true)
             } else {
+                $('#btn_update').prop('disabled', false)
                 $('#btn_add').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
             }

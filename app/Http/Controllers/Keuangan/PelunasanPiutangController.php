@@ -32,7 +32,7 @@ class PelunasanPiutangController extends Controller
                 'penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
                 'penjualan.matauang:id,kode,nama',
                 'penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
-            );
+            )->orderByDesc('id');
 
             return DataTables::of($pelunasan)
                 ->addIndexColumn()

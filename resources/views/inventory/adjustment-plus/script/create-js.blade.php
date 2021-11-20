@@ -13,6 +13,7 @@
 
         $('#matauang').change(function() {
             hitung_grand_total()
+            get_barang_by_matauang_id()
         })
 
         $('input[name="tanggal"]').change(function() {
@@ -118,6 +119,10 @@
         })
 
         $('#btn_clear_form').click(function() {
+            // $(this).prop('disabled', true)
+            // $('#btn_update').prop('disabled', true)
+            // $('#btn_add').prop('disabled', true)
+
             clear_form_entry()
 
             cek_table_length()
@@ -174,27 +179,38 @@
                 },
                 data: data,
                 success: function(data) {
-                    $('#tbl_trx tbody tr').remove()
-
-                    $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                    $('input[name="rate"]').val('')
-
-                    $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-                    $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
-
-                    clear_form_entry()
-                    hitung_grand_total()
-                    cek_table_length()
-                    get_kode()
-
-                    $('select[name="gudang"]').focus()
-                    $('#btn_simpan').text('simpan')
-
                     Swal.fire({
                         icon: 'success',
-                        title: 'Tambah data',
+                        title: 'Simpan data',
                         text: 'Berhasil'
+                    }).then(function() {
+                        setTimeout(() => {
+                            window.location = '{{ route('adjustment-plus.create') }}'
+                        }, 500)
                     })
+
+                    // $('#tbl_trx tbody tr').remove()
+
+                    // $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
+                    // $('input[name="rate"]').val('')
+
+                    // $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
+                    // $('select[name="matauang"] option[value=""]').attr('selected', 'selected')
+
+                    // clear_form_entry()
+                    // hitung_grand_total()
+                    // cek_table_length()
+                    // get_kode()
+
+                    // $('select[name="gudang"]').focus()
+                    // $('#btn_simpan').text('simpan')
+                    // $('#grand_total').text(`GRAND TOTAL: 0,- `)
+
+                    // Swal.fire({
+                    //     icon: 'success',
+                    //     title: 'Tambah data',
+                    //     text: 'Berhasil'
+                    // })
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText)
@@ -220,6 +236,8 @@
 
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
+            $('#btn_update').prop('disabled', false)
+            $('#btn_clear_form').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -258,6 +276,50 @@
                 $('#btn_simpan').prop('disabled', true)
                 $('#btn_clear_table').prop('disabled', true)
             }
+        }
+
+        function get_barang_by_matauang_id() {
+            let select_barang = $('#kode_barang_input')
+            select_barang.prop('disabled', true)
+            select_barang.html(`<option value="" disabled selected>Loading...</option>`)
+
+            $.ajax({
+                url: "/jual/direct-penjualan/get-barang-by-matauang/",
+                data: {
+                    id: $('#matauang').val()
+                },
+                type: 'GET',
+                success: function(data) {
+                    barang = ''
+                    setTimeout(() => {
+                        if (data.length > 0) {
+                            barang += ` <option value="" disabled selected>-- Pilih --</option>`
+                            $.each(data, function(key, value) {
+                                barang +=
+                                    `<option value="${value.id}">${value.kode} - ${value.nama}</option>`
+                            })
+
+                            select_barang.html(barang)
+                            select_barang.prop('disabled', false)
+                        } else {
+                            barang =
+                                `<option value="" disabled selected>Barang tidak ditemukan</option>`
+
+                            select_barang.html(barang)
+                            select_barang.prop('disabled', false)
+                        }
+                    }, 1000)
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
 
         function update_list(index) {
@@ -360,6 +422,9 @@
             })
 
             let matauang_type = $('#matauang option:selected').html()
+            // if (matauang_type == '-- Pilih -- ') {
+            //     matauang_type = ''
+            // }
 
             $('#grand_total').text(`GRAND TOTAL: ${matauang_type} ${format_ribuan(total)},- `)
 
@@ -391,12 +456,15 @@
                 !$('#supplier_input').val() ||
                 !$('#bentuk_kepemilikan_input').val() ||
                 !$('#harga_input').val() ||
+                !$('#subtotal_input').val() ||
                 !$('#qty_input').val() ||
-                !$('#subtotal_input').val()
+                $('#qty_input').val() < 1
             ) {
+                $('#btn_update').prop('disabled', true)
                 $('#btn_add').prop('disabled', true)
                 $('#btn_clear_form').prop('disabled', true)
             } else {
+                $('#btn_update').prop('disabled', false)
                 $('#btn_add').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
             }
@@ -424,7 +492,7 @@
                     harga.prop('disabled', false)
                     harga.prop('placeholder', 'Harga')
 
-                    $('#supplier_input').focus()
+                    $('#bentuk_kepemilikan_input').focus()
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText)

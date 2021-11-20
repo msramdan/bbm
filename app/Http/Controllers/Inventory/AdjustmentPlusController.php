@@ -34,7 +34,7 @@ class AdjustmentPlusController extends Controller
                 'adjustment_plus_detail.supplier:id,kode,nama_supplier',
                 'matauang:id,kode,nama',
                 'gudang:id,kode,nama'
-            )->withCount('adjustment_plus_detail')->orderByDesc('updated_at');
+            )->withCount('adjustment_plus_detail')->orderByDesc('id');
 
             return Datatables::of($adjustmentPlus)
                 ->addIndexColumn()
@@ -52,7 +52,7 @@ class AdjustmentPlusController extends Controller
                     return $row->created_at->format('d F Y H:i');
                 })
                 ->addColumn('grand_total', function ($row) {
-                    return $row->matauang->kode . ' ' . number_format($row->grand_total);
+                    return $row->matauang->kode . ' ' . number_format($row->grand_total, 2, '.', ',');
                 })
                 ->addColumn('updated_at', function ($row) {
                     return $row->updated_at->format('d F Y H:i');

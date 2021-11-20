@@ -160,24 +160,34 @@
                 },
                 data: data,
                 success: function(data) {
-                    $('#tbl_trx tbody tr').remove()
-
-                    $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
-                    $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
-
-                    clear_form_entry()
-                    cek_table_length()
-                    get_kode()
-                    cek_form_entry()
-
-                    $('select[name="gudang"]').focus()
-                    $('#btn_simpan').text('simpan')
-
                     Swal.fire({
                         icon: 'success',
-                        title: 'Tambah data',
+                        title: 'Simpan data',
                         text: 'Berhasil'
+                    }).then(function() {
+                        setTimeout(() => {
+                            window.location = '{{ route('adjustment-minus.create') }}'
+                        }, 500)
                     })
+
+                    // $('#tbl_trx tbody tr').remove()
+
+                    // $('input[name="tanggal"]').val("{{ date('Y-m-d') }}")
+                    // $('select[name="gudang"] option[value=""]').attr('selected', 'selected')
+
+                    // clear_form_entry()
+                    // cek_table_length()
+                    // get_kode()
+                    // cek_form_entry()
+
+                    // $('select[name="gudang"]').focus()
+                    // $('#btn_simpan').text('simpan')
+
+                    // Swal.fire({
+                    //     icon: 'success',
+                    //     title: 'Tambah data',
+                    //     text: 'Berhasil'
+                    // })
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText)
@@ -202,6 +212,8 @@
 
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
+            $('#btn_update').prop('disabled', false)
+            $('#btn_clear_form').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -343,11 +355,14 @@
                 !$('#kode_barang_input').val() ||
                 !$('#supplier_input').val() ||
                 !$('#bentuk_kepemilikan_input').val() ||
-                !$('#qty_input').val()
+                !$('#qty_input').val() ||
+                $('#qty_input').val() < 1
             ) {
+                $('#btn_update').prop('disabled', true)
                 $('#btn_add').prop('disabled', true)
                 $('#btn_clear_form').prop('disabled', true)
             } else {
+                $('#btn_update').prop('disabled', false)
                 $('#btn_add').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
             }

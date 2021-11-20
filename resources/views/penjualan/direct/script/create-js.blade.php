@@ -11,24 +11,13 @@
         // #matauang -> select
         // .matauang -> input hidden pada table
         $('#matauang').change(function() {
-            // $('.card').each(function(i) {
-            //     if ($('.matauang').eq(i).val() == $('#matauang option:selected').text()) {
-            //         $('.card').eq(i).show()
-            //         // console.log('beda');
-            //     } else {
-            //         $('.card').eq(i).hide()
-            //         // console.log('sama');
-            //     }
-
-            //     // console.log($('.matauang').eq(i).val());
-            //     // console.log($('#matauang option:selected').text());
-            // })
-
             get_barang_by_matauang_id()
         })
 
         $('#search').on('keyup', function() {
+            // setTimeout(() => {
             get_barang_by_matauang_id()
+            // }, 500)
         })
 
         $(document).on('click', '.card', function() {
@@ -70,45 +59,45 @@
                     })
                 } else {
                     let data_trx = `<tr>
-                    <td></td>
-                    <td>
-                        <p style="line-height: 10px;">${nama_barang}</p>
-                        <p style="line-height: 10px;">
-                            <span class="span_harga">${format_ribuan(harga)}</span>
-                        </p>
-                        <p style="line-height: 10px;">
-                            <span class="span_diskon">Disc: ${diskon}</span>,
-                            <span class="span_ppn">PPN: ${ppn}</span>
-                        </p>
-                        <input type="hidden" name="id_barang[]" class="id_barang_hidden" value="${id_barang}">
-                        <input type="hidden" class="nama_barang_hidden" value="${nama_barang}">
-                        <input type="hidden" name="harga[]" class="harga_hidden" value="${harga}">
-                        <input type="hidden" name="subtotal[]" class="subtotal_hidden" value="${harga}">
-                        <input type="hidden" class="matauang_hidden" value="${matauang}">
-                        <input type="hidden" class="stok_hidden" value="${stok}">
+                        <td></td>
+                        <td>
+                            <p style="line-height: 10px;">${nama_barang}</p>
+                            <p style="line-height: 10px;">
+                                <span class="span_harga">${matauang} ${format_ribuan(harga)}</span>
+                            </p>
+                            <p style="line-height: 10px;">
+                                <span class="span_diskon">Disc: ${matauang} ${diskon}</span>,
+                                <span class="span_ppn">PPN: ${matauang} ${ppn}</span>
+                            </p>
+                            <input type="hidden" name="id_barang[]" class="id_barang_hidden" value="${id_barang}">
+                            <input type="hidden" class="nama_barang_hidden" value="${nama_barang}">
+                            <input type="hidden" name="harga[]" class="harga_hidden" value="${harga}">
+                            <input type="hidden" name="subtotal[]" class="subtotal_hidden" value="${harga}">
+                            <input type="hidden" class="matauang_hidden" value="${matauang}">
+                            <input type="hidden" class="stok_hidden" value="${stok}">
 
-                        <input type="hidden" name="diskon[]" class="diskon_hidden" value="0">
-                        <input type="hidden" name="diskon_persen[]" class="diskon_persen_hidden" value="0">
-                        <input type="hidden" name="ppn[]" class="ppn_hidden" value="0">
-                        <input type="hidden" name="netto[]" class="netto_hidden" value="${subtotal}">
-                    </td>
-                    <td>
-                        <span class="span_qty">1</span>
-                        <input type="hidden" name="qty[]" class="qty_hidden" value="1">
-                    </td>
-                    <td>
-                        <span class="span_subtotal">${format_ribuan(harga)}</span>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs btn_edit" data-toggle="modal" data-target="#myModal">
-                            <i class="fa fa-edit"></i>
-                        </button>
+                            <input type="hidden" name="diskon[]" class="diskon_hidden" value="0">
+                            <input type="hidden" name="diskon_persen[]" class="diskon_persen_hidden" value="0">
+                            <input type="hidden" name="ppn[]" class="ppn_hidden" value="0">
+                            <input type="hidden" name="netto[]" class="netto_hidden" value="${subtotal}">
+                        </td>
+                        <td>
+                            <span class="span_qty">1</span>
+                            <input type="hidden" name="qty[]" class="qty_hidden" value="1">
+                        </td>
+                        <td>
+                            <span class="span_subtotal">${matauang} ${format_ribuan(harga)}</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-xs btn_edit" data-toggle="modal" data-target="#myModal">
+                                <i class="fa fa-edit"></i>
+                            </button>
 
-                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </td>
-                </tr>`
+                            <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`
 
                     $('#tbl_trx').append(data_trx)
                     generate_nomer()
@@ -127,11 +116,11 @@
                     <td>
                         <p style="line-height: 10px;">${nama_barang}</p>
                         <p style="line-height: 10px;">
-                            <span class="span_harga">${format_ribuan(harga)}</span>
+                            <span class="span_harga">${matauang} ${format_ribuan(harga)}</span>
                         </p>
                         <p style="line-height: 10px;">
-                            <span class="span_diskon">Disc: ${diskon}</span>,
-                            <span class="span_ppn">PPN: ${ppn}</span>
+                            <span class="span_diskon">Disc: ${matauang} ${diskon}</span>,
+                            <span class="span_ppn">PPN: ${matauang} ${ppn}</span>
                         </p>
 
                         <input type="hidden" name="id_barang[]" class="id_barang_hidden" value="${id_barang}">
@@ -151,7 +140,7 @@
                         <input type="hidden" name="qty[]" class="qty_hidden" value="${qty}">
                     </td>
                     <td>
-                        <span class="span_subtotal">${format_ribuan(subtotal)}</span>
+                        <span class="span_subtotal">${matauang} ${format_ribuan(subtotal)}</span>
                     </td>
                     <td>
                         <button type="button" class="btn btn-info btn-xs btn_edit" data-toggle="modal" data-target="#myModal">
@@ -226,20 +215,15 @@
             let matauang = $('#matauang_modal').val()
             let qty = $('#qty_modal').val()
             let stok = $('#stok_modal').val()
-            // console.log('stok kurang');
 
             if (parseInt(stok) < parseInt(qty)) {
+                qty = 1
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Stok tidak mencukupi untuk dikeluarkan',
                     text: `Stok tersisa: ${stok}`
                 })
-
-                // $('#qty_modal').val(1)
-
-                qty = 1
-
-                // console.log('stok kurang');
             } else {
                 $('.id_barang_hidden').eq(index).val(id_barang)
                 $('.nama_barang_hidden').eq(index).val(nama_barang)
@@ -254,10 +238,10 @@
                 $('.netto_hidden').eq(index).val(netto)
                 $('.matauang_hidden').eq(index).val(matauang)
 
-                $('.span_ppn').eq(index).text('PPN: ' + format_ribuan(ppn))
-                $('.span_diskon').eq(index).text('Disc: ' + format_ribuan(diskon))
-                $('.span_subtotal').eq(index).text(format_ribuan(netto))
-                $('.span_harga').eq(index).text(format_ribuan(harga))
+                $('.span_ppn').eq(index).text('PPN: ' + matauang + ' ' + format_ribuan(ppn))
+                $('.span_diskon').eq(index).text('Disc: ' + matauang + ' ' + format_ribuan(diskon))
+                $('.span_subtotal').eq(index).text(matauang + ' ' + format_ribuan(netto))
+                $('.span_harga').eq(index).text(matauang + ' ' + format_ribuan(harga))
                 $('.span_qty').eq(index).text(qty)
 
                 hitung_grand_total()
@@ -286,19 +270,19 @@
                 success: function(data) {
                     barang = ''
                     $('#list-barang').html(`
-                    <div class="col-md-12">
-                        <p class="text-center">Loading...</p>
+                    <div class="col-md-12 text-center">
+                        <img src="../../storage/img/barang/loading.gif" alt="Loading..." width="20">
                     </div>`)
 
                     setTimeout(() => {
                         if (data.length > 0) {
                             $.each(data, function(key, value) {
-                                barang += `<div class="col-md-3 text-center card">
-                                    <img src="${ value.gambar == 'noimage.png' ? '../../img/' : '../../storage/img/barang/'}${value.gambar}" alt="gambar barang" class="img-fluid rounded" style="width: 100%; height: 120px; object-fit: cover; border-radius: 3px; margin-bottom: 4px;">
+                                barang += `<div class="col-md-4 text-center card">
+                                    <img src="${ value.gambar == 'noimage.png' ? '../../img/' : '../../storage/img/barang/'}${value.gambar}" alt="gambar barang" class="img-fluid rounded" style="width: 100%; height: 190px; object-fit: cover; border-radius: 3px; margin-bottom: 5px;">
 
-                                    <p>${value.kode} - ${value.nama}</p>
+                                    <p class="p_nama_barang">${value.kode} - ${value.nama}</p>
 
-                                    <small>${value.mata_uang_jual.kode} ${value.harga_jual}</small>
+                                    <small>${value.mata_uang_jual.kode} ${format_ribuan(value.harga_jual)}</small>
 
                                     <input type="hidden" class="id_barang" value="${value.id}">
 

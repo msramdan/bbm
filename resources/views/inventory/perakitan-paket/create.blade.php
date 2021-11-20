@@ -69,7 +69,7 @@
                                         <option value="" selected disabled>-- Pilih --</option>
                                         @forelse ($paket as $item)
                                             <option value="{{ $item->id }}">
-                                                {{ $item->kode . ' - ' . $item->nama . ' ' . $item->stok }}
+                                                {{ $item->kode . ' - ' . $item->nama }}
                                             </option>
                                         @empty
                                             <option value="" disabled>Data tidak ditemukan</option>

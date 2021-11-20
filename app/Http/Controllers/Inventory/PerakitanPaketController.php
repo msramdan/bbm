@@ -13,6 +13,17 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PerakitanPaketController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:create perakitan paket')->only('create');
+        $this->middleware('permission:read perakitan paket')->only('index');
+        $this->middleware('permission:edit perakitan paket')->only('edit');
+        $this->middleware('permission:detail perakitan paket')->only('show');
+        $this->middleware('permission:update perakitan paket')->only('update');
+        $this->middleware('permission:delete perakitan paket')->only('delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +31,7 @@ class PerakitanPaketController extends Controller
      */
     public function index()
     {
-        $paket = PerakitanPaket::with('perakitan_paket_detail',  'gudang', 'paket')->withCount('perakitan_paket_detail')->orderByDesc('updated_at');
+        $paket = PerakitanPaket::with('perakitan_paket_detail',  'gudang', 'paket')->withCount('perakitan_paket_detail')->orderByDesc('id');
 
         if (request()->ajax()) {
             return DataTables::of($paket)

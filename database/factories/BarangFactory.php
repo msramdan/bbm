@@ -41,7 +41,7 @@ class BarangFactory extends Factory
             'harga_jual_min' => rand(1, 5000),
             'stok' => rand(10, 80),
             'min_stok' => rand(1, 5),
-            'gambar' => 'noimage.png',
+            'gambar' => 'no_image.webp',
             'status' => 'Y',
         ];
     }

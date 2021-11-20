@@ -32,7 +32,7 @@ class PesananPembelianController extends Controller
             $pesanan = PesananPembelian::with(
                 'supplier:id,nama_supplier',
                 'matauang:id,kode,nama'
-            )->withCount('pesanan_pembelian_detail');
+            )->withCount('pesanan_pembelian_detail')->orderByDesc('id');
 
             return Datatables::of($pesanan)
                 ->addIndexColumn()

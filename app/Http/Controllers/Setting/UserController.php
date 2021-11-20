@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
 use App\Models\Salesman;
 use App\Models\User;
+use Illuminate\Validation\Rules\Password;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -35,6 +36,9 @@ class UserController extends Controller
                 ->addColumn('action', 'setting.user.data-table.action')
                 ->addColumn('role', function ($row) {
                     return ucfirst($row->roles[0]->name);
+                })
+                ->addColumn('status', function ($row) {
+                    return $row->status == 1 ? 'Aktif' : 'Nonaktif';
                 })
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at->format('d F Y H:i');
@@ -102,7 +106,27 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        // kalo admin pertama gabisa diedit
+        // kalo ada request password berarti user pengen ganti password
+        if ($request->password || $request->password_confirmation) {
+            $request->validate([
+                'password' => [
+                    'required',
+                    'confirmed',
+                    Password::min(8)
+                        ->letters()
+                        ->mixedCase()
+                        ->numbers()
+                        ->symbols()
+                        ->uncompromised()
+                ]
+            ]);
+
+            $user->update([
+                'password' => bcrypt($request->password)
+            ]);
+        }
+
+        // kalo admin pertama/satu-satunya gabisa diedit
         if ($user->id == 1) {
             Alert::success('Update Data', 'Berhasil');
 
@@ -112,7 +136,7 @@ class UserController extends Controller
         $user->syncRoles($request->role);
         $user->syncPermissions($request->permissions);
 
-        $user->update($request->only(['name', 'email']));
+        $user->update($request->only(['name', 'email', 'status']));
 
         // kalo ada request salesman.id maka set salesman.user_id
         if ($request->salesman && $request->role == 'salesman') {

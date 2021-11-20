@@ -31,7 +31,8 @@ class PesananPenjualanController extends Controller
             $penjualan = PesananPenjualan::with(
                 'pelanggan:id,kode,nama_pelanggan',
                 'matauang:id,kode,nama'
-            )->withCount('pesanan_penjualan_detail');
+            )->withCount('pesanan_penjualan_detail')
+                ->orderByDesc('id');
 
             return datatables()::of($penjualan)
                 ->addIndexColumn()

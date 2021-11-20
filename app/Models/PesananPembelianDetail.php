@@ -11,7 +11,7 @@ class PesananPembelianDetail extends Model
 
     protected $table = 'pesanan_pembelian_detail';
 
-    protected $with = ['barang'];
+    // protected $with = ['barang'];
 
     protected $fillable = [
         'pesanan_pembelian_id',

@@ -3,7 +3,7 @@
 
 return [
     'title' => [
-        'index' => 'Dasbor',
+        'index' => 'Dashboard',
     ],
     'greeting' => [
         'welcome' => "Selamat Datang :a",
@@ -19,7 +19,7 @@ return [
         'area' => 'Area',
         'satuan_barang' => 'Satuan Barang',
         'pelanggan' => 'Pelanggan',
-        'salesman' => 'Pramuniaga',
+        'salesman' => 'Salesman',
         'gudang' => 'Gudang',
         'kategori' => 'Kategori Barang',
         'barang' => 'Barang',
@@ -47,7 +47,7 @@ return [
         'direct_sales' => 'POS Terminal'
     ],
     'link' => [
-        'dashboard' => 'Dasbor',
+        'dashboard' => 'Dashboard',
         'profile' => 'Rubah Profil',
         'logout' => 'Keluar',
     ],

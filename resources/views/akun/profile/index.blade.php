@@ -33,8 +33,8 @@
                         <h4 class="panel-title">{{ trans('profile.title.edit') }}</h4>
                     </div>
                     <div class="panel-body">
-                        <form  action="{{ route('profile.store') }}" method="post"
-                            enctype="multipart/form-data" novalidate>
+                        <form action="{{ route('profile.store') }}" method="post" enctype="multipart/form-data"
+                            novalidate>
                             @csrf
 
                             <div class="row">
@@ -97,6 +97,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <h4>Password</h4>
+                                    <small>Biarkan kosong jika tidak ingin diganti.</small>
                                 </div>
 
                                 <div class="col-md-8">

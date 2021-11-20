@@ -114,13 +114,13 @@
                                                 <td>{{ $detail->supplier->nama_supplier }}</td>
                                                 <td>{{ $detail->bentuk_kepemilikan_stok }}</td>
                                                 <td>
-                                                    {{ $adjustmentPlus->matauang->kode . ' ' . number_format($detail->harga) }}
+                                                    {{ $adjustmentPlus->matauang->kode . ' ' . number_format($detail->harga, 2, '.', ',') }}
                                                 </td>
                                                 <td>
-                                                    {{ number_format($detail->qty) }}
+                                                    {{ $detail->qty }}
                                                 </td>
                                                 <td>
-                                                    {{ $adjustmentPlus->matauang->kode . ' ' . number_format($detail->subtotal) }}
+                                                    {{ $adjustmentPlus->matauang->kode . ' ' . number_format($detail->subtotal, 2, '.', ',') }}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -134,7 +134,7 @@
                                                 {{ $total_qty }}
                                             </th>
                                             <th>
-                                                {{ $adjustmentPlus->matauang->kode . ' ' . number_format($adjustmentPlus->grand_total) }}
+                                                {{ $adjustmentPlus->matauang->kode . ' ' . number_format($adjustmentPlus->grand_total, 2, '.', ',') }}
                                             </th>
                                         </tr>
                                     </tfoot>

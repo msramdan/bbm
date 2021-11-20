@@ -34,7 +34,8 @@ class PembelianController extends Controller
                 'supplier:id,kode,nama_supplier',
                 'matauang:id,kode,nama',
                 'pesanan_pembelian'
-            )->withCount('pembelian_detail');
+            )->withCount('pembelian_detail')
+                ->orderByDesc('id');
 
             return Datatables::of($pembelian)
                 ->addIndexColumn()

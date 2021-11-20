@@ -34,7 +34,7 @@ class CekGiroCairController extends Controller
                 'cek_giro.pembelian.pembelian_pembayaran',
                 'cek_giro.penjualan:id,kode',
                 'cek_giro.penjualan.penjualan_pembayaran'
-            )->orderByDesc('updated_at');
+            )->orderByDesc('id');
 
             return DataTables::of($cekGiroCair)
                 ->addIndexColumn()

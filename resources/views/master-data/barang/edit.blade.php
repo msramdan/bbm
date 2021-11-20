@@ -253,14 +253,8 @@
                                 <label class="col-md-3 control-label" for="gambar">Gambar</label>
 
                                 <div class="col-md-4 text-center">
-                                    @if ($barang->gambar == 'noimage.png')
-                                        <img src="{{ asset('img/noimage.png') }}" alt="gambar" class="img-fluid rounded"
-                                            style="width: 150px; height: 120px; object-fit: cover;">
-                                    @else
-                                        <img src="{{ asset('storage/img/barang/' . $barang->gambar) }}" alt="gambar"
-                                            class="img-fluid rounded"
-                                            style="width: 150px; height: 120px; object-fit: cover;">
-                                    @endif
+                                    <img src="{{ asset('storage/img/barang/' . $barang->gambar) }}" alt="gambar"
+                                        class="img-fluid rounded" style="width: 150px; height: 120px; object-fit: cover;">
                                 </div>
 
                                 <div class="col-md-5">

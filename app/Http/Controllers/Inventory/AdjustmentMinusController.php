@@ -31,8 +31,7 @@ class AdjustmentMinusController extends Controller
         $adjustmentMinus = AdjustmentMinus::with(
             'adjustment_minus_detail',
             'gudang:id,kode,nama'
-        )->withCount('adjustment_minus_detail')->orderByDesc('updated_at');
-
+        )->withCount('adjustment_minus_detail')->orderByDesc('id');
         if (request()->ajax()) {
             return Datatables::of($adjustmentMinus)
                 ->addIndexColumn()

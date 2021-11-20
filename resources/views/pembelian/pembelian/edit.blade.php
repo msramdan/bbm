@@ -83,8 +83,8 @@
                                     <label class="control-label">Mata Uang</label>
 
                                     <select name="matauang" id="matauang" class="form-control" readonly>
-                                        <option value="{{ $pembelian->matauang->kode }}">
-                                            {{ $pembelian->matauang->kode . ' - ' . $pembelian->matauang->nama }}
+                                        <option value="{{ $pembelian->matauang->id }}">
+                                            {{ $pembelian->matauang->kode }}
                                         </option>
                                     </select>
                                 </div>
@@ -164,14 +164,7 @@
                                 <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="kode_barang">Nama Barang</label>
                                     <select name="kode_barang" id="kode_barang_input" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @forelse ($barang as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->kode . ' - ' . $item->nama }}
-                                            </option>
-                                        @empty
-                                            <option value="" disabled>Data tidak ditemukan</option>
-                                        @endforelse
+                                        <option value="" disabled selected>-- Pilih Matauang Terlebih Dahulu--</option>
                                     </select>
                                 </div>
 

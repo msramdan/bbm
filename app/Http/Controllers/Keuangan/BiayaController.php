@@ -30,7 +30,7 @@ class BiayaController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $biaya = Biaya::with('matauang:id,kode,nama');
+            $biaya = Biaya::with('matauang:id,kode,nama')->orderByDesc('id');
 
             return DataTables::of($biaya)
                 ->addIndexColumn()

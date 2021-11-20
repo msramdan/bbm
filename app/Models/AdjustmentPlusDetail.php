@@ -21,7 +21,7 @@ class AdjustmentPlusDetail extends Model
         'subtotal'
     ];
 
-    protected $with = ['barang', 'supplier'];
+    // protected $with = ['barang', 'supplier'];
 
     public function adjustment_plus()
     {

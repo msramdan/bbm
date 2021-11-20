@@ -27,8 +27,8 @@ class DatabaseSeeder extends Seeder
             GudangSeeder::class,
             KategoriSeeder::class,
             BarangSeeder::class,
-            AdjustmentPlusSeeder::class,
-            AdjustmentMinusSeeder::class,
+            // AdjustmentPlusSeeder::class,
+            // AdjustmentMinusSeeder::class,
             TokoSeeder::class,
             RoleAndPermissionSeeder::class,
         ]);

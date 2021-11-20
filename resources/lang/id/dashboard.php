@@ -19,7 +19,7 @@ return [
         'area' => 'Area',
         'satuan_barang' => 'Satuan Barang',
         'pelanggan' => 'Pelanggan',
-        'salesman' => 'Pramuniaga',
+        'salesman' => 'Salesman',
         'gudang' => 'Gudang',
         'kategori' => 'Kategori Barang',
         'barang' => 'Barang',

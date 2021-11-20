@@ -115,7 +115,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($barang_paling_laku as $item)
+                                @forelse ($barang_paling_laku as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
@@ -126,7 +126,11 @@
                                         <td>{{ $item->barang->kode . ' - ' . $item->barang->nama }}</td>
                                         <td>{{ $item->sum_qty }}</td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">Barang tidak ditemukan</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

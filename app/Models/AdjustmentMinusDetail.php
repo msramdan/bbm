@@ -19,7 +19,7 @@ class AdjustmentMinusDetail extends Model
         'qty'
     ];
 
-    protected $with = ['barang', 'supplier'];
+    // protected $with = ['barang', 'supplier'];
 
     public function adjustment_minus()
     {

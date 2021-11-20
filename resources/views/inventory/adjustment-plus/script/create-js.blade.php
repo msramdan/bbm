@@ -119,6 +119,10 @@
         })
 
         $('#btn_clear_form').click(function() {
+            // $(this).prop('disabled', true)
+            // $('#btn_update').prop('disabled', true)
+            // $('#btn_add').prop('disabled', true)
+
             clear_form_entry()
 
             cek_table_length()

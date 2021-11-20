@@ -42,7 +42,7 @@
                             <div class="row form-group">
                                 <div class="col-md-6" style="margin-bottom: 1em;">
                                     <label class="control-label">Nama</label>
-                                    <input type="text" name="name" class="form-control" placeholder="name"
+                                    <input type="text" name="name" class="form-control" placeholder="Nama"
                                         value="{{ old('name') ? old('name') : $user->name }}" required />
                                     @error('name')
                                         <small class="text-danger">{{ $message }}</small>
@@ -51,7 +51,7 @@
 
                                 <div class="col-md-6" style="margin-bottom: 1em;">
                                     <label class="control-label">Email</label>
-                                    <input type="email" name="email" class="form-control" placeholder="email"
+                                    <input type="email" name="email" class="form-control" placeholder="Email"
                                         value="{{ old('email') ? old('email') : $user->email }}" required />
                                     @error('email')
                                         <small class="text-danger">{{ $message }}</small>

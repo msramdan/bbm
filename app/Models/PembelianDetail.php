@@ -11,7 +11,7 @@ class PembelianDetail extends Model
 
     protected $table = 'pembelian_detail';
 
-    protected $with = ['barang'];
+    // protected $with = ['barang'];
 
     protected $fillable = [
         'pembelian_id',

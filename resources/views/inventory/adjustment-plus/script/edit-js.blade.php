@@ -116,8 +116,8 @@
         })
 
         $('#btn_clear_form').click(function() {
+            $(this).prop('disabled', true)
             clear_form_entry()
-
             cek_table_length()
         })
 
@@ -185,7 +185,7 @@
                     })
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',
@@ -208,6 +208,8 @@
 
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
+            $('#btn_update').prop('disabled', false)
+            $('#btn_clear_form').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -318,6 +320,7 @@
             $('#bentuk_kepemilikan_input option[value=""]').attr('selected', 'selected')
 
             $('#harga_input').val('')
+            $('#stok_input').val('')
             $('#qty_input').val('')
             $('#subtotal_input').val('')
 
@@ -362,11 +365,11 @@
             if (
                 !$('#kode_barang_input').val() ||
                 !$('#supplier_input').val() ||
-                // !$('#bentuk_kepemilikan_input').val() ||
+                !$('#bentuk_kepemilikan_input').val() ||
                 !$('#harga_input').val() ||
-                !$('#qty_input').val() ||
                 !$('#subtotal_input').val() ||
-                !$('#qty_input').val() < 1
+                !$('#qty_input').val() ||
+                $('#qty_input').val() < 1
             ) {
                 $('#btn_update').prop('disabled', true)
                 $('#btn_add').prop('disabled', true)
@@ -381,15 +384,23 @@
         function cek_stok(id, harga_edit = null) {
             let harga = $('#harga_input')
             harga.prop('disabled', true)
+            let stok = $('#stok_input')
             harga.val('')
             harga.prop('placeholder', 'Loading...')
+            stok.prop('disabled', true)
+            stok.val('')
+            stok.prop('placeholder', 'Loading...')
 
             $.ajax({
                 url: '/masterdata/barang/cek-stok/' + id,
                 type: 'GET',
                 success: function(data) {
+                    // ini stok buat cek stok(hidden)
                     $('#stok').val(data.stok)
                     $('#min_stok').val(data.min_stok)
+
+                    // ini stok yg ditampilin(input)
+                    stok.val(data.stok)
 
                     if (harga_edit) {
                         harga.val(harga_edit)
@@ -399,11 +410,12 @@
 
                     harga.prop('disabled', false)
                     harga.prop('placeholder', 'Harga')
+                    stok.prop('placeholder', 'Stok')
 
                     $('#bentuk_kepemilikan_input').focus()
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',
@@ -447,7 +459,7 @@
                     }, 1000)
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',

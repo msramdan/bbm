@@ -162,6 +162,13 @@
                                         </select>
                                     </div>
 
+                                    {{-- stok --}}
+                                    <div class="form-group">
+                                        <label for="stok">Stok</label>
+                                        <input type="number" name="stok" id="stok_input" class="form-control" min="1"
+                                            placeholder="Stok" disabled />
+                                    </div>
+
                                     {{-- Bentuk stok --}}
                                     <div class="form-group">
                                         <label for="bentuk_kepemilikan_input">Bentuk Kepemilikan Stok</label>

@@ -245,7 +245,7 @@ class ReturPenjualanController extends Controller
             'salesman:id,kode,nama',
             'matauang:id,kode,nama',
             'penjualan_detail',
-            'penjualan_detail.barang:id,kode,nama,harga_jual,harga_beli',
+            'penjualan_detail.barang:id,kode,nama',
         )->findOrFail($id);
 
         return response()->json($penjualan, 200);

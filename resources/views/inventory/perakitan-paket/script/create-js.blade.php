@@ -51,8 +51,10 @@
                 })
             } else {
                 if (stok == min_stok || qty > stok) {
-                    $('#qty_input').val(stok)
+                    $('#qty_input').val('')
                     $('#qty_input').focus()
+
+                    cek_form_entry()
 
                     Swal.fire({
                         icon: 'error',
@@ -272,8 +274,10 @@
             let no = parseInt(parseInt(index) + 1)
 
             if (stok == min_stok || qty > stok) {
-                $('#qty_input').val(stok)
+                $('#qty_input').val('')
                 $('#qty_input').focus()
+
+                cek_form_entry()
 
                 Swal.fire({
                     icon: 'error',
@@ -327,6 +331,7 @@
             $('#bentuk_kepemilikan_input option[value=""]').attr('selected', 'selected')
 
             $('#qty_input').val('')
+            $('#stok_input').val('')
 
             $('#btn_update').hide()
             $('#btn_add').show()
@@ -375,12 +380,21 @@
         }
 
         function cek_stok(id) {
+            let stok = $('#stok_input')
+            stok.val('')
+            stok.prop('placeholder', 'Loading...')
+
             $.ajax({
                 url: '/masterdata/barang/cek-stok/' + id,
                 type: 'GET',
                 success: function(data) {
+                    // ini stok buat cek stok(hidden)
                     $('#stok').val(data.stok)
                     $('#min_stok').val(data.min_stok)
+
+                    // ini stok yg ditampilin(input)
+                    stok.val(data.stok)
+                    stok.prop('placeholder', 'Stok')
 
                     $('#bentuk_kepemilikan_input').focus()
                 },

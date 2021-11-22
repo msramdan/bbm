@@ -168,6 +168,13 @@
                                     </select>
                                 </div>
 
+                                {{-- Stok --}}
+                                <div class="col-md-2" style="margin-bottom: 1em;">
+                                    <label for="stok">Stok</label>
+                                    <input type="number" step="any" name="stok" id="stok_input" class="form-control"
+                                        disabled placeholder="Stok" />
+                                </div>
+
                                 {{-- Harga --}}
                                 <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="harga">Harga</label>
@@ -176,14 +183,14 @@
                                 </div>
 
                                 {{-- Qty --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="qty">Qty</label>
                                     <input type="number" step="any" name="qty" id="qty_input" class="form-control"
                                         required placeholder="Qty" />
                                 </div>
 
                                 {{-- Diskon% --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="diskon_persen_input">Diskon%</label>
                                     <input type="number" step="any" name="diskon_persen_input" id="diskon_persen_input"
                                         class="form-control" placeholder="Diskon%" />

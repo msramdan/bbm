@@ -160,16 +160,22 @@
                         <form id="form_trx" method="POST">
                             <div class="row form-group">
                                 {{-- barang --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="barang">Barang</label>
                                     <input type="text" name="barang" id="barang_input" class="form-control" disabled
                                         placeholder="Kode - Nama Barang" />
                                     <input type="hidden" id="barang_hidden" />
                                 </div>
 
+                                {{-- stok --}}
+                                <div class="col-md-2" style="margin-bottom: 1em;">
+                                    <label for="stok">Stok</label>
+                                    <input type="number" step="any" name="stok" id="stok_input" class="form-control"
+                                        disabled placeholder="Stok" />
+                                </div>
 
                                 {{-- Harga --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="harga">Harga</label>
                                     <input type="number" step="any" name="harga" id="harga_input" class="form-control"
                                         disabled placeholder="Harga" />

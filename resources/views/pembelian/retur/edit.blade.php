@@ -145,29 +145,35 @@
                         <form id="form_trx" method="POST">
                             <div class="row form-group">
                                 {{-- barang --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="barang">Barang</label>
                                     <input type="text" name="barang" id="barang_input" class="form-control" disabled
                                         placeholder="Kode - Nama Barang" />
                                     <input type="hidden" id="barang_hidden" />
                                 </div>
 
+                                {{-- Stok --}}
+                                <div class="col-md-2" style="margin-bottom: 1em;">
+                                    <label for="stok">Stok</label>
+                                    <input type="number" step="any" name="stok" id="stok_input" class="form-control"
+                                        disabled placeholder="Stok" />
+                                </div>
 
                                 {{-- Harga --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="harga">Harga</label>
                                     <input type="number" step="any" name="harga" id="harga_input" class="form-control"
                                         disabled placeholder="Harga" />
                                 </div>
 
-                                {{-- Qty --}}
+                                {{-- Qty Beli --}}
                                 <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="qty_beli">Qty Beli</label>
                                     <input type="number" step="any" name="qty_beli" id="qty_beli_input"
                                         class="form-control" placeholder="Qty Beli" disabled />
                                 </div>
 
-                                {{-- Qty --}}
+                                {{-- Qty Returr --}}
                                 <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="qty_retur">Qty Retur</label>
                                     <input type="number" step="any" name="qty_retur" id="qty_retur_input"

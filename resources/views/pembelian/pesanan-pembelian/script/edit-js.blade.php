@@ -53,10 +53,14 @@
                 let ppn = $('#ppn_input').val()
                 let pph = $('#pph_input').val()
                 let diskon = $('#diskon_input').val()
-                let diskon_persen = $('#diskon_persen_input').val() ? parseFloat($('#diskon_persen_input').val()) :
-                    0
-                let biaya_masuk = $('#biaya_masuk_input').val() ? parseFloat($('#biaya_masuk_input').val()) : 0
-                let clr_fee = $('#clr_fee_input').val() ? parseFloat($('#clr_fee_input').val()) : 0
+                let diskon_persen = $('#diskon_persen_input').val() ?
+                    parseFloat($('#diskon_persen_input').val()) : 0
+
+                let biaya_masuk = $('#biaya_masuk_input').val() ?
+                    parseFloat($('#biaya_masuk_input').val()) : 0
+
+                let clr_fee = $('#clr_fee_input').val() ?
+                    parseFloat($('#clr_fee_input').val()) : 0
                 let netto = $('#netto_input').val()
 
                 let gross = harga * qty
@@ -118,7 +122,8 @@
                     </td>
                     <td>
                         ${format_ribuan(clr_fee)}
-                        <input type="hidden"  class="clr_fee_hidden" name="clr_fee[]" value="${clr_fee}">
+                        <input type="hidden"  class="clr_fee_hidden" name="clr_fee[]"
+                        value="${clr_fee}">
                     </td>
                     <td>
                         ${format_ribuan(netto)}
@@ -291,21 +296,7 @@
             let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
 
-            if (ppn > 0) {
-                $('#checkbox_ppn').prop('checked', true)
-            } else {
-                $('#checkbox_ppn').prop('checked', false)
-                $('#checkbox_pph').prop('checked', false)
-            }
-
-            if (pph > 0) {
-                $('#checkbox_pph').prop('checked', true)
-            } else {
-                $('#checkbox_pph').prop('checked', false)
-            }
-
             $('#kode_barang_input option[value="' + kode_barang + '"]').attr('selected', 'selected')
-
             $('#harga_input').val(harga)
             $('#qty_input').val(qty)
             $('#gross_input').val(gross)
@@ -322,8 +313,22 @@
 
             $('#index_tr').val(index)
 
+            if (ppn > 0) {
+                $('#checkbox_ppn').prop('checked', true)
+            } else {
+                $('#checkbox_ppn').prop('checked', false)
+                $('#checkbox_pph').prop('checked', false)
+            }
+
+            if (pph > 0) {
+                $('#checkbox_pph').prop('checked', true)
+            } else {
+                $('#checkbox_pph').prop('checked', false)
+            }
+
             cek_stok(kode_barang, harga)
         })
+
 
         // hitung jumlan <> pada table#tbl_trx
         function cek_table_length() {
@@ -402,7 +407,8 @@
                 </td>
                 <td>
                     ${format_ribuan(clr_fee)}
-                    <input type="hidden"  class="clr_fee_hidden" name="clr_fee[]" value="${clr_fee}">
+                    <input type="hidden"  class="clr_fee_hidden" name="clr_fee[]"
+                    value="${clr_fee}">
                 </td>
                 <td>
                     ${format_ribuan(netto)}
@@ -432,6 +438,7 @@
             $('#kode_barang_input option[value=""]').attr('selected', 'selected')
             $('#harga_input').val('')
             $('#qty_input').val('')
+            $('#stok_input').val('')
             $('#ppn_input').val('')
             $('#pph_input').val('')
             $('#gross_input').val('')
@@ -589,14 +596,19 @@
 
         function cek_stok(id, harga_edit = null) {
             let harga = $('#harga_input')
+            let stok = $('#stok_input')
             harga.prop('disabled', true)
             harga.val('')
+            stok.val('')
             harga.prop('placeholder', 'Loading...')
+            stok.prop('placeholder', 'Loading...')
 
             $.ajax({
                 url: '/masterdata/barang/cek-stok/' + id,
                 type: 'GET',
                 success: function(data) {
+                    stok.val(data.stok)
+
                     if (harga_edit) {
                         harga.val(harga_edit)
                     } else {
@@ -605,6 +617,8 @@
 
                     harga.prop('disabled', false)
                     harga.prop('placeholder', 'Harga')
+                    stok.prop('placeholder', 'Stok')
+
 
                     $('#qty_input').focus()
                 },

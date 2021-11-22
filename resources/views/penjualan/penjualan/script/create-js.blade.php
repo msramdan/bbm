@@ -616,6 +616,7 @@
         $(document).on('click', '.btn_edit_brg', function(e) {
             e.preventDefault()
             $('#btn_update_brg').prop('disabled', false)
+            $('#btn_clear_form_brg').prop('disabled', false)
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
@@ -893,6 +894,7 @@
             $('#harga_input').val('')
             $('#qty_input').val('')
             $('#ppn_input').val('')
+            $('#stok_input').val('')
             $('#netto_input').val('')
             $('#gross_input').val('')
             $('#diskon_input').val('')
@@ -1104,14 +1106,21 @@
 
         function cek_stok(id, harga_edit = null) {
             let harga = $('#harga_input')
+            let stok = $('#stok_input')
+
             harga.prop('disabled', true)
             harga.val('')
             harga.prop('placeholder', 'Loading...')
+            stok.prop('disabled', true)
+            stok.val('')
+            stok.prop('placeholder', 'Loading...')
 
             $.ajax({
                 url: '/masterdata/barang/cek-stok/' + id,
                 type: 'GET',
                 success: function(data) {
+                    stok.val(data.stok)
+
                     $('#stok').val(data.stok)
                     $('#min_stok').val(data.min_stok)
 
@@ -1123,6 +1132,7 @@
 
                     harga.prop('disabled', false)
                     harga.prop('placeholder', 'Harga')
+                    stok.prop('placeholder', 'Stok')
 
                     $('#qty_input').focus()
                     // console.log(`stok: ${stok}, min: ${min_stok}`);

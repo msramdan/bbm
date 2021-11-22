@@ -213,7 +213,7 @@
                     // })
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',
@@ -311,7 +311,7 @@
                     }, 1000)
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',
@@ -392,6 +392,7 @@
             $('#bentuk_kepemilikan_input option[value=""]').attr('selected', 'selected')
 
             $('#harga_input').val('')
+            $('#stok_input').val('')
             $('#qty_input').val('')
             $('#subtotal_input').val('')
 
@@ -473,15 +474,23 @@
         function cek_stok(id, harga_edit = null) {
             let harga = $('#harga_input')
             harga.prop('disabled', true)
+            let stok = $('#stok_input')
             harga.val('')
             harga.prop('placeholder', 'Loading...')
+            stok.prop('disabled', true)
+            stok.val('')
+            stok.prop('placeholder', 'Loading...')
 
             $.ajax({
                 url: '/masterdata/barang/cek-stok/' + id,
                 type: 'GET',
                 success: function(data) {
+                    // ini stok buat cek stok(hidden)
                     $('#stok').val(data.stok)
                     $('#min_stok').val(data.min_stok)
+
+                    // ini stok yg ditampilin(input)
+                    stok.val(data.stok)
 
                     if (harga_edit) {
                         harga.val(harga_edit)
@@ -491,11 +500,12 @@
 
                     harga.prop('disabled', false)
                     harga.prop('placeholder', 'Harga')
+                    stok.prop('placeholder', 'Stok')
 
                     $('#bentuk_kepemilikan_input').focus()
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',

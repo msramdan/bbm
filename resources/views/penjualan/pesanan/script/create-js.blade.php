@@ -602,14 +602,21 @@
 
         function cek_stok(id, harga_edit = null) {
             let harga = $('#harga_input')
+            let stok = $('#stok_input')
+
             harga.prop('disabled', true)
             harga.val('')
             harga.prop('placeholder', 'Loading...')
+            stok.prop('disabled', true)
+            stok.val('')
+            stok.prop('placeholder', 'Loading...')
 
             $.ajax({
                 url: '/masterdata/barang/cek-stok/' + id,
                 type: 'GET',
                 success: function(data) {
+                    stok.val(data.stok)
+
                     $('#stok').val(data.stok)
                     $('#min_stok').val(data.min_stok)
 
@@ -621,6 +628,7 @@
 
                     harga.prop('disabled', false)
                     harga.prop('placeholder', 'Harga')
+                    stok.prop('placeholder', 'Stok')
 
                     $('#qty_input').focus()
                 },

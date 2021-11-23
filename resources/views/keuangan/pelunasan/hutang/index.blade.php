@@ -45,12 +45,8 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode</th>
-                                        <th>Kode Pembelian</th>
                                         <th>Tanggal</th>
-                                        <th>Supplier</th>
-                                        <th>Mata Uang</th>
                                         <th>Jenis Pembayaran</th>
-                                        <th>Saldo Hutang</th>
                                         <th>Bayar</th>
                                         <th>Rate</th>
                                         <th>Created At</th>
@@ -93,28 +89,12 @@
                 name: 'kode'
             },
             {
-                data: 'kode_pembelian',
-                name: 'kode_pembelian'
-            },
-            {
                 data: 'tanggal',
                 name: 'tanggal'
             },
             {
-                data: 'supplier',
-                name: 'supplier'
-            },
-            {
-                data: 'matauang',
-                name: 'matauang'
-            },
-            {
                 data: 'jenis_pembayaran',
                 name: 'jenis_pembayaran'
-            },
-            {
-                data: 'saldo_hutang',
-                name: 'saldo_hutang'
             },
             {
                 data: 'bayar',

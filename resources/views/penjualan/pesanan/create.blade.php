@@ -179,6 +179,13 @@
                                     </select>
                                 </div>
 
+                                {{-- Stok --}}
+                                <div class="col-md-2" style="margin-bottom: 1em;">
+                                    <label for="stok">Stok</label>
+                                    <input type="number" step="any" name="stok" id="stok_input" class="form-control"
+                                        disabled placeholder="Stok" />
+                                </div>
+
                                 {{-- Harga --}}
                                 <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="harga">Harga</label>
@@ -208,14 +215,14 @@
                                 </div>
 
                                 {{-- Gross --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="gross_input">Gross</label>
                                     <input type="number" step="any" name="gross" id="gross_input" class="form-control"
                                         readonly placeholder="0" />
                                 </div>
 
                                 {{-- ppn --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="ppn">PPN</label>
                                     <input type="checkbox" id="checkbox_ppn" checked>
                                     <input type="number" step="any" name="ppn" id="ppn_input" class="form-control"

@@ -136,6 +136,13 @@
                                         </select>
                                     </div>
 
+                                    {{-- stok --}}
+                                    <div class="form-group">
+                                        <label for="stok">Stok</label>
+                                        <input type="number" name="stok" id="stok_input" class="form-control" min="1"
+                                            placeholder="Stok" disabled />
+                                    </div>
+
                                     {{-- Supplier --}}
                                     <div class="form-group">
                                         <label for="supplier_input">Supplier</label>

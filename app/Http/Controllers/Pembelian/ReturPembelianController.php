@@ -260,7 +260,8 @@ class ReturPembelianController extends Controller
         $pembelian = Pembelian::with(
             'supplier:id,kode,nama_supplier',
             'matauang:id,kode,nama',
-            'pembelian_detail'
+            'pembelian_detail',
+            'pembelian_detail.barang:id,kode,nama'
         )->findOrFail($id);
 
         return response()->json($pembelian, 200);

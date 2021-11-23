@@ -365,6 +365,8 @@
             let ppn = $('.ppn_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
 
+            cek_stok(barang_id)
+
             if (ppn > 0) {
                 $('#checkbox_ppn').prop('checked', true)
             } else {
@@ -478,6 +480,7 @@
             $('#barang_input').val('')
             $('#barang_hidden').val('')
             $('#harga_input').val('')
+            $('#stok_input').val('')
             $('#qty_beli_input').val('')
             $('#qty_retur_input').val('')
             $('#ppn_input').val('')
@@ -612,6 +615,34 @@
                 $('#btn_update').prop('disabled', false)
                 $('#btn_clear_form').prop('disabled', false)
             }
+        }
+
+        function cek_stok(id) {
+            let stok = $('#stok_input')
+            stok.prop('disabled', true)
+            stok.val('')
+            stok.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    stok.val(data.stok)
+                    stok.prop('placeholder', 'Stok')
+
+                    $('#qty_input').focus()
+                    // console.log(`stok: ${stok}, min: ${min_stok}`);
+                },
+                error: function(xhr, status, error) {
+                    // console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
         }
     </script>
 @endpush

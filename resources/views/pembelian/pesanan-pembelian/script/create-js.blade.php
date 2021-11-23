@@ -7,8 +7,8 @@
         cek_form_entry()
 
         $('#matauang').change(function() {
-            hitung_semua_total()
             get_barang_by_matauang_id()
+            hitung_semua_total()
         })
 
         $('input[name="tanggal"]').change(function() {
@@ -454,6 +454,7 @@
             $('#kode_barang_input option[value=""]').attr('selected', 'selected')
             $('#harga_input').val('')
             $('#qty_input').val('')
+            $('#stok_input').val('')
             $('#ppn_input').val('')
             $('#pph_input').val('')
             $('#gross_input').val('')
@@ -607,14 +608,19 @@
 
         function cek_stok(id, harga_edit = null) {
             let harga = $('#harga_input')
+            let stok = $('#stok_input')
             harga.prop('disabled', true)
             harga.val('')
+            stok.val('')
             harga.prop('placeholder', 'Loading...')
+            stok.prop('placeholder', 'Loading...')
 
             $.ajax({
                 url: '/masterdata/barang/cek-stok/' + id,
                 type: 'GET',
                 success: function(data) {
+                    stok.val(data.stok)
+
                     if (harga_edit) {
                         harga.val(harga_edit)
                     } else {
@@ -623,10 +629,9 @@
 
                     harga.prop('disabled', false)
                     harga.prop('placeholder', 'Harga')
+                    stok.prop('placeholder', 'Stok')
 
                     $('#qty_input').focus()
-
-                    console.log(data);
                 },
                 error: function(xhr, status, error) {
                     // console.error(xhr.responseText)

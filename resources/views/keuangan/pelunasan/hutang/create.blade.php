@@ -8,9 +8,8 @@
         {{ Breadcrumbs::render('pelunasan_hutang_add') }}
         <!-- begin row -->
         <div class="row">
-            <form action="{{ route('pelunasan-hutang.store') }}" method="post">
-                @csrf
-                @method('post')
+            <form>
+
                 <!-- begin col-12 -->
                 <div class="col-md-12">
                     <!-- begin panel -->
@@ -38,7 +37,7 @@
 
                         <div class="panel-body">
                             <div class="form-group row" style="margin-bottom: 1em;">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="kode" class="control-label">Kode</label>
                                     <input type="text" name="kode" class="form-control" placeholder="Kode" id="kode"
                                         readonly />
@@ -47,7 +46,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="tanggal" class="control-label">Tanggal</label>
                                     <input type="date" name="tanggal" class="form-control" required
                                         value="{{ date('Y-m-d') }}" id="tanggal" />
@@ -56,70 +55,146 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="rate" class="control-label">Rate</label>
                                     <input type="number" name="rate" class="form-control" placeholder="Rate" id="rate"
-                                        required />
+                                        required autofocus />
                                     @error('rate')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-
-                                <div class="col-md-3">
-                                    <label for="pembelian">Kode Pembelian</label>
-                                    <select name="pembelian" id="pembelian" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @forelse ($pembelianBelumLunas as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->kode }}
-                                            </option>
-                                        @empty
-                                            <option value="" disabled>Data tidak ditemukan</option>
-                                        @endforelse
-                                    </select>
-                                    @error('pembelian')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
                             </div>
+                        </div>
+                    </div>
+                    <!-- end panel -->
+                </div>
+                <!-- end col-12 -->
 
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <label for="tgl_pembelian" class="control-label">Tanggal Pembelian</label>
-                                    <input type="text" name="tgl_pembelian" class="form-control"
-                                        placeholder="Tanggal Pembelian" id="tgl_pembelian" readonly />
-                                    @error('tgl_pembelian')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
+                <div class="col-md-12">
+                    <!-- begin panel -->
+                    <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
+                        <div class="panel-heading">
+                            <div class="panel-heading-btn">
+                                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default"
+                                    data-click="panel-expand">
+                                    <i class="fa fa-expand"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success"
+                                    data-click="panel-reload"><i class="fa fa-repeat"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning"
+                                    data-click="panel-collapse">
+                                    <i class="fa fa-minus"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger"
+                                    data-click="panel-remove">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                            <h4 class="panel-title">{{ trans('pelunasan_hutang.title.tambah') }} - List</h4>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <table class="table table-striped table-condensed" id="tbl_trx">
+                                        <thead>
+                                            <tr>
+                                                <th width="10">No.</th>
+                                                <th>Kode Pembelian</th>
+                                                <th>Tanggal</th>
+                                                <th>Supplier</th>
+                                                <th>Matauang</th>
+                                                <th>Hutang</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="total_hutang" class="control-label">Total Hutang</label>
+                                                <input type="text" id="total_hutang" name="total_hutang"
+                                                    class="form-control" placeholder="Total Hutang" id="total_hutang"
+                                                    disabled />
+
+                                                <input type="hidden" id="total_hutang_hidden" name="total_hutang_hidden">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="supplier" class="control-label">Supplier</label>
-                                    <input type="text" name="supplier" class="form-control" placeholder="Supplier"
-                                        id="supplier" readonly />
-                                    @error('supplier')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
+                                    <div class="form-group">
+                                        <label for="pembelian">Kode Pembelian</label>
+                                        <select name="pembelian" id="kode_pembelian" class="form-control" required>
+                                            <option value="" disabled selected>-- Pilih --</option>
+                                            @forelse ($pembelianBelumLunas as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->kode }}
+                                                </option>
+                                            @empty
+                                                <option value="" disabled>Data tidak ditemukan</option>
+                                            @endforelse
+                                        </select>
+                                        @error('pembelian')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
 
-                                <div class="col-md-3">
-                                    <label for="saldo_hutang" class="control-label">Saldo Hutang</label>
-                                    <input type="text" name="saldo_hutang" class="form-control" placeholder="Saldo Hutang"
-                                        id="saldo_hutang" readonly />
-                                    @error('saldo_hutang')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
+                                    <div class="form-group">
+                                        <label for="tgl_pembelian" class="control-label">Tanggal Pembelian</label>
+                                        <input type="text" name="tgl_pembelian" class="form-control"
+                                            placeholder="Tanggal Pembelian" id="tgl_pembelian" readonly />
+                                        @error('tgl_pembelian')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
 
-                                <div class="col-md-3">
-                                    <label for="matauang" class="control-label">Mata Uang</label>
-                                    <input type="text" name="matauang" class="form-control" placeholder="Mata Uang"
-                                        id="matauang" readonly />
-                                    @error('matauang')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
+                                    <div class="form-group">
+                                        <label for="matauang" class="control-label">Mata Uang</label>
+                                        <input type="text" name="matauang" class="form-control" placeholder="Mata Uang"
+                                            id="matauang" readonly />
+                                        @error('matauang')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
 
+                                    <div class="form-group">
+                                        <label for="hutang" class="control-label">Hutang</label>
+                                        <input type="text" name="hutang" class="form-control" placeholder="Hutang"
+                                            id="hutang" readonly />
+                                        @error('hutang')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="supplier" class="control-label">Supplier</label>
+                                        <input type="text" name="supplier" class="form-control" placeholder="Supplier"
+                                            id="supplier" readonly />
+                                        @error('supplier')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
+                                    <input type="hidden" id="index_tr">
+
+                                    <button type="button" class="btn btn-primary" id="btn_add" disabled>
+                                        <i class="fa fa-plus"></i> Add
+                                    </button>
+
+                                    <button type="button" class="btn btn-info" id="btn_update" style="display: none"
+                                        data-index="">
+                                        <i class="fa fa-save"></i> Update
+                                    </button>
+
+                                    <button type="button" class="btn btn-warning" id="btn_clear_form" disabled>
+                                        <i class="fa fa-times"></i> Clear Form
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -237,7 +312,8 @@
                                 </div>
 
                                 <div class="col-md-12" style="margin-top: 1em;">
-                                    <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+                                    <button type="submit" id="btn_simpan" class="btn btn-sm btn-success"
+                                        disabled>Simpan</button>
                                     {{-- <a href="{{ route('pelunasan-hutang.index') }}" class="btn btn-sm btn-default">
                                             Cancel
                                         </a> --}}
@@ -257,161 +333,4 @@
     <!-- end #content -->
 @endsection
 
-@push('custom-js')
-    <script>
-        get_kode()
-
-        $('#jenis_pembayaran').change(function() {
-            let jenis_pembayaran = $(this)
-            let bank = $('#bank')
-            let rekening = $('#rekening')
-            let no_cek_giro = $('#no_cek_giro')
-            let tgl_cek_giro = $('#tgl_cek_giro')
-            let bayar = $('#bayar')
-
-            // kalo cash, bank dan giro boleh kosong
-            if (jenis_pembayaran.val() == 'Cash') {
-                bank.prop('disabled', true)
-                rekening.prop('disabled', true)
-                no_cek_giro.prop('disabled', true)
-                tgl_cek_giro.prop('disabled', true)
-
-                bank.val('')
-                no_cek_giro.val('')
-                tgl_cek_giro.val('')
-                rekening.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
-
-                if (bayar.val()) {
-                    $('#btn_add_payment').prop('disabled', false)
-                    $('#btn_clear_form_payment').prop('disabled', false)
-                } else {
-                    $('#btn_add_payment').prop('disabled', true)
-                    $('#btn_clear_form_payment').prop('disabled', true)
-                }
-
-                bank.prop('required', false)
-                rekening.prop('required', false)
-                no_cek_giro.prop('required', false)
-                tgl_cek_giro.prop('required', false)
-            }
-
-            if (jenis_pembayaran.val() == 'Transfer') {
-                bank.val('')
-                bank.prop('disabled', false)
-                rekening.prop('disabled', true)
-
-                no_cek_giro.prop('disabled', true)
-                no_cek_giro.val('')
-                tgl_cek_giro.prop('disabled', true)
-                tgl_cek_giro.val('')
-
-                if (bayar.val() && bank.val() && rekening.val()) {
-                    $('#btn_add_payment').prop('disabled', false)
-                    $('#btn_clear_form_payment').prop('disabled', false)
-                } else {
-                    $('#btn_add_payment').prop('disabled', true)
-                    $('#btn_clear_form_payment').prop('disabled', true)
-                }
-
-                bank.prop('required', true)
-                rekening.prop('required', true)
-            }
-
-            if (jenis_pembayaran.val() == 'Giro') {
-                bank.prop('disabled', false)
-                bank.val('')
-                rekening.prop('disabled', true)
-                rekening.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
-
-                no_cek_giro.prop('disabled', false)
-                tgl_cek_giro.prop('disabled', false)
-
-                if (bayar.val() && no_cek_giro.val() && tgl_cek_giro.val()) {
-                    $('#btn_add_payment').prop('disabled', false)
-                    $('#btn_clear_form_payment').prop('disabled', false)
-                } else {
-                    $('#btn_add_payment').prop('disabled', true)
-                    $('#btn_clear_form_payment').prop('disabled', true)
-                }
-
-                no_cek_giro.prop('required', true)
-                tgl_cek_giro.prop('required', true)
-            }
-        })
-
-        $('#pembelian').change(function() {
-            $.ajax({
-                url: "/keuangan/pelunasan-hutang/get-pembelian-belum-lunas/" + $(this).val(),
-                type: 'GET',
-                success: function(data) {
-                    $('#supplier').val('Loading...')
-                    $('#saldo_hutang').val('Loading...')
-                    $('#matauang').val('Loading...')
-                    $('#tgl_pembelian').val('Loading...')
-
-                    setTimeout(() => {
-                        let format = new Date(data.tanggal)
-
-                        $('#supplier').val(data.supplier ? data.supplier.nama_supplier :
-                            'Tanpa Supplier')
-                        $('#saldo_hutang').val(data.total_netto)
-                        $('#matauang').val(data.matauang.nama)
-                        $('#tgl_pembelian').val(format.toLocaleDateString('id-ID'))
-                    }, 1000);
-                }
-            })
-        })
-
-        $('#bank').change(function() {
-            if ($('#jenis_pembayaran').val() == 'Transfer') {
-                $.ajax({
-                    url: "/beli/pembelian/get-rekening/" + $('#bank').val(),
-                    type: 'GET',
-                    success: function(data) {
-                        let rekening = []
-
-                        $('#rekening').prop('disabled', true)
-                        $('#rekening').html(
-                            '<option value="" disabled selected>Loading...</option>')
-
-                        setTimeout(() => {
-                            if (data.length > 0) {
-                                data.forEach(elm => {
-                                    rekening.push(
-                                        `<option value="${elm.id}">${elm.nomor_rekening} - ${elm.nama_rekening}</option>`
-                                    )
-                                })
-
-                                $('#rekening').html(rekening)
-
-                                $('#rekening').prop('disabled', false)
-                            } else {
-                                $('#rekening').html(
-                                    '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
-                                )
-                            }
-                        }, 1000);
-                    }
-                })
-            }
-        })
-
-        $('#tanggal').change(function() {
-            get_kode()
-        })
-
-        function get_kode() {
-            $.ajax({
-                url: "/keuangan/pelunasan-hutang/generate-kode/" + $('input[name="tanggal"]').val(),
-                type: 'GET',
-                success: function(data) {
-                    $('input[name="kode"]').val('Loading...')
-
-                    setTimeout(() => {
-                        $('input[name="kode"]').val(data)
-                    }, 1000)
-                }
-            })
-        }
-    </script>
-@endpush
+@include('keuangan.pelunasan.hutang.script.create-js')

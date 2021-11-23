@@ -38,21 +38,18 @@
                             <div class="form-group row" style="margin-bottom: 10px">
                                 <div class="col-md-3">
                                     <label class="control-label">Kode</label>
-
                                     <input type="text" name="kode" class="form-control" placeholder="Kode" id="kode"
                                         required readonly />
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="control-label">Tanggal</label>
-
                                     <input type="date" name="tanggal" class="form-control" required
                                         value="{{ date('Y-m-d') }}" />
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="control-label">Gudang</label>
-
                                     <select name="gudang" id="gudang" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($gudang as $item)
@@ -66,7 +63,6 @@
 
                                 <div class="col-md-3">
                                     <label class="control-label">Kode P.O</label>
-
                                     <select name="kode_po" id="kode_po" class="form-control" required>
                                         <option value="" selected>Tanpa P.O</option>
                                         @forelse ($pesananPembelian as $item)
@@ -81,7 +77,6 @@
                             <div class="form-group row">
                                 <div class="col-md-3">
                                     <label class="control-label">Supplier</label>
-
                                     <select id="supplier" name="supplier" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($supplier as $item)
@@ -94,7 +89,6 @@
 
                                 <div class="col-md-3">
                                     <label class="control-label">Mata Uang</label>
-
                                     <select name="matauang" id="matauang" class="form-control" required>
                                         <option value="" disabled selected>-- Pilih --</option>
                                         @forelse ($matauang as $item)
@@ -172,6 +166,13 @@
                                     </select>
                                 </div>
 
+                                {{-- Stok --}}
+                                <div class="col-md-2" style="margin-bottom: 1em;">
+                                    <label for="stok">Stok</label>
+                                    <input type="number" step="any" name="stok" id="stok_input" class="form-control"
+                                        disabled placeholder="Stok" />
+                                </div>
+
                                 {{-- Harga --}}
                                 <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="harga">Harga</label>
@@ -180,14 +181,14 @@
                                 </div>
 
                                 {{-- Qty --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="qty">Qty</label>
                                     <input type="number" step="any" name="qty" id="qty_input" class="form-control"
                                         required placeholder="Qty" />
                                 </div>
 
                                 {{-- Diskon% --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="diskon_persen_input">Diskon%</label>
                                     <input type="number" step="any" name="diskon_persen_input" id="diskon_persen_input"
                                         class="form-control" placeholder="Diskon%" />
@@ -308,8 +309,8 @@
                                     {{-- Total PPH --}}
                                     <div class="col-md-4">
                                         <label for="total_pph">Total PPH</label>
-                                        <input type="text" step="any" name="total_pph" id="total_pph" class="form-control"
-                                            placeholder="0" readonly />
+                                        <input type="text" step="any" name="total_pph" id="total_pph"
+                                            class="form-control" placeholder="0" readonly />
                                     </div>
 
                                     {{-- Total PPN --}}

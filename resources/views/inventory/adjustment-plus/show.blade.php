@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Create adjustment_plus')
+@section('title', trans('adjustment_plus.title.show'))
 
 @section('content')
     <!-- begin #content -->

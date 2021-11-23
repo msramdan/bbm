@@ -4,13 +4,74 @@ use App\Http\Controllers\Akun\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LocalizationController;
-use App\Http\Controllers\MasterData\{AreaController, BankController, BarangController, GudangController, KategoriController, MatauangController, PelangganController, RateMataUangController, RekeningBankController, SalesmanController, SupplierController, SatuanBarangController};
-use App\Http\Controllers\Inventory\{AdjustmentMinusController, AdjustmentPlusController, PerakitanPaketController};
-use App\Http\Controllers\Pembelian\{PembelianController, ReturPembelianController, PesananPembelianController};
-use App\Http\Controllers\Penjualan\{DirectPenjualanController, PenjualanController, PesananPenjualanController, ReturPenjualanController};
-use App\Http\Controllers\Setting\{TokoController, UserController};
-use App\Http\Controllers\Keuangan\{BiayaController, CekGiroCairController, CekGiroTolakController, PelunasanHutangController, PelunasanPiutangController};
-use App\Http\Controllers\Laporan\{AdjustmentMinusReportController, AdjustmentPlusReportController, BiayaReportController, CekGiroReportController, GrossProfitReportController, KomisiReportController, NettProfitReportController, PelunasanHutangReportController, PelunasanPiutangReportController, PembelianReportController, PenjualanReportController, PesananPembelianReportController, PesananPenjualanReportController, ReturPembelianReportController, ReturPenjualanReportController, SaldoHutangReportController, SaldoPiutangReportController, StokBarangReportController};
+use App\Http\Controllers\MasterData\{
+    AreaController,
+    BankController,
+    BarangController,
+    GudangController,
+    KategoriController,
+    MatauangController,
+    PelangganController,
+    RateMataUangController,
+    RekeningBankController,
+    SalesmanController,
+    SupplierController,
+    SatuanBarangController
+};
+
+use App\Http\Controllers\Inventory\{
+    AdjustmentMinusController,
+    AdjustmentPlusController,
+    PerakitanPaketController
+};
+
+use App\Http\Controllers\Pembelian\{
+    PembelianController,
+    ReturPembelianController,
+    PesananPembelianController
+};
+
+use App\Http\Controllers\Penjualan\{
+    DirectPenjualanController,
+    PenjualanController,
+    PesananPenjualanController,
+    ReturPenjualanController
+};
+
+use App\Http\Controllers\Setting\{
+    TokoController,
+    UserController
+};
+
+use App\Http\Controllers\Keuangan\{
+    BiayaController,
+    CekGiroCairController,
+    CekGiroTolakController,
+    PelunasanHutangController,
+    PelunasanPiutangController
+};
+
+use App\Http\Controllers\Laporan\{
+    AdjustmentMinusReportController,
+    AdjustmentPlusReportController,
+    BiayaReportController,
+    CekGiroReportController,
+    GrossProfitReportController,
+    KomisiReportController,
+    NettProfitReportController,
+    PelunasanHutangReportController,
+    PelunasanPiutangReportController,
+    PembelianReportController,
+    PenjualanReportController,
+    PesananPembelianReportController,
+    PesananPenjualanReportController,
+    ReturPembelianReportController,
+    ReturPenjualanReportController,
+    SaldoHutangReportController,
+    SaldoPiutangReportController,
+    StokBarangReportController
+};
+
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -138,6 +199,7 @@ Route::group(['prefix' => 'jual', 'middleware' => ['web', 'auth']], function () 
 // Keuangan
 Route::group(['prefix' => 'keuangan', 'middleware' => ['web', 'auth']], function () {
     // Pelunasan Hutang
+    // Route::post('/pelunasan-hutang/store', [PelunasanHutangController::class, 'store'])->name('pelunasan-hutang.store');
     Route::get('/pelunasan-hutang/get-pembelian-belum-lunas/{id}', [PelunasanHutangController::class, 'getPembelianYgBelumLunas']);
     Route::get('/pelunasan-hutang/generate-kode/{tanggal}', [PelunasanHutangController::class, 'generateKode']);
     Route::resource('/pelunasan-hutang', PelunasanHutangController::class);

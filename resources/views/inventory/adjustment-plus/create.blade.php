@@ -158,11 +158,19 @@
                                         </select>
                                     </div>
 
-                                    {{-- <div class="form-group">
-                                        <label for="nama_barang_input">Nama Barang</label>
-                                        <input type="text" name="nama_barang_input" id="nama_barang_input"
-                                            class="form-control" readonly placeholder="Nama barang" />
-                                    </div> --}}
+                                    {{-- stok --}}
+                                    <div class="form-group">
+                                        <label for="stok">Stok</label>
+                                        <input type="number" name="stok" id="stok_input" class="form-control" min="1"
+                                            placeholder="Stok" disabled />
+                                    </div>
+
+                                    {{-- Harga --}}
+                                    <div class="form-group">
+                                        <label for="harga">Harga</label>
+                                        <input type="number" name="harga" id="harga_input" class="form-control" min="1"
+                                            placeholder="Harga" />
+                                    </div>
 
                                     {{-- Supplier --}}
                                     <div class="form-group">
@@ -187,13 +195,6 @@
                                             <option value="Stok Sendiri">Stok Sendiri</option>
                                             <option value="Konsinyasi">Konsinyasi</option>
                                         </select>
-                                    </div>
-
-                                    {{-- Harga --}}
-                                    <div class="form-group">
-                                        <label for="harga">Harga</label>
-                                        <input type="number" name="harga" id="harga_input" class="form-control" min="1"
-                                            placeholder="Harga" />
                                     </div>
 
                                     {{-- Qty --}}

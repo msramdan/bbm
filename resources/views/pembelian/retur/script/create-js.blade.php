@@ -387,7 +387,7 @@
                         // })
                     },
                     error: function(xhr, status, error) {
-                        console.error(xhr.responseText)
+                        // console.error(xhr.responseText)
 
                         Swal.fire({
                             icon: 'error',
@@ -420,6 +420,8 @@
             let biaya_masuk = $('.biaya_masuk_hidden:eq(' + index + ')').val()
             let clr_fee = $('.clr_fee_hidden:eq(' + index + ')').val()
             let netto = $('.netto_hidden:eq(' + index + ')').val()
+
+            cek_stok(barang_id)
 
             if (ppn > 0) {
                 $('#checkbox_ppn').prop('checked', true)
@@ -563,6 +565,7 @@
             $('#barang_hidden').val('')
             $('#harga_input').val('')
             $('#qty_beli_input').val('')
+            $('#stok_input').val('')
             $('#qty_retur_input').val('')
             $('#ppn_input').val('')
             $('#pph_input').val('')
@@ -770,7 +773,35 @@
                     $('#qty_input').focus()
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText)
+                    // console.error(xhr.responseText)
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
+        }
+
+        function cek_stok(id) {
+            let stok = $('#stok_input')
+            stok.prop('disabled', true)
+            stok.val('')
+            stok.prop('placeholder', 'Loading...')
+
+            $.ajax({
+                url: '/masterdata/barang/cek-stok/' + id,
+                type: 'GET',
+                success: function(data) {
+                    stok.val(data.stok)
+                    stok.prop('placeholder', 'Stok')
+
+                    $('#qty_input').focus()
+                    // console.log(`stok: ${stok}, min: ${min_stok}`);
+                },
+                error: function(xhr, status, error) {
+                    // console.error(xhr.responseText)
 
                     Swal.fire({
                         icon: 'error',

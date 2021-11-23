@@ -145,8 +145,15 @@
                                 <div class="col-md-3" style="margin-bottom: 1em;">
                                     <label for="kode_barang">Nama Barang</label>
                                     <select name="kode_barang" id="kode_barang_input" class="form-control" required>
-                                        <option value="" disabled selected>-- Pilih Matauang Terlebih --</option>
+                                        <option value="" disabled selected>-- Pilih Matauang Terlebih Dahulu --</option>
                                     </select>
+                                </div>
+
+                                {{-- Stok --}}
+                                <div class="col-md-2" style="margin-bottom: 1em;">
+                                    <label for="stok">Stok</label>
+                                    <input type="number" step="any" name="stok" id="stok_input" class="form-control"
+                                        disabled placeholder="Stok" />
                                 </div>
 
                                 {{-- Harga --}}
@@ -157,14 +164,14 @@
                                 </div>
 
                                 {{-- Qty --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="qty">Qty</label>
                                     <input type="number" step="any" name="qty" id="qty_input" class="form-control"
                                         required placeholder="Qty" />
                                 </div>
 
                                 {{-- Diskon% --}}
-                                <div class="col-md-3" style="margin-bottom: 1em;">
+                                <div class="col-md-2" style="margin-bottom: 1em;">
                                     <label for="diskon_persen_input">Diskon%</label>
                                     <input type="number" step="any" name="diskon_persen_input" id="diskon_persen_input"
                                         class="form-control" placeholder="Diskon%" />
@@ -322,12 +329,12 @@
                                                     <td>
                                                         {{ number_format($detail->clr_fee) }}
                                                         <input type="hidden" class="clr_fee_hidden" name="clr_fee[]"
-                                                            value=" {{ $detail->clr_fee }}">
+                                                            value="{{ $detail->clr_fee }}">
                                                     </td>
                                                     <td>
                                                         {{ number_format($detail->netto) }}
                                                         <input type="hidden" class="netto_hidden" name="netto[]"
-                                                            value={{ $detail->netto }}">
+                                                            value="{{ $detail->netto }}">
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn btn-info btn-xs btn_edit">

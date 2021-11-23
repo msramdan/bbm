@@ -260,7 +260,6 @@
             let subtotal = harga * qty
 
             // cek duplikasi pas update
-            let cek = 0
             $('input[name="barang[]"]').each(function(i) {
                 // i = index each
                 if ($(this).val() == kode_barang.val() && i != index) {

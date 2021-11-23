@@ -8,8 +8,8 @@ return [
         'edit' => 'Edit Pelunasan Piutang',
         'show' => 'Detail Pelunasan Piutang',
         'payment' => 'Pembayaran',
-        'payment_list' => 'Daftar Pembayaran',
-        'item_list' => 'Daftar Barang'
+        'payment_list' => 'Pembayaran',
+        'item_list' => 'Daftar Penjualan'
     ],
     'button' => [
         'tambah' => 'Tambah',

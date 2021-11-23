@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePelunasanHutangRequest;
-use App\Models\{PelunasanHutang, Pembelian, PembelianPembayaran};
+use App\Models\{PelunasanHutang, PelunasanHutangDetail, Pembelian, PembelianPembayaran};
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PelunasanHutangController extends Controller
 {
@@ -29,30 +31,13 @@ class PelunasanHutangController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pelunasan = PelunasanHutang::with(
-                'pembelian:id,kode,tanggal,total_netto,matauang_id,supplier_id',
-                'pembelian.matauang:id,kode,nama',
-                'pembelian.supplier:id,kode,nama_supplier',
-                'pembelian.matauang:id,kode,nama'
-            )->orderByDesc('id');
+            $pelunasan = PelunasanHutang::orderByDesc('id');
 
             return DataTables::of($pelunasan)
                 ->addIndexColumn()
                 ->addColumn('action', 'keuangan.pelunasan.hutang.data-table.action')
-                ->addColumn('saldo_hutang', function ($row) {
-                    return number_format($row->pembelian->total_netto);
-                })
                 ->addColumn('bayar', function ($row) {
                     return number_format($row->bayar);
-                })
-                ->addColumn('kode_pembelian', function ($row) {
-                    return $row->pembelian->kode;
-                })
-                ->addColumn('supplier', function ($row) {
-                    return  $row->pembelian->supplier ? $row->pembelian->supplier->nama_supplier : 'Tanpa Supplier';
-                })
-                ->addColumn('matauang', function ($row) {
-                    return $row->pembelian->matauang->nama;
                 })
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at->format('d F Y H:i');
@@ -85,28 +70,47 @@ class PelunasanHutangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePelunasanHutangRequest $request)
+    public function store(Request $request)
     {
-        $attr = $request->validated();
-        $attr['pembelian_id'] = $request->pembelian;
-        $attr['bank_id'] = $request->bank;
-        $attr['rekening_bank_id'] = $request->rekening;
+        DB::transaction(function () use ($request) {
+            $pelunasan = PelunasanHutang::create([
+                'kode' => $request->kode,
+                'tanggal' => $request->tanggal,
+                'bank_id' => $request->bank,
+                'rekening_bank_id' => $request->rekening,
+                'jenis_pembayaran' => $request->jenis_pembayaran,
+                'rate' => $request->rate,
+                'no_cek_giro' => $request->no_cek_giro,
+                'tgl_cek_giro' => $request->tgl_cek_giro,
+                'bayar' => $request->bayar,
+                'keterangan' => $request->keterangan,
+            ]);
 
-        $pelunasanHutang =  PelunasanHutang::create($attr);
+            foreach ($request->pembelian_id as $id) {
+                $pelunasanDetail[] = new PelunasanHutangDetail([
+                    'pembelian_id' => $id
+                ]);
 
-        $pelunasanHutang->pembelian->update(['status' => 'Lunas']);
-        $pelunasanHutang->pembelian->pembelian_pembayaran()->create([
-            'jenis_pembayaran' => $request->jenis_pembayaran,
-            'bank_id' => $request->bank,
-            'rekening_bank_id' => $request->rekening,
-            'tgl_cek_giro' => $request->tgl_cek_giro,
-            'no_cek_giro' => $request->no_cek_giro,
-            'bayar' => $request->bayar,
-        ]);
+                $pembelian = Pembelian::find($id);
 
-        Alert::success('Simpan Data', 'Berhasil');
+                // insert pembelian pembayaran
+                $pembelian->pembelian_pembayaran()->create([
+                    'jenis_pembayaran' => $request->jenis_pembayaran,
+                    'bank_id' => $request->bank,
+                    'rekening_bank_id' => $request->rekening,
+                    'tgl_cek_giro' => $request->tgl_cek_giro,
+                    'no_cek_giro' => $request->no_cek_giro,
+                    'bayar' => $request->bayar,
+                ]);
 
-        return redirect()->route('pelunasan-hutang.index');
+                // update pembayaran jadi lunas
+                $pembelian->update(['status' => 'Lunas']);
+            }
+
+            $pelunasan->pelunasan_hutang_detail()->saveMany($pelunasanDetail);
+        });
+
+        return response()->json(['success'], 200);
     }
 
     /**
@@ -118,12 +122,12 @@ class PelunasanHutangController extends Controller
     public function show(PelunasanHutang $pelunasanHutang)
     {
         $pelunasanHutang->load(
-            'pembelian:id,kode,tanggal,total_netto,matauang_id',
-            'pembelian.matauang:id,kode,nama',
+            'pelunasan_hutang_detail.pembelian:id,kode,supplier_id,tanggal,total_netto,matauang_id',
+            'pelunasan_hutang_detail.pembelian.matauang:id,kode,nama',
+            'pelunasan_hutang_detail.pembelian.supplier:id,kode,nama_supplier',
+            'pelunasan_hutang_detail.pembelian.matauang:id,kode,nama',
             'bank:id,kode,nama',
-            'rekening_bank:id,kode,nomor_rekening,nama_rekening',
-            'pembelian.supplier:id,kode,nama_supplier',
-            'pembelian.matauang:id,kode,nama'
+            'rekening_bank:id,kode,nomor_rekening,nama_rekening'
         );
 
         return view('keuangan.pelunasan.hutang.show', compact('pelunasanHutang'));
@@ -138,13 +142,16 @@ class PelunasanHutangController extends Controller
     public function edit(PelunasanHutang $pelunasanHutang)
     {
         $pelunasanHutang->load(
-            'pembelian:id,kode,tanggal,total_netto,matauang_id',
-            'pembelian.matauang:id,kode,nama',
+            'pelunasan_hutang_detail.pembelian:id,kode,supplier_id,tanggal,total_netto,matauang_id',
+            'pelunasan_hutang_detail.pembelian.matauang:id,kode,nama',
+            'pelunasan_hutang_detail.pembelian.supplier:id,kode,nama_supplier',
+            'pelunasan_hutang_detail.pembelian.matauang:id,kode,nama',
             'bank:id,kode,nama',
-            'rekening_bank:id,kode,nomor_rekening,nama_rekening',
-            'pembelian.supplier:id,kode,nama_supplier',
-            'pembelian.matauang:id,kode,nama'
+            'rekening_bank:id,kode,nomor_rekening,nama_rekening'
         );
+
+        // return $pelunasanHutang;
+        // die;
 
         return view('keuangan.pelunasan.hutang.edit', compact('pelunasanHutang'));
     }
@@ -156,39 +163,59 @@ class PelunasanHutangController extends Controller
      * @param  \App\Models\PelunasanHutang  $pelunasanHutang
      * @return \Illuminate\Http\Response
      */
-    public function update(StorePelunasanHutangRequest $request, PelunasanHutang $pelunasanHutang)
+    public function update(Request $request, $id)
     {
-        $attr = $request->validated();
-        $attr['pembelian_id'] = $request->pembelian;
-        $attr['bank_id'] = $request->bank;
-        $attr['rekening_bank_id'] = $request->rekening;
+        $pelunasan = PelunasanHutang::with('pelunasan_hutang_detail', 'pelunasan_hutang_detail.pembelian')->findOrFail($id);
 
-        // hapus pembayaran lama
-        $pembayaranLama = PembelianPembayaran::where('pembelian_id', $pelunasanHutang->pembelian_id)->first();
+        // buat pembelian lama jadi belum lunas
+        foreach ($pelunasan->pelunasan_hutang_detail as $detail) {
+            $detail->pembelian->update(['status' => 'Belum Lunas']);
 
-        if ($pembayaranLama) {
-            $pembayaranLama->pembelian()->update(['status' => 'Belum Lunas']);
+            $detail->pembelian->pembelian_pembayaran()->delete();
 
-            $pembayaranLama->delete();
+            // hapus detail pelunasan lama
+            $detail->delete();
         }
 
-        $pelunasanHutang->update($attr);
+        DB::transaction(function () use ($request, $pelunasan) {
+            $pelunasan->update([
+                // 'kode' => $request->kode,
+                // 'tanggal' => $request->tanggal,
+                'bank_id' => $request->bank,
+                'rekening_bank_id' => $request->rekening,
+                'jenis_pembayaran' => $request->jenis_pembayaran,
+                // 'rate' => $request->rate,
+                'no_cek_giro' => $request->no_cek_giro,
+                'tgl_cek_giro' => $request->tgl_cek_giro,
+                'bayar' => $request->bayar,
+                'keterangan' => $request->keterangan,
+            ]);
 
-        $pelunasanHutang->pembelian->update(['status' => 'Lunas']);
+            foreach ($request->pembelian_id as $id) {
+                $pelunasanDetail[] = new PelunasanHutangDetail([
+                    'pembelian_id' => $id
+                ]);
 
-        // insert pembayaran baru
-        $pelunasanHutang->pembelian->pembelian_pembayaran()->create([
-            'jenis_pembayaran' => $request->jenis_pembayaran,
-            'bank_id' => $request->bank,
-            'rekening_bank_id' => $request->rekening,
-            'tgl_cek_giro' => $request->tgl_cek_giro,
-            'no_cek_giro' => $request->no_cek_giro,
-            'bayar' => $request->bayar,
-        ]);
+                $pembelian = Pembelian::find($id);
 
-        Alert::success('Update Data', 'Berhasil');
+                // insert pembelian pembayaran
+                $pembelian->pembelian_pembayaran()->create([
+                    'jenis_pembayaran' => $request->jenis_pembayaran,
+                    'bank_id' => $request->bank,
+                    'rekening_bank_id' => $request->rekening,
+                    'tgl_cek_giro' => $request->tgl_cek_giro,
+                    'no_cek_giro' => $request->no_cek_giro,
+                    'bayar' => $request->bayar,
+                ]);
 
-        return redirect()->route('pelunasan-hutang.index');
+                // update pembayaran jadi lunas
+                $pembelian->update(['status' => 'Lunas']);
+            }
+
+            $pelunasan->pelunasan_hutang_detail()->saveMany($pelunasanDetail);
+        });
+
+        return response()->json(['success'], 200);
     }
 
     /**
@@ -199,9 +226,15 @@ class PelunasanHutangController extends Controller
      */
     public function destroy(PelunasanHutang $pelunasanHutang)
     {
-        $pelunasanHutang->pembelian->update(['status' => 'Belum Lunas']);
+        // buat pembelian lama jadi belum lunas
+        foreach ($pelunasanHutang->pelunasan_hutang_detail as $detail) {
+            $detail->pembelian->update(['status' => 'Belum Lunas']);
 
-        $pelunasanHutang->pembelian->pembelian_pembayaran()->delete();
+            $detail->pembelian->pembelian_pembayaran()->delete();
+
+            // hapus detail pelunasan lama
+            $detail->delete();
+        }
 
         $pelunasanHutang->delete();
 

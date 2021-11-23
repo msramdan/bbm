@@ -3,7 +3,24 @@
         integrity="sha256-EQtsX9S1OVXguoTG+N488HS0oZ1+s80IbOEbE3wzJig=" crossorigin="anonymous"></script>
 
     <script>
-        get_kode()
+        hitung_total_hutang()
+
+        let selected_rekening = '{{ $pelunasanHutang->rekening_bank ? $pelunasanHutang->rekening_bank->id : '' }}'
+
+        if ($('#bank :selected').val()) {
+            $('#bank').prop('disabled', false)
+            if ($('#jenis_pembayaran').val() == 'Transfer') {
+                get_rekening()
+            }
+        }
+
+        if ($('#tgl_cek_giro').val()) {
+            $('#tgl_cek_giro').prop('disabled', false)
+        }
+
+        if ($('#no_cek_giro').val()) {
+            $('#no_cek_giro').prop('disabled', false)
+        }
 
         $('#btn_add').click(function(e) {
             e.preventDefault()
@@ -42,35 +59,35 @@
                 })
 
                 let data_trx = `<tr>
-                    <td></td>
-                    <td>
-                        ${kode_pembelian.html()}
-                        <input type="hidden" class="kode_pembelian_hidden" name="kode_pembelian[]" value="${kode_pembelian.val()}">
-                    </td>
-                    <td>
-                        ${tgl_pembelian}
-                        <input type="hidden" class="tgl_pembelian_hidden" name="tgl_pembelian[]" value="${tgl_pembelian}">
-                    </td>
-                    <td>
-                        ${supplier}
-                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier}">
-                    </td>
-                    <td>${matauang}
-                        <input type="hidden" class="matauang_hidden" name="matauang[]" value="${matauang}">
-                    </td>
-                    <td>${format_ribuan(hutang)}
-                        <input type="hidden" class="hutang_hidden" name="hutang[]" value="${hutang}">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs btn_edit">
-                            <i class="fa fa-edit"></i>
-                        </button>
+                                    <td></td>
+                                    <td>
+                                        ${kode_pembelian.html()}
+                                        <input type="hidden" class="kode_pembelian_hidden" name="kode_pembelian[]" value="${kode_pembelian.val()}">
+                                    </td>
+                                    <td>
+                                        ${tgl_pembelian}
+                                        <input type="hidden" class="tgl_pembelian_hidden" name="tgl_pembelian[]" value="${tgl_pembelian}">
+                                    </td>
+                                    <td>
+                                        ${supplier}
+                                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier}">
+                                    </td>
+                                    <td>${matauang}
+                                        <input type="hidden" class="matauang_hidden" name="matauang[]" value="${matauang}">
+                                    </td>
+                                    <td>${format_ribuan(hutang)}
+                                        <input type="hidden" class="hutang_hidden" name="hutang[]" value="${hutang}">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-xs btn_edit">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
 
-                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </td>
-                </tr>`
+                                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>`
 
                 $('#tbl_trx').append(data_trx)
 
@@ -105,34 +122,34 @@
             })
 
             let data_trx = `
-                    <td></td>
-                    <td>
-                        ${kode_pembelian.html()}
-                        <input type="hidden" class="kode_pembelian_hidden" name="kode_pembelian[]" value="${kode_pembelian.val()}">
-                    </td>
-                    <td>
-                        ${tgl_pembelian}
-                        <input type="hidden" class="tgl_pembelian_hidden" name="tgl_pembelian[]" value="${tgl_pembelian}">
-                    </td>
-                    <td>
-                        ${supplier}
-                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier}">
-                    </td>
-                    <td>${matauang}
-                        <input type="hidden" class="matauang_hidden" name="matauang[]" value="${matauang}">
-                    </td>
-                    <td>${format_ribuan(hutang)}
-                        <input type="hidden" class="hutang_hidden" name="hutang[]" value="${hutang}">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs btn_edit">
-                            <i class="fa fa-edit"></i>
-                        </button>
+                                    <td></td>
+                                    <td>
+                                        ${kode_pembelian.html()}
+                                        <input type="hidden" class="kode_pembelian_hidden" name="kode_pembelian[]" value="${kode_pembelian.val()}">
+                                    </td>
+                                    <td>
+                                        ${tgl_pembelian}
+                                        <input type="hidden" class="tgl_pembelian_hidden" name="tgl_pembelian[]" value="${tgl_pembelian}">
+                                    </td>
+                                    <td>
+                                        ${supplier}
+                                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier}">
+                                    </td>
+                                    <td>${matauang}
+                                        <input type="hidden" class="matauang_hidden" name="matauang[]" value="${matauang}">
+                                    </td>
+                                    <td>${format_ribuan(hutang)}
+                                        <input type="hidden" class="hutang_hidden" name="hutang[]" value="${hutang}">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-xs btn_edit">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
 
-                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </td>`
+                                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </td>`
 
             $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
 
@@ -179,35 +196,7 @@
 
         $('#bank').change(function() {
             if ($('#jenis_pembayaran').val() == 'Transfer') {
-                $.ajax({
-                    url: "/beli/pembelian/get-rekening/" + $('#bank').val(),
-                    type: 'GET',
-                    success: function(data) {
-                        let rekening = []
-
-                        $('#rekening').prop('disabled', true)
-                        $('#rekening').html(
-                            '<option value="" disabled selected>Loading...</option>')
-
-                        setTimeout(() => {
-                            if (data.length > 0) {
-                                data.forEach(elm => {
-                                    rekening.push(
-                                        `<option value="${elm.id}">${elm.nomor_rekening} - ${elm.nama_rekening}</option>`
-                                    )
-                                })
-
-                                $('#rekening').html(rekening)
-
-                                $('#rekening').prop('disabled', false)
-                            } else {
-                                $('#rekening').html(
-                                    '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
-                                )
-                            }
-                        }, 1000)
-                    }
-                })
+                get_rekening()
             }
         })
 
@@ -307,13 +296,10 @@
                 no_cek_giro.prop('disabled', false)
                 tgl_cek_giro.prop('disabled', false)
 
-                if (
-                    parseFloat(bayar.val()) &&
-                    parseFloat(bayar.val()) >= parseFloat(total_hutang.val()) &&
-                    bank.val() &&
+                if (parseFloat(bayar.val()) && parseFloat(bayar.val()) >= parseFloat(total_hutang.val()) &&
                     no_cek_giro.val() &&
-                    tgl_cek_giro.val()
-                ) {
+                    bank.val() &&
+                    tgl_cek_giro.val()) {
                     $('#btn_simpan').prop('disabled', false)
                     // $('#btn_clear_form_payment').prop('disabled', false)
                 } else {
@@ -370,14 +356,13 @@
             }
 
             $.ajax({
-                type: 'POST',
-                url: '{{ route('pelunasan-hutang.store') }}',
+                type: 'PUT',
+                url: '{{ route('pelunasan-hutang.update', $pelunasanHutang->id) }}',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data: data,
                 success: function(response) {
-                    // console.log(response)
                     Swal.fire({
                         icon: 'success',
                         title: 'Update data',
@@ -399,6 +384,43 @@
                 }
             })
         })
+
+        function get_rekening() {
+            $.ajax({
+                url: "/beli/pembelian/get-rekening/" + $('#bank').val(),
+                type: 'GET',
+                success: function(data) {
+                    let rekening = []
+
+                    $('#rekening').prop('disabled', true)
+                    $('#rekening').html(
+                        '<option value="" disabled selected>Loading...</option>')
+
+                    setTimeout(() => {
+                        if (data.length > 0) {
+                            data.forEach(elm => {
+                                rekening.push(
+                                    `<option value="${elm.id}">${elm.nomor_rekening} - ${elm.nama_rekening}</option>`
+                                )
+                            })
+
+                            $('#rekening').html(rekening)
+
+                            $('#rekening').prop('disabled', false)
+
+                            if (selected_rekening) {
+                                $('#rekening option[value=' + selected_rekening + ']').attr('selected',
+                                    'selected')
+                            }
+                        } else {
+                            $('#rekening').html(
+                                '<option value="" disabled selected>-- No.Rekening tidak ditemukan --</option>'
+                            )
+                        }
+                    }, 1000);
+                }
+            })
+        }
 
         function hitung_total_hutang() {
             let total_hutang = 0

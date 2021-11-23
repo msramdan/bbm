@@ -8,8 +8,8 @@ return [
         'edit' => 'Edit A/P Payment',
         'show' => 'Detail A/P Payment',
         'payment' => 'Payment',
-        'payment_list' => 'Payment List',
-        'item_list' => 'Item List'
+        'payment_list' => 'Payment',
+        'item_list' => 'Purchase List'
     ],
     'button' => [
         'tambah' => 'Create',

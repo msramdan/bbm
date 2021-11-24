@@ -14,7 +14,6 @@ class PelunasanPiutang extends Model
     protected $casts = ['tanggal' => 'date'];
 
     protected $fillable = [
-        'penjualan_id',
         'bank_id',
         'rekening_bank_id',
         'kode',
@@ -27,9 +26,9 @@ class PelunasanPiutang extends Model
         'keterangan',
     ];
 
-    public function penjualan()
+    public function pelunasan_piutang_detail()
     {
-        return $this->belongsTo(Penjualan::class);
+        return $this->hasMany(PelunasanPiutangDetail::class);
     }
 
     public function bank()

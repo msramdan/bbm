@@ -15,7 +15,6 @@ class CreatePelunasanPiutangTable extends Migration
     {
         Schema::create('pelunasan_piutang', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('penjualan_id')->constrained('penjualan');
             $table->foreignId('bank_id')->nullable()->constrained('bank')->nullOnDelete();
             $table->foreignId('rekening_bank_id')->nullable()->constrained('rekening_bank')->nullOnDelete();
             $table->string('kode', 20);

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PelunasanPiutangRequest;
-use App\Models\{PelunasanPiutang, Penjualan, PenjualanPembayaran};
+use App\Models\{PelunasanPiutang, PelunasanPiutangDetail, Penjualan, PenjualanPembayaran};
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -28,29 +30,13 @@ class PelunasanPiutangController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pelunasan = PelunasanPiutang::with(
-                'penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
-                'penjualan.matauang:id,kode,nama',
-                'penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
-            )->orderByDesc('id');
+            $pelunasan = PelunasanPiutang::orderByDesc('id');
 
             return DataTables::of($pelunasan)
                 ->addIndexColumn()
                 ->addColumn('action', 'keuangan.pelunasan.piutang.data-table.action')
-                ->addColumn('saldo_piutang', function ($row) {
-                    return number_format($row->penjualan->total_netto);
-                })
                 ->addColumn('bayar', function ($row) {
                     return number_format($row->bayar);
-                })
-                ->addColumn('kode_penjualan', function ($row) {
-                    return $row->penjualan->kode;
-                })
-                ->addColumn('pelanggan', function ($row) {
-                    return $row->penjualan->pelanggan->nama_pelanggan;
-                })
-                ->addColumn('matauang', function ($row) {
-                    return $row->penjualan->matauang->nama;
                 })
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at->format('d F Y H:i');
@@ -83,28 +69,47 @@ class PelunasanPiutangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PelunasanPiutangRequest $request)
+    public function store(Request $request)
     {
-        $attr = $request->validated();
-        $attr['penjualan_id'] = $request->penjualan;
-        $attr['bank_id'] = $request->bank;
-        $attr['rekening_bank_id'] = $request->rekening;
+        DB::transaction(function () use ($request) {
+            $pelunasan = PelunasanPiutang::create([
+                'kode' => $request->kode,
+                'tanggal' => $request->tanggal,
+                'bank_id' => $request->bank,
+                'rekening_bank_id' => $request->rekening,
+                'jenis_pembayaran' => $request->jenis_pembayaran,
+                'rate' => $request->rate,
+                'no_cek_giro' => $request->no_cek_giro,
+                'tgl_cek_giro' => $request->tgl_cek_giro,
+                'bayar' => $request->bayar,
+                'keterangan' => $request->keterangan,
+            ]);
 
-        $pelunasanPiutang = PelunasanPiutang::create($attr);
+            foreach ($request->penjualan_id as $id) {
+                $pelunasanDetail[] = new PelunasanPiutangDetail([
+                    'penjualan_id' => $id
+                ]);
 
-        $pelunasanPiutang->penjualan->update(['status' => 'Lunas']);
-        $pelunasanPiutang->penjualan->penjualan_pembayaran()->create([
-            'jenis_pembayaran' => $request->jenis_pembayaran,
-            'bank_id' => $request->bank,
-            'rekening_bank_id' => $request->rekening,
-            'tgl_cek_giro' => $request->tgl_cek_giro,
-            'no_cek_giro' => $request->no_cek_giro,
-            'bayar' => $request->bayar,
-        ]);
+                $penjualan = Penjualan::find($id);
 
-        Alert::success('Simpan Data', 'Berhasil');
+                // insert penjualan pembayaran
+                $penjualan->penjualan_pembayaran()->create([
+                    'jenis_pembayaran' => $request->jenis_pembayaran,
+                    'bank_id' => $request->bank,
+                    'rekening_bank_id' => $request->rekening,
+                    'tgl_cek_giro' => $request->tgl_cek_giro,
+                    'no_cek_giro' => $request->no_cek_giro,
+                    'bayar' => $request->bayar,
+                ]);
 
-        return redirect()->route('pelunasan-piutang.index');
+                // update pembayaran jadi lunas
+                $penjualan->update(['status' => 'Lunas']);
+            }
+
+            $pelunasan->pelunasan_piutang_detail()->saveMany($pelunasanDetail);
+        });
+
+        return response()->json(['success'], 200);
     }
 
     /**
@@ -116,9 +121,9 @@ class PelunasanPiutangController extends Controller
     public function show(PelunasanPiutang $pelunasanPiutang)
     {
         $pelunasanPiutang->load(
-            'penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
-            'penjualan.matauang:id,kode,nama',
-            'penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
+            'pelunasan_piutang_detail.penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
+            'pelunasan_piutang_detail.penjualan.matauang:id,kode,nama',
+            'pelunasan_piutang_detail.penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
             'bank:id,kode,nama',
             'rekening_bank:id,nomor_rekening,nama_rekening'
         );
@@ -135,9 +140,9 @@ class PelunasanPiutangController extends Controller
     public function edit(PelunasanPiutang $pelunasanPiutang)
     {
         $pelunasanPiutang->load(
-            'penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
-            'penjualan.matauang:id,kode,nama',
-            'penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
+            'pelunasan_piutang_detail.penjualan:id,kode,tanggal,total_netto,matauang_id,pelanggan_id',
+            'pelunasan_piutang_detail.penjualan.matauang:id,kode,nama',
+            'pelunasan_piutang_detail.penjualan.pelanggan:id,kode,alamat,nama_pelanggan',
             'bank:id,kode,nama',
             'rekening_bank:id,nomor_rekening,nama_rekening'
         );
@@ -152,39 +157,59 @@ class PelunasanPiutangController extends Controller
      * @param  \App\Models\PelunasanPiutang  $pelunasanPiutang
      * @return \Illuminate\Http\Response
      */
-    public function update(PelunasanPiutangRequest $request, PelunasanPiutang $pelunasanPiutang)
+    public function update(Request $request, $id)
     {
-        $attr = $request->validated();
-        $attr['penjualan_id'] = $request->penjualan;
-        $attr['bank_id'] = $request->bank;
-        $attr['rekening_bank_id'] = $request->rekening;
+        $pelunasan = PelunasanPiutang::with('pelunasan_piutang_detail', 'pelunasan_piutang_detail.penjualan')->findOrFail($id);
 
-        // hapus pembayaran lama
-        $pembayaranLama = PenjualanPembayaran::where('penjualan_id', $pelunasanPiutang->penjualan_id)->first();
+        // buat penjualan lama jadi belum lunas
+        foreach ($pelunasan->pelunasan_piutang_detail as $detail) {
+            $detail->penjualan->update(['status' => 'Belum Lunas']);
 
-        if ($pembayaranLama) {
-            $pembayaranLama->penjualan()->update(['status' => 'Belum Lunas']);
+            $detail->penjualan->penjualan_pembayaran()->delete();
 
-            $pembayaranLama->delete();
+            // hapus detail pelunasan lama
+            $detail->delete();
         }
 
-        $pelunasanPiutang->update($attr);
+        DB::transaction(function () use ($request, $pelunasan) {
+            $pelunasan->update([
+                // 'kode' => $request->kode,
+                // 'tanggal' => $request->tanggal,
+                'bank_id' => $request->bank,
+                'rekening_bank_id' => $request->rekening,
+                'jenis_pembayaran' => $request->jenis_pembayaran,
+                // 'rate' => $request->rate,
+                'no_cek_giro' => $request->no_cek_giro,
+                'tgl_cek_giro' => $request->tgl_cek_giro,
+                'bayar' => $request->bayar,
+                'keterangan' => $request->keterangan,
+            ]);
 
-        $pelunasanPiutang->penjualan->update(['status' => 'Lunas']);
+            foreach ($request->penjualan_id as $id) {
+                $pelunasanDetail[] = new PelunasanPiutangDetail([
+                    'penjualan_id' => $id
+                ]);
 
-        // insert pembayaran baru
-        $pelunasanPiutang->penjualan->penjualan_pembayaran()->create([
-            'jenis_pembayaran' => $request->jenis_pembayaran,
-            'bank_id' => $request->bank,
-            'rekening_bank_id' => $request->rekening,
-            'tgl_cek_giro' => $request->tgl_cek_giro,
-            'no_cek_giro' => $request->no_cek_giro,
-            'bayar' => $request->bayar,
-        ]);
+                $penjualan = Penjualan::find($id);
 
-        Alert::success('Update Data', 'Berhasil');
+                // insert penjualan pembayaran
+                $penjualan->penjualan_pembayaran()->create([
+                    'jenis_pembayaran' => $request->jenis_pembayaran,
+                    'bank_id' => $request->bank,
+                    'rekening_bank_id' => $request->rekening,
+                    'tgl_cek_giro' => $request->tgl_cek_giro,
+                    'no_cek_giro' => $request->no_cek_giro,
+                    'bayar' => $request->bayar,
+                ]);
 
-        return redirect()->route('pelunasan-piutang.index');
+                // update pembayaran jadi lunas
+                $penjualan->update(['status' => 'Lunas']);
+            }
+
+            $pelunasan->pelunasan_piutang_detail()->saveMany($pelunasanDetail);
+        });
+
+        return response()->json(['success'], 200);
     }
 
     /**
@@ -195,9 +220,15 @@ class PelunasanPiutangController extends Controller
      */
     public function destroy(PelunasanPiutang $pelunasanPiutang)
     {
-        $pelunasanPiutang->penjualan->update(['status' => 'Belum Lunas']);
+        // buat penjualan lama jadi belum lunas
+        foreach ($pelunasanPiutang->pelunasan_piutang_detail as $detail) {
+            $detail->penjualan->update(['status' => 'Belum Lunas']);
 
-        $pelunasanPiutang->penjualan->penjualan_pembayaran()->delete();
+            $detail->penjualan->penjualan_pembayaran()->delete();
+
+            // hapus detail pelunasan lama
+            $detail->delete();
+        }
 
         $pelunasanPiutang->delete();
 

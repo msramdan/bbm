@@ -31,7 +31,10 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                        <a href="{{ route('pelunasan-piutang.create') }}" class="btn btn-success{{ !auth()->user()->can('create pelunasan piutang') ? ' disabled' : '' }}">
+                        <a href="{{ route('pelunasan-piutang.create') }}"
+                            class="btn btn-success{{ !auth()->user()->can('create pelunasan piutang')
+                                ? ' disabled'
+                                : '' }}">
                             <i class="fa fa-plus-square-o"></i> {{ trans('pelunasan_piutang.button.tambah') }}
                         </a>
                     </div>
@@ -42,14 +45,10 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode</th>
-                                        <th>Kode Penjualan</th>
                                         <th>Tanggal</th>
-                                        <th>Pelanggan</th>
-                                        <th>Mata Uang</th>
-                                        <th>Rate</th>
                                         <th>Jenis Pembayaran</th>
-                                        <th>Saldo piutang</th>
                                         <th>Bayar</th>
+                                        <th>Rate</th>
                                         <th>Created At</th>
                                         <th>Updated At</th>
                                         @if (auth()->user()->can('edit pelunasan piutang') ||
@@ -75,9 +74,9 @@
     <script>
         const action =
             '{{ auth()->user()->can('edit pelunasan piutang') ||
-auth()->user()->can('delete pelunasan piutang')
-    ? 'yes yes yes'
-    : '' }}'
+            auth()->user()->can('delete pelunasan piutang')
+                ? 'yes yes yes'
+                : '' }}'
 
         let columns = [{
                 data: 'DT_RowIndex',
@@ -90,36 +89,20 @@ auth()->user()->can('delete pelunasan piutang')
                 name: 'kode'
             },
             {
-                data: 'kode_penjualan',
-                name: 'kode_penjualan'
-            },
-            {
                 data: 'tanggal',
                 name: 'tanggal'
-            },
-            {
-                data: 'pelanggan',
-                name: 'pelanggan'
-            },
-            {
-                data: 'matauang',
-                name: 'matauang'
-            },
-            {
-                data: 'rate',
-                name: 'rate'
             },
             {
                 data: 'jenis_pembayaran',
                 name: 'jenis_pembayaran'
             },
             {
-                data: 'saldo_piutang',
-                name: 'saldo_piutang'
-            },
-            {
                 data: 'bayar',
                 name: 'bayar'
+            },
+            {
+                data: 'rate',
+                name: 'rate'
             },
             {
                 data: 'created_at',

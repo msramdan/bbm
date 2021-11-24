@@ -18,23 +18,23 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Mohon isi data {{ trans('pelunasan_hutang.title.index') }} - Header terlebih dahulu!'
+                    text: 'Mohon isi data {{ trans('piutang.title.index') }} - Header terlebih dahulu!'
                 })
             } else {
 
-                let kode_pembelian = $('#kode_pembelian option:selected')
-                let tgl_pembelian = $('#tgl_pembelian').val()
-                let supplier = $('#supplier').val()
+                let kode_penjualan = $('#kode_penjualan option:selected')
+                let tgl_penjualan = $('#tgl_penjualan').val()
+                let pelanggan = $('#pelanggan').val()
                 let matauang = $('#matauang').val()
-                let hutang = parseFloat($('#hutang').val())
+                let piutang = parseFloat($('#piutang').val())
 
-                // cek duplikasi kode_pembelian
-                $('input[name="kode_pembelian[]"]').each(function() {
+                // cek duplikasi kode_penjualan
+                $('input[name="kode_penjualan[]"]').each(function() {
                     // cari index tr ke berapa
                     let index = $(this).parent().parent().index()
-                    // kalo id kode_pembelian di cart dan form input(kode_pembelian) sama
-                    //  kalo id supplier di cart dan form input(kode_pembelian) sama
-                    if ($(this).val() == kode_pembelian.val()) {
+                    // kalo id kode_penjualan di cart dan form input(kode_penjualan) sama
+                    //  kalo id pelanggan di cart dan form input(kode_penjualan) sama
+                    if ($(this).val() == kode_penjualan.val()) {
                         // hapus tr berdasarkan index
                         $('#tbl_trx tbody tr:eq(' + index + ')').remove()
                         generate_nomer()
@@ -44,22 +44,22 @@
                 let data_trx = `<tr>
                     <td></td>
                     <td>
-                        ${kode_pembelian.html()}
-                        <input type="hidden" class="kode_pembelian_hidden" name="kode_pembelian[]" value="${kode_pembelian.val()}">
+                        ${kode_penjualan.html()}
+                        <input type="hidden" class="kode_penjualan_hidden" name="kode_penjualan[]" value="${kode_penjualan.val()}">
                     </td>
                     <td>
-                        ${tgl_pembelian}
-                        <input type="hidden" class="tgl_pembelian_hidden" name="tgl_pembelian[]" value="${tgl_pembelian}">
+                        ${tgl_penjualan}
+                        <input type="hidden" class="tgl_penjualan_hidden" name="tgl_penjualan[]" value="${tgl_penjualan}">
                     </td>
                     <td>
-                        ${supplier}
-                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier}">
+                        ${pelanggan}
+                        <input type="hidden" class="pelanggan_hidden" name="pelanggan[]" value="${pelanggan}">
                     </td>
                     <td>${matauang}
                         <input type="hidden" class="matauang_hidden" name="matauang[]" value="${matauang}">
                     </td>
-                    <td>${format_ribuan(hutang)}
-                        <input type="hidden" class="hutang_hidden" name="hutang[]" value="${hutang}">
+                    <td>${format_ribuan(piutang)}
+                        <input type="hidden" class="piutang_hidden" name="piutang[]" value="${piutang}">
                     </td>
                     <td>
                         <button type="button" class="btn btn-info btn-xs btn_edit">
@@ -80,98 +80,123 @@
 
                 cek_form_entry()
 
-                hitung_total_hutang()
+                hitung_total_piutang()
 
                 $('#bayar').val('')
                 $('#btn_simpan').prop('disabled', true)
             }
         })
 
-        $('#btn_update').click(function() {
-            let index = $('#index_tr').val()
+        $('#jenis_pembayaran, #bayar').on('keyup change', function() {
+            let jenis_pembayaran = $('#jenis_pembayaran')
+            let bank = $('#bank')
+            let rekening = $('#rekening')
+            let no_cek_giro = $('#no_cek_giro')
+            let tgl_cek_giro = $('#tgl_cek_giro')
+            let bayar = $('#bayar')
+            let total_piutang = $('#total_piutang_hidden')
 
-            let kode_pembelian = $('#kode_pembelian option:selected')
-            let tgl_pembelian = $('#tgl_pembelian').val()
-            let supplier = $('#supplier').val()
-            let matauang = $('#matauang').val()
-            let hutang = parseFloat($('#hutang').val())
+            // kalo cash, bank dan giro boleh kosong
+            if (jenis_pembayaran.val() == 'Cash') {
+                bank.prop('disabled', true)
+                rekening.prop('disabled', true)
+                no_cek_giro.prop('disabled', true)
+                tgl_cek_giro.prop('disabled', true)
 
-            // cek duplikasi pas update
-            $('input[name="kode_pembelian[]"]').each(function(i) {
-                // i = index each
-                if ($(this).val() == kode_pembelian.val() && i != index) {
-                    $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                bank.val('')
+                no_cek_giro.val('')
+                tgl_cek_giro.val('')
+                rekening.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
+
+                if (parseFloat(bayar.val()) && parseFloat(bayar.val()) >= parseFloat(total_piutang.val())) {
+                    $('#btn_simpan').prop('disabled', false)
+                    // $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_simpan').prop('disabled', true)
+                    // $('#btn_clear_form_payment').prop('disabled', true)
                 }
-            })
 
-            let data_trx = `
-                    <td></td>
-                    <td>
-                        ${kode_pembelian.html()}
-                        <input type="hidden" class="kode_pembelian_hidden" name="kode_pembelian[]" value="${kode_pembelian.val()}">
-                    </td>
-                    <td>
-                        ${tgl_pembelian}
-                        <input type="hidden" class="tgl_pembelian_hidden" name="tgl_pembelian[]" value="${tgl_pembelian}">
-                    </td>
-                    <td>
-                        ${supplier}
-                        <input type="hidden" class="supplier_hidden" name="supplier[]" value="${supplier}">
-                    </td>
-                    <td>${matauang}
-                        <input type="hidden" class="matauang_hidden" name="matauang[]" value="${matauang}">
-                    </td>
-                    <td>${format_ribuan(hutang)}
-                        <input type="hidden" class="hutang_hidden" name="hutang[]" value="${hutang}">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs btn_edit">
-                            <i class="fa fa-edit"></i>
-                        </button>
+                bank.prop('required', false)
+                rekening.prop('required', false)
+                no_cek_giro.prop('required', false)
+                tgl_cek_giro.prop('required', false)
+            }
 
-                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </td>`
+            if (jenis_pembayaran.val() == 'Transfer') {
+                bank.prop('disabled', false)
+                rekening.prop('disabled', false)
 
-            $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
+                no_cek_giro.prop('disabled', true)
+                no_cek_giro.val('')
+                tgl_cek_giro.prop('disabled', true)
+                tgl_cek_giro.val('')
 
-            clear_form_entry()
+                if (parseFloat(bayar.val()) && parseFloat(bayar.val()) >= parseFloat(total_piutang.val()) && bank
+                    .val() && rekening.val()) {
+                    $('#btn_simpan').prop('disabled', false)
+                    // $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_simpan').prop('disabled', true)
+                    // $('#btn_clear_form_payment').prop('disabled', true)
+                }
 
-            hitung_total_hutang()
+                bank.prop('required', true)
+                rekening.prop('required', true)
+            }
 
-            generate_nomer()
+            if (jenis_pembayaran.val() == 'Giro') {
+                rekening.prop('disabled', true)
+                rekening.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
 
-            cek_form_entry()
+                bank.prop('disabled', false)
+                no_cek_giro.prop('disabled', false)
+                tgl_cek_giro.prop('disabled', false)
 
-            $('#bayar').val('')
-            $('#btn_simpan').prop('disabled', true)
+                if (
+                    parseFloat(bayar.val()) &&
+                    parseFloat(bayar.val()) >= parseFloat(total_piutang.val()) &&
+                    bank.val() &&
+                    no_cek_giro.val() &&
+                    tgl_cek_giro.val()
+                ) {
+                    $('#btn_simpan').prop('disabled', false)
+                    // $('#btn_clear_form_payment').prop('disabled', false)
+                } else {
+                    $('#btn_simpan').prop('disabled', true)
+                    // $('#btn_clear_form_payment').prop('disabled', true)
+                }
+
+                bank.prop('required', true)
+                no_cek_giro.prop('required', true)
+                tgl_cek_giro.prop('required', true)
+            }
         })
 
-        $('#kode_pembelian').change(function() {
+        $('#kode_penjualan').change(function() {
             $('#btn_update').prop('disabled', true)
             $('#btn_add').prop('disabled', true)
             $('#btn_clear_form').prop('disabled', true)
 
             $.ajax({
-                url: "/keuangan/pelunasan-hutang/get-pembelian-belum-lunas/" + $(this).val(),
+                url: "/keuangan/pelunasan-piutang/get-penjualan-belum-lunas/" + $(this).val(),
                 type: 'GET',
                 success: function(data) {
-                    $('#supplier').val('Loading...')
-                    $('#hutang').val('Loading...')
+                    $('#pelanggan').val('Loading...')
+                    $('#piutang').val('Loading...')
                     $('#matauang').val('Loading...')
-                    $('#tgl_pembelian').val('Loading...')
+                    $('#tgl_penjualan').val('Loading...')
 
                     setTimeout(() => {
                         let format = new Date(data.tanggal)
 
-                        $('#supplier').val(data.supplier ? data.supplier.nama_supplier :
-                            'Tanpa Supplier')
-                        $('#hutang').val(data.total_netto)
+                        $('#pelanggan').val(data.pelanggan ? data.pelanggan.nama_pelanggan :
+                            'Tanpa pelanggan')
+                        $('#piutang').val(data.total_netto)
                         $('#matauang').val(data.matauang.nama)
-                        $('#tgl_pembelian').val(format.toLocaleDateString('id-ID'))
+                        $('#tgl_penjualan').val(format.toLocaleDateString('id-ID'))
 
                         cek_form_entry()
+
                     }, 1000)
                 }
             })
@@ -180,7 +205,7 @@
         $('#bank').change(function() {
             if ($('#jenis_pembayaran').val() == 'Transfer') {
                 $.ajax({
-                    url: "/beli/pembelian/get-rekening/" + $('#bank').val(),
+                    url: "/jual/penjualan/get-rekening/" + $('#bank').val(),
                     type: 'GET',
                     success: function(data) {
                         let rekening = []
@@ -215,108 +240,23 @@
             get_kode()
         })
 
-        $('#jenis_pembayaran, #bayar').on('keyup change', function() {
-            let jenis_pembayaran = $('#jenis_pembayaran')
-            let bank = $('#bank')
-            let rekening = $('#rekening')
-            let no_cek_giro = $('#no_cek_giro')
-            let tgl_cek_giro = $('#tgl_cek_giro')
-            let bayar = $('#bayar')
-            let total_hutang = $('#total_hutang_hidden')
-
-            // kalo cash, bank dan giro boleh kosong
-            if (jenis_pembayaran.val() == 'Cash') {
-                bank.prop('disabled', true)
-                rekening.prop('disabled', true)
-                no_cek_giro.prop('disabled', true)
-                tgl_cek_giro.prop('disabled', true)
-
-                bank.val('')
-                no_cek_giro.val('')
-                tgl_cek_giro.val('')
-                rekening.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
-
-                if (parseFloat(bayar.val()) && parseFloat(bayar.val()) >= parseFloat(total_hutang.val())) {
-                    $('#btn_simpan').prop('disabled', false)
-                    // $('#btn_clear_form_payment').prop('disabled', false)
-                } else {
-                    $('#btn_simpan').prop('disabled', true)
-                    // $('#btn_clear_form_payment').prop('disabled', true)
-                }
-
-                bank.prop('required', false)
-                rekening.prop('required', false)
-                no_cek_giro.prop('required', false)
-                tgl_cek_giro.prop('required', false)
-            }
-
-            if (jenis_pembayaran.val() == 'Transfer') {
-                bank.prop('disabled', false)
-                rekening.prop('disabled', false)
-
-                no_cek_giro.prop('disabled', true)
-                no_cek_giro.val('')
-                tgl_cek_giro.prop('disabled', true)
-                tgl_cek_giro.val('')
-
-                if (parseFloat(bayar.val()) && parseFloat(bayar.val()) >= parseFloat(total_hutang.val()) && bank
-                    .val() && rekening.val()) {
-                    $('#btn_simpan').prop('disabled', false)
-                    // $('#btn_clear_form_payment').prop('disabled', false)
-                } else {
-                    $('#btn_simpan').prop('disabled', true)
-                    // $('#btn_clear_form_payment').prop('disabled', true)
-                }
-
-                bank.prop('required', true)
-                rekening.prop('required', true)
-            }
-
-            if (jenis_pembayaran.val() == 'Giro') {
-                rekening.prop('disabled', true)
-                rekening.html('<option value="" disabled selected>-- Pilih Bank terlebih dahulu --</option>')
-
-                bank.prop('disabled', false)
-                no_cek_giro.prop('disabled', false)
-                tgl_cek_giro.prop('disabled', false)
-
-                if (
-                    parseFloat(bayar.val()) &&
-                    parseFloat(bayar.val()) >= parseFloat(total_hutang.val()) &&
-                    bank.val() &&
-                    no_cek_giro.val() &&
-                    tgl_cek_giro.val()
-                ) {
-                    $('#btn_simpan').prop('disabled', false)
-                    // $('#btn_clear_form_payment').prop('disabled', false)
-                } else {
-                    $('#btn_simpan').prop('disabled', true)
-                    // $('#btn_clear_form_payment').prop('disabled', true)
-                }
-
-                bank.prop('required', true)
-                no_cek_giro.prop('required', true)
-                tgl_cek_giro.prop('required', true)
-            }
-        })
-
         $(document).on('click', '.btn_edit', function(e) {
             e.preventDefault()
 
             // ambil <tr> index
             let index = $(this).parent().parent().index()
 
-            let kode_pembelian = $('.kode_pembelian_hidden:eq(' + index + ')').val()
-            let supplier = $('.supplier_hidden:eq(' + index + ')').val()
-            let tgl_pembelian = $('.tgl_pembelian_hidden:eq(' + index + ')').val()
+            let kode_penjualan = $('.kode_penjualan_hidden:eq(' + index + ')').val()
+            let pelanggan = $('.pelanggan_hidden:eq(' + index + ')').val()
+            let tgl_penjualan = $('.tgl_penjualan_hidden:eq(' + index + ')').val()
             let matauang = $('.matauang_hidden:eq(' + index + ')').val()
-            let hutang = $('.hutang_hidden:eq(' + index + ')').val()
+            let piutang = $('.piutang_hidden:eq(' + index + ')').val()
 
-            $('#kode_pembelian option[value="' + kode_pembelian + '"]').attr('selected', 'selected')
-            $('#supplier').val(supplier)
-            $('#tgl_pembelian').val(tgl_pembelian)
+            $('#kode_penjualan option[value="' + kode_penjualan + '"]').attr('selected', 'selected')
+            $('#pelanggan').val(pelanggan)
+            $('#tgl_penjualan').val(tgl_penjualan)
             $('#matauang').val(matauang)
-            $('#hutang').val(hutang)
+            $('#piutang').val(piutang)
 
             $('#btn_add').hide()
             $('#btn_update').show()
@@ -333,7 +273,7 @@
             $(this).parent().parent().remove()
 
             generate_nomer()
-            hitung_total_hutang()
+            hitung_total_piutang()
             cek_table_length()
 
             $('#bayar').val('')
@@ -349,6 +289,67 @@
             cek_table_length()
         })
 
+        $('#btn_update').click(function() {
+            let index = $('#index_tr').val()
+
+            let kode_penjualan = $('#kode_penjualan option:selected')
+            let tgl_penjualan = $('#tgl_penjualan').val()
+            let pelanggan = $('#pelanggan').val()
+            let matauang = $('#matauang').val()
+            let piutang = parseFloat($('#piutang').val())
+
+            // cek duplikasi pas update
+            $('input[name="kode_penjualan[]"]').each(function(i) {
+                // i = index each
+                if ($(this).val() == kode_penjualan.val() && i != index) {
+                    $('#tbl_trx tbody tr:eq(' + i + ')').remove()
+                }
+            })
+
+            let data_trx = `
+                    <td></td>
+                    <td>
+                        ${kode_penjualan.html()}
+                        <input type="hidden" class="kode_penjualan_hidden" name="kode_penjualan[]" value="${kode_penjualan.val()}">
+                    </td>
+                    <td>
+                        ${tgl_penjualan}
+                        <input type="hidden" class="tgl_penjualan_hidden" name="tgl_penjualan[]" value="${tgl_penjualan}">
+                    </td>
+                    <td>
+                        ${pelanggan}
+                        <input type="hidden" class="pelanggan_hidden" name="pelanggan[]" value="${pelanggan}">
+                    </td>
+                    <td>${matauang}
+                        <input type="hidden" class="matauang_hidden" name="matauang[]" value="${matauang}">
+                    </td>
+                    <td>${format_ribuan(piutang)}
+                        <input type="hidden" class="piutang_hidden" name="piutang[]" value="${piutang}">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs btn_edit">
+                            <i class="fa fa-edit"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-danger btn-xs btn_hapus">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>`
+
+            $('#tbl_trx tbody tr:eq(' + index + ')').html(data_trx)
+
+            clear_form_entry()
+
+            hitung_total_piutang()
+
+            generate_nomer()
+
+            cek_form_entry()
+
+            $('#bayar').val('')
+            $('#btn_simpan').prop('disabled', true)
+        })
+
         $('#btn_simpan').click(function() {
             $(this).prop('disabled', true)
             $(this).text('loading...')
@@ -357,7 +358,7 @@
                 kode: $('#kode').val(),
                 tanggal: $('#tanggal').val(),
                 rate: $('#rate').val(),
-                pembelian_id: $('input[name="kode_pembelian[]"]').map(function() {
+                penjualan_id: $('input[name="kode_penjualan[]"]').map(function() {
                     return $(this).val()
                 }).get(),
                 jenis_pembayaran: $('#jenis_pembayaran').val(),
@@ -371,7 +372,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '{{ route('pelunasan-hutang.store') }}',
+                url: '{{ route('pelunasan-piutang.store') }}',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -384,7 +385,7 @@
                         text: 'Berhasil'
                     }).then(function() {
                         setTimeout(() => {
-                            window.location = '{{ route('pelunasan-hutang.index') }}'
+                            window.location = '{{ route('pelunasan-piutang.index') }}'
                         }, 500)
                     })
                 },
@@ -402,7 +403,7 @@
 
         function get_kode() {
             $.ajax({
-                url: "/keuangan/pelunasan-hutang/generate-kode/" + $('input[name="tanggal"]').val(),
+                url: "/keuangan/pelunasan-piutang/generate-kode/" + $('input[name="tanggal"]').val(),
                 type: 'GET',
                 success: function(data) {
                     $('input[name="kode"]').val('Loading...')
@@ -414,15 +415,15 @@
             })
         }
 
-        function hitung_total_hutang() {
-            let total_hutang = 0
+        function hitung_total_piutang() {
+            let total_piutang = 0
 
-            $('.hutang_hidden').each(function() {
-                total_hutang += parseInt($(this).val())
+            $('.piutang_hidden').each(function() {
+                total_piutang += parseInt($(this).val())
             })
 
-            $('#total_hutang').val(format_ribuan(total_hutang))
-            $('#total_hutang_hidden').val(total_hutang)
+            $('#total_piutang').val(format_ribuan(total_piutang))
+            $('#total_piutang_hidden').val(total_piutang)
         }
 
         function format_ribuan(x) {
@@ -439,11 +440,11 @@
         }
 
         function clear_form_entry() {
-            $('#kode_pembelian option[value=""]').attr('selected', 'selected')
-            $('#tgl_pembelian').val('')
-            $('#supplier').val('')
+            $('#kode_penjualan option[value=""]').attr('selected', 'selected')
+            $('#tgl_penjualan').val('')
+            $('#pelanggan').val('')
             $('#matauang').val('')
-            $('#hutang').val('')
+            $('#piutang').val('')
 
             $('#btn_update').hide()
             $('#btn_add').show()
@@ -464,11 +465,11 @@
 
         function cek_form_entry() {
             if (
-                !$('#kode_pembelian').val() ||
-                !$('#tgl_pembelian').val() ||
-                !$('#supplier').val() ||
+                !$('#kode_penjualan').val() ||
+                !$('#tgl_penjualan').val() ||
+                !$('#pelanggan').val() ||
                 !$('#matauang').val() ||
-                !$('#hutang').val()
+                !$('#piutang').val()
             ) {
                 $('#btn_update').prop('disabled', true)
                 $('#btn_add').prop('disabled', true)

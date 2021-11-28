@@ -153,7 +153,7 @@
                             </a>
                         </li>
 
-                        <li class="{{ set_active('pembelian*') }}">
+                        <li class="{{ request()->is('beli/pembelian*') ? ' active' : '' }}">
                             <a href="{{ route('pembelian.index') }}">
                                 {{ trans('dashboard.menu.pembelian') }}
                             </a>
@@ -181,7 +181,7 @@
                             </a>
                         </li>
 
-                        <li class="{{ set_active('penjualan*') }}">
+                        <li class="{{ request()->is('jual/penjualan*') ? ' active' : '' }}">
                             <a href="{{ route('penjualan.index') }}">
                                 {{ trans('dashboard.menu.penjualan') }}
                             </a>
@@ -425,12 +425,12 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item" href="http://bbm.test/logout"
+                        <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();document.getElementById('logout-form-sidebar').submit();">
                             Logout
                         </a>
 
-                        <form id="logout-form-sidebar" action="http://bbm.test/logout" method="POST"
+                        <form id="logout-form-sidebar" action="{{ route('logout') }}" method="POST"
                             class="d-none">
                             @csrf
                         </form>

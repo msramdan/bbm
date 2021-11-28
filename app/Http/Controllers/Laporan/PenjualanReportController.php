@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Laporan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\Penjualan;
 use Barryvdh\DomPDF\Facade as PDF;
 
@@ -20,6 +21,9 @@ class PenjualanReportController extends Controller
         if (request()->query()) {
             $laporan = $this->getLaporan();
         }
+
+        // return $laporan;
+        // die;
 
         return view('laporan.penjualan.penjualan.index', compact('laporan'));
     }
@@ -43,12 +47,17 @@ class PenjualanReportController extends Controller
 
     protected function getLaporan()
     {
-        return Penjualan::with(
+        //
+        return Penjualan::select('id', 'kode', 'tanggal', 'gudang_id', 'pelanggan_id', 'matauang_id', 'salesman_id', 'total_gross', 'total_diskon', 'total_netto', 'total_ppn', 'rate')->with(
             'penjualan_detail',
+            'penjualan_detail.barang:id,kode,nama',
             'gudang:id,nama',
             'pelanggan:id,nama_pelanggan',
             'salesman:id,nama',
-            'matauang:id,kode'
+            'matauang:id,kode',
+            'retur_penjualan:id,penjualan_id',
+            'retur_penjualan.retur_penjualan_detail:retur_penjualan_id,id,qty_retur',
+            // 'retur_penjualan.retur_penjualan_detail.barang:id,kode,nama',
         )
             ->when(request()->query('pelanggan'), function ($q) {
                 $q->where('pelanggan_id',  request()->query('pelanggan'));
@@ -66,16 +75,17 @@ class PenjualanReportController extends Controller
                 $q->when(request()->query('bentuk_kepemilikan_stok'), function ($q) {
                     $q->where('bentuk_kepemilikan_stok',  request()->query('bentuk_kepemilikan_stok'));
                 });
-            })
-            ->whereHas('penjualan_detail.barang', function ($q) {
+
                 $q->when(request()->query('barang'), function ($q) {
-                    $q->where('id',  request()->query('barang'));
+                    $q->where('barang_id',  request()->query('barang'));
                 });
             })
             ->whereBetween('tanggal', [
                 request()->query('dari_tanggal'),
                 request()->query('sampai_tanggal')
             ])
+            ->limit(100)
+            ->orderByDesc('id')
             ->get();
     }
 }

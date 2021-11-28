@@ -128,7 +128,7 @@ class ReturPembelianController extends Controller
                 // Update stok barang
                 $barangQuery = Barang::whereId($value);
                 $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty_retur[$i])]);
             }
 
             $retur->pembelian()->update(['retur' => 'YA']);
@@ -226,7 +226,7 @@ class ReturPembelianController extends Controller
                 // Update stok barang
                 $barangQuery = Barang::whereId($value);
                 $getBarang = $barangQuery->first();
-                $barangQuery->update(['stok' => ($getBarang->stok + $request->qty_retur[$i])]);
+                $barangQuery->update(['stok' => ($getBarang->stok - $request->qty_retur[$i])]);
             }
 
             // insert retur baru

@@ -152,10 +152,10 @@
                                         <td>
                                             {{ $item->tanggal->diffForHumans() }}
                                         </td>
-                                        <td>{{ $item->matauang->kode . ' ' . number_format($item->total_netto, 2, '.', ',') }}
+                                        <td>{{ $item->matauang->kode . ' ' . number_format($item->total_netto) }}
                                         </td>
                                         <td>{{ $item->matauang->kode }}
-                                            {{ $item->penjualan_pembayaran ? number_format($item->penjualan_pembayaran[0]->bayar, 2, '.', ',') : 0 }}
+                                            {{ $item->penjualan_pembayaran ? number_format($item->penjualan_pembayaran[0]->bayar) : 0 }}
                                         </td>
                                     </tr>
                                     @php
@@ -171,8 +171,8 @@
                             <tfoot>
                                 <tr>
                                     <th colspan="7">Total</th>
-                                    <th>{{ number_format($total_nilai_jual, 2, '.', ',') }}</th>
-                                    <th>{{ number_format($total_saldo_piutang, 2, '.', ',') }}</th>
+                                    <th>{{ number_format($total_nilai_jual) }}</th>
+                                    <th>{{ number_format($total_saldo_piutang) }}</th>
                                 </tr>
                             </tfoot>
                         </table>

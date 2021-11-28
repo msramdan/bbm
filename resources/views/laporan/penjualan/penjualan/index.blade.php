@@ -161,7 +161,7 @@
                                     <th colspan="2">Tanggal</th>
                                     <th colspan="2">Gudang</th>
                                     <th colspan="3">Pelanggan</th>
-                                    <th colspan="3">Salesman</th>
+                                    <th colspan="6">Salesman</th>
                                     <th>Rate</th>
                                 </tr>
                             </thead>
@@ -173,6 +173,9 @@
                                     @php
                                         $total_qty = 0;
                                         $total = 0;
+                                        $total_diskon = 0;
+                                        $total_qty_retur = 0;
+                                        $total_retur = 0;
                                     @endphp
                                     <tr>
                                         <th>{{ $loop->iteration }}</th>
@@ -182,7 +185,7 @@
                                         <th colspan="3">
                                             {{ $item->pelanggan->nama_pelanggan }}
                                         </th>
-                                        <th colspan="3">
+                                        <th colspan="6">
                                             {{ $item->salesman->nama }}
                                         </th>
                                         <th>{{ $item->rate }}</th>
@@ -192,14 +195,14 @@
                                         <th colspan="4">Barang</th>
                                         <th>Qty</th>
                                         <th colspan="3">Harga</th>
+                                        <th>Disc%</th>
                                         <th>Disc</th>
                                         <th>PPN</th>
-                                        <th>PPH</th>
-                                        <th>B.Msk</th>
-                                        <th>Clr.Fee</th>
                                         <th colspan="5">Subtotal</th>
+                                        <th>Retur</th>
+                                        <th>Total</th>
                                     </tr>
-                                    @foreach ($item->penjualan_detail as $detail)
+                                    @foreach ($item->penjualan_detail as $index => $detail)
                                         <tr>
                                             <td></td>
                                             <td colspan="4">
@@ -210,28 +213,44 @@
                                                 {{ $item->matauang->kode . ' ' . number_format($detail->harga) }}
                                             </td>
                                             <td>
+                                                {{ $detail->diskon_persen }}
+                                            </td>
+                                            <td>
                                                 {{ $item->matauang->kode . ' ' . number_format($detail->diskon) }}
                                             </td>
                                             <td>
                                                 {{ $item->matauang->kode . ' ' . number_format($detail->ppn) }}
                                             </td>
-                                            <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->pph) }}
-                                            </td>
-                                            <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->biaya_masuk) }}
-                                            </td>
-                                            <td>
-                                                {{ $item->matauang->kode . ' ' . number_format($detail->clr_fee) }}
-                                            </td>
                                             <td colspan="5">
                                                 {{ $item->matauang->kode . ' ' . number_format($detail->netto) }}
                                             </td>
+                                            <td>
+                                                @if ($item->retur_penjualan)
+                                                    {{ $item->retur_penjualan->retur_penjualan_detail[$index]->qty_retur }}
+                                                    @php
+                                                        $total_qty_retur += $item->retur_penjualan->retur_penjualan_detail[$index]->qty_retur;
+                                                    @endphp
+                                                @else
+                                                    0
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($item->retur_penjualan)
+                                                    {{ $item->matauang->kode . ' ' . number_format($item->retur_penjualan->retur_penjualan_detail[$index]->qty_retur * $detail->harga) }}
+                                                    @php
+                                                        $total_retur += $item->retur_penjualan->retur_penjualan_detail[$index]->qty_retur * $detail->harga;
+                                                    @endphp
+                                                @else
+                                                    0
+                                                @endif
+                                            </td>
                                         </tr>
+
                                         @php
                                             $total_qty += $detail->qty;
                                             $total += $detail->subtotal;
                                             $grandtotal += $detail->subtotal;
+                                            $total_diskon += $detail->diskon_persen;
                                         @endphp
                                     @endforeach
                                     <tr>
@@ -242,27 +261,23 @@
                                             {{ $item->matauang->kode . ' ' . number_format($item->total_gross) }}
                                         </th>
                                         <th>
+                                            {{ $total_diskon }}%
+                                        </th>
+                                        <th>
                                             {{ $item->matauang->kode . ' ' . number_format($item->total_diskon) }}
                                         </th>
                                         <th>
                                             {{ $item->matauang->kode . ' ' . number_format($item->total_ppn) }}
                                         </th>
-                                        <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_pph) }}
-                                        </th>
-                                        <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_biaya_masuk) }}
-                                        </th>
-                                        <th>
-                                            {{ $item->matauang->kode . ' ' . number_format($item->total_clr_fee) }}
-                                        </th>
                                         <th colspan="5">
                                             {{ $item->matauang->kode . ' ' . number_format($item->total_netto) }}
                                         </th>
+                                        <th>{{ $total_qty_retur }}</th>
+                                        <th>{{ $item->matauang->kode . ' ' . number_format($total_retur) }}</th>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="18" class="text-center">Data tidak ditemukan</td>
+                                        <td colspan="20" class="text-center">Data tidak ditemukan</td>
                                     </tr>
                                 @endforelse
                             </tbody>

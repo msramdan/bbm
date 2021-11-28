@@ -183,9 +183,9 @@
 
                                 {{-- Qty --}}
                                 <div class="col-md-2" style="margin-bottom: 1em;">
-                                    <label for="qty_beli">Qty Beli</label>
+                                    <label for="qty_beli">Qty Jual</label>
                                     <input type="number" step="any" name="qty_beli" id="qty_beli_input"
-                                        class="form-control" placeholder="Qty Beli" disabled />
+                                        class="form-control" placeholder="Qty Jual" disabled />
                                 </div>
 
                                 {{-- Qty --}}
@@ -265,7 +265,7 @@
                                                 <th>No.</th>
                                                 <th>Barang</th>
                                                 <th>Harga</th>
-                                                <th>Qty Beli</th>
+                                                <th>Qty Jual</th>
                                                 <th>Qty Retur</th>
                                                 <th>Disc%</th>
                                                 <th>Disc</th>

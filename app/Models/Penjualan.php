@@ -80,4 +80,9 @@ class Penjualan extends Model
     {
         return $this->hasMany(CekGiro::class);
     }
+
+    public function retur_penjualan()
+    {
+        return $this->hasOne(ReturPenjualan::class);
+    }
 }

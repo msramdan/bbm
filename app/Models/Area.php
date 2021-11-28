@@ -13,6 +13,7 @@ class Area extends Model
 
     protected $fillable = [
         'kode',
-        'nama'
+        'nama',
+        'status'
     ];
 }

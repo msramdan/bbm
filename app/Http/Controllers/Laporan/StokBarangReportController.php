@@ -28,7 +28,6 @@ class StokBarangReportController extends Controller
             $laporan = $this->getLaporan();
         }
 
-
         // return $laporan['stok_retur_beli'];
         // die;
 
@@ -184,7 +183,7 @@ class StokBarangReportController extends Controller
             ->get();
 
         $stok_adjustment_minus = AdjustmentMinusDetail::select('id', 'qty', 'barang_id', 'adjustment_minus_id')->with(
-            'barang:id,nama,kode,harga_jual',
+            'barang:id,nama,kode,harga_beli',
             'adjustment_minus:id,gudang_id',
             'adjustment_minus.gudang:id,nama',
         )

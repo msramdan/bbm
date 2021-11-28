@@ -110,12 +110,12 @@
                         <td>{{ $item->matauang->kode . ' ' . number_format($item->total_netto) }}
                         </td>
                         <td>{{ $item->matauang->kode }}
-                            {{ $item->pembelian_pembayaran ? number_format($item->pembelian_pembayaran[0]->bayar) : 0 }}
+                            {{ count($item->pembelian_pembayaran) > 1 ? number_format($item->pembelian_pembayaran[0]->bayar) : 0 }}
                         </td>
                     </tr>
                     @php
                         $total_nilai_beli += $item->total_netto;
-                        $total_saldo_hutang += $item->pembelian_pembayaran[0]->bayar;
+                        $total_saldo_hutang += count($item->pembelian_pembayaran) > 1 ? $item->pembelian_pembayaran[0]->bayar : 0;
                     @endphp
                 @empty
                     <tr>

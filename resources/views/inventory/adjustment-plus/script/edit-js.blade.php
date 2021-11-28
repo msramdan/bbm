@@ -404,7 +404,7 @@
                     if (harga_edit) {
                         harga.val(harga_edit)
                     } else {
-                        harga.val(data.harga_jual)
+                        harga.val(data.harga_beli)
                     }
 
                     harga.prop('disabled', false)

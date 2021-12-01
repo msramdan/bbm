@@ -43,7 +43,7 @@
                             <div class="row form-group">
                                 <div class="col-md-6" style="margin-bottom: 1em;">
                                     <label class="control-label">Nama</label>
-                                    <input type="text" name="name" class="form-control" placeholder="name" required />
+                                    <input type="text" name="name" class="form-control" placeholder="Nama" required />
                                     @error('name')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -51,11 +51,13 @@
 
                                 <div class="col-md-6" style="margin-bottom: 1em;">
                                     <label class="control-label">Email</label>
-                                    <input type="email" name="email" class="form-control" placeholder="email" required />
+                                    <input type="email" name="email" class="form-control" placeholder="Email" required />
                                     @error('email')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+
+                                <div class="clearfix visible-md visible-lg"></div>
 
                                 <div class="col-md-4" style="margin-bottom: 1em;">
                                     <label for="role" class="control-label">Role</label>

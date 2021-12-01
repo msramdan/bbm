@@ -150,7 +150,7 @@ class UserController extends Controller
              * kalo admin otomatis $request->salesman = null
              * udah coba null secara manual ga bisa
              */
-            $user->salesman->update(['user_id' => $request->salesman]);
+            $user->salesman ? $user->salesman->update(['user_id' => $request->salesman]) : null;
         }
 
         Alert::success('Update Data', 'Berhasil');

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -44,6 +45,7 @@ class LoginController extends Controller
         return redirect()->route('login');
     }
 
+    // custom redirect sesuai role setelah login
     protected function authenticated(Request $request, $user)
     {
         if ($user->getRoleNames()[0] == 'salesman') {
@@ -51,5 +53,20 @@ class LoginController extends Controller
         }
 
         return redirect()->route('dashboard.index');
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        // Get the user details from database and check if user is exist and active.
+        $user = User::where('email', $request->email)->first();
+        if ($user && $user->status === 0) {
+            throw ValidationException::withMessages([$this->username() => __('User has been desactivated.')]);
+        }
+
+        // Then, validate input.
+        return $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
     }
 }

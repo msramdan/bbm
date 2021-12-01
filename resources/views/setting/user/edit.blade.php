@@ -147,12 +147,12 @@
                 salesman.prop('disabled', false)
                 salesman.prop('required', true)
 
-                // $('input:checkbox').prop('checked', false)
+                $('input:checkbox').prop('checked', false)
             } else {
                 salesman.prop('disabled', true)
                 salesman.prop('required', false)
 
-                // $('input:checkbox').prop('checked', true)
+                $('input:checkbox').prop('checked', true)
             }
 
             $('#salesman option:eq(0)').attr('selected', 'selected')
